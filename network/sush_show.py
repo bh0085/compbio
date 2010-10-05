@@ -12,7 +12,7 @@ def show_m(net_number = 0):
     tffun = lambda x: x[0]
     sigmafun = lambda x: 1 / (1 + np.exp(-x /1))
 
-    prefix = 'predmodel/regressionwts/fRN'
+    prefix = 'predmodel/regressionwts/mRN'
     nwdata = open(os.path.join(prefix,'nw_'+str(net_number) + '.sif')).read()
     #Parse the list
     r = re.compile('^[ ]*(?P<target>[^\s]+)\t(?P<tf>[^\s]+)\t(?P<weight>[^\s]+)',re.M)
@@ -39,6 +39,12 @@ def show_m(net_number = 0):
     for k, v in trg_d.iteritems():
         v['color'] /= count
     trgnames =  trg_d.keys()
+    
+    import random
+    trgcolors = {}
+    for n in trgnames:
+        c = [random.uniform(0,1),random.uniform(0,1),random.uniform(0,1)]
+        trgcolors[n]= c
 
     #Extract a dictionary with information for each TF
     tf_d = {}
@@ -53,8 +59,8 @@ def show_m(net_number = 0):
     
 
     #Display options:
-    rtype = 'val' #valid types, abs and val
-    axis =  'rect' # valid types are rect and polar
+    rtype = 'abs' #valid types, abs and val
+    axis =  'polar' # valid types are rect and polar
     colortype = 'sign' # valid types are sign and identity
 
     #Configure the plotter
@@ -74,11 +80,12 @@ def show_m(net_number = 0):
 
     #Choose subsets of interest for TF and Gene
     n = len(tfsort) /5
-    trg_subset = trgnames[::10]
+    trg_subset = trgnames[::2]
+    
     #Initialize the loop
     xs , ys, cs, rs,ts,ps = [],[],[],[],[],[]
     for i in range(n):
-        j = i# tfsort[-1 -i]
+        j = tfsort[-1 -i]
         #mid = np.array(divmod(i, np.ceil(np.sqrt(n))) ) / np.ceil(np.sqrt(n))
         mid = np.array([np.cos(np.pi*2 * float(i) / n), 
                         np.sin(2*np.pi*float(i)/n)])
@@ -94,15 +101,17 @@ def show_m(net_number = 0):
         these_w = []
         for trg in tf['targets']:
 
-            if len(trg_d[trg]['weights']) > 3:
+            if len(trg_d[trg]['weights']) > 1:
                 continue
             if not trg in trg_subset:
                 continue
             
+        
             trg_tf_idx = trg_d[trg]['tfs'].index(tfname)
             trg_tf_w = trg_d[trg]['weights'][trg_tf_idx]
             if colortype == 'identity':
-                color = trg_d[trg]['color']
+                color = trgcolors[trg]
+                #color = trg_d[trg]['color']
             elif colortype == 'sign':
                 thr = .1
                 if trg_tf_w > thr:
@@ -112,6 +121,9 @@ def show_m(net_number = 0):
                 else:
                     color = [0,0,0]
 
+            tbump = 0.0
+            if trg_tf_w > 0:
+                tbump = .1
             these_w.append(trg_tf_w)
             if rtype == 'val':
                 rval = sigmafun(trg_tf_w) + inner_rad
@@ -119,8 +131,8 @@ def show_m(net_number = 0):
                 rval = np.abs(trg_tf_w) + inner_rad
                 
             xs.append(mid[0]*rval)
-            ys.append(mid[1]*rval)
-            ts.append(2 * np.pi * i / n)
+            ys.append(mid[1]*rval + tbump)
+            ts.append(2 * np.pi * i / n +tbump)
             ps.append(rval)
             rs.append(10)
             cs.append(color)
