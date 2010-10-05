@@ -31,7 +31,15 @@ def print_phylip(aligned,fname):
     for key, value in s.items():
         f.write('{0:30}'.format(key) + str(value).replace('.', '-')+'\n')
     f.close()
-    
+
+def print_fasta(aligned,fname):
+    s = aligned.seqs
+    f = open(fname,'w')
+    for key, value in s.items():
+        f.write('>'+key+'\n')
+        f.write(str(value).replace('.', '-') + '\n')
+    f.close()                
+                
 def make_tree(aligned):
     if not os.path.isdir('temp'):
         os.mkdir('temp')
@@ -39,7 +47,13 @@ def make_tree(aligned):
     print_phylip(aligned, fname)
     subprocess.call(["phyml -i " + fname],shell=True)
     
-                
+def gblocked_alignment(aligned):
+    if not os.path.isdir('temp'):
+        os.mkdir('temp')
+    fname = 'temp/temp.fa'
+    print_fasta(aligned, fname)
+    
+   
 class Aligned:
     seqs ={}
     folds = {}
