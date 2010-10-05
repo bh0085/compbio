@@ -1,0 +1,52 @@
+
+ oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+                                    ---  PhyML v3.0_360-500M  ---                                             
+                            http://www.atgc-montpellier.fr/phyml                                          
+                         Copyright CNRS - Universite Montpellier II                                 
+ oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+
+. Sequence filename: 			temp.phylip
+
+. Data set: 				#1
+
+. Tree topology search : 		NNIs
+
+. Initial tree: 			BioNJ
+
+. Model of nucleotides substitution: 	HKY85
+
+. Number of taxa: 			712
+
+. Log-likelihood: 			-31854.33072
+
+. Unconstrained likelihood: 		-1219.58509
+
+. Parsimony: 				7395
+
+. Tree size: 				68.20522
+
+. Discrete gamma model: 		Yes
+  - Number of categories: 		4
+  - Gamma shape parameter: 		1.454
+
+. Transition/transversion ratio: 	2.816
+
+. Nucleotides frequencies:
+
+  - f(A)= 0.22893
+  - f(C)= 0.27095
+  - f(G)= 0.29638
+  - f(T)= 0.20374
+
+. Time used 7h56m20s
+
+
+. 28580 seconds
+
+ oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+ Suggested citation:
+ S. Guindon & O. Gascuel
+ "A simple, fast, and accurate algorithm to estimate large phylogenies by maximum likelihood"
+ Systematic Biology. 2003. 52(5):696-704.
+ oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
