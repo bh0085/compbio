@@ -1,0 +1,12 @@
+#Wraps unafold.
+def fold(seq):
+
+    f = open('unatemp.seq','w')
+    f.write(seq)
+    f.close
+    import subprocess
+    subprocess.call(["hybrid-ss-min","unatemp.seq"],shell=True)
+    fout = open('unatemp.ct')
+    data = fout.read()
+    
+    print data
