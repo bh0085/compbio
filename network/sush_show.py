@@ -12,7 +12,7 @@ def show_m(net_number = 0):
     tffun = lambda x: x[0]
     sigmafun = lambda x: 1 / (1 + np.exp(-x /1))
 
-    prefix = 'predmodel/regressionwts/mRN'
+    prefix = 'predmodel/regressionwts/bRN'
     nwdata = open(os.path.join(prefix,'nw_'+str(net_number) + '.sif')).read()
     #Parse the list
     r = re.compile('^[ ]*(?P<target>[^\s]+)\t(?P<tf>[^\s]+)\t(?P<weight>[^\s]+)',re.M)
@@ -79,8 +79,8 @@ def show_m(net_number = 0):
 
 
     #Choose subsets of interest for TF and Gene
-    n = len(tfsort) /5
-    trg_subset = trgnames[::2]
+    n = len(tfsort) #/5
+    trg_subset = trgnames[::1]
     
     #Initialize the loop
     xs , ys, cs, rs,ts,ps = [],[],[],[],[],[]
@@ -101,8 +101,8 @@ def show_m(net_number = 0):
         these_w = []
         for trg in tf['targets']:
 
-            if len(trg_d[trg]['weights']) > 1:
-                continue
+            #if len(trg_d[trg]['weights']) > 1:
+            #    continue
             if not trg in trg_subset:
                 continue
             
