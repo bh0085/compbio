@@ -5,6 +5,9 @@ import itertools as it
 import scipy as sp
 import scipy.linalg as lin
 import matplotlib.pyplot as plt
+from scipy import sparse
+from numpy import *
+
 
 def parse_net(name = 'mRN',number = 0):
     prefix = os.path.join('predmodel/regressionwts', name)
@@ -72,11 +75,17 @@ def svd_net(name = 'mRN', number = 0):
     #with possible interactions for each gene appearing in 
     #the network
 
+        
+    #prune the network for testing purposes.
     m = len(kmap0.keys())
+    mmax = 500
+    m = mmax
+
     n = len(kmap1.keys())
-    N = np.zeros([m,n])
+    N = np.zeros([mmax,n])
     for k_trg,v_trg in trgs.items():
         i = kmap0[k_trg]
+        if i >= mmax: continue
         for k_tf in v_trg['tfs']:            
             j = kmap1[k_tf]
             N[i][j] = 1.0
@@ -86,24 +95,54 @@ def svd_net(name = 'mRN', number = 0):
     comp_svd = True
     if comp_svd:
         U, S, Vh = lin.svd(N)
+        
         V = Vh.T
-        svd = (U,S,V)
-        pickle.dump(svd,open(svdname,'w'))
+        U2 = U.copy()
+        U2[:,len(S):] = 0.0
+        SARR = sparse.lil_matrix(mat(zeros([m,n]))) # sparse.lil_matrix((n,m))
+        print 'shape' + str(SARR.shape)
+        for i in range(min(n,m)):
+            SARR[i,i] = S[i]
+        #U = sparse.lil_matrix(U)
+        #V = sparse.lil_matrix(V)
+        #svd = (U,S,V)
+        #pickle.dump(svd,open(svdname,'w'))
     else:
         U,S,V = pickle.load(open(svdname))
 
     #from mlabwrap import mlab
     #U2, S2, V2 = mlab.svd(N,nout = 3)
+        
+    print len(S) 
+    print 'V: '+str(V.shape)
+    print 'U: '+str(U.shape)
+    print SARR.shape
+    V = mat(V)
+    U = mat(U)
+    prod = ( U2 * SARR) * (conj(V).T)
+#prod = np.dot(U,np.dot(SARR,np.conj(V)))
+    
     
     f = plt.figure(0)
     plt.clf()
     ax = plt.axes(frameon = False)
-    ax.set_xlim([0,1])
-    ax.set_ylim([0,1])
 
-    xax = np.arange(float(len(S)))/len(S)
-    yax = S / S.max()
-    ax.plot(xax, yax)
-
-
+    #f2 = plt.figure(1)
+    #ax1 = plt.axes(frameon = False)
+    
+    plot_vals = False
+    if plot_vals:
+        ax.set_xlim([0,1])
+        ax.set_ylim([0,1])
+        
+        xax = np.arange(float(len(S)))/len(S)
+        yax = S / S.max()
+        ax.plot(xax, yax)
+    else:
+        #ax.imshow(U2)
+        ax.imshow(prod)
+       # print abs(N).mean()
+       # print  abs(N-prod).mean()
+        pass
+        
     print N
