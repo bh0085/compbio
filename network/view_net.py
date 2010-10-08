@@ -2,9 +2,10 @@ import netutils as nu
 import netsvd as ns
 import matplotlib.pyplot as plt
 from numpy import *
+import numpy as np
 
 def view():
-    arr = reshape(array(range(100)),(10,10))
+    arr = reshape(arange(100.),(10,10))
     view_array(arr)
 
 def view_array(M):
@@ -13,10 +14,9 @@ def view_array(M):
     n = M.shape[1]
     
 
-    xs = []
-    ys = [] 
+    xs,ys,rs,cs = [], [], [], []
     max_r = 50^2
-    rscl = max_r / max(abs(M))
+    rscl = max_r / (abs(M).max())
     
     
     for i in range(m):
@@ -33,6 +33,7 @@ def view_array(M):
 
     fig = plt.figure(1)
     fig.clear()
-    sp = f.add_subplot(221,frame_on = False); sp.set_axis_off()
+    sp = fig.add_subplot(221,frame_on = False); sp.set_axis_off()
+    print xs, ys,rs,cs
     sp.scatter(xs,ys,rs,cs)
     
