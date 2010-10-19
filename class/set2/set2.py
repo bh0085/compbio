@@ -61,7 +61,12 @@ def run(part = '1a',rseed = 1):
         p1m1 = array(p1m1)
         p1m2 = array(p1m2)
         
-        p2_drawprobs( (p1m1,p1m2),(p2m1,p2m2) )    
+        p2_drawprobs( (p1m1,p1m2),(p2m1,p2m2) )
+    if part == '4':
+        r = random_rna(250)
+        M,TB = nussinov(r)
+        t = nussinov_traceback(r,M,TB)
+        draw_rna(r,t)
     if part == '4a':
         scores = []
         for i  in range(200):
@@ -120,8 +125,7 @@ def run(part = '1a',rseed = 1):
                 
                 
 
-        #t = nussinov_traceback(seq,M,TB)
-        #draw_rna(seq,t)
+
 def getct(n, seed = 0, forceRB = True):
     random.seed(seed)
     ct = []
@@ -555,9 +559,9 @@ def draw_rna(seq,pairs_unsorted):
     
             n = len(elts)
             
-            trippy = False
+            trippy = True
             decay = 1
-            do_decay = False
+            do_decay = True
             if not do_decay:
                 xvals = zeros(n)+1
             elif trippy:
@@ -621,7 +625,8 @@ def draw_sum(M,N,T,E,skey,ekey):
     smap = [  syms[skey.keys()[items.index(i)]] for i in range(max(items)+1)  ]
     items = list(ekey.itervalues())
     emap = [  syms[ekey.keys()[items.index(i)]] for i in range(max(items)+1)  ]
-
+    
+    print 'drawing'
     f = plt.figure(3)
     f.clear()
     rect = array([-1.0,l,-.5,1.5])
@@ -661,7 +666,7 @@ Total paths: ''' + str(sum(N[:,l-1])) + '''
     ax2.annotate('All Paths', 
                  xy=(.1,.9),size = 25, xycoords = 'axes fraction')
          
-
+    plt.show()
     
 def sym_map():
     syms={'M':'M',

@@ -10,8 +10,20 @@ from numpy import *
 import pickle
 import subprocess
 import random
+import inspect
+import mlpy
+import utils.colors as mycolors
 
-def parse_net(name = 'mRN',number = 0):
+verbose_utils = True
+default_name = 'fRN'
+
+def claim_reset():
+    if verbose_utils:
+        print '''Resetting:
+   '''+inspect.stack()[1][3]+'''
+'''
+
+def parse_net(name = default_name,number = 0):
     prefix = os.path.join('predmodel/regressionwts', name)
     nwdata = open(os.path.join(prefix,
                                'nw_'+str(number) + '.sif')).read()
@@ -92,3 +104,537 @@ def load_CL():
 def load_TS():
     f = pickle.load(open('TC.pickle'))
     return f
+
+
+import pickle
+import inspect
+
+last_square =  100
+
+
+
+#Write/read now sticks nets in common variables -
+#this way, we don't have to do any unpickling when
+#running the same routine again and again.
+def writenet(name, value, hardcopy = False):
+    caller_name = inspect.stack()[1][3]
+    savename = caller_name + '_' +name
+ 
+    globals()['lastname_'+caller_name] = name
+    globals()['last_'+caller_name] = value
+
+    if hardcopy:
+        path = os.path.join(os.environ['NETWORK_TEMPPATH'], savename)
+        pickle.dump(value, open(path,'w'))
+        
+
+def readnet(name, hardcopy = False):
+    caller_name = inspect.stack()[1][3]
+    try:
+        lname = globals()['lastname_'+caller_name]
+        if lname == name:
+            return globals()['last_'+caller_name]
+        else: 
+            raise Exception()
+    except:
+        if not hardcopy:
+            raise Exception('compute')
+        savename = caller_name +name
+        path =  os.path.join(os.environ['NETWORK_TEMPPATH'],savename)
+        try:
+            value = pickle.load(open(path))
+        except:
+            raise Exception('readnet failed: '+ name + ' unsaved for ' + caller_name)
+        globals()['lastname_'+caller_name] = name
+        globals()['last_'+caller_name] = value
+        return value
+
+
+#RESETS:
+#reset value specifies both whether a function
+#will recompute its value (reset > 0)
+#and whether it will ask its children to recompute (reset mod 2)
+def net_square_affinity(name = default_name, reset = 0):
+
+    hardcopy = False
+    try:
+        if reset: raise Exception('compute')
+        return readnet(name,hardcopy = hardcopy)
+    except Exception as e:
+        if e.args[0] != 'compute': raise Exception()
+        claim_reset()
+        trgs, tfs = parse_net(name)
+        k0 = trgs.keys()
+        k1 = tfs.keys()
+    
+
+        all_keys = k0
+        all_keys.extend(k1)
+        all_keys = sort(all_keys)
+        uk = []
+        for g,v in it.groupby(all_keys): uk.append(g)
+        nk = size(uk)
+        N = sparse.lil_matrix((nk,nk))
+
+        tf_imap = {}
+        for k in tfs.keys():
+            tf_imap[k] = uk.index(k)
+
+        for k,t in trgs.iteritems():
+            i = uk.index(k)
+            for ktf in t['tfs']:
+                j = tf_imap[ktf]
+                N[i,j] = 1
+        
+            
+        affinity = (N,uk)
+        writenet(name, affinity,hardcopy = hardcopy)
+        return affinity
+    
+
+def net_affinity(name = default_name ,reset = 0):
+    hardcopy = False
+    try:
+        if reset: raise Exception('compute')
+        return readnet(name, hardcopy = hardcopy)
+    except Exception as e:
+        if e.args[0] != 'compute': raise Exception()
+        claim_reset()
+        trgs, tfs = parse_net(name)
+        k0 = trgs.keys()
+        k1 = tfs.keys()
+    
+        kmap0 = {}
+        kmap1 = {}
+        for i in range(len(k0)):
+            kmap0[k0[i]] = i
+        for i in range(len(k1)):
+            kmap1[k1[i]] = i
+
+    #Now, for a first shot, lets construct an n*m matrix
+    #with possible interactions for each gene appearing in 
+    #the network        
+    #prune the network for testing purposes.
+        m = len(kmap0.keys())
+        
+        n = len(kmap1.keys())
+        N = np.zeros([m,n])
+        for k_trg,v_trg in trgs.items():
+            i = kmap0[k_trg]
+            for k_tf in v_trg['tfs']:            
+                j = kmap1[k_tf]
+                N[i][j] = 1.0
+
+        affinity = (N,kmap0,kmap1)
+        writenet(name, affinity,hardcopy = hardcopy)
+        return affinity
+
+def net_jcf(name = default_name, reset = 0):
+    hardcopy = False
+    try:
+        if reset: raise Exception('compute')
+        return readnet(name,hardcopy = hardcopy)
+    except Exception as e:
+        if e.args[0] != 'compute': raise Exception()
+        claim_reset()
+
+        square_aff = net_square_affinity(name, reset = mod(reset,2))
+        import pymat
+        command = 'pymatjordan'
+        arr = square_aff[0]
+        
+        inp = {'array':arr}
+        output = pymat.runmat(command, inp)
+        writenet(name, output, hardcopy = hardcopy)
+        return output
+
+    
+
+
+
+def net_genegene(name = default_name, reset = 0):
+    hardcopy = False
+    try:
+        if reset: raise Exception('compute')
+        return readnet(name,hardcopy = hardcopy)
+    except Exception as e:
+        if e.args[0] != 'compute': raise Exception()
+        claim_reset()
+        sq = net_square_affinity(name, reset = mod(reset,2))[0]
+
+        n = shape(sq)[0]
+        for i in range(n):
+            sq[i,i] = 1
+        #note that this better be a matrix...
+        sq = sq.todense()
+        #summed = np.sum(sq,1)
+        #for i in range(n):
+        #    sq[:,i] /= summed[i]
+        genegene = sq*sq.T
+        writenet(name,genegene, hardcopy = hardcopy)
+        return genegene
+def net_genegene_norm(name = default_name, reset = 0):
+    hardcopy = False
+    try:
+        if reset: raise Exception('compute')
+        return readnet(name,hardcopy = hardcopy)
+    except Exception as e:
+        if e.args[0] != 'compute': raise Exception()
+        claim_reset()
+        sq = net_square_affinity(name, reset = mod(reset,2))[0]
+
+        n = shape(sq)[0]
+        for i in range(n):
+            sq[i,i] = 1
+        #note that this better be a matrix...
+        sq = sq.todense()
+        summed = np.sum(sq,1)
+        for i in range(n):
+            sq[:,i] /= summed[i]
+        genegene = sq*sq.T
+        writenet(name,genegene, hardcopy = hardcopy)
+        return genegene
+
+
+def net_hcluster_genegene_norm(name = default_name, reset = 0, n = 200,
+                              cosine = True,
+                              hier = True,
+                              cut = .5):
+    hardcopy = True
+    try:
+        if reset: raise Exception('compute')
+        return readnet(name,hardcopy =hardcopy)
+    except Exception as e:
+        if e.args[0] != 'compute': raise Exception()
+        claim_reset()
+        sqa = net_genegene_norm(name, reset = mod(reset,2))
+        gg = sqa
+        sub = matrix(gg[0:n,0:n])
+
+
+        if cosine:
+            for view in sub:
+                view = view / sum(view)
+        
+        h = mlpy.HCluster()
+        comp = h.compute(sub)
+        clustered = h.cut(cut)
+   
+        value = {'HCluster':h,'clusters':clustered}
+        writenet(name,value, hardcopy = hardcopy)
+        return value
+        
+def net_kcluster_genegene_norm(name = default_name, reset = 0, n = 200, 
+                               k = 5,
+                               cosine = True):
+    hardcopy = True
+    try:
+        if reset: raise Exception('compute')
+        return readnet(name,hardcopy =hardcopy)
+    except Exception as e:
+        if e.args[0] != 'compute': raise Exception()
+        claim_reset()
+        sqa = net_genegene_norm(name, reset = mod(reset,2))
+        gg = sqa
+        sub = matrix(gg[0:n,0:n])
+
+
+        if cosine:
+            for view in sub:
+                view = view / sum(view)
+        
+        kmeans = mlpy.Kmeans(k)
+        clustered = kmeans.compute(sub)
+        means = kmeans.means
+
+        value = {'KMeans':kmeans,'clusters':clustered}
+        writenet(name,value, hardcopy = hardcopy)
+        return value
+        
+
+
+def net_blanket( name = default_name , reset = 0, order = 1):
+
+
+    saff = net_square_affinity(name,reset = mod(reset,2))
+
+    m = saff[0]
+    n = shape(m)[0]
+    for i in range(n):
+        m[i,i]  = 1
+        
+
+    m2 = m * m.T
+    lower100 = m2[0:500,0:500].todense()
+    f = plt.figure(0)
+    f.clear()
+    ax = f.add_axes([0,0,1,1], aspect = 'auto',frameon=False)
+    ax.imshow(lower100,interpolation = 'nearest')
+
+    
+    return
+
+
+def expr_TS_binary(reset = 0 , 
+                   hardcopy = True ):
+    pass
+
+def expr_CL_binary(reset = 0,
+                   hardcopy = True):
+    ts = load_TS()
+    ts_mixtures = {}
+    count = 0
+    
+    mean0,max0,mean1,max1,n0,n1 = [[] for i in range(6)]
+    for k in ts.keys():
+        if count > 100: break
+        count += 1
+        t = ts[k]
+        #ts_mixtures contains the probabilities of a classification
+        #at each timepoint (0 = off, 1 = onn)
+        mixture = expr_gmm_onoff(t)
+        cutoff = .25 #demand 25% certainty for a label
+        mix0 = squeeze(mixture[:,0])
+        mix1 = squeeze(mixture[:,1])
+
+        for i in range(3):
+            if i == 0: w = nonzero(greater(mix0, mix1+cutoff))[0]
+            elif i == 1: w = nonzero(greater(mix1, mix0+cutoff))[0]
+            elif i == 2: w = nonzero(less(abs(mix0 - mix1),cutoff))[0]
+                     
+            n = len(w)
+            if i < 2: 
+                if n == 0: meanu =1
+                else: meanu =mean( [mixture[w,i] -mixture[w,1-i]])
+            if i < 2: 
+                if n == 0: maxu = 1
+                else: maxu =np.max([  mixture[w,i] - mixture[w,i-1]])
+            if i ==0:
+                mean0.append(meanu)
+                max0.append(maxu)
+                n0.append(n)
+            elif i==1:
+                mean1.append(meanu)
+                max1.append(maxu)
+                n1.append(n)
+     
+    max1 = array(max1)
+    mean1 = array(mean1)
+    max0 = array(max0)
+    mean0 = array(mean0)
+    n0 = array(n0)
+    n1 = array(n1)
+    n = len(mean1)
+    f = plt.figure(0)
+    f.clear()
+    ax = f.add_axes([.05,0,.95,1])
+    xax = arange(n)
+    ct = mycolors.getct(2)
+
+    nt = array(n0) + array(n1)
+    srt = argsort(nt)
+
+
+    #ax.plot(xax,mean0[srt],color =ct[0])
+    #ax.plot(xax,max0[srt],color = ct[0])
+    ax.plot(xax,mean1[srt],color = ct[1])
+    ax.plot(xax,max1[srt],color = ct[1])
+
+    f2 = plt.figure(1)
+    f2.clear()
+    ax2 = f2.add_axes([.05,0,.95,1])
+    srt = argsort(nt)
+    xax = range(len(nt))
+    ax2.plot(xax,nt[srt])
+    ax2.plot(xax,n0[srt])
+    ax2.plot(xax,n1[srt])
+def expr_view():
+    ts = load_TS()
+    
+    saff = net_square_affinity()
+    raff = net_affinity()
+
+    tfkeys = raff[2]
+    skeys = saff[1]
+
+    sqidxs = []
+    for k in tfkeys.keys():
+        sqidxs.append(skeys.index(k))
+
+    f = plt.figure(1)
+    f.clear()
+    ax = f.add_axes([0,0,1,1])
+    for k in tfkeys:
+        
+        expr_gmm_onoff(ts[k],draw = True)
+        expr_gmm_onoff(ts[k],log_expr = False,draw =True, fig = 2)
+
+        inp = raw_input('next')
+        if inp == 'd':
+            break
+        
+def expr_gmm_onoff(expr_in,
+                   log_expr = True, 
+                   fig = 1,
+                   draw = False):
+    
+    expr = (array(expr_in))
+    dev = std(expr)
+    if log_expr:
+        expr = log(expr + dev)
+    n = len(expr)
+    expr_array = zeros((n,1))
+    for i in range(n):
+        expr_array[i] = expr[i]
+    expr = expr_array
+        
+    from scikits.learn import gmm
+    
+    #demand seperation of max from alternate hypotheses by e/2
+    cmin_diff = log(e*1.5)
+    #cmin_diff = .0001
+    k = 2
+
+    G = gmm.GMM(n_states = k, n_dim = 1)
+    G.fit(expr)
+    [probs, clusters] = G.decode(expr)
+    [probs, mixtures] = G.eval(expr)
+    mean_as = argsort(G.means,0)
+    for i in range(shape(mixtures)[0]):
+        mixtures[i,:] = mixtures[i,squeeze(mean_as)]
+
+    
+    if draw:
+        n = len(expr)
+        xax = arange(n)[argsort(expr,0)]
+        f = plt.figure(fig)
+        f.clear()
+        ax = f.add_axes([0,0,1,1])
+
+        ct =mycolors.getct(k)
+        cs, rs = [], []
+
+        c2s  = []
+        r2s = []
+        x2s = []
+        y2s = []
+        for i in range(n):
+            cs.append(ct[mean_as[clusters[i]]])
+            rs.append(100)
+            for j in range(k):
+                mprob = mixtures[i,j]
+                x2s.append(i)
+                y2s.append(expr[i])
+                c2s.append(ct[j])
+                r2s.append(pow(exp(mprob),2)*100)
+           
+        x3s,y3s,c3s,r3s = [], [], [], []
+        for i in range(n):
+            probs = mixtures[i,:]
+            cval = clusters[i]
+            srt = argsort(probs)[::-1]
+            maxval = probs[srt[0]]
+            secval = probs[srt[1]]
+            reliable = False
+    
+            if log(maxval) - log(secval) > cmin_diff: reliable = True
+
+            x3s.append(i)
+            y3s.append(expr[i])
+            r3s.append(200)
+            if not reliable:
+                color = [0,0,0]
+            else:
+                color = ct[srt[0]]
+            c3s.append(color)
+    #ax.scatter(xax,expr,rs, color = cs)
+        ax.scatter(x2s,y2s,r2s,edgecolor=c2s,facecolor = 'none')   
+        ax.scatter(x3s,y3s,r3s,c3s)
+    return mixtures
+
+def expr_getonoff(expr_in):
+    expr = array(expr_in)
+    dev = std(expr)
+    #expr = log(expr+dev)
+    k = 3
+    km = mlpy.Kmeans(k)
+    n = len(expr)
+    expr_2d = []
+    for i in range(n):
+        expr_2d.append(array([expr[i],0]))
+    expr_2d = array(expr_2d)
+    comp = km.compute(expr_2d)
+    means = km.means
+    compsort = arange(k)[argsort(map(lambda x: x[0],means))]
+
+    n = len(expr)
+    xax = argsort(expr)
+    
+    means = zeros(k)
+    stds = zeros(k)
+    for i in range(k):
+        idxs = nonzero(equal(comp,i))[0]
+        vals = array(expr)[idxs]
+        means[i] = mean(vals)
+        stds[i] = std(vals)
+        
+
+    f = plt.figure(1)
+    f.clear()
+    ax = f.add_axes([0,0,1,1])
+
+    ct =mycolors.getct(k)
+    cs, rs = [], []
+    for i in range(n):
+        cs.append(ct[compsort[comp[i]]])
+        rs.append(100)
+    ax.scatter(xax,expr,rs, color = cs)
+    
+
+    x0 = 0
+    y0 = 0
+    for i in range(k):
+        ax.plot([x0,x0],[means[i] - stds[i], means[i]+ stds[i]]
+                ,linewidth = 5, color = ct[compsort[i]])
+
+
+def draw_genegene(gg):
+    maxview = 200
+    f = plt.figure(0)
+    ax = f.add_axes([0,0,1,1])
+    ggd = matrix(gg[0:maxview,0:maxview])
+    #for i in range(len(ggd)):
+    #    ggd[i,i] = 0
+
+    ax.imshow(ggd)
+
+def draw_hclustered(clustered):
+    
+    c = clustered['HCluster']
+    clusters = c.cut(0)
+    f = plt.figure(0)
+    f.clear()
+    ax = f.add_axes([0,.6,1,.4],aspect = 'auto')
+    ax2 = f.add_axes([0,.05,1,.4],aspect = 'auto')
+    ax.set_aspect('auto')
+    c0 = c.cut(0)
+    n = max(array(c0)) +1
+    nlvl = 50
+    h = zeros((nlvl,n))
+
+    cuts = linspace(0,.9,nlvl)
+    appearances = zeros(n)-1
+    for i in range(nlvl):
+        cut = cuts[i]
+        clusters = c.cut(cut)
+        for j in range(n):
+            cval = clusters[j]
+            if appearances[cval] == -1: appearances[cval] = j
+            h[i,j] = appearances[cval]
+        h[i,:] = sorted(h[i,:])
+        ax2.plot(h[i,:])
+        
+    for i in range(shape(h)[0]):
+        h[i,:] /= max(h[i,:])
+
+    ax.imshow(h, aspect = 'auto', interpolation = 'nearest')

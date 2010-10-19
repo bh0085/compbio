@@ -1,7 +1,13 @@
 def svd_test():
+    import mpl.littlegui as lg
+    win = lg.makewindow(pressed)
+
+def pressed():
+
     M = reshape(array([1,1,0,0,1,0,0,0,0][::-1]),(3,3))
     U, S, Vh = lin.svd(M)
     V = Vh.T
+    
     
 
     f = plt.figure(0)
