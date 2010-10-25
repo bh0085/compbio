@@ -1,0 +1,12 @@
+I've grabbed a few packages for learning in python.
+
+For clustering, I use mply.HCluster, KCluster
+
+For regression, I use mlpy.RidgeRegression, ElasticNet
+
+For svm, I am wrapping SVM light, see: mysvm.
+
+For NNs, try fann (C Wrapped, fast, complicated and fully featured)
+    	 or ffnet (Fortran Wrapped, fast, simple)
+
+For GA, use pyEvolve.
