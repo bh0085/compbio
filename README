@@ -1,0 +1,7 @@
+For the newest networks, check /network/patrick/[___].txt
+
+I am not sure which is better, they share at least 60% of edges.
+
+A utility to view TF/TG expression levels is in /network/step_predict.py.
+
+New utilities to parse the new network are in /network/netutils2.py
