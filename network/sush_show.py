@@ -5,14 +5,14 @@ import re
 import matplotlib.pyplot as plt
  
 
-def show_m(net_number = 0):
+def show_m(net_number = 0, ntf = 100, trgskip = 100, name = 'fRN'):
     #A few functions defined here to be used later
     trgfun = lambda x: x[1]
     wtfun = lambda x:float( x[2] )
     tffun = lambda x: x[0]
     sigmafun = lambda x: 1 / (1 + np.exp(-x /1))
 
-    prefix = 'predmodel/regressionwts/fRN'
+    prefix = 'predmodel/regressionwts/'+name
     nwdata = open(os.path.join(prefix,'nw_'+str(net_number) + '.sif')).read()
     #Parse the list
     r = re.compile('^[ ]*(?P<target>[^\s]+)\t(?P<tf>[^\s]+)\t(?P<weight>[^\s]+)',re.M)
@@ -59,8 +59,8 @@ def show_m(net_number = 0):
     
 
     #Display options:
-    rtype = 'abs' #valid types, abs and val
-    axis =  'polar' # valid types are rect and polar
+    rtype = 'val' #valid types, abs and val
+    axis =  'rect' # valid types are rect and polar
     colortype = 'sign' # valid types are sign and identity
 
     #Configure the plotter
@@ -79,8 +79,8 @@ def show_m(net_number = 0):
 
 
     #Choose subsets of interest for TF and Gene
-    n = len(tfsort/100)
-    trg_subset = trgnames[::100]
+    n = len(tfsort)/50
+    trg_subset = trgnames[::50]
     
     #Initialize the loop
     xs , ys, cs, rs,ts,ps = [],[],[],[],[],[]
@@ -94,7 +94,7 @@ def show_m(net_number = 0):
         ys.insert(0,mid[1]*rval)
         ts.insert(0,2 * np.pi * i / n)
         ps.insert(0,rval)
-        rs.insert(0,tflens[j])
+        rs.insert(0,tflens[j]*3)
         cs.insert(0,[0,0,1])
         tfname = tf_d.keys()[j]
         tf =  tf_d[tfname]

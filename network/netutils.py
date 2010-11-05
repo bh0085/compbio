@@ -324,78 +324,76 @@ def net_blanket( name = default_name , reset = 0, order = 1):
 
 
 def expr_TS_binary(reset = 0 , 
+                   name = default_name,
                    hardcopy = True ):
-    pass
+    try:
+        if reset: raise Exception('compute')
+        return nw.readnet(name,hardcopy = hardcopy)
+    except Exception as e:
+        if e.args[0] != 'compute': raise Exception()
+        nw.claim_reset()        
+        ts = load_TS()
+        ts_mixtures = {}
+        count = 0
+        
+        nc = len(ts[ts.keys()[0]])
+        all_states = {}
+        
+        for k in ts.keys():
+            if mod(count,100) == 0 : print count
+            count += 1
+            t = ts[k]
+            #ts_mixtures contains the probabilities of a classification
+            #at each timepoint (0 = off, 1 = onn)
+            mixture = expr_gmm_onoff(t)
+            cutoff = .25 #demand 25% certainty for a label
+            mix0 = squeeze(mixture[:,0])
+            mix1 = squeeze(mixture[:,1])
+            
+            states = zeros(nc) + 2
+            states[nonzero(greater(mix1, mix0 + cutoff))[0]] = 1
+            states[nonzero(greater(mix0, mix1 + cutoff))[0]] = 0
+            all_states[k] = states
 
-def expr_CL_binary(reset = 0,
-                   hardcopy = True):
-    ts = load_TS()
-    ts_mixtures = {}
-    count = 0
-    
-    mean0,max0,mean1,max1,n0,n1 = [[] for i in range(6)]
-    for k in ts.keys():
-        if count > 100: break
-        count += 1
-        t = ts[k]
-        #ts_mixtures contains the probabilities of a classification
-        #at each timepoint (0 = off, 1 = onn)
-        mixture = expr_gmm_onoff(t)
-        cutoff = .25 #demand 25% certainty for a label
-        mix0 = squeeze(mixture[:,0])
-        mix1 = squeeze(mixture[:,1])
+        nw.writenet( name, all_states, hardcopy = hardcopy)
+        return all_states
 
-        for i in range(3):
-            if i == 0: w = nonzero(greater(mix0, mix1+cutoff))[0]
-            elif i == 1: w = nonzero(greater(mix1, mix0+cutoff))[0]
-            elif i == 2: w = nonzero(less(abs(mix0 - mix1),cutoff))[0]
-                     
-            n = len(w)
-            if i < 2: 
-                if n == 0: meanu =1
-                else: meanu =mean( [mixture[w,i] -mixture[w,1-i]])
-            if i < 2: 
-                if n == 0: maxu = 1
-                else: maxu =np.max([  mixture[w,i] - mixture[w,i-1]])
-            if i ==0:
-                mean0.append(meanu)
-                max0.append(maxu)
-                n0.append(n)
-            elif i==1:
-                mean1.append(meanu)
-                max1.append(maxu)
-                n1.append(n)
-     
-    max1 = array(max1)
-    mean1 = array(mean1)
-    max0 = array(max0)
-    mean0 = array(mean0)
-    n0 = array(n0)
-    n1 = array(n1)
-    n = len(mean1)
-    f = plt.figure(0)
-    f.clear()
-    ax = f.add_axes([.05,0,.95,1])
-    xax = arange(n)
-    ct = mycolors.getct(2)
+def expr_CL_binary(reset = 0 , 
+                   name = default_name,
+                   hardcopy = True ):
+    try:
+        if reset: raise Exception('compute')
+        return nw.readnet(name,hardcopy = hardcopy)
+    except Exception as e:
+        if e.args[0] != 'compute': raise Exception()
+        nw.claim_reset()        
+        ts = load_CL()
+        ts_mixtures = {}
+        count = 0
+        
+        nc = len(ts[ts.keys()[0]])
+        all_states = {}
+        
+        for k in ts.keys():
+            count += 1
+            t = ts[k]
+            #ts_mixtures contains the probabilities of a classification
+            #at each timepoint (0 = off, 1 = onn)
+            mixture = expr_gmm_onoff(t)
+            cutoff = .25 #demand 25% certainty for a label
+            mix0 = squeeze(mixture[:,0])
+            mix1 = squeeze(mixture[:,1])
+            
+            states = zeros(nc) + 2
+            states[nonzero(greater(mix1, mix0 + cutoff))[0]] = 1
+            states[nonzero(greater(mix0, mix1 + cutoff))[0]] = 0
+            all_states[k] = states
 
-    nt = array(n0) + array(n1)
-    srt = argsort(nt)
+        nw.writenet( name, all_states, hardcopy = hardcopy)
+        return all_states
 
 
-    #ax.plot(xax,mean0[srt],color =ct[0])
-    #ax.plot(xax,max0[srt],color = ct[0])
-    ax.plot(xax,mean1[srt],color = ct[1])
-    ax.plot(xax,max1[srt],color = ct[1])
 
-    f2 = plt.figure(1)
-    f2.clear()
-    ax2 = f2.add_axes([.05,0,.95,1])
-    srt = argsort(nt)
-    xax = range(len(nt))
-    ax2.plot(xax,nt[srt])
-    ax2.plot(xax,n0[srt])
-    ax2.plot(xax,n1[srt])
 def expr_view():
     ts = load_TS()
     
@@ -422,7 +420,7 @@ def expr_view():
             break
         
 def expr_gmm_onoff(expr_in,
-                   log_expr = True, 
+                   log_expr = False, 
                    fig = 1,
                    draw = False):
     
