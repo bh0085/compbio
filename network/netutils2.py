@@ -10,8 +10,6 @@ def parse_name(name):
     tfs = {}
     tgs = {}
     
-    
-    
     for l in lines:
         tf = l.split('\t')[0]
         tg = l.split('\t')[1]
@@ -25,7 +23,6 @@ def parse_name(name):
         tglist = tgs.get(tg, [])
         tglist.append((tf,weight))
         tgs[tg] = tglist
-        
         
     return tfs, tgs
 
