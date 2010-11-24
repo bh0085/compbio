@@ -1,0 +1,37 @@
+\documentclass{letter}
+\usepackage{geometry}
+
+\begin{document}
+Review for ``Predicting Bacteriophage Susceptibility in E. Coli Mutants''
+
+Proposed by Jenny Cheng and Nadia Makan
+
+Reviewed by Ben Holmes (brh@mit.edu)
+
+This proposal has an interesting idea: to identify and weight a set of genomic characteristics in e-coli for their ability to ward off phage predation certainly sounds novel. Presumably if the task can be accomplished, you will derive substantial insight into bacterial population dynamics and phage interaction. It seems to me that many of the methods that would be developed in such an endeavor could be useful in medicine in order to track the development of resistances to antibiotics and the efforts of the adaptive immune system as sequencing rises to prominence in medicine.
+
+With respect to your described motivation of the project however, I have a few questions:
+
+\begin{enumerate}
+\item{Why exactly have you chosen to tie the significance of your project to hypothetical accidents in synthetic biology when other applications of your work seem equally plausible?}
+\item{The score defined in your approach section is a sum of features inducing susceptibility, do you have some reason to suspect that genetic engineers will find cause to pluck these susceptibilities one by one from their pet organisms?}
+\item{Do you instead suppose that fully synthetic creations such as Craig Venter's minimal organisms will find phage resistance a sufficient advantage to outcompete natural competitors in the ecosystem?}
+\end{enumerate}
+
+In your innovation section, you suggest that nobody has yet tried to compute such a score for bacteriophage susceptibility. If you can compute such a score, then your work will indubitably be innovative but I wonder: do you have some reason to believe that one should exist? 
+
+As I understand it, bacteriophage and bacteria coexist in natural environments with a ``kill the winner" dynamic - won't phage quickly evolve to attack strains that derive sufficient fitness from their immunity to rise to prominence in a population? Phage are highly variable and something that is not entirely clear to me from this proposal is whether you intend to score bacterial resistance to all phage or just a particular strain. The papers you cite seem to examine resistance to single strains.
+
+Reading your approach section, I wonder about the specifics of your scoring heuristic:
+
+\begin{enumerate}
+\item{What exactly is a ``gene contributing to viral replication''? Don't most phage rely largely on the replication machinery of bacteria themselves? When phage do not, do they pack replication proteins of their own?}
+\item{What exactly is H?}
+\item{How specific are viral receptor proteins to specific viruses? If you are trying to compute an overall score for resilience to phage predation will a sum over all putative receptor proteins be a relevant quantity?}
+\item{More generally, will your final formulation retain the assumption here that susceptibility score is a linear function of the total number of appearances of lumped traits? Is there some reason to suspect that this formulation reflects reality?}
+\end{enumerate}
+
+Overall, while your idea seems innovative, I hope that you will clarify your approach and goals substantially. If you do then I think that this will be a very interesting project - I look forward to seeing it completed!
+
+
+\end{document}

@@ -1,0 +1,44 @@
+%%% review_ahn.tex --- 
+
+%% Author: bh0085@31-34-106.wireless.csail.mit.edu
+%% Version: $Id: reviews.tex,v 0.0 2010/11/03 17:29:57 bh0085 Exp$
+
+
+\documentclass[12pt,draft,a4paper]{article}
+%%\usepackage[debugshow,final]{graphics}
+
+%%\revision$Header: /Users/bh0085/Programming/Comp Bio/HW/set3/reviews.tex,v 0.0 2010/11/03 17:29:57 bh0085 Exp$
+
+\usepackage{amsmath}
+
+\begin{document} 
+
+%%%%##########################################################################
+
+\section*{Proposal review:\\ Phylogenetic Tree Construction of Pain Related Receptors}
+\subsection*{proposed by:\\ Minjeong Clair Ahn}
+
+I like your proposal very much. In so far as you seek to understand pain receptors, your work is of applied interest. Your schedule, your approach and its explication seem straightforward; to them, I can suggest only minor changes:
+
+\begin{enumerate}
+\item{I cannot comment on the accuracy of the distance based tree computation method of ClusalW but if you are looking for a simple tree builder to compare to the results of phyml, one that seems to perform pretty well for large trees is BioNJ. One advantage to BioNJ is that it is packaged with phyml (I think) and can be run automatically as part of the phyml tree building sequence.
+}
+\item{If part of your methodology will to be to build your own tree builder, you should explain why this will be necessary. What improvements will you hope to realize with a homebrewed tree builder? Will these improvements be worth the time you spend implementing a tree search?
+}
+
+
+
+\end{enumerate}
+
+And similar to the latter point: while the proposal's opening section clearly establishes the significance of research into pain receptors and pain-related receptors, the specific applications of constructing a phylogeny for them are not clear to me. 
+
+If as you say, most approaches to dealing with pain are based on old technologies, then the field is ripe for innovation. If pain receptor phylogenies have not yet been built, then the proposal is presumably innovative but I would like to see how these things connect. 
+
+Similarly, while your approach seems to be sufficiently hard (especially if you construct your own tree building algorithm), I wonder how the magnitude of your work will translate to improving the understanding and treatment of pain. Since your background is in the study of pain and you have chosen to this project, I assume you a have good idea of these things. Perhaps they could have been made clearer in the proposal?
+
+These things aside, I am excited to see how your project turns out. I wonder whether we will observe for example, that pain receptors have different phylogenies than the organisms that contain them?
+
+
+%%%%##########################################################################
+
+\end{document}

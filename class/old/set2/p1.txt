@@ -1,0 +1,8 @@
+1)
+	a) See 1a.pdf.
+	b) P(E(2) == A) = P(alpha) * P(alpha->A) + P(beta) * P(beta->A) + ...
+		        = .095
+	c) See 1c.pdf
+	d) See 1d.pdf.
+	   Since the total likelihood is 1.5e-4 and the path likelihood is
+      	   2.8e-5, the 'most likely path' is actually quite unlikely.

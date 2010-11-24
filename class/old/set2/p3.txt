@@ -1,0 +1,64 @@
+3)	a)
+	The distribution is a decreasing exponential: since at every
+	base, we have a (1-a_kk) chance of exiting state k, the expected
+	value for occupancy time is exactly 1/(1-a_kk).
+
+	P(D_k = d) = exp(-(d * (1-a_kk))) *C
+	where C is a normalizing constant = 1/(1-a_kk)
+
+	b)
+	In the hardcoded model, the expected duration is 100 since transition
+	probability is 1%. The accuracy is indeed ~83%.
+
+	c)
+	The model gets accuracies of: 71.96%,  68.80%, 67.72% for mystery 1,2,3.
+	
+	Each of the mystery sequences has a distribution of lengths whose
+	mean is ~100 and each has a roughly symmetric distribution of lengths
+	around this point. Although symmetric, each distribution has a
+	characteristic shape and standard deviation.
+	
+	Our simplistic model does worse as SD shrinks - perfoming most poorly
+	on the mystery3 data set whose length distribution has a single skinny
+	peak at 100.  
+
+	In each case, our model has generated predictions with a roughly
+	exponential falloff of lengths and higher mean length than
+	the actual data set.
+
+	d) 
+	This procedure would probably not be effective here: since GC content
+	between high and low regions does not vary between mystery examples, it
+	would be useless to try and learn emission probabiliies. Meanwhile
+	as the length distributions are symmetric about the mean, we not expect
+	a learning algorithm to adjust the transition amplitudes in any 
+	meaningful way.
+
+	Noting that on these sequences much of the error is coming form the
+	fact that my model derives a much higher mean sequence length than
+	desired, I can boost accuracies to: 83.83% 83.87% 82.40% 
+	respectively simply by raising transition probabilities to .1 and
+	thus pushing the mean sequence length back down to ~100.
+
+	e)
+	GENSCAN parses sequences using a Hidden Markov Model like we do but 
+	fixing a different element length before each consecutive parsing. 
+	After running at different lengths it chooses parsing and scale to 
+	maximize likelihood at a locus. 
+
+	In similar fashion, we could recode the algorithm to search for states
+	with duration exactly 100 states. Such a search would perhaps swap
+	the high g-c state with 100 states having the same emissions but a
+	a deterministic transition path e.g:
+	
+	M1_1 -> M1_2 -> M1_3.... M1_100 -> M2_1 -> ...
+  
+	with: tr(M1_i,M2_j) = 0 for all i != 100, j != 0.
+	      tr(M1_i,M1_j) = 0 for all j != i+1	
+
+	and would perhaps do very well on mystery 3. We could similarly adjust
+	the transition parameters to remove determinism and encode a
+	variety of length distributions such as a gaussian (mystery3) by 
+	allowing transition amplitudes from M1_i -> M2_0 to vary.
+
+code modifications are contained in viterbi.py
