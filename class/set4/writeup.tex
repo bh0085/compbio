@@ -1,0 +1,71 @@
+%%% writeup.tex --- 
+
+%% Author: bh0085@Buddy.local
+%% Version: $Id: writeup.tex,v 0.0 2010/11/25 08:33:28 bh0085 Exp$
+
+
+\documentclass[12pt,draft,a4paper]{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+%%\usepackage[debugshow,final]{graphics}
+
+%%\revision$Header: /Users/bh0085/programming/Python/compbio/class/set4/writeup.tex,v 0.0 2010/11/25 08:33:28 bh0085 Exp$
+
+\begin{document}
+
+
+%%%%##########################################################################
+\setlength{\parindent}{0in}
+
+\section{Representing Trees}
+
+\section{Tree Building}
+
+\section{Positive Seletion}
+\subsection*{(a)}
+\subsubsection*{i}
+Long haplotypes indicate that a derived locus has risen to  prominence in a population on a shorter time scale than recombinative disruption. For a large population this is unlikely to happen unless selection is at work.
+\subsubsection*{ii}
+Because in a long haplotype many individual polymorphisms may have been derived and hitchihiked to prominence by chance alone.
+\subsubsection*{iii}
+cM is preferable here because rates of recombination can vary across the chromosome - recombination frequency measure a genetic distance with recombination taken into account. (see figs/3aiii.png)
+\subsubsection*{iv}
+C, Europe appears to be under selection as it scores high in EHH in comparison with each population.
+\subsubsection*{v}
+79 snps appear above 2.0.
+\subsection*{(b)}
+\subsubsection*{(i)}
+Back of the envelope: the ancestor is about halfway between chimp and human thus $.66$\% of the traits that we label "ancestral" will have in fact been derived by the chimp. For these we will usually observe the true ancestral trait in humans which we will misidentify as derived. 
+
+\subsubsection*{ii}
+
+See figs/3bii.png
+
+\subsubsection*{iii}
+
+See figs/3biii.png
+
+\subsection*{(c)}
+\subsubsection*{i}
+\begin{align*} H_S &= \overline{p\times(1 - p)}\\
+&=\frac{\left(p+d\right) - \left(p+d\right)^2 + \left(p-d\right) - \left(p-d\right)^2}{2}\\
+\implies F_{ST} &= \frac{H_T - H_S}{H_T}\\
+&= \frac{ p(1-p) - (p-p^2-d^2)}{p(1-p)}\\
+&=\frac{d^2}{p(1-p)}\end{align*}
+\section{Variant Discovery}
+\subsection*{ii}
+Can estimate $H_T$ from $\frac{\text{\#heterozygotes}}{\text{\#total}}$ and estimate $H_P$ over subpopulations. Using these numbers, can compute $F_{ST}$. Given $H_{T}$ compute $p$:
+\begin{align*}
+2p^2 + 2p + H_T = 0 \implies p =\frac{ -2 \pm \sqrt{4 - 4(2)(H_T)}}{4}
+\end{align*}
+and compute $d$:
+
+\begin{equation} d = \sqrt{p(1-p)F_{ST}} \end{equation}
+
+\section{Coalescence}
+
+
+
+%%%%##########################################################################
+
+\end{document}

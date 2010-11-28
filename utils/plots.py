@@ -19,5 +19,6 @@ def color_legend(fig,colors, labels,
 
     fig.legend(patches,
                labels,pos,
-               frameon = frameon
+               frameon = frameon,prop = {'family':'serif'},
+               fancybox = True
                )

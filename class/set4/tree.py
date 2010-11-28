@@ -2,6 +2,9 @@ import matplotlib.pyplot as plt
 from numpy import *
 import matplotlib.text
 import numpy as np
+import upmg
+
+v = True
 
 seed_seqs = ['AACCGG',
              'ACTCAG',
@@ -14,20 +17,204 @@ costs =array( [[0,1,2,2],
         [2,2,1,0]
         ])
 
-class MyTree():
-    def __init__(self,nx, ny, nlinks,parents, labels = []):
-        self.xs = nx
-        self.ys = ny
-        self.children = nlinks
+class Tree2():
+    def __init__(self, parents, children, labels = None, weights = None):
         self.parents = parents
+        self.children = children
         self.labels = labels
+        self.weights = weights
+        print weights
+        self.nodexy = None
+        self.node_xy = [[] for i in range(len(parents))]
+        if v: print 'canonicalizing tree on init'
+        self.canonicalize()
+        self.make_xys()
+        self.cxnlabels = None
+        self.biglabel = ''
+
+
+    def canonicalize(self):
+        p2 = list(self.parents)
+        c2 = list(self.children)
+        #canonicalizes the list of node children.
+        print p2
+        #root the tree at the last node in the list:
+        c0 = c2[-1]
+        
+        if v: print "canonicalizing under the assumption that nodes are"
+        if v: print "indexed with children appearing before parents"
+
+        n = len(p2)
+        min_child = arange(n)
+        for i in range(n):
+            min_child[p2[i]] = min([min_child[p2[i]],min_child[i]])
+            
+    
+        print c2
+        for i in range(n):
+            if not c2[i]: continue
+            if min_child[c2[i][0]] > min_child[c2[i][1]]:
+                c2[i].reverse()
+        self.children = c2
+        if v: print "done canonicalizing"
+        
+
+    def make_xys(self):
+        leaves = nonzero( map(lambda x: x == [], self.children))[0]
+        n = len(self.children)
+        sorted_leaves = []
+        self.subtree_leaves(n-1,sorted_leaves)
+        nl = len(leaves)
+        
+        #generate a list of locations and spool them into
+        #leaf coordinates ordered in the canonical fashion
+        xs = 10*cos((arange(float(nl))-0)/nl * pi * 2)
+        ys = 10*sin((arange(float(nl))-0)/nl * pi * 2)
+        
+        self.lx, self.ly = [], []
+        e_idx = -1
+        for i in range(nl):
+            try: 
+                this_i = sorted_leaves.index(i)
+            except Exception, e:
+                this_i = e_idx
+                e_idx -= 1
+
+
+            self.lx.append(  xs[this_i] )
+            self.ly.append(  ys[this_i] )
+
+        roots = nonzero(equal(self.parents,-1))[0]
+        for r in roots:
+            xy_root = self.get_xy(r)
+
+        print self.node_xy
+        
+    def pull_xys(self, pull = .4, leaves = True):
+        n = len(self.children)
+        for i in range(n)[::-1]:
+            xyp = self.node_xy[i]
+            for c in self.children[i]:
+                if not leaves and self.children[c] == []: continue
+                self.node_xy[c] += (xyp - self.node_xy[c])*pull
+                
+
+    
+    def scale_branches(self):
+        print 'scaling branches with a pad of 1'
+        pad = 1
+        roots = nonzero(equal(self.parents,-1))[0]
+        for r in roots:
+            self._scale_branches(r,[0.0,0.0], pad = 1)
+
+    def _scale_branches(self,idx, shiftxy,pad = 0):
+        """shiftxy is the amount that the parent of this node has already been shifted"""
+
+        childs = self.children[idx]
+        weights = self.weights[idx]
+
+        newxy =  self.node_xy[idx] + shiftxy
+        for i in range(len(childs)):
+
+            
+            c = childs[i]
+            w = weights[i]
+            cxy = self.node_xy[c]
+            delta = cxy - newxy
+            mag = np.sqrt(np.sum(np.power(delta,2)))
+            cshift = (newxy + (delta/mag *(w+ pad))) - cxy 
+            self._scale_branches(c, cshift,pad = pad)
+
+        self.node_xy[idx] = newxy
+        
+
+        # + delta / mag * w 
+
+    def subtree_leaves(self,idx,sorted_leaves):
+        """return a list of subtree leaves in the order of their occurence"""
+        #... using a recursive alg...
+        if not self.children[idx]:
+            sorted_leaves.append(idx)
+            return
+        else:
+            self.subtree_leaves(self.children[idx][0],sorted_leaves)
+            self.subtree_leaves(self.children[idx][1],sorted_leaves)
+            return
+
+    def get_xy(self,idx):
+        if not self.node_xy[idx]:
+            self.compute_xy(idx)
+        return self.node_xy[idx]
+        
+    def compute_xy(self, idx):
+        if self.children[idx] == []:
+            self.node_xy[idx] =array( [self.lx[idx],self.ly[idx]])
+        else:
+            self.node_xy[idx] = np.mean([self.get_xy(self.children[idx][0]),
+                                    self.get_xy(self.children[idx][1])], 0)
+        
+
+def run_upgma(max_itr = -1):
+    max_n = 4
+    f = plt.figure(0)
+    f.clear()
+    f.set_facecolor('.8')
+
+    for i in range(max_n):
+        ax = f.add_subplot('22'+str(i+1))
+        u,dists  = upmg.run_test_upgma(max_itr = i+2)
+        t = u.tree
+        t.biglabel = str(dists)
+        t.pull_xys(.25, leaves = False)
+        draw(t, plot_weights = False, ax = ax)
+        
+    ax.annotate('(b) UPGMA with distance matrices',[0,0],xytext = [.05,.9],family = 'serif',textcoords = 'figure fraction',size = 'xx-large')
+        
+        
+
+def run_nj(max_itr = -1):
+
+    max_n = 4
+    f = plt.figure(0)
+    f.clear()
+    f.set_facecolor('.8')
+
+    
+    ax = f.add_subplot('11'+str(1))
+    u,dists = upmg.run_test_nj()
+    t = u.tree
+    t.scale_branches
+    t.pull_xys(.4, leaves = False)
+
+    draw(t, plot_weights = True, ax = ax)
+    ax.annotate('(c) The NJ Algorithm Get Lengths Right',[0,0],xytext = [.05,.9],family = 'serif',textcoords = 'figure fraction',size = 'xx-large')
+
 
 def run():
-    t = build()
-    s = get_costs(t)
-    print t.labels
-    draw(t)
 
+    coals = [[[0,1],[0,1],[0,1]],
+             [[0,2],[0,1],[0,1]],
+             [[0,3],[0,1],[0,1]]]
+
+
+    f = plt.figure(0)
+    f.clear()
+    f.set_facecolor('.8')
+
+
+
+
+    for i in range(len(coals)):
+        c = coals[i]
+        ax = f.add_subplot('13'+ str(i))
+        t = build(nodes = range(4),coals = c)
+        t.pull_xys(leaves = False)
+        s = get_costs(t)
+        draw(t,plot_weights = False,ax = ax)
+    ax.annotate('(a) The best pairing is the third one',[0,0],xytext = [.05,.9],family = 'serif',textcoords = 'figure fraction',size = 'xx-large')
+
+def get_coals():
+    return [[0,1],[0,1],[0,1]]
 def get_costs(tree):
     c = tree.children
     n = len(c)
@@ -38,8 +225,9 @@ def get_costs(tree):
     seen[leaves] = 3
     
     compute = []
-    print 'fixing seq length = 6'
-    seq_len = 6
+    print 'assuming fixed seq_length'
+    seq_len = len(tree.labels[0])
+    print seq_len
     seq_costs = zeros((n,seq_len,4),float)
 
     
@@ -73,143 +261,152 @@ def get_costs(tree):
             compute.append(w)
     
     labels = []
+    max_c = -1
     for i in range(n):
         label = []
         for j in range(seq_len):
-            label.append(np.min(seq_costs[i,j,:]))
+            p_costs = np.min(seq_costs[i,j,:])
+            label.append(p_costs)
+        if np.sum(label) > max_c: max_c = np.sum(label)
         labels.append(label)
     for i in range(len(tree.labels)):
-                                   
         if tree.labels[i] == '':
             tree.labels[i] = labels[i]
-
-def get_coals(x,y):
-    return [[3,1],[2,0],[0,3]]
-
-def build(nodes = range(4)):
-
-
-    xleaves = array([0,0,1,1],float)
-    yleaves = array([0,1,0,1],float)
-    
+    tree.biglabel = 'Cost: ' +str(max_c)
+def build(nodes = range(4), coals = [[0,1],[0,1],[0,1]]):
     #use a fairly silly notation for coalescence
     #store the current cluster of each leaf so that
     #I can merge leaves...
-
-    coals = get_coals(xleaves, yleaves)
     currents = range(4)
-    
     nlinks = []
-    nx = []
-    ny = []
     seqs = []
     for x in nodes:
         nlinks.append([])
-        nx.append(xleaves[x])
-        ny.append(yleaves[x])
         seqs.append(seed_seqs[x])
 
-    for i in coals:
-        i_last = i
-        #search forward for node current positions in the list
-        while 1:
-            i_new= currents[i_last[0]],currents[i_last[1]]
-            if i_new == i_last: break
-            else: i_last = i_new
-        idxs = i_new
-
-        x = mean(array([nx[idxs[0]],nx[idxs[1]]],float))
-        y = mean(array([ny[idxs[0]],ny[idxs[1]]],float))
-        
+    T=nodes
+    L=list(T)
+    parents = [-1] * len(T)
+    children = [[]] * len(T)
+    weights = list(children)
+    for c in coals:
+        parents.append(-1)
+        children.append([])
+        weights.append([1,1])
         seqs.append('')
+        nidx = len(T)
+        T.append(nidx)
 
-        cur_node = len(nlinks)
+        chosen= [L[c[0]],L[c[1]]]
+        for n in chosen:
+            L.remove(n)
+            parents[n] = nidx
+            children[nidx].append(n)
+        print nidx
+        print T
+        L.append(nidx)
+        
 
-        #link the list backward
-        nlinks.append(idxs)
-        nx.append(x)
-        ny.append(y)
+    t = Tree2(parents, children, labels = seqs,weights = weights)
 
-
-        #link the list forward
-        currents.append(cur_node)
-
-        currents[idxs[0]] = cur_node
-        currents[idxs[1]] = cur_node
-
-    t = MyTree(nx,ny,nlinks,currents, labels = seqs)
     return t
+
+
 
 def merge_seqs(s1,s2):
     return s1
 
-def draw(tree):
-    #PARAMS
-    nudge = .25
+def node_radius(tree,idx):
+    if tree.children[idx] == []:
+        return 20
+    else:
+        return 5
+
+def draw(tree,plot_weights = True, ax = None):
 
     xs = []
     ys = []
     rs = []
     ls = []
     l_ofs = []
-    
     import matplotlib.patches as patches
     cxns = []
-
-    node_xs = array(tree.xs)
-    node_ys = array(tree.ys)
-
-    #Pull Children towards parents
-    n = len(node_xs)
-    for i in range(n)[::-1]:
-        p = i
-        children = tree.children[i]
-        for c in children: 
-            node_xs[c] +=  nudge *( node_xs[p] - node_xs[c])
-            node_ys[c] +=  nudge *( node_ys[p] - node_ys[c])
-
+    n = len(tree.parents)
+    cxweights = []
 
     for i in range(n)[::-1]:
         children = tree.children[i]
-        p = tree.parents[i]
+        
 
-        x0 = node_xs[i]
-        y0 = node_ys[i]
+        if tree.cxnlabels:
+            labels = tree.cxnlabels[i]
+        if tree.weights:
+            labels = map(lambda x: str(around(x,3)),tree.weights[i])
+        else:
+            labels = ['' for i in range(len(children))]
+            
+
+        x0, y0 = tree.node_xy[i]
         xs.append(x0)
         ys.append(y0)
         
         ls.append(tree.labels[i])
 
+        r = node_radius(tree,i)
+        rs.append(pow(r,2)*pi)
+        l_ofs.append(r+3)         
+        for i in range(len(children)):
+            w = labels[i]
+            c = children[i]
+            x1,y1 = tree.node_xy[c]
+            delta = array([x0,y0]) - array([x1,y1])
+            cxweights.append({'xy':np.mean(array([[x0,y0],[x1,y1]]),0),
+                              'wt':w,
+                              'unit':delta / sqrt(np.sum(power(delta,2)))})
 
-        if children:
-            r = 5
-            rs.append(pow(r,2)*pi)
-            l_ofs.append(r)    
-        else:
-            r = 20
-            l_ofs.append(r)
-            rs.append(pow(r,2)*pi)
-
-        for c in children:
-            x1,y1 = node_xs[c], node_ys[c]
             p = patches.ConnectionPatch([x0,y0],[x1,y1],'data','data',
-                                        arrowstyle = 'wedge,tail_width=3',
-                                        shrinkA = 25,
-                                        shrinkB = 25,
+                                        arrowstyle = 'wedge,tail_width=1.5',
+                                        shrinkA = r + 2,
+                                        shrinkB = node_radius(tree,c) + 3,
                                         edgecolor = 'black',
                                         facecolor = 'white',
                                         alpha = .5)
             cxns.append(p) 
         
-    f = plt.figure(0)
-    f.clear()
-    ax = f.add_subplot('111')
+    if not ax:
+        f = plt.figure(0)
+        f.clear()
+        ax = f.add_subplot('111', frameon = False)
+        
+    plt.axis('off')
+
+
     for x in cxns:
         ax.add_patch(x)
-        
+
+
     ax.scatter(xs,ys,rs,'white')
     for i in range(len(xs)):
         ax.annotate(ls[i],[xs[i],ys[i]],
                     xytext = [l_ofs[i],l_ofs[i]],
-                    textcoords = 'offset points')
+                    textcoords = 'offset points',
+                    bbox=dict(boxstyle="round4,pad=.5", fc="0.99",alpha = .5),
+                    color = (lambda x: x and 'black' or 'black')(plot_weights),
+                    size = 'small')
+
+    if plot_weights:
+        for w in cxweights:
+            print sqrt(sum(power(w['unit'],2)))
+            xytext = 50*array([w['unit'][1],-1*w['unit'][0]])
+            print  sqrt(sum(power(xytext,2)))
+            ax.annotate(w['wt'],w['xy'], 
+                        xytext = xytext,
+                        textcoords = 'offset points',
+                        arrowprops = {'width':10,'alpha':1,'shrink':.1},
+                        color = 'black',
+                        size = 'small')
         
+    if tree.biglabel:
+        ax.annotate(tree.biglabel, [0,0],
+                    family = 'serif',size = 'x-large',
+                    xycoords='axes points')
