@@ -15,8 +15,8 @@ def num2seq(num):
         current/=4
     return seq
 
-def parse_known_motifs():
-    data = open('data/Yeast_known_motifs.txt').read()
+def parse_known_motifs(fname ='data/Yeast_known_motifs.txt'):
+    data = open(fname).read()
     #omit the header line
     data = data[data.index('\n'):]
     #parse with a regular expression

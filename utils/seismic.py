@@ -11,13 +11,19 @@ def seismic(fig,
             xax = None,
             edgecolor = 'none',
             linewidth = 0,
-            scale_none = 'False',
+            scale_none = False,
             subplot = None,
             axison = 'off',
             y_marked = None,
-            continuous = True):
-    
-    
+            mark_scale = True,
+            continuous = True,
+            ax = None,
+            yunits = '',
+            xunits = '',
+            label_y = True,
+            label_x = True,
+            labelspace= True):
+
     #Seismic only shows absolute values... deal with it.
     yvecs = np.abs(yvecs_in)
     n = shape(yvecs)[0]
@@ -27,10 +33,12 @@ def seismic(fig,
     big_max = np.max(yvecs)
     all_maxes = np.max(yvecs,1)
     
-    if not subplot:
-        ax = fig.add_axes([0,0,1,1],frameon = False)
-    else:
-        ax = fig.add_subplot(subplot)
+    if not ax:
+        if not subplot:
+            ax = fig.add_axes([0,0,1,1],frameon = False)
+        else:
+            ax = fig.add_subplot(subplot)
+
     if not xax:
         xax = arange(nx)
 
@@ -53,9 +61,14 @@ def seismic(fig,
 
     nz_lambda = lambda x: x == 0 and 1 or x
     for i in range(n):
-        yfrac = 1.0/2.5/n
+        if not labelspace:
+            neff = n
+        else:
+            neff = n+1.5
+
+        yfrac = 1.0/2.0/(neff)
         ypad = 1.1
-        yofs =  (float(i)+.5) / n
+        yofs =  (float(i)+1) / neff
         yvec = yvecs[i]
 
         
@@ -66,35 +79,77 @@ def seismic(fig,
             scl = 1.0/nz_lambda(big_max)/ ypad *yfrac 
         else:
             scl = 1.0/ypad*yfrac
-        yvec*=scl
 
-        ax.fill_between(xax[xinds],yvec[yinds]+yofs,-1*yvec[yinds]+yofs,
+        yup = yvec[yinds]*scl+yofs
+        ydown = -1*yvec[yinds]*scl+yofs
+        ax.fill_between(xax[xinds],yup,ydown,
                         edgecolor = edgecolor,
                         linewidth =linewidth,
                         facecolor = colors[i])
-
-
+        
         if y_marked:
-            
+            this_ymark = y_marked
+        else:
+            this_ymark = max(yvec[yinds])
 
+        xbounds = [ min(xax) - (max(xax) - min(xax))*.15,
+                    max(xax) + (max(xax) - min(xax))*.15]
+        xpts =[ min(xax) - (max(xax) - min(xax))*.1,
+                max(xax) + (max(xax) - min(xax))*.1]
+        ypts = array([-this_ymark,this_ymark])* scl + yofs
 
-            xbounds = [ min(xax) - (max(xax) - min(xax))*.15,
-                        max(xax) + (max(xax) - min(xax))*.15]
-            xpts =[ min(xax) - (max(xax) - min(xax))*.1,
-                    max(xax) + (max(xax) - min(xax))*.1]
-            ypts = array([-y_marked,y_marked])* scl + yofs
+        
+        dx = max(xax) - min(xax)
+        dy = max(yup) - min(ydown)
 
+        if label_y:
             for x in xpts:
                 p = patches.ConnectionPatch([x,ypts[0]],[x,ypts[1]],'data','data',
-                                        arrowstyle = 'wedge,tail_width=1',
+                                        arrowstyle = '<->',
                                         edgecolor = 'black',
                                         facecolor = 'white',
-                                        alpha = 1)
+                                        alpha = .5)
                 ax.add_patch(p)
-                ax.annotate(str(y_marked), [x, max(ypts)],xytext = [10,0],textcoords='offset points')
+                ax.annotate(str(this_ymark)+str('\n(')+str(yunits)+')', 
+                            [x, max(ypts)],
+                            xytext = [10,0],
+                            textcoords='offset points',
+                            verticalalignment = 'top')
+
+        if i == 0 and label_x:
+
+            p = patches.ConnectionPatch([max(xax),min(ydown) - dy * .2],
+                                         [min(xax),min(ydown) - dy * .2],
+                                         'data','data',
+                                        arrowstyle = '<->',
+                                        edgecolor = 'black',
+                                        facecolor = 'white',
+                                        alpha = .5)
+            ax.add_patch(p)
+
+            ax.annotate(xunits,[min(xax) + .5*dx, min(ydown) - dy*.3],xycoords = 'data',
+                        xytext = [.5,0],textcoords ='offset pixels', 
+                        horizontalalignment = 'center',verticalalignment = 'top')
+
+            ax.annotate(str(min(xax)),[min(xax), min(ydown) - dy*.3],xycoords = 'data',
+                        xytext = [10,-5],textcoords = 'offset pixels', 
+                        verticalalignment = 'top',horizontalalignment = 'center')
+
+            ax.annotate(str(max(xax)),[max(xax), min(ydown) - dy*.3],xycoords = 'data',
+                        xytext = [-10,-5],textcoords = 'offset pixels', 
+                        verticalalignment = 'top', horizontalalignment = 'center')            
+
+        if labels: 
+            this_label = labels[i]
+            ax.annotate(this_label, [min(xpts),mean(ypts)], 
+                        size = 'x-large', textcoords = 'offset pixels',
+                        xytext = [-10,0],color = colors[i],
+                        horizontalalignment = 'right',
+                        verticalalignment = 'center')
 
     ax.set_ylim([0,1])
     
     ax.set_xlim(xbounds)
+    return ax
     
     

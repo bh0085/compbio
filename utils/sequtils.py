@@ -80,3 +80,12 @@ def kmer_in_list(kmer,motifs):
             max_index = i
 
     return (max_index, max_score)
+
+def motifs_in_seq(seq,motifs):
+    print motifs
+    for m in motifs['seqs']:
+        mre = sequence_re(m)
+        found = re.search(m, seq)
+        if found:
+            print m
+            print found.group()
