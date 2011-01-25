@@ -13,54 +13,72 @@ import random
 import mlpy
 import utils.colors as mycolors
 import netwriter as nw
+import inspect
+import pickle
+import inspect
 
-default_name = 'fRN'
+default_name = 'unsup'
 
-def parse_net(name = default_name,number = 0):
-    prefix = os.path.join('predmodel/regressionwts', name)
-    nwdata = open(os.path.join(prefix,
-                               'nw_'+str(number) + '.sif')).read()
+def parse_net(name = default_name,number = 0, reset = 0):
+    
+    net_dir = os.path.abspath(os.path.dirname(inspect.getfile(inspect.currentframe())))
+    if not reset:
+        net,sxs = nw.rn2(name = name)
+        if not sxs: raise Exception('error reading ' + name)
+    else:
+        if name == 'unsup':
+            fpath = os.path.join(net_dir,'patrick/unsup_patrick.txt')
+        else:
+            fpath = os.path.join(net_dir,'patrick/logistic_0.6.txt')
+
+
+        TS = load_TS( reset = mod(reset,2))
+        CL = load_CL( reset = mod(reset,2))
+        nwdata = open(fpath).read()
     #A few functions defined here to be used later
-    trgfun = lambda x: x[1]
-    wtfun = lambda x:float( x[2] )
-    tffun = lambda x: x[0]
-    sigmafun = lambda x: 1 / (1 + np.exp(-x /1))
+        trgfun = lambda x: x[1]
+        wtfun = lambda x:float( x[2] )
+        tffun = lambda x: x[0]
+        sigmafun = lambda x: 1 / (1 + np.exp(-x /1))
 
-    r = re.compile('^[ ]*(?P<target>[^\s]+)\t(?P<tf>[^\s]+)\t(?P<weight>[^\s]+)'
+        r = re.compile('^[ ]*(?P<tf>\S+)\s+(?P<target>\S+)\s+(?P<weight>\S+)'
                    ,re.M)
-    matches = list(re.finditer(r,nwdata))    
+        matches = list(re.finditer(r,nwdata))    
     #Unsorted lists of tfs and targets
-    targets =map(lambda x:x.group('target'),matches)
-    tfs =    map(lambda x:x.group('tf'),matches)
-    weights =map(lambda x:x.group('weight'),matches)
+        targets =map(lambda x:x.group('target'),matches)
+        tfs =    map(lambda x:x.group('tf'),matches)
+        weights =map(lambda x:x.group('weight'),matches)
     
     #Concat the data for easier sorting
-    cat = []
-    for i in np.argsort(tfs):
-        cat.append([tfs[i],targets[i],weights[i]])
+        cat = []
+        for i in np.argsort(tfs):
+            if TS.has_key(tfs[i]) and CL.has_key(targets[i]):
+                cat.append([tfs[i],targets[i],weights[i]])
 
     #Extract a dictionary with information for each target.
-    trg_d = {}
-    count = 0.0
-    for k, g in it.groupby(sorted(cat,key = trgfun),key = trgfun):
-        l = list(g)
-        count += 1.0
-        trg_d[k] = {'color': np.array([count, 0, 0]),
-                    'tfs' : map(tffun,l),
-                    'weights': map(wtfun,l)
-                    }
+        trg_d = {}
+        count = 0.0
+        for k, g in it.groupby(sorted(cat,key = trgfun),key = trgfun):
+            l = list(g)
+            count += 1.0
+            trg_d[k] = {'color': np.array([count, 0, 0]),
+                        'tfs' : map(tffun,l),
+                        'weights': map(wtfun,l)
+                        }
 
 
     #Extract a dictionary with information for each TF
-    tf_d = {}
-    for k, g in it.groupby(cat,key = lambda x: x[0]):
-        l = list(g)
-        tf_targets = map(lambda x: x[1],l)
+        tf_d = {}
+        for k, g in it.groupby(cat,key = lambda x: x[0]):
+            l = list(g)
+            tf_targets = map(lambda x: x[1],l)
         
-        tf_d[k] = {'targets':map(trgfun,l),
-                   'weights':map(wtfun,l)}
+            tf_d[k] = {'targets':map(trgfun,l),
+                       'weights':map(wtfun,l)}
 
-    return (trg_d, tf_d)
+        net =  (trg_d, tf_d)
+        nw.wn2( name,net, hardcopy = True)
+    return net
 
 
 def parse_TS():
@@ -91,18 +109,32 @@ def parse_CL():
 
     pickle.dump(seqdict,open('CL.pickle','w'))
 
-def load_CL():
-    f = pickle.load(open('CL.pickle'))
-    return f
-def load_TS():
-    f = pickle.load(open('TC.pickle'))
-    return f
+def load_CL(reset = 0):
+    hardcopy = True
+    net_dir = os.path.abspath(os.path.dirname(inspect.getfile(inspect.currentframe())))
 
+    if not reset:
+        #no reason to use name... only one cl is available
+        out, sxs = nw.rn2( default_name, hardcopy = hardcopy, np = False)
+        if not sxs: raise Exception()
+    else:
+        out = pickle.load(open(os.path.join(net_dir, 'CL.pickle')))
+        nw.wn2( default_name, out,  hardcopy = hardcopy, np = False)
 
-import pickle
-import inspect
+    return out
 
-last_square =  100
+def load_TS(reset = 0):
+    hardcopy = True
+    net_dir = os.path.abspath(os.path.dirname(inspect.getfile(inspect.currentframe())))
+    if not reset:
+        #no reason to use name... only one cl is available
+        out, sxs = nw.rn2(default_name, hardcopy = hardcopy, np = False)
+        if not sxs: raise Exception()
+    else:
+        out = pickle.load(open(os.path.join(net_dir,'TC.pickle')))
+        nw.wn2(default_name , out, hardcopy = hardcopy, np = False)
+
+    return out
 
 
 
@@ -114,12 +146,11 @@ last_square =  100
 def net_square_affinity(name = default_name, reset = 0):
 
     hardcopy = True
-    try:
-        if reset: raise Exception('compute')
-        return nw.readnet(name,hardcopy = hardcopy, np = np)
-    except Exception as e:
-        if e.args[0] != 'compute': raise Exception()
-        claim_reset()
+    if not reset:
+        net,sxs= nw.rn2(name,hardcopy = hardcopy, np = np)
+        if not sxs: raise Exception()
+    else:
+        nw.claim_reset()
         trgs, tfs = parse_net(name)
         k0 = trgs.keys()
         k1 = tfs.keys()
@@ -143,21 +174,26 @@ def net_square_affinity(name = default_name, reset = 0):
                 j = tf_imap[ktf]
                 N[i,j] = 1
         
+
+        kidxs = {}
+        for i in range(len(uk)):
+            kidxs[uk[i]] = i
             
-        affinity = N
-        nw.writenet(name, affinity,hardcopy = hardcopy,np = True)
-        return affinity
-    
+        net_sq_keyidxs(name = name, write = kidxs)
+
+
+        net = N
+        nw.wn2(name, net,hardcopy = hardcopy,np = True)
+    return net
 
 def net_affinity(name = default_name ,reset = 0):
     hardcopy = True
-    try:
-        if reset: raise Exception('compute')
-        return nw.readnet(name, hardcopy = hardcopy, np = True)
-    except Exception as e:
-        if e.args[0] != 'compute': raise Exception()
-        claim_reset()
-        trgs, tfs = parse_net(name)
+    if not reset:
+        net, sxs = nw.rn2(name, hardcopy = hardcopy, np = True)
+        if not sxs: raise Exception()
+    else:
+        nw.claim_reset()
+        trgs, tfs = parse_net(name, reset = mod(reset,2))
         k0 = trgs.keys()
         k1 = tfs.keys()
     
@@ -172,19 +208,26 @@ def net_affinity(name = default_name ,reset = 0):
     #with possible interactions for each gene appearing in 
     #the network        
     #prune the network for testing purposes.
+        
+        net_trg_keyidxs(name = name, write = kmap0)
+        net_tf_keyidxs(name = name, write = kmap1)
+
         m = len(kmap0.keys())
         
         n = len(kmap1.keys())
         N = np.zeros([m,n],float32)
         for k_trg,v_trg in trgs.items():
             i = kmap0[k_trg]
-            for k_tf in v_trg['tfs']:            
+            for idx in range(len(v_trg['tfs'])):
+                k_tf = v_trg['tfs'][idx]
+                w_tf = v_trg['weights'][idx]
                 j = kmap1[k_tf]
-                N[i][j] = 1.0
+                N[i][j] = w_tf
+                print w_tf
 
-        affinity =N
-        nw.writenet(name, affinity,hardcopy = hardcopy, np = True)
-        return affinity
+        net = N
+        nw.writenet(name, net,hardcopy = hardcopy, np = True)
+    return net
 
 def net_jcf(name = default_name, reset = 0):
     hardcopy = False
@@ -193,12 +236,12 @@ def net_jcf(name = default_name, reset = 0):
         return nw.readnet(name,hardcopy = hardcopy)
     except Exception as e:
         if e.args[0] != 'compute': raise Exception()
-        claim_reset()
+        nw.claim_reset()
 
         square_aff = net_square_affinity(name, reset = mod(reset,2))
         import pymat
         command = 'pymatjordan'
-        arr = square_aff[0]
+        arr = square_aff
         
         inp = {'array':arr}
         output = pymat.runmat(command, inp)
@@ -209,28 +252,63 @@ def net_jcf(name = default_name, reset = 0):
 
 
 
+
 def net_genegene(name = default_name, reset = 0):
     hardcopy = True
-    try:
-        if reset: raise Exception('compute')
-        return nw.readnet(name,hardcopy = hardcopy, np = True)
-    except Exception as e:
-        if e.args[0] != 'compute': raise Exception()
-        claim_reset()
-        sq = net_square_affinity(name, reset = mod(reset,2))[0]
+
+    if not reset:
+        out, sxs = nw.rn2(name,hardcopy = hardcopy, np = True)
+        if not sxs: raise Exception()
+    else:
+        nw.claim_reset()
+        sq = net_square_affinity(name, reset = mod(reset,2))
         genegene = dot(sq,sq.T)
-        nw.writenet(name,genegene, hardcopy = hardcopy, np =True)
-        return genegene
+        out = genegene
+        nw.wn2(name,genegene, hardcopy = hardcopy, np =True)
+    return out
+
+
+
+#Write keys of targets to a file when an affinity matrix is created
+def net_sq_keyidxs(name = default_name, write = None ):
+    if write != None:
+        nw.wn2(name, write, hardcopy = True, np = False)
+        idxs = write
+    else:
+        idxs,sxs = nw.rn2(name, hardcopy = True, np = False)
+        if not sxs: raise Exception()
+    return idxs
+
+
+#Write keys of targets to a file when an affinity matrix is created
+def net_trg_keyidxs(name = default_name, write = None ):
+    if write != None:
+        nw.wn2(name, write, hardcopy = True, np = False)
+        idxs = write
+    else:
+        idxs,sxs = nw.rn2(name, hardcopy = True, np = False)
+        if not sxs: raise Exception()
+    return idxs
+
+#Write keys of tfs to a file when an affinity matrix is created
+def net_tf_keyidxs(name =default_name, write = None):            
+    if write != None:
+        nw.wn2(name, write, hardcopy = True, np = False)
+        idxs = write
+    else:
+        idxs,sxs = nw.rn2(name, hardcopy = True, np = False)
+        if not sxs: raise Exception()
+    return idxs
+
 
 def net_genegene_norm(name = default_name, reset = 0):
     hardcopy = True
-    try:
-        if reset: raise Exception('compute')
-        return nw.readnet(name,hardcopy = hardcopy,np = True)
-    except Exception as e:
-        if e.args[0] != 'compute': raise Exception()
-        claim_reset()
-        sq0 =array(net_square_affinity(name, reset = mod(reset,2))[0]) 
+    if not reset:
+        out, sxs =  nw.rn2(name,hardcopy = hardcopy,np = True)
+        if not sxs: raise Exception()
+    else:
+        nw.claim_reset()
+        sq0 =array(net_square_affinity(name, reset = mod(reset,2))) 
         sq1 =array( sq0.T)
         n = shape(sq0)[0]
 
@@ -239,7 +317,9 @@ def net_genegene_norm(name = default_name, reset = 0):
             sq1[:,i] /= max(1,sp.sum(sq1[:,i]))
         genegene = dot(sq0,sq1)
         nw.writenet(name,genegene, hardcopy = hardcopy,np = True)
-        return genegene
+        out = genegene
+    return out
+
 
 
 def net_hcluster_genegene_norm(name = default_name, reset = 0, n = 200,
@@ -252,7 +332,7 @@ def net_hcluster_genegene_norm(name = default_name, reset = 0, n = 200,
         return nw.readnet(name,hardcopy =hardcopy)
     except Exception as e:
         if e.args[0] != 'compute': raise Exception()
-        claim_reset()
+        nw.claim_reset()
         sqa = net_genegene_norm(name, reset = mod(reset,2))
         gg = sqa
         sub = matrix(gg[0:n,0:n])
@@ -279,7 +359,7 @@ def net_kcluster_genegene_norm(name = default_name, reset = 0, n = 200,
         return nw.readnet(name,hardcopy =hardcopy)
     except Exception as e:
         if e.args[0] != 'compute': raise Exception()
-        claim_reset()
+        nw.claim_reset()
         sqa = net_genegene_norm(name, reset = mod(reset,2))
         gg = sqa
         sub = matrix(gg[0:n,0:n])
@@ -301,12 +381,14 @@ def net_kcluster_genegene_norm(name = default_name, reset = 0, n = 200,
         
 
 
+
+
 def net_blanket( name = default_name , reset = 0, order = 1):
 
 
     saff = net_square_affinity(name,reset = mod(reset,2))
 
-    m = saff[0]
+    m = saff
     n = shape(m)[0]
     for i in range(n):
         m[i,i]  = 1
@@ -326,11 +408,10 @@ def net_blanket( name = default_name , reset = 0, order = 1):
 def expr_TS_binary(reset = 0 , 
                    name = default_name,
                    hardcopy = True ):
-    try:
-        if reset: raise Exception('compute')
-        return nw.readnet(name,hardcopy = hardcopy)
-    except Exception as e:
-        if e.args[0] != 'compute': raise Exception()
+    if not reset:
+        out, sxs =  nw.rn2(name,hardcopy = hardcopy)
+        if not sxs: raise Exception()
+    else:
         nw.claim_reset()        
         ts = load_TS()
         ts_mixtures = {}
@@ -338,6 +419,7 @@ def expr_TS_binary(reset = 0 ,
         
         nc = len(ts[ts.keys()[0]])
         all_states = {}
+        mixes  = {}
         
         for k in ts.keys():
             if mod(count,100) == 0 : print count
@@ -350,14 +432,18 @@ def expr_TS_binary(reset = 0 ,
             mix0 = squeeze(mixture[:,0])
             mix1 = squeeze(mixture[:,1])
             
-            states = zeros(nc) + 2
+            states = zeros(nc) 
             states[nonzero(greater(mix1, mix0 + cutoff))[0]] = 1
-            states[nonzero(greater(mix0, mix1 + cutoff))[0]] = 0
+            states[nonzero(greater(mix0, mix1 + cutoff))[0]] = -1
+            mix = (mix0,mix1)
+            mixes[k] = mix
             all_states[k] = states
+            
+            if mod(count, 10) == 0: print count
 
-        nw.writenet( name, all_states, hardcopy = hardcopy)
-        return all_states
-
+        nw.wn2( name, (all_states,mixes), hardcopy = hardcopy)
+        out= (all_states,mixes)
+    return out
 def expr_CL_binary(reset = 0 , 
                    name = default_name,
                    hardcopy = True ):
@@ -366,7 +452,7 @@ def expr_CL_binary(reset = 0 ,
         return nw.readnet(name,hardcopy = hardcopy)
     except Exception as e:
         if e.args[0] != 'compute': raise Exception()
-        nw.claim_reset()        
+        nw.nw.claim_reset()        
         ts = load_CL()
         ts_mixtures = {}
         count = 0
@@ -397,16 +483,6 @@ def expr_CL_binary(reset = 0 ,
 def expr_view():
     ts = load_TS()
     
-    saff = net_square_affinity()
-    raff = net_affinity()
-
-    tfkeys = raff[2]
-    skeys = saff[1]
-
-    sqidxs = []
-    for k in tfkeys.keys():
-        sqidxs.append(skeys.index(k))
-
     f = plt.figure(1)
     f.clear()
     ax = f.add_axes([0,0,1,1])
@@ -547,86 +623,6 @@ def expr_getonoff(expr_in):
 
 
 
-def nsq_keys(name = default_name, reset = 0 ):
-    hardcopy = True
-    try:
-        if reset: raise Exception('compute')
-        return nw.readnet(name,hardcopy = hardcopy)
-    except Exception as e:
-        if e.args[0] != 'compute': raise Exception()
-        claim_reset()    
-        keys = net_square_affinity(name)[1]
-        #store keys in a dict for easy comparison
-        keydict = {}
-        for i in range(len(keys)):
-            keydict[keys[i]] = i
-
-        nw.writenet(name, keydict,hardcopy = hardcopy)
-        return keydict
-
-def nsq_gkeys(name = default_name, reset = 0 ):
-    hardcopy = True
-
-    try:
-        if reset: raise Exception('compute')
-        return nw.readnet(name,hardcopy = hardcopy)
-    except Exception as e:
-        if e.args[0] != 'compute': raise Exception()
-        claim_reset()    
-        keys = nsq_keys(name)
-        gkeys = na_gkeys(name)
-        sqg = {}
-        for gk in gkeys.keys():
-            sqg[gk] = keys[gk]
-
-
-        nw.writenet(name, sqg,hardcopy = hardcopy)
-        return sqg
-
-def nsq_tfkeys(name = default_name, reset = 0 ):
-    hardcopy = True
-    try:
-        if reset: raise Exception('compute')
-        return nw.readnet(name,hardcopy = hardcopy)
-    except Exception as e:
-        if e.args[0] != 'compute': raise Exception()
-        claim_reset()    
-        keys = nsq_keys(name)
-        tfkeys = na_tfkeys(name)
-        sqtf = {}
-        for tfk in tfkeys.keys():
-            sqtf[tfk] = keys[tfk]
-        nw.writenet(name, sqtf,hardcopy = hardcopy)
-        return sqtf
-
-def na_gkeys(name = default_name, reset = 0 ):
-    hardcopy = True
-
-    try:
-        if reset: raise Exception('compute')
-        return nw.readnet(name,hardcopy = hardcopy)
-    except Exception as e:
-        if e.args[0] != 'compute': raise Exception()
-        claim_reset()    
-        keys = net_affinity()[1]
-        nw.writenet(name, keys,hardcopy = hardcopy)
-        return keys
-
-
-def na_tfkeys(name = default_name, reset = 0 ):
-    hardcopy = True
-    try:
-        if reset: raise Exception('compute')
-        return nw.readnet(name,hardcopy = hardcopy)
-    except Exception as e:
-        if e.args[0] != 'compute': raise Exception()
-        claim_reset()    
-        keys = net_affinity()[2]
-
-        nw.writenet(name, keys,hardcopy = hardcopy)
-        return keys
-
-
 #... default ordering for TFs
 #right now, they are ordered simply by
 #the order of their out degree
@@ -637,7 +633,7 @@ def tf_ordering(name = default_name, reset = 0 ):
         return nw.readnet(name,hardcopy = hardcopy)
     except Exception as e:
         if e.args[0] != 'compute': raise Exception()
-        claim_reset()
+        nw.claim_reset()
 
         #default keymap into tfspace
         keymap = na_tfkeys()
@@ -650,16 +646,6 @@ def tf_ordering(name = default_name, reset = 0 ):
             k = keymap.keys()[keymap.values().index(d)]
             kordered[k] = count
             count+=1
-
-        #this way is faster but who cares?
-        #klist = []
-        #kvpairs = map(lambda x,y:[x,y], keymap.iteritems())
-        #vals = map(lambda x: x[1],kvpairs)
-        #vals_srt = argsort(vals)
-        #keys = map(lambda x: x[0],kvpairs)
-        #keys_srt = keys[vals_srt]
-        
-        
         
         nw.writenet(name, kordered,hardcopy = hardcopy)
         return kordered
@@ -676,7 +662,7 @@ def gene_ordering(name = default_name, reset = 0 ):
         return nw.readnet(name,hardcopy = hardcopy)
     except Exception as e:
         if e.args[0] != 'compute': raise Exception()
-        claim_reset()
+        nw.claim_reset()
 
         #default keymap into tfspace
         keymap = na_gkeys()
@@ -704,93 +690,3 @@ def gene_ordering(name = default_name, reset = 0 ):
         return kordered
 
 
-def nsq_tfidxs(name = default_name, reset = 0 ):
-    try:
-        if reset: raise Exception('compute')
-        return nw.readnet(name)
-    except Exception as e:
-        if e.args[0] != 'compute': raise Exception()
-        claim_reset()
-
-        #default keymap into tfspace
-        keymap = tf_ordering(name)
-        n = len(keymap.keys())
-
-        #keymap into sq_tfspace
-        keys = nsq_tfkeys(name)
-        idxs = zeros(n,int)
-
-        #compute idxmap from tfspace into sq_tfspace
-        for k,v in keymap.iteritems():
-            idxs[v] = keys[k]
-            
-        nw.writenet(name, idxs)
-        return idxs
-
-def na_tfidxs(name = default_name, reset = 0 ):
-    try:
-        if reset: raise Exception('compute')
-        return nw.readnet(name)
-    except Exception as e:
-        if e.args[0] != 'compute': raise Exception()
-        claim_reset()
-
-        #default keymap into tfspace
-        keymap = tf_ordering(name)
-        n = len(keymap.keys())
-
-        #keymap into sq_tfspace
-        keys = na_tfkeys(name)
-        idxs = zeros(n,int)
-
-        #compute idxmap from tfspace into sq_tfspace
-        for k,v in keymap.iteritems():
-            idxs[v] = keys[k]
-            
-        nw.writenet(name, idxs)
-        return idxs
-
-def nsq_gidxs(name = default_name, reset = 0 ):
-    try:
-        if reset: raise Exception('compute')
-        return nw.readnet(name)
-    except Exception as e:
-        if e.args[0] != 'compute': raise Exception()
-        claim_reset()
-
-        #default keymap into tfspace
-        keymap = gene_ordering(name)
-        n = len(keymap.keys())
-
-        #keymap into sq_tfspace
-        keys = nsq_gkeys(name)
-        idxs = zeros(n,int)
-
-        #compute idxmap from tfspace into sq_tfspace
-        for k,v in keymap.iteritems():
-            idxs[v] = keys[k]
-            
-        nw.writenet(name, idxs)
-        return idxs
-
-def na_gidxs(name = default_name, reset = 0 ):
-    try:
-        if reset: raise Exception('compute')
-        return nw.readnet(name)
-    except Exception as e:
-        if e.args[0] != 'compute': raise Exception()
-        claim_reset()
-
-        #default keymap into tfspace
-        keymap = gene_ordering(name)
-        n = len(keymap.keys())
-        #keymap into sq_tfspace
-        keys = na_gkeys(name)
-        idxs = zeros(n,int)
-
-        #compute idxmap from tfspace into sq_tfspace
-        for k,v in keymap.iteritems():
-            idxs[v] = keys[k]
-            
-        nw.writenet(name, idxs)
-        return idxs

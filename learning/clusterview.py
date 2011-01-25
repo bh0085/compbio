@@ -41,8 +41,12 @@ stored.
     #with each element giving the coordinate of the
     #i'th tf in sqa space.
 
-    tfidxs = nu.na_tfidxs()
-    tf_sqidxs = nu.nsq_tfidxs()
+
+    sqidxs = nu.net_sq_keyidxs()
+    n_tfidxs = nu.net_tf_keyidxs() 
+    trgs,tfs = nu.parse_net()
+    tf_sqidxs = [sqidxs[key] for key in tfs.keys()]
+    tfidxs = n_tfidxs.values()
     ntf = len(tfidxs)
 
     tfweights = zeros(ntf,int)
@@ -62,14 +66,14 @@ Neither would svdU of TF-TF which is actually the the exact same thing.'''
     
 
     
-    TFprojs= zeros((n,k,541))
+    TFprojs= zeros((n,k,ntf))
     for i in range(n):
         m = all_means[i]
         dim = shape(m)[1]
         #we are now going to project clusters on to the tfs
         #in this form, we only need rows corresponding to tfs.
 
-        if dim == 541:
+        if dim> 500:
             #If dim = 541, we just read off the most important tfs
             this_tf_sum = np.abs(m[:,tfidxs])
             TFprojs[i,:,:] = this_tf_sum
@@ -80,7 +84,7 @@ Neither would svdU of TF-TF which is actually the the exact same thing.'''
         #Now, since we are at the moment only working with GG
         #and SVD_U, we are in gene space and can undo the mapping
         #with sqaT
-        elif dim == 8321:
+        elif dim > 8000:
             #remember, ROWS of the matrix correspond to the
             #target space.
             a = sqa.T[tf_sqidxs,:]            
@@ -136,12 +140,22 @@ def one(all_means, all_mems,
     m2 = all_means[idxs[1]]
     c2 = all_mems[idxs[1]]
     proj2=abs(tfp[idxs[1],:,:])
-    
-    tf_sqidxs = nu.nsq_tfidxs()
-    gene_sqidxs = nu.nsq_gidxs()
-    tf_aidx = nu.na_tfidxs()
-    gene_aidx = nu.na_gidxs()
 
+    
+    sqidxs = nu.net_sq_keyidxs()
+    n_tfidxs = nu.net_tf_keyidxs() 
+    trgs,tfs = nu.parse_net()
+    tf_sqidxs = [sqidxs[key] for key in tfs.keys()]
+    gene_sqidxs = [sqidxs[key] for key in trgs.keys()]
+
+    tfk = nu.net_tf_keyidxs()
+    tgk = nu.net_trg_keyidxs()
+    tf_aidx = [ tfk[key] for key in tfs.keys()]
+    gene_aidx = [ tgk[key] for key in trgs.keys()]
+
+
+    tfidxs = tf_aidx
+ 
     k = len(m)
     ntf = len(tf_sqidxs)
     ng = len(gene_sqidxs)
@@ -249,7 +263,7 @@ is the order of the TF x axis.'''
     nc = shape(img)[0]
     xs, ys, rs, cs = [[] for i in range(4)]
     
-    nchoice = 3
+    nchoice = 1
     if choice_ax == 'y':
 
         dim =  shape(img)[0]

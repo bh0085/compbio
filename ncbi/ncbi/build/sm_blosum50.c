@@ -1,0 +1,1 @@
+../util/tables/sm_blosum50.c

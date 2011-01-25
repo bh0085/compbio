@@ -1,0 +1,1 @@
+../asnstat/asntable.h

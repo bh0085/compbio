@@ -82,10 +82,24 @@ def kmer_in_list(kmer,motifs):
     return (max_index, max_score)
 
 def motifs_in_seq(seq,motifs):
-    print motifs
+
+    d = {}
     for m in motifs['seqs']:
+        motif_entry = {}        
+        
         mre = sequence_re(m)
-        found = re.search(m, seq)
+        found = re.finditer(m, seq)
         if found:
-            print m
-            print found.group()
+            for f in found:
+                starts = motif_entry.get('starts',[])
+                lens = motif_entry.get('lens',[])
+                s = motif_entry.get('seqs',[])
+                starts.append(f.start())
+                lens.append(len(f.group(0)))
+                s.append(f.group(0))
+                motif_entry['starts'] = starts
+                motif_entry['lens'] = lens
+                motif_entry['seqs'] = s
+        d[m]=motif_entry
+
+    return d

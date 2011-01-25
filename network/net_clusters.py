@@ -4,11 +4,13 @@ import netutils as nu
 import netwriter as nw
 import mlpy
 import compbio.learning.clusterview as cl
+from numpy import *
 
 name = nu.default_name
-maxgenes = 8321
+maxgenes = 8316
+k = 10
 
-def runall(maxg = 8321, runk = 40, rname = nu.default_name):
+def runall(maxg = maxgenes, runk = 40, rname = nu.default_name):
     maxgenes = maxg
     k = runk
     name = rname
@@ -25,31 +27,36 @@ maxgenes='''+str(maxgenes)+'''
     net_cluster_gg(k,reset = r)
     net_cluster_ggn(k,reset = r)
     net_cluster_genes_by_tf(k,reset = r)
-    net_cluster_ggsvdU(k, reset = r)
+   
+    dosvd = False
+    if dosvd:
+
+        net_cluster_ggsvdU(k, reset = r)
     #for now, we are not working witht he clusters of the V arrays
     #I don't understand what they represent.
     #(And while we are clustering V.T, I suspect that we should
     #be clustering V instead. who knows?)
     #net_cluster_ggsvdV(k, reset = r)
-    net_cluster_sqsvdU(k, reset = r)
+        net_cluster_sqsvdU(k, reset = r)
     #net_cluster_sqsvdV(k, reset = r)
 
-def viewall(projs,idxs = [0,1],axis = 'tf'):
+def viewall(projs,idxs = [0,1],axis = 'tf',viewmany = False):
     clusters = []
     means = []
     kmeans = []
     kmeans.append(net_cluster_gg())
     kmeans.append(net_cluster_ggn())
     kmeans.append(net_cluster_genes_by_tf())
-    kmeans.append(net_cluster_ggsvdU())
+    dosvd = False
+    if dosvd:
+        kmeans.append(net_cluster_ggsvdU())
     #kmeans.append(net_cluster_ggsvdV())
-    kmeans.append(net_cluster_sqsvdU())
+        kmeans.append(net_cluster_sqsvdU())
     #kmeans.append(net_cluster_sqsvdV())
     
     clusters = map(lambda x: x[0], kmeans)
     means = map(lambda x: x[1], kmeans)
 
-    viewmany = False
     if viewmany:
         projs = cl.viewmany(means,clusters,fig = 13)
     else:
@@ -62,53 +69,63 @@ def net_cluster_gg(k = k, reset = 0):
     hardcopy = True
     try:
         if reset: raise Exception('compute')
-        return nw.readnet(name, hardcopy = hardcopy)
+        out,sxs =  nw.rn2(name, hardcopy = hardcopy)
+        if not sxs: raise Exception()
 
     except Exception as e:
         if e.args[0] != 'compute': raise Exception()
         nw.claim_reset()    
-        gg = nu.net_genegene()
+        gg = nu.net_genegene(reset = mod(reset,2))
         kmeans = mlpy.Kmeans(k)
         clustered = kmeans.compute(gg[0:maxgenes,:])
         means = kmeans.means
-        nw.writenet(name, (clustered, means) ,hardcopy = hardcopy)
+        out = (clustered,means)
+        nw.wn2(name, (clustered, means) ,hardcopy = hardcopy)
 
-
+    return out
 def net_cluster_ggn(k = k, reset = 0):
     hardcopy = True
     try:
         if reset: raise Exception('compute')
-        return nw.readnet(name, hardcopy = hardcopy)
+        out,sxs =  nw.rn2(name, hardcopy = hardcopy)
+        if not sxs: raise Exception()
 
     except Exception as e:
         if e.args[0] != 'compute': raise Exception()
         nw.claim_reset()   
-        gg = nu.net_genegene_norm()
+        gg = nu.net_genegene_norm(reset = mod(reset,2))
         kmeans = mlpy.Kmeans(k)
         clustered = kmeans.compute(gg[0:maxgenes,:])
         means = kmeans.means
-        nw.writenet(name, (clustered, means) ,hardcopy = hardcopy) 
+        out = (clustered,means)
+        nw.wn2(name, (clustered, means) ,hardcopy = hardcopy) 
+    return out
 
 def net_cluster_genes_by_tf(k= k, reset = 0):
     hardcopy = True
     try:
         if reset: raise Exception('compute')
-        return nw.readnet(name, hardcopy = hardcopy)
+        out,sxs =  nw.rn2(name, hardcopy = hardcopy)
+        if not sxs: raise Exception()
 
     except Exception as e:
         if e.args[0] != 'compute': raise Exception()
         nw.claim_reset()    
-        gg = nu.net_affinity()[0]
+        gg = nu.net_affinity(reset = mod(reset,2))
         kmeans = mlpy.Kmeans(k)
         clustered = kmeans.compute(gg[0:maxgenes,:])
         means = kmeans.means
-        nw.writenet(name, (clustered, means) ,hardcopy = hardcopy) 
+        out = (clustered,means)
+        nw.wn2(name, (clustered, means) ,hardcopy = hardcopy) 
+    return out
 
 def net_cluster_ggsvdU(k = k,reset = 0):
     hardcopy = True
     try:
         if reset: raise Exception('compute')
-        return nw.readnet(name, hardcopy = hardcopy)
+        out,sxs =  nw.rn2(name, hardcopy = hardcopy)
+        if not sxs: raise Exception()
+
 
     except Exception as e:
         if e.args[0] != 'compute': raise Exception()
@@ -118,13 +135,15 @@ def net_cluster_ggsvdU(k = k,reset = 0):
         kmeans = mlpy.Kmeans(k)
         clustered = kmeans.compute(gg[0:maxgenes,:])
         means = kmeans.means
-        nw.writenet(name, (clustered, means) ,hardcopy = hardcopy) 
-   
+        nw.wn2(name, (clustered, means) ,hardcopy = hardcopy) 
+    return out
+
 def net_cluster_ggsvdV(k = k,reset = 0):
     hardcopy = True
     try:
         if reset: raise Exception('compute')
-        return nw.readnet(name, hardcopy = hardcopy)
+        out,sxs =  nw.rn2(name, hardcopy = hardcopy)
+        if not sxs: raise Exception()
 
     except Exception as e:
         if e.args[0] != 'compute': raise Exception()
@@ -133,13 +152,17 @@ def net_cluster_ggsvdV(k = k,reset = 0):
         kmeans = mlpy.Kmeans(k)
         clustered = kmeans.compute(gg[0:maxgenes,:])
         means = kmeans.means
-        nw.writenet(name, (clustered, means) ,hardcopy = hardcopy) 
+        nw.wn2(name, (clustered, means) ,hardcopy = hardcopy) 
+    return out
 
 def net_cluster_sqsvdU(k = k,reset = 0):
     hardcopy = True
     try:
         if reset: raise Exception('compute')
-        return nw.readnet(name, hardcopy = hardcopy)
+        out,sxs =  nw.rn2(name, hardcopy = hardcopy)
+        if not sxs: raise Exception()
+
+
 
     except Exception as e:
         if e.args[0] != 'compute': raise Exception()
@@ -149,13 +172,17 @@ def net_cluster_sqsvdU(k = k,reset = 0):
         kmeans = mlpy.Kmeans(k)
         clustered = kmeans.compute(gg[0:maxgenes,:])
         means = kmeans.means
-        nw.writenet(name, (clustered, means) ,hardcopy = hardcopy) 
+        nw.wn2(name, (clustered, means) ,hardcopy = hardcopy) 
+    return out
    
 def net_cluster_sqsvdV(k = k,reset = 0):
     hardcopy = True
     try:
+
         if reset: raise Exception('compute')
-        return nw.readnet(name, hardcopy = hardcopy)
+        out,sxs =  nw.rn2(name, hardcopy = hardcopy)
+        if not sxs: raise Exception()
+
 
     except Exception as e:
         if e.args[0] != 'compute': raise Exception()
@@ -164,4 +191,5 @@ def net_cluster_sqsvdV(k = k,reset = 0):
         kmeans = mlpy.Kmeans(k)
         clustered = kmeans.compute(gg[0:maxgenes,:])
         means = kmeans.means
-        nw.writenet(name, (clustered, means) ,hardcopy = hardcopy) 
+        nw.wn2(name, (clustered, means) ,hardcopy = hardcopy) 
+    return out

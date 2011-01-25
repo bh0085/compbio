@@ -1,0 +1,1 @@
+../biostruc/mmdb_pubstruct.c

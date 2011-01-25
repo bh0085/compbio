@@ -63,7 +63,11 @@ def run(part = '1a',rseed = 1):
         
         p2_drawprobs( (p1m1,p1m2),(p2m1,p2m2) )
     if part == '4':
-        r = random_rna(250)
+        r = random_rna(50)
+        r = 'CGCUCAUCCAGAGGGGCAGAGGGAUACGGCCCGAUGAAGCCCCGGCAACCCUCCAGUCGGUUCUUGUCACACGGACGUGGCGAGGCUCCCGGCUAGGGAAGGUGCCAAAUCCGUCUCACGGCGAGAUGCGUCGUGAGGAAGAUGAGGA'
+        #S. coelicolor
+        bac ='CUCUUAUCAAGAGCAGGCAGAGGGACUUGGCCCGAUGAUGCCCAGCAACCGACCGUAAUUCCAUCGUGAGAUGGGGCGCAAUCCUUGCGCCGGAGAAUUCCUCCAUAAGGCACGGUGCUAAUUCCAGCAGAAAGCUUGGCUUUCUGGCAGAUAAGAG'
+        r =bac
         M,TB = nussinov(r)
         t = nussinov_traceback(r,M,TB)
         draw_rna(r,t)
@@ -489,6 +493,7 @@ def draw_rna(seq,pairs_unsorted):
                   key = lambda x:x[2][-1])
     max_bif = max(map(lambda x:x[2][-1],pairs))
     bif_colors = getct(max_bif+1)
+    bif_colors = [[0,0,1]] *(max_bif+1)
     from matplotlib.patches import Circle
     cir = Circle((0,0),radius=.5,
                  facecolor = '1',edgecolor='.8',
@@ -559,7 +564,7 @@ def draw_rna(seq,pairs_unsorted):
     
             n = len(elts)
             
-            trippy = True
+            trippy = False
             decay = 1
             do_decay = True
             if not do_decay:
@@ -691,7 +696,7 @@ def draw_path(path,sequence,M,T,E,skey,ekey):
     items = list(ekey.itervalues())
     emap = [  syms[ekey.keys()[items.index(i)]] for i in range(max(items)+1)  ]
 
-    f = plt.figure(1)
+    f = plt.figure(0)
     f.clear()
     rect = array([-1.0,l,-.5,1.5])
     ax2 = f.add_axes([0,0,1,1],xlim = rect[0:2],ylim=rect[2:4])

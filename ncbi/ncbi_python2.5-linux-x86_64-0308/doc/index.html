@@ -1,0 +1,66 @@
+
+<h1>NCBI C++ Toolkit Python Interface</h1>
+
+The Python wrapper for the
+<a href="http://www.ncbi.nlm.nih.gov/books/bv.fcgi?call=bv.View..ShowTOC&rid=toolkit.TOC&depth=2">NCBI C++ Toolkit</a>
+provides a <a href="http://www.python.org">Python</a>
+
+interface to most of the central
+portions of the Toolkit, along with some additional functionality
+for ease of use and for obtaining documentation interactively.
+This interface is produced using <a href="http://www.swig.org">SWIG</a>,
+along with procedures for automated production of input for SWIG
+and manipulation of its intermediate results.
+<p>
+The wrapper provides access to most, but not all, of the functionality
+in the version of the C++ Toolkit that it wraps.
+Omitted from the public version of the wrappers (but present in the
+C++ Toolkit release) are dbapi functionality, which would
+introduce library dependencies and is unlikely to be useful to
+outsiders; the image library, omitted for similar reasons;
+structure-related classes and functions (mass spectrometry-related and MMDB)
+because they would significantly increase
+wrapper size and are anticipated to see little use; and
+eutils functionality which, in addition to being fairly
+new, presents some problems for wrapping.  Any of these
+might be included in the future, especially if there is
+sufficient demand.  Also absent are a few scattered functions
+and classes that could not be wrapped, but the vast majority
+of Toolkit functionality is present in the wrapper.
+<p>
+More information about the wrapper and how to use it can be
+found in the links below.
+The data files used in the examples in the links are provided
+with the distribution (you should be able to execute the commands
+if you substitute the actual path to your copy of the "data" directory).
+There is also some example
+Python code
+in the "examples" directory.
+
+<ul>
+<li><a href="python_basic.html">Getting started with the Python module</a>
+<li><a href="cpp_details.html">Details of C++/scripting language mappings</a>
+<li><a href="useful_stuff_python.html">Doing useful things in Python</a>
+<li><a href="add_ons_python.html">Add-on functionality</a>
+<li><a href="pointers_and_refs_python.html">Dealing with pointers and references to built-in types</a>
+</ul>
+
+
+<p>
+<!-- Begin footer content -->
+
+<table BORDER=0 CELLSPACING=0 WIDTH="100%" >
+<tr>
+<td ALIGN=LEFT>
+<a NAME="copyright"></a>
+<address>
+<a href="mailto:jcherry@ncbi.nlm.nih.gov">Josh Cherry</a>&nbsp;</address>
+</td>
+
+<td>
+
+
+</tr>
+</table>
+
+

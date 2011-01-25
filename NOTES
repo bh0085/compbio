@@ -1,0 +1,4 @@
+
+SED SCRIPT TO REPLACE LINES FROM A BUNCH OF FILES WITHOUT FOLLOWING SYMLINKS
+
+echo "`find .`" | xargs grep -Il utils.plots | xargs sed s/'^.*utils.plots.*$'/'from compbio.utils import plots as myplots'/ | grep -C 2 'as myplots'

@@ -15,7 +15,7 @@ def claim_reset():
 
 #if writenet is called without a name, use the value
 #default.
-def writenet(name = 'default', value = None, hardcopy = False,np = False):
+def writenet(name = 'default', value = None, hardcopy = True,np = False):
     caller_name = inspect.stack()[1][3]
     savename = caller_name + '_' +name
  
@@ -31,40 +31,95 @@ def writenet(name = 'default', value = None, hardcopy = False,np = False):
             pickle.dump(value, f)
         f.close()
 
+def wn2(name = 'default',value = None, hardcopy = True, np = False):
+    caller_name = inspect.stack()[1][3]
+    savename = caller_name + '_' +name
+ 
+    globals()['lastname_'+caller_name] = name
+    globals()['last_'+caller_name] = value
+
+    if hardcopy:
+        path = os.path.join(os.environ['NETWORK_TEMPPATH'], savename)
+        f = open(path,'w')
+        if np:
+            save( f,value)
+        else:
+            pickle.dump(value, f)
+        f.close()
+
+
 #if readnet is called without a name, it just
 #returns the most recently globalized net.
-def readnet(name = 'last', hardcopy = False,np = False):
+def rn2(name = 'last', hardcopy = True,np = False):
+    sxs = False
+    out = -1
+
     caller_name = inspect.stack()[1][3]
-    print 'reading'
     try:
         lname = globals()['lastname_'+caller_name]
-        print lname
-        
         if lname == name or name == 'last':
-            return globals()['last_'+caller_name]
+            return globals()['last_'+caller_name], True
         else: 
             raise Exception()
     except Exception as e:
-        print e
         if not hardcopy:
-            raise Exception('compute')
+            return out, sxs
         savename = caller_name +'_'+name
         path =  os.path.join(os.environ['NETWORK_TEMPPATH'],savename)
-        try:
-                if hardcopy:
-                    path = os.path.join(os.environ['NETWORK_TEMPPATH'], savename)
-                    f = open(path,'w')
-                    if np:
-                        load(f)
-                    else:
-                        pickle.load( f)
-                    f.close()
-        
-        except Exception as e2:
-            print e2
-            raise Exception('readnet failed: '+ name + ' unsaved for ' + caller_name)
+
+        if hardcopy:
+            path = os.path.join(os.environ['NETWORK_TEMPPATH'], savename)
+            f = open(path,'r')
+            if np:
+                out = load(f)
+                sxs = True
+            else:
+                out = pickle.load( f)
+                sxs = True
+            f.close()
+
+    
         globals()['lastname_'+caller_name] = name
-        globals()['last_'+caller_name] = value
-        return value
+        globals()['last_'+caller_name] = out
+
+    return out, sxs
+
+
+#if readnet is called without a name, it just
+#returns the most recently globalized net.
+def readnet(name = 'last', hardcopy = True,np = False):
+    sxs = False
+    out = -1
+
+    caller_name = inspect.stack()[1][3]
+    try:
+        lname = globals()['lastname_'+caller_name]
+        if lname == name or name == 'last':
+            return globals()['last_'+caller_name], True
+        else: 
+            raise Exception()
+    except Exception as e:
+        if not hardcopy:
+            return out, sxs
+        savename = caller_name +'_'+name
+        path =  os.path.join(os.environ['NETWORK_TEMPPATH'],savename)
+
+        if hardcopy:
+            path = os.path.join(os.environ['NETWORK_TEMPPATH'], savename)
+            f = open(path,'r')
+            if np:
+                out = load(f)
+                sxs = True
+            else:
+                out = pickle.load( f)
+                sxs = True
+            f.close()
+
+    
+        globals()['lastname_'+caller_name] = name
+        globals()['last_'+caller_name] = out
+    if not sxs:
+        raise Exception('readnet failed')
+    return out
 
 

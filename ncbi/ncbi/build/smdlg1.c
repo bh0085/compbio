@@ -1,0 +1,1 @@
+../desktop/smdlg1.c

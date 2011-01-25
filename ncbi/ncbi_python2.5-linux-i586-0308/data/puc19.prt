@@ -1,0 +1,331 @@
+Seq-entry ::= seq {
+  id {
+    genbank {
+      name "SYNPUC19CV",
+      accession "L09137",
+      version 2
+    },
+    gi 20141090
+  },
+  descr {
+    title "Cloning vector pUC19c, complete sequence",
+    comment "These data and their annotation were supplied to GenBank by Will
+ Gilbert under the auspices of the GenBank Currator Program. pUC19c - Cloning
+ vector (beta-galactosidase mRNA on complementary strand)~ENTRY PUC19C        
+            #TYPE DNA CIRCULAR TITLE pUC19c - Cloning vector~             
+ (beta-galactosidase mRNA on complementary strand) DATE      03-FEB-1986~  
+ #sequence  16-DEC-1986~ACCESSION VB0033~SOURCE    artificial~COLLECTION  ATCC
+ 37254~REFERENCE~   #number  ~   #authors  Norrander J., Kempe T., Messing J.~
+   #journal Gene (1983) 26: 101-106~REFERENCE~   #number  1~   #authors 
+ Yanisch-Perron C., Vieira J., Messing J.~   #journal Gene (1985) 33: 103-119~
+   #comment shows the complete compiled sequence~REFERENCE~   #number  2~  
+ #authors  Chambers,S.P., et al.~   #journal Gene (1988) 68: 139-149~  
+ #describes mutation at nt1308 and its effect on copy number~REFERENCE~  
+ #number ~   #authors Pouwels P.H., Enger-Valk B.E., Brammar W.J.~   #book   
+ Cloning Vectors, Elsvier 1985 and supplements~   #comment  vector
+ I-A-iv-20~COMMENT~   This Sequence was obtained 3-MAR-1986 from J. Messing,
+ Waksman~   Institute, NJ on floppy disk.~   Revised 16-DEC-1986 by F.
+ Pfeiffer:~   1062/3 ""AT"" to ""TA"" to match revised sequence of PBR322~  
+ The beta-galactosidase mRNA sequence including the multiple~   cloning site
+ of M13mp19 is on the strand complementary to that~  
+ shown.~KEYWORDS~CROSSREFERENCE~   #complement~     VecBase(3):pUC19~  
+ #prerevised~     GenBank(50):M11662, EMBL(11):ARPuc19~   #parent~    
+ VecBase(3):pUC13, VecBase(3):M13mp19, VecSource(3):bGal19 PARENT~   Features
+ of pUC19c (2686 bp)~     residue     source~      1- 137  2074-2210 pBR322~  
+  138- 237  2252-2351 pBR322~    238- 395  1461-1304 (c) Lac-Operon~    396-
+ 452    57-   1 (c) polylinker of M13mp19~    455- 682  1298-1071 (c)
+ Lac-Operon~    683-2686  2352-4355 pBR322~   Conflict (cfl) and Mutations
+ (mut):~        pUC19c  source~   mut 1308  A  G  2977   pBR322   linked to
+ increased copy number~   mut 1942  A  G  3611   pBR322~   mut 2243  T  C 
+ 3912   pBR322~FEATURE~   1629-2417 789-1 (c) Ap-R; b-lactamase~POLYLINKER 
+ HindIII-SphI-PstI-SalI-XbaI-BamHI-SmaI-KpnI-SacI-EcoRI SELECTION~  
+ #resistance  Ap~   #indicator beta-galactosidase~SUMMARY  pUC19c    #length
+ 2686   #checksum 4465",
+    genbank {
+      extra-accessions {
+        "X02514"
+      },
+      entry-date std {
+        year 1993,
+        month 3,
+        day 5
+      }
+    },
+    source {
+      org {
+        taxname "Cloning vector pUC19c",
+        db {
+          {
+            db "taxon",
+            tag id 174689
+          }
+        },
+        orgname {
+          name partial {
+            {
+              fixed-level other,
+              level "species",
+              name "Cloning vector pUC19c"
+            }
+          },
+          lineage "artificial sequences; vectors",
+          gcode 11,
+          div "SYN"
+        }
+      }
+    },
+    molinfo {
+      biomol genomic,
+      completeness complete
+    },
+    pub {
+      pub {
+        gen {
+          cit "Unpublished",
+          authors {
+            names std {
+              {
+                name name {
+                  last "Gilbert",
+                  initials "W."
+                }
+              }
+            }
+          },
+          title "Obtained from VecBase 3.0"
+        }
+      },
+      comment "simple staff_entry"
+    },
+    pub {
+      pub {
+        article {
+          title {
+            name "Improved M13 phage cloning vectors and host strains:
+ nucleotide sequences of the M13mp18 and pUC19 vectors."
+          },
+          authors {
+            names std {
+              {
+                name name {
+                  last "Yanisch-Perron",
+                  initials "C."
+                }
+              },
+              {
+                name name {
+                  last "Vieira",
+                  initials "J."
+                }
+              },
+              {
+                name name {
+                  last "Messing",
+                  initials "J."
+                }
+              }
+            }
+          },
+          from journal {
+            title {
+              iso-jta "Gene",
+              ml-jta "Gene",
+              issn "0378-1119",
+              name "Gene."
+            },
+            imp {
+              date std {
+                year 1985
+              },
+              volume "33",
+              issue "1",
+              pages "103-119",
+              language "eng"
+            }
+          },
+          ids {
+            pubmed 2985470,
+            medline 85180545
+          }
+        },
+        pmid 2985470,
+        muid 85180545
+      }
+    },
+    pub {
+      pub {
+        article {
+          title {
+            name "The pMTL nic- cloning vectors. I. Improved pUC polylinker
+ regions to facilitate the use of sonicated DNA for nucleotide sequencing."
+          },
+          authors {
+            names std {
+              {
+                name name {
+                  last "Chambers",
+                  initials "S.P."
+                }
+              },
+              {
+                name name {
+                  last "Prior",
+                  initials "S.E."
+                }
+              },
+              {
+                name name {
+                  last "Barstow",
+                  initials "D.A."
+                }
+              },
+              {
+                name name {
+                  last "Minton",
+                  initials "N.P."
+                }
+              }
+            },
+            affil str "Microbial Technology Laboratory, PHLS Centre for
+ Applied Microbiology and Research, Salisbury, Wiltshire, U.K."
+          },
+          from journal {
+            title {
+              iso-jta "Gene",
+              ml-jta "Gene",
+              issn "0378-1119",
+              name "Gene."
+            },
+            imp {
+              date std {
+                year 1988,
+                month 8,
+                day 15
+              },
+              volume "68",
+              issue "1",
+              pages "139-149",
+              language "eng"
+            }
+          },
+          ids {
+            pubmed 2851488,
+            medline 89121486
+          }
+        },
+        pmid 2851488,
+        muid 89121486
+      }
+    },
+    pub {
+      pub {
+        sub {
+          authors {
+            names std {
+              {
+                name name {
+                  last "Messing",
+                  first "J",
+                  initials "J."
+                }
+              }
+            },
+            affil std {
+              affil "Rutgers, The State University of New Jersey, Waksman
+ Institute of Microbiology",
+              city "Piscataway",
+              sub "NJ",
+              country "USA",
+              street "190 Frelinghuysen Road",
+              postal-code "08854-8020"
+            }
+          },
+          date std {
+            year 2002,
+            month 4,
+            day 11
+          },
+          descr "Sequence update by submitter"
+        }
+      }
+    },
+    pub {
+      pub {
+        sub {
+          authors {
+            names std {
+              {
+                name name {
+                  last "Messing",
+                  first "J",
+                  initials "J."
+                }
+              }
+            },
+            affil std {
+              affil "University of Minnesota",
+              div "Department of Biochemistry",
+              city "St. Paul",
+              sub "MN",
+              country "USA",
+              postal-code "55108"
+            }
+          },
+          medium other,
+          date std {
+            year 1993,
+            month 4,
+            day 27
+          }
+        }
+      }
+    },
+    create-date std {
+      year 1993,
+      month 4,
+      day 27
+    },
+    update-date std {
+      year 2002,
+      month 5,
+      day 22
+    }
+  },
+  inst {
+    repr raw,
+    mol dna,
+    length 2686,
+    topology circular,
+    strand ds,
+    seq-data ncbi2na 'D99BF6B8E1AE005DE11392756886B449FB7B09A396A2484256D2A66D
+26AEFA6AEDAA7A7C1CE69348923EC788B914CE6BB80C591239B0A200C5934A653D94F4A79907BE
+A0A98DAE6A5DF673C6527A602AA3B9E4298F0BEAC194ABFD52D186FB0061A52E0F6276B15AA35D
+C8B6179293909FA6C34EB4C9EFD7BB80FBCD67443D444131896824C0BB025EAB970E2E270744F0
+F9BE6747959FD4B6A017B6E52793C383694199AA229AFE6CFA99DF59F5D9D1E1D9E676B6F69E69
+89ACD274740A6B0C6BCD44834AA3064A0204EE240294900A52816C00A59BE7A6FFD4CA75955786
+24D1003619D0B48AE980561287302314A6FD55E827576E6775EF5857967C5A317B597F757DA826
+E99FDD327467B2B374BDAECADBD9D427A9EEE460555BD256167997CD6B0736DF8B5056B08461F3
+651E924947AC128F24898ACECA6B9C48BDF82EBA5C1C69C4720812CFEB3799DE78252F17DA0022
+FAC9DF8D690101459EB26BAFFFEFE424923C6648000A374208D7F8DFF71AADE19D2E81801D1BC2
+A3FEB4E23CD0028DF45C8D7FC0F00382FF0343702CCCE2C07EB784BC50E7C34B8A45CDD2637B73
+F6F4D4CBE5E1D56DBB230718C6A2A7C537A552E790E316621519D169D48FCD243014949682A589
+920BAD7907F35975352DCF0FBE5A82722C2CBD94BC32FE641BEF94F9C4A4DBAED19DB6FEB3A7D3
+D275AF5418D0A62F138D553BEE40026BC9D7DAD758DBED20B0BE964BBCD1D3AF3A491E4C3DDF1E
+D394D6C239FF7B87AE2C74142D3DE20CBB39A6162F9DF95A6D0C6A30C59944C9207F00B9D34FA0
+06F7DAA60077428DF167BE2352F63B05476E4541E37D24DFF1FD149BF7AB89001282900E59000A
+830A984680EF831D31DF5FFD0CF3E093F34ABCFB74E268C4CFE0ECFC800C040CAAF59913F55802
+E51786DC2014F3CD384F05CC00CA6CD18A57F6D0'H,
+    hist {
+      replaces {
+        date std {
+          year 2002,
+          month 4,
+          day 11
+        },
+        ids {
+          gi 209213
+        }
+      }
+    }
+  }
+}

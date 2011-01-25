@@ -1,0 +1,1 @@
+../object/objvalid.c

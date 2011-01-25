@@ -1,0 +1,213 @@
+<h2>C++ and Scripting Languages</h2>
+
+In this section I discuss some details of how various
+C++ constructs translate to Perl and Python constructs.
+
+<h3>Objects, Pointers, and References</h3>
+
+In the scripting languages
+there is no difference in representation between
+objects, pointers to objects, and references
+to objects.  All are represented by a instances of a scripting
+language class of the same name as the C++ class.
+This can be passed as a parameter to a function
+taking an object by value, pointer or reference.
+
+<h3>The <code>const</code> Qualifier</h3>
+
+SWIG does not respect <code>const</code> qualifiers on return
+values: it generates wrapper code that blithely casts away
+<code>const</code>.  I consider this a serious deficit
+of SWIG, but we're stuck with it, at least for now.
+
+<h3>Strings</h3>
+
+STL <code>std::string</code> objects are used throughout the
+Toolkit.  The scripting language interfaces support
+these with corresponding classes, but also attempt
+to integrate them with the native string types of
+the scripting languages.  
+
+<p>
+Wrappers for C++ functions
+that take <code>std::string</code>s by value or
+by <code>const</code> reference or pointer
+will accept scripting language strings as well
+as <code>std::string</code>s.
+This means that in Perl you can simply write
+<font color="brown"><pre>
+print ncbi::NStr::ToUpper('hello');
+</pre></font>
+rather than
+<font color="brown"><pre>
+$s = new ncbi::string()
+<em>something to build string</em>
+print ncbi::NStr::ToUpper($s);
+</pre></font>
+though the latter is legal too.
+Similarly, in Python you can write
+<font color="brown"><pre>
+ncbi.NStr.ToUpper('hello')
+</pre></font>
+and this returns a Python string.
+Functions that take non-<code>const</code> references
+or pointers to <code>std::string</code>s must be handed
+a <code>string</code> object, since they may change
+what they're handed.
+
+<p>
+When a C++ function returns a <code>std::string</code>
+by value or <code>const</code> reference, a native scripting
+language string is produced.
+(the calls to <code>ToUpper</code> shown above return
+Perl and Python strings, not wrapped <code>string</code> objects).
+When an non-<code>const</code>
+reference is returned, a wrapped <code>string</code> object is
+returned, which can be used to modify the underlying
+C++ object.
+
+<p>
+The scripting language classes representing <code>std::string</code>
+support only a subset of <code>std::string</code> operations.
+Objects of this type can easily be converted to native scripting
+language strings, using <code>$s->perl_string()</code> in Perl
+or <code>str(s)</code> or <code>s[:]</code>
+in Python.
+
+<h3>Input/Output Streams</h3>
+
+The scripting languages provide their own means of reading and
+writing files.  However, some of the Toolkit functions work with
+standard C++ I/O streams.  The interfaces contain classes
+to represent these.  They have the names of the standard
+C++ classes, such as <code>istream</code>, rather than
+the NCBI names like <code>CNcbiIstream</code>.
+To load an agp-format file in Perl, you could do
+<font color="brown"><pre>
+$istr = new ncbi::ifstream('data/test.agp');
+$bss = ncbi::AgpRead($istr);
+</pre></font>
+or in Python
+<font color="brown"><pre>
+istr = ncbi.ifstream('data/test.agp')
+bss = ncbi.AgpRead(istr)
+</pre></font>
+(<b>Note</b>: you will need to use a different path to the data directory
+unless you are working in the directory that contains it.)
+
+<h3><code>CObject</code>s and <code>CRef</code>s</h3>
+
+The C++ Toolkit makes extensive use of "smart pointers"
+called <code>CRef</code>s, which participate in
+reference counting for objects that derive from
+class <code>CObject</code>.  The scripting language interfaces
+aim to make <code>CRef</code>s largely invisible to the user.
+When a C++ function returns a <code>CRef</code> to an
+object of some type,
+it is automatically converted to a
+scripting language object of the corresponding type.  Conversely,
+when a C++ function expects a <code>CRef</code> to an object,
+the scripting language interface will accept a raw object.
+<p>
+Scripting language objects that represent <code>CObject</code>s
+are <code>CRef</code>-like in that they maintain a reference
+to the underlying C++ object.  "Destruction" of an object
+in the scripting language merely decrements the reference
+count on the <code>CObject</code>, which will destroy it only
+if the reference count goes to zero.
+
+<h3><code>list</code>s and <code>vector</code>s</h3>
+
+STL <code>list</code>s and <code>vector</code>s are
+used throughout the Toolkit.  The intent of the
+scripting language interfaces is to wrap all
+<code>list</code> and <code>vector</code> types
+that appear as function parameters or return types.
+The corresponding classes have names like <code>list_CAtom_id</code>,
+<code>list_int</code>, and <code>vector_CRef_CSeq_id</code>,
+and support a subset
+of C++ <code>list</code> and <code>vector</code> operations.
+Like <code>string</code>s, these are largely integrated with
+native scripting language types.  Functions that take
+a <code>list</code> or <code>vector</code> by value
+or <code>const</code> reference will also accept a Perl
+array <em>reference</em> (put a "\" in front of an array
+name to make a reference, e.g., <code>\@myarray</code>)
+or a Python list or tuple.  Functions that, in C++, return
+a <code>list</code> or <code>vector</code>, or a
+<code>const</code> reference thereto, will return
+a Python list in Python. In Perl,
+<code>list</code> and <code>vector</code> are provided
+with an <code>array()</code> function that returns
+a <em>reference</em> to a Perl array
+(so the members are accessed as <code>$ar->[42]</code>
+rather than <code>$ar[42]</code>).  In Python a
+Python list is returned by <code>vec_or_list[:]</code>.
+
+<h3>Other C++ Templates</h3>
+
+Templates are a sticky issue because they must be specified
+when the interface module is built.  It is impossible to anticipate
+every template instantiation that someone might want, and
+impractical to generate a huge number of combinations.
+Yet some template instances are critical.  A growing
+number of template instances that seem actually useful
+are included in the interface.  They have names
+like <code>COpenRange_TSeqPos</code> (representing
+a C++ <code>COpenRange&lt;TSeqPos&gt;</code>).
+If you discover an important template instantiation
+missing, please let me know.
+
+<h3>Overloaded Operators</h3>
+
+SWIG automatically supports many overloaded operators for Python,
+and can be persuaded to support some others.  Thus C++ operators such
+as "+" will be reflected in Python operators of the same name.
+Python lacks "++" and "--" operators.  Currently I rename these to
+<code>Incr()</code> and <code>Decr()</code> methods
+(so instead of <code>++foo</code> you would say
+foo.Incr() in Python).  <code>bool</code> conversion operators
+get mapped sensibly, so that conditionals work the way you would
+expect (and you can call the converter explicitly using
+<code>bool(foo)</code> in Python).  Square brackets (<code>[]</code>)
+are not automatically wrapped because of an issue with their semantics
+in Python, but they should be working, for read access at least,
+for all NCBI objects that define them, as well as
+for <code>vector</code> and <code>string</code> objects,
+<p>
+For Perl, all non-mutating C++ operators supported by the
+Perl <a href="http://www.perl.com/doc/manual/html/lib/overload.html">
+overload module</a> are supported in Perl.  Mutating operators,
+namely ++, --, and += and its analogs, are not overloaded in the
+Perl wrapper at this time.
+The reason is that the Perl overload module enforces a semantics for
+them that is potentially confusing, and especially so where
+wrapped C++ objects are involved.  ++ and -- are wrapped
+as <code>Incr()</code> and <code>Decr()</code> methods, as in Python.
+<code>operator bool</code>, when provided in C++, is wrapped
+as overloaded boolean conversion in Perl.
+Use of objects that provide this operator is quite natural
+in conditionals.  If a variable is to be set to a boolean value,
+the programmer should be aware that boolean expressions in
+Perl do not (necessarily) return a 1 or 0, but a reference to
+some object involved in the expression.  This can be forced to
+a 1 or 0 (as appropriate) by the <code>ncbi::bool()</code> function.
+This function can also be usefully applied to an object with a boolean
+conversion to invoke that conversion.
+
+<p>
+<!-- Begin footer content -->
+
+<table BORDER=0 CELLSPACING=0 WIDTH="100%" >
+<tr>
+<td ALIGN=LEFT>
+<a NAME="copyright"></a>
+<address>
+<a href="mailto:jcherry@ncbi.nlm.nih.gov">Josh Cherry</a>&nbsp;</address>
+</td>
+
+<td>
+
+
+</tr>
+</table>

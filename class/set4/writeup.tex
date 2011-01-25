@@ -69,10 +69,10 @@ See figs/3biii\_europe.png and figs/3biii\_all.png.
 &=\frac{d^2}{p(1-p)}\end{align*}
 
 \subsubsection*{ii}
-I can estimate $p$ for a pairwise comparison by averaging derived frequency over the two subpopulations. $d$ is simply $\frac{f_1 - f_2}{2}$ with the appropriate sign. By the formula above, I can compute $F_{ST}$.
+I can estimate $p$ for a pairwise comparison by averaging derived frequency over the two subpopulations. $d$ is simply $\frac{f_1 - f_2}{2}$ with the appropriate sign. By the formula above, I can compute $F_{ST}$. See figs/3cii.png.
 
 \subsubsection*{iii}
-See figs/3cii.png. 7 SNPs pass $F_{ST}>.6$ and one of these is excluded by the previous tests. Thus, 6 SNPs pass the above thresholds and have $F_{ST} > .6$.
+See figs/3ciii.png. 7 SNPs pass $F_{ST}>.6$ and one of these is excluded by the previous tests. Thus, 6 SNPs pass the above thresholds and have $F_{ST} > .6$.
 
 
 \subsection*{(d)}
@@ -103,9 +103,6 @@ Per base, the raw error frequencies vary from $.45\%$ got C and G nucleotides to
 
 I can also compute a mean error rate per sequence position. The easest way to do this is to check reference reads along the sequence and compare to every read hitting that position - hashing errors according to position relative to read start. Normalizing by the total umbers of reads at each position gives the plot in figs/4b\_positional\_errors.png.
 
-
-
-\pagebreak
 \subsection*{(c)}
 First I map the references sequences across the genome and then I do the same thing for sequence reads. To keep track of discrepancies between reads, I map reads to an $n\times5$ array that functions as a hash table incremented whenever a read indicates a base (or ``N'') at a particular position. From this hash table, I find the most common read at a site but in order to distinguish SNPs with high certainty - say, $95\%$ - I demand that the probability of the correct labeling exceeds the probabillity of all other labels by a factor of 20. Using the single valued empirical error rate $\epsilon_0 = .005$ estimated above, I can approximate relative probability of correct labeling by $\epsilon_0^{|\text{consensus}| - |\text{other}|}$. In order to minimize misidentifications of SNPs, I can apply a bonferri correction and demand that correct labeling be more probable by a factor of $n \times 20$.
 

@@ -1,3 +1,7 @@
+import subprocess
+from numpy import *
+import numpy as np
+import itertools as it
 def SVM_predict(trg_n = 0, name = 'fRN', number = 0, option ='svd'):
     trgs, tfs = nu.parse_net(name,number)
     ts = nu.load_TS()
@@ -77,7 +81,10 @@ def SVM_predict(trg_n = 0, name = 'fRN', number = 0, option ='svd'):
     cl_test, ces =get_training_data(cl_data, cl_testing_labels, array(V[:,vecs].T))
 
 
-    model_file =SVM_train(ts_train)
+    if binary:
+        model_file =SVM_train_binary(ts_train)
+    else:
+        model_file = SVM_train(ts_train)
 
     for i in range(3):
         if i == 0:
@@ -95,6 +102,10 @@ def SVM_predict(trg_n = 0, name = 'fRN', number = 0, option ='svd'):
 
         predictions_file = SVM_classify(dfile, model_file)
         predicted = read_SVM(predictions_file)
+        
+        #draw_std(fignum = i+5, predicted = predicted, expr_median=expr_median,actual = actual)
+
+def draw_std(fignum = 0, predicted = None, expr_median = None):
         np = len(predicted)
     
         colors = []
@@ -122,10 +133,34 @@ def SVM_predict(trg_n = 0, name = 'fRN', number = 0, option ='svd'):
             ax0.plot(xax,v,color = 'w', alpha = .25, zorder = -1)
 
 
-def SVM_train(data):
+def SVM_pstring(binary = True, degree = 1, e = .2, c = .2,
+                kernel = 'polynomial'):
+    
+    if kernel == 'polynomial':
+        tstr = '1'
+    elif kernel =='linear':
+        tstr = '0'
+    elif kernel == 'rbg':
+        tstr = '2'
+
+    p = {'-e': e,
+         '-c': c,
+         '-z': (lambda x: x and 'c' or 'r')(binary) ,
+         '-d': degree,
+         '-t':tstr
+         }
+
+
+    plist =' '.join(map(lambda x: ' '.join([x[0],str(x[1])]),p.iteritems()))
+    return plist
+
+
+def SVM_train(data,pstring = ' -e .2 -c .2 -z r '):
+
+    print pstring
     training_file = write_SVM(data)
     model_file = 'temp/model.svm'
-    subprocess.call('svm_learn -e .2 -c .2 -z r '+training_file+' '+model_file,shell = True)
+    subprocess.call('svm_learn '+pstring+ ' '+training_file+' '+model_file,shell = True)
     return model_file
     
 def SVM_classify(data, model_file):
@@ -135,6 +170,7 @@ def SVM_classify(data, model_file):
     predictions_file = 'temp/predictions.svm'
     subprocess.call('svm_classify ' + datafile + ' ' + model_file + ' ' + predictions_file
                     ,shell = True)
+
     return predictions_file
 
 def read_SVM(filename):
@@ -149,14 +185,24 @@ def write_SVM(data):
     fname = 'temp/svm.data'
     f = open(fname,'w')
 
-    n = len(data[0][1])
-    t = len(data)
+    print
+    print 'Note that in the current svm implementation, data must be binarized on input'
+    print 'write_SVM is no longer responsible...'
+    print
 
-    for e in data:
-        line = str(e[0]) + ' '
+    value_lambda = lambda x: x
+
+    train_x = data[0]
+    train_y = data[1]
+
+    t, n = shape(train_x)
+
+    for j in range(len(train_x)):
+        line = str(value_lambda(train_y[j])) + ' '
         for i in range(n):
-            line += str(i+1) + ':' + str(e[1][i]) + ' '
+            line += str(i+1) + ':' + str(train_x[j][i]) + ' '
         f.write(line + '\n')
+        print line
     f.close()
 
     return fname

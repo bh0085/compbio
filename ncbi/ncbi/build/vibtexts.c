@@ -1,0 +1,1 @@
+../vibrant/vibtexts.c

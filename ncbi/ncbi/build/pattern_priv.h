@@ -1,0 +1,1 @@
+../algo/blast/core/pattern_priv.h

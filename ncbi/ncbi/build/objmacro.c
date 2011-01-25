@@ -1,0 +1,1 @@
+../object/objmacro.c

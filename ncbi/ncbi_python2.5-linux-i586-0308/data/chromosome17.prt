@@ -1,0 +1,242 @@
+Seq-entry ::= seq {
+  id {
+    other {
+      name "NC_000017",
+      accession "NC_000017",
+      version 8
+    },
+    general {
+      db "NCBI_GENOMES",
+      tag id 17
+    },
+    gi 42406304
+  },
+  descr {
+    user {
+      type str "GenomeBuild",
+      data {
+        {
+          label str "Assembly",
+          data str "HGSC Finished Genome v2.0"
+        },
+        {
+          label str "NcbiAnnotation",
+          data str "34"
+        },
+        {
+          label str "NcbiVersion",
+          data str "3"
+        },
+        {
+          label str "DataFreeze",
+          data str "Jul 30, 2003"
+        }
+      }
+    },
+    comment "The DNA sequence is part of the second release of the finished
+ human reference genome. It was assembled from individual clone sequences by
+ the Human Genome Sequencing Consortium in consultation with NCBI staff.",
+    molinfo {
+      biomol genomic,
+      tech htgs-3
+    },
+    user {
+      class "Genomes",
+      type str "info",
+      data {
+        {
+          label id 1,
+          data int 17
+        }
+      }
+    },
+    title "Homo sapiens chromosome 17",
+    source {
+      genome genomic,
+      org {
+        taxname "Homo sapiens",
+        common "human",
+        db {
+          {
+            db "taxon",
+            tag id 9606
+          }
+        },
+        orgname {
+          name binomial {
+            genus "Homo",
+            species "sapiens"
+          },
+          lineage "Eukaryota; Metazoa; Chordata; Craniata; Vertebrata;
+ Euteleostomi; Mammalia; Eutheria; Primates; Catarrhini; Hominidae; Homo",
+          gcode 1,
+          mgcode 2,
+          div "PRI"
+        }
+      },
+      subtype {
+        {
+          subtype chromosome,
+          name "17"
+        }
+      }
+    },
+    pub {
+      pub {
+        gen {
+          cit "Unpublished",
+          authors {
+            names str {
+              "International Human Genome Sequencing Consortium"
+            }
+          },
+          date std {
+            year 2003
+          },
+          title "The complete sequence of Homo sapiens"
+        }
+      }
+    },
+    create-date std {
+      year 2002,
+      month 8,
+      day 29
+    },
+    update-date std {
+      year 2004,
+      month 2,
+      day 20
+    }
+  },
+  inst {
+    repr delta,
+    mol dna,
+    length 81860266,
+    strand ds,
+    ext delta {
+      literal {
+        length 38000
+      },
+      loc int {
+        from 0,
+        to 296853,
+        strand plus,
+        id gi 37544595
+      },
+      literal {
+        length 46522
+      },
+      loc int {
+        from 0,
+        to 728183,
+        strand plus,
+        id gi 29799518
+      },
+      literal {
+        length 250000
+      },
+      loc int {
+        from 0,
+        to 17922182,
+        strand plus,
+        id gi 37543500
+      },
+      literal {
+        length 20000
+      },
+      loc int {
+        from 0,
+        to 2426902,
+        strand plus,
+        id gi 37544716
+      },
+      literal {
+        length 100000
+      },
+      loc int {
+        from 0,
+        to 579923,
+        strand plus,
+        id gi 37544515
+      },
+      literal {
+        length 3000000
+      },
+      loc int {
+        from 0,
+        to 9412827,
+        strand plus,
+        id gi 37544509
+      },
+      literal {
+        length 100000
+      },
+      loc int {
+        from 0,
+        to 1629268,
+        strand plus,
+        id gi 29799562
+      },
+      literal {
+        length 100000
+      },
+      loc int {
+        from 0,
+        to 5070692,
+        strand plus,
+        id gi 37543812
+      },
+      literal {
+        length 100000
+      },
+      loc int {
+        from 0,
+        to 24793601,
+        strand plus,
+        id gi 37544107
+      },
+      literal {
+        length 90000
+      },
+      loc int {
+        from 0,
+        to 11438617,
+        strand plus,
+        id gi 37542591
+      },
+      literal {
+        length 153000
+      },
+      loc int {
+        from 0,
+        to 2103125,
+        strand plus,
+        id gi 37544588
+      },
+      literal {
+        length 65000
+      },
+      loc int {
+        from 0,
+        to 1275559,
+        strand plus,
+        id gi 37542676
+      },
+      literal {
+        length 120000
+      }
+    },
+    hist {
+      replaces {
+        date std {
+          year 2004,
+          month 2,
+          day 4
+        },
+        ids {
+          gi 42406083
+        }
+      }
+    }
+  }
+}

@@ -188,6 +188,8 @@ def q3c():
     fs[isnan(fs)] = 0 
 
     fs[2,:] = np.mean(fs[0:2,:],0)
+
+
     f.clear()
     ct = mycolors.getct(3)
 
@@ -201,6 +203,7 @@ def q3c():
                       r'Average $F_{ST}$.'])
     plots.maketitle(ax,'$F_{ST}$ Across chromosome 5')
     
+    return
 
     idxs_passing = q3b()
     f = plt.figure(0)
