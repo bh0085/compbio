@@ -1,0 +1,366 @@
+<?xml version="1.0" standalone="yes"?>
+
+<TREE>
+  <NODE EXTINCT="0" ID="4" CONFIDENCE="0" PHYLESIS="1" LEAF="0" HASPAGE="1" ANCESTORWITHPAGE="1" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="2">
+    <NAME><![CDATA[Archaea]]></NAME>
+    <DESCRIPTION><![CDATA[(Methanogens, Halophiles, Sulfolobus, and relatives)]]></DESCRIPTION>
+    <AUTHORITY></AUTHORITY>
+    <NAMECOMMENT></NAMECOMMENT>
+    <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+    <AUTHDATE>null</AUTHDATE>
+    <OTHERNAMES>
+      <OTHERNAME ISIMPORTANT="0" ISPREFERRED="0" SEQUENCE="0" DATE="null" ITALICIZENAME="0">
+        <NAME><![CDATA[archaeans]]></NAME>
+        <AUTHORITY></AUTHORITY>
+        <COMMENTS></COMMENTS>
+      </OTHERNAME>
+    </OTHERNAMES>
+    <NODES>
+      <NODE EXTINCT="0" ID="7" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="4" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="0">
+        <NAME><![CDATA[Korarchaeota]]></NAME>
+        <DESCRIPTION></DESCRIPTION>
+        <AUTHORITY></AUTHORITY>
+        <NAMECOMMENT></NAMECOMMENT>
+        <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+        <AUTHDATE>null</AUTHDATE>
+      </NODE>
+      <NODE EXTINCT="0" ID="8" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="4" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="2">
+        <NAME></NAME>
+        <DESCRIPTION></DESCRIPTION>
+        <AUTHORITY></AUTHORITY>
+        <NAMECOMMENT></NAMECOMMENT>
+        <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+        <AUTHDATE>null</AUTHDATE>
+        <NODES>
+          <NODE EXTINCT="0" ID="9" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="1" ANCESTORWITHPAGE="4" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="2">
+            <NAME><![CDATA[Crenarchaeota]]></NAME>
+            <DESCRIPTION></DESCRIPTION>
+            <AUTHORITY></AUTHORITY>
+            <NAMECOMMENT></NAMECOMMENT>
+            <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+            <AUTHDATE>null</AUTHDATE>
+            <NODES>
+              <NODE EXTINCT="0" ID="12" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="9" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="2">
+                <NAME></NAME>
+                <DESCRIPTION></DESCRIPTION>
+                <AUTHORITY></AUTHORITY>
+                <NAMECOMMENT></NAMECOMMENT>
+                <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                <AUTHDATE>null</AUTHDATE>
+                <NODES>
+                  <NODE EXTINCT="0" ID="13" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="9" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="0">
+                    <NAME><![CDATA[Thermofilum]]></NAME>
+                    <DESCRIPTION></DESCRIPTION>
+                    <AUTHORITY></AUTHORITY>
+                    <NAMECOMMENT></NAMECOMMENT>
+                    <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                    <AUTHDATE>null</AUTHDATE>
+                  </NODE>
+                  <NODE EXTINCT="0" ID="14" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="9" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="2">
+                    <NAME></NAME>
+                    <DESCRIPTION></DESCRIPTION>
+                    <AUTHORITY></AUTHORITY>
+                    <NAMECOMMENT></NAMECOMMENT>
+                    <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                    <AUTHDATE>null</AUTHDATE>
+                    <NODES>
+                      <NODE EXTINCT="0" ID="15" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="9" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="0">
+                        <NAME><![CDATA[Pyrobaculum]]></NAME>
+                        <DESCRIPTION></DESCRIPTION>
+                        <AUTHORITY></AUTHORITY>
+                        <NAMECOMMENT></NAMECOMMENT>
+                        <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                        <AUTHDATE>null</AUTHDATE>
+                      </NODE>
+                      <NODE EXTINCT="0" ID="16" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="9" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="0">
+                        <NAME><![CDATA[Thermoproteus]]></NAME>
+                        <DESCRIPTION></DESCRIPTION>
+                        <AUTHORITY></AUTHORITY>
+                        <NAMECOMMENT></NAMECOMMENT>
+                        <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                        <AUTHDATE>null</AUTHDATE>
+                      </NODE>
+                    </NODES>
+                  </NODE>
+                </NODES>
+              </NODE>
+              <NODE EXTINCT="0" ID="17" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="9" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="2">
+                <NAME></NAME>
+                <DESCRIPTION></DESCRIPTION>
+                <AUTHORITY></AUTHORITY>
+                <NAMECOMMENT></NAMECOMMENT>
+                <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                <AUTHDATE>null</AUTHDATE>
+                <NODES>
+                  <NODE EXTINCT="0" ID="18" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="9" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="2">
+                    <NAME></NAME>
+                    <DESCRIPTION></DESCRIPTION>
+                    <AUTHORITY></AUTHORITY>
+                    <NAMECOMMENT></NAMECOMMENT>
+                    <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                    <AUTHDATE>null</AUTHDATE>
+                    <NODES>
+                      <NODE EXTINCT="0" ID="19" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="9" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="0">
+                        <NAME><![CDATA[Sulfolobus]]></NAME>
+                        <DESCRIPTION></DESCRIPTION>
+                        <AUTHORITY></AUTHORITY>
+                        <NAMECOMMENT></NAMECOMMENT>
+                        <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                        <AUTHDATE>null</AUTHDATE>
+                      </NODE>
+                      <NODE EXTINCT="0" ID="20" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="9" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="2">
+                        <NAME></NAME>
+                        <DESCRIPTION></DESCRIPTION>
+                        <AUTHORITY></AUTHORITY>
+                        <NAMECOMMENT></NAMECOMMENT>
+                        <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                        <AUTHDATE>null</AUTHDATE>
+                        <NODES>
+                          <NODE EXTINCT="0" ID="21" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="9" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="0">
+                            <NAME><![CDATA[Metallosphaera]]></NAME>
+                            <DESCRIPTION></DESCRIPTION>
+                            <AUTHORITY></AUTHORITY>
+                            <NAMECOMMENT></NAMECOMMENT>
+                            <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                            <AUTHDATE>null</AUTHDATE>
+                          </NODE>
+                          <NODE EXTINCT="0" ID="22" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="9" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="0">
+                            <NAME><![CDATA[Acidianus]]></NAME>
+                            <DESCRIPTION></DESCRIPTION>
+                            <AUTHORITY></AUTHORITY>
+                            <NAMECOMMENT></NAMECOMMENT>
+                            <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                            <AUTHDATE>null</AUTHDATE>
+                          </NODE>
+                        </NODES>
+                      </NODE>
+                    </NODES>
+                  </NODE>
+                  <NODE EXTINCT="0" ID="23" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="9" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="2">
+                    <NAME></NAME>
+                    <DESCRIPTION></DESCRIPTION>
+                    <AUTHORITY></AUTHORITY>
+                    <NAMECOMMENT></NAMECOMMENT>
+                    <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                    <AUTHDATE>null</AUTHDATE>
+                    <NODES>
+                      <NODE EXTINCT="0" ID="24" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="9" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="2">
+                        <NAME></NAME>
+                        <DESCRIPTION></DESCRIPTION>
+                        <AUTHORITY></AUTHORITY>
+                        <NAMECOMMENT></NAMECOMMENT>
+                        <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                        <AUTHDATE>null</AUTHDATE>
+                        <NODES>
+                          <NODE EXTINCT="0" ID="25" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="9" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="2">
+                            <NAME></NAME>
+                            <DESCRIPTION></DESCRIPTION>
+                            <AUTHORITY></AUTHORITY>
+                            <NAMECOMMENT></NAMECOMMENT>
+                            <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                            <AUTHDATE>null</AUTHDATE>
+                            <NODES>
+                              <NODE EXTINCT="0" ID="26" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="9" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="0">
+                                <NAME><![CDATA[Thermodiscus]]></NAME>
+                                <DESCRIPTION></DESCRIPTION>
+                                <AUTHORITY></AUTHORITY>
+                                <NAMECOMMENT></NAMECOMMENT>
+                                <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                                <AUTHDATE>null</AUTHDATE>
+                              </NODE>
+                              <NODE EXTINCT="0" ID="27" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="9" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="0">
+                                <NAME><![CDATA[Igneococcus]]></NAME>
+                                <DESCRIPTION></DESCRIPTION>
+                                <AUTHORITY></AUTHORITY>
+                                <NAMECOMMENT></NAMECOMMENT>
+                                <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                                <AUTHDATE>null</AUTHDATE>
+                              </NODE>
+                            </NODES>
+                          </NODE>
+                          <NODE EXTINCT="0" ID="28" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="9" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="2">
+                            <NAME></NAME>
+                            <DESCRIPTION></DESCRIPTION>
+                            <AUTHORITY></AUTHORITY>
+                            <NAMECOMMENT></NAMECOMMENT>
+                            <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                            <AUTHDATE>null</AUTHDATE>
+                            <NODES>
+                              <NODE EXTINCT="0" ID="29" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="9" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="2">
+                                <NAME></NAME>
+                                <DESCRIPTION></DESCRIPTION>
+                                <AUTHORITY></AUTHORITY>
+                                <NAMECOMMENT></NAMECOMMENT>
+                                <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                                <AUTHDATE>null</AUTHDATE>
+                                <NODES>
+                                  <NODE EXTINCT="0" ID="30" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="9" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="0">
+                                    <NAME><![CDATA[Thermosphaera]]></NAME>
+                                    <DESCRIPTION></DESCRIPTION>
+                                    <AUTHORITY></AUTHORITY>
+                                    <NAMECOMMENT></NAMECOMMENT>
+                                    <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                                    <AUTHDATE>null</AUTHDATE>
+                                  </NODE>
+                                  <NODE EXTINCT="0" ID="31" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="9" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="0">
+                                    <NAME><![CDATA[Desulfurococcus]]></NAME>
+                                    <DESCRIPTION></DESCRIPTION>
+                                    <AUTHORITY></AUTHORITY>
+                                    <NAMECOMMENT></NAMECOMMENT>
+                                    <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                                    <AUTHDATE>null</AUTHDATE>
+                                  </NODE>
+                                </NODES>
+                              </NODE>
+                              <NODE EXTINCT="0" ID="32" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="9" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="0">
+                                <NAME><![CDATA[Staphylothermus]]></NAME>
+                                <DESCRIPTION></DESCRIPTION>
+                                <AUTHORITY></AUTHORITY>
+                                <NAMECOMMENT></NAMECOMMENT>
+                                <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                                <AUTHDATE>null</AUTHDATE>
+                              </NODE>
+                            </NODES>
+                          </NODE>
+                        </NODES>
+                      </NODE>
+                      <NODE EXTINCT="0" ID="33" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="9" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="2">
+                        <NAME></NAME>
+                        <DESCRIPTION></DESCRIPTION>
+                        <AUTHORITY></AUTHORITY>
+                        <NAMECOMMENT></NAMECOMMENT>
+                        <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                        <AUTHDATE>null</AUTHDATE>
+                        <NODES>
+                          <NODE EXTINCT="0" ID="34" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="9" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="0">
+                            <NAME><![CDATA[Pyrolobus]]></NAME>
+                            <DESCRIPTION></DESCRIPTION>
+                            <AUTHORITY></AUTHORITY>
+                            <NAMECOMMENT></NAMECOMMENT>
+                            <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                            <AUTHDATE>null</AUTHDATE>
+                          </NODE>
+                          <NODE EXTINCT="0" ID="35" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="9" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="2">
+                            <NAME></NAME>
+                            <DESCRIPTION></DESCRIPTION>
+                            <AUTHORITY></AUTHORITY>
+                            <NAMECOMMENT></NAMECOMMENT>
+                            <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                            <AUTHDATE>null</AUTHDATE>
+                            <NODES>
+                              <NODE EXTINCT="0" ID="36" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="9" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="0">
+                                <NAME><![CDATA[Hyperthermus]]></NAME>
+                                <DESCRIPTION></DESCRIPTION>
+                                <AUTHORITY></AUTHORITY>
+                                <NAMECOMMENT></NAMECOMMENT>
+                                <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                                <AUTHDATE>null</AUTHDATE>
+                              </NODE>
+                              <NODE EXTINCT="0" ID="37" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="9" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="0">
+                                <NAME><![CDATA[Pyrodictium]]></NAME>
+                                <DESCRIPTION></DESCRIPTION>
+                                <AUTHORITY></AUTHORITY>
+                                <NAMECOMMENT></NAMECOMMENT>
+                                <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                                <AUTHDATE>null</AUTHDATE>
+                              </NODE>
+                            </NODES>
+                          </NODE>
+                        </NODES>
+                      </NODE>
+                    </NODES>
+                  </NODE>
+                </NODES>
+              </NODE>
+            </NODES>
+          </NODE>
+          <NODE EXTINCT="0" ID="10" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="1" ANCESTORWITHPAGE="4" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="7">
+            <NAME><![CDATA[Euryarchaeota]]></NAME>
+            <DESCRIPTION></DESCRIPTION>
+            <AUTHORITY></AUTHORITY>
+            <NAMECOMMENT></NAMECOMMENT>
+            <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+            <AUTHDATE>null</AUTHDATE>
+            <NODES>
+              <NODE EXTINCT="0" ID="39" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="10" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="2">
+                <NAME></NAME>
+                <DESCRIPTION></DESCRIPTION>
+                <AUTHORITY></AUTHORITY>
+                <NAMECOMMENT></NAMECOMMENT>
+                <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                <AUTHDATE>null</AUTHDATE>
+                <NODES>
+                  <NODE EXTINCT="0" ID="40" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="10" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="0">
+                    <NAME><![CDATA[Halobacteriales]]></NAME>
+                    <DESCRIPTION></DESCRIPTION>
+                    <AUTHORITY></AUTHORITY>
+                    <NAMECOMMENT></NAMECOMMENT>
+                    <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                    <AUTHDATE>null</AUTHDATE>
+                  </NODE>
+                  <NODE EXTINCT="0" ID="41" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="10" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="0">
+                    <NAME><![CDATA[Methanomicrobiales]]></NAME>
+                    <DESCRIPTION></DESCRIPTION>
+                    <AUTHORITY></AUTHORITY>
+                    <NAMECOMMENT></NAMECOMMENT>
+                    <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                    <AUTHDATE>null</AUTHDATE>
+                  </NODE>
+                </NODES>
+              </NODE>
+              <NODE EXTINCT="0" ID="42" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="10" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="0">
+                <NAME><![CDATA[Methanobacteriales]]></NAME>
+                <DESCRIPTION></DESCRIPTION>
+                <AUTHORITY></AUTHORITY>
+                <NAMECOMMENT></NAMECOMMENT>
+                <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                <AUTHDATE>null</AUTHDATE>
+              </NODE>
+              <NODE EXTINCT="0" ID="43" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="10" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="0">
+                <NAME><![CDATA[Methanococcales]]></NAME>
+                <DESCRIPTION></DESCRIPTION>
+                <AUTHORITY></AUTHORITY>
+                <NAMECOMMENT></NAMECOMMENT>
+                <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                <AUTHDATE>null</AUTHDATE>
+              </NODE>
+              <NODE EXTINCT="0" ID="44" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="10" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="0">
+                <NAME><![CDATA[Methanopyrales]]></NAME>
+                <DESCRIPTION></DESCRIPTION>
+                <AUTHORITY></AUTHORITY>
+                <NAMECOMMENT></NAMECOMMENT>
+                <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                <AUTHDATE>null</AUTHDATE>
+              </NODE>
+              <NODE EXTINCT="0" ID="45" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="10" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="0">
+                <NAME><![CDATA[Archeoglobales]]></NAME>
+                <DESCRIPTION></DESCRIPTION>
+                <AUTHORITY></AUTHORITY>
+                <NAMECOMMENT></NAMECOMMENT>
+                <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                <AUTHDATE>null</AUTHDATE>
+              </NODE>
+              <NODE EXTINCT="0" ID="46" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="10" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="0">
+                <NAME><![CDATA[Thermoplasmales]]></NAME>
+                <DESCRIPTION></DESCRIPTION>
+                <AUTHORITY></AUTHORITY>
+                <NAMECOMMENT></NAMECOMMENT>
+                <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                <AUTHDATE>null</AUTHDATE>
+              </NODE>
+              <NODE EXTINCT="0" ID="47" CONFIDENCE="0" PHYLESIS="0" LEAF="0" HASPAGE="0" ANCESTORWITHPAGE="10" ITALICIZENAME="0" INCOMPLETESUBGROUPS="0" SHOWAUTHORITY="0" SHOWAUTHORITYCONTAINING="0" IS_NEW_COMBINATION="0" COMBINATION_DATE="null" CHILDCOUNT="0">
+                <NAME><![CDATA[Thermococcales]]></NAME>
+                <DESCRIPTION></DESCRIPTION>
+                <AUTHORITY></AUTHORITY>
+                <NAMECOMMENT></NAMECOMMENT>
+                <COMBINATION_AUTHOR></COMBINATION_AUTHOR>
+                <AUTHDATE>null</AUTHDATE>
+              </NODE>
+            </NODES>
+          </NODE>
+        </NODES>
+      </NODE>
+    </NODES>
+  </NODE>
+</TREE>
+

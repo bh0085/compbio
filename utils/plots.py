@@ -248,3 +248,18 @@ If rgb in on, rgb channels are normalized independently.
         amax = np.max(np.max(arr,0),0)
         amin = np.min(np.min(arr,0),0)
         return (arr - amax)/(amax - amin)
+
+def spacefill(ax,rs, cs):
+  import utils.lilturtle as lt
+  
+  t = lt.lilturtle(90)
+  l = len(rs)
+  levs = t.inverseN(l)
+  t.hilbert(levs)
+  c = t.curve()
+
+  xs = c[:l,0]
+  ys = c[:l,1]
+
+  ax.plot(xs,ys, zorder = -1, alpha = .2, color = 'black')
+  ax.scatter(xs,ys,rs,color = cs)

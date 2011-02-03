@@ -16,6 +16,9 @@ def pushd(d = None, f = False):
   globals()['dstack'].append(cdir)
 
 
+def getd():
+  return os.path.dirname(inspect.stack()[1][1])
+
 def popd(f = False):
   cdir = os.getcwd()
   dname = globals()['dstack'][-1]
