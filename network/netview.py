@@ -2,7 +2,7 @@ import netsvd
 import matplotlib.pyplot as plt
 from numpy import *
 import numpy as np
-import utils.colors as mycolors
+import compbio.utils.colors as mycolors
 import netutils as nu
 
 def draw_genegene(gg):

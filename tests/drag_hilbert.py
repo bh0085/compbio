@@ -3,7 +3,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from compbio.biopython import biohilbert as bh
-from utils import hilbert as h
+from compbio.utils import hilbert as h
 
 class DragHilbert:
     lock = None  # only one can be animated at a time

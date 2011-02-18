@@ -2,7 +2,7 @@ import re
 import matplotlib.pyplot as plt
 from numpy import *
 import numpy as np
-from utils import seismic, plots, colors as mycolors
+from compbio.utils import seismic, plots, colors as mycolors
 from numpy import logical_and as land
 
 def q3a(p = True):

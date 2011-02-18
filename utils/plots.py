@@ -250,7 +250,7 @@ If rgb in on, rgb channels are normalized independently.
         return (arr - amax)/(amax - amin)
 
 def spacefill(ax,rs, cs):
-  import utils.lilturtle as lt
+  import compbio.utils.lilturtle as lt
   
   t = lt.lilturtle(90)
   l = len(rs)

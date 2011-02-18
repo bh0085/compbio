@@ -3,7 +3,7 @@ import netutils as nu
 from numpy import *
 import numpy as np
 import matplotlib.pyplot as plt
-import utils.colors as mycolors
+import compbio.utils.colors as mycolors
 
 def show_binary(idx = 0):
     tsb = nu.expr_TS_binary(reset = 0)

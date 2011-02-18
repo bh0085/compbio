@@ -72,11 +72,11 @@ def run(reset= False, hash_r = False, dmel = False):
   bh.setHash(speedhash)
     
   actor_kwargs = {
-    'skeleton':2,
-    'skelwidth':8,
+    'skeleton':4,
+    'skelwidth':1,
     'skelalpha':.8,
     'skeloff':0
-    }
+    
 
   
   dh2.show_actor(bh, actor_kwargs = actor_kwargs) 

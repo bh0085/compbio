@@ -3,10 +3,10 @@ from numpy import *
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-import utils.seismic as seismic
-import utils.plots as myplots
+import compbio.utils.seismic as seismic
+import compbio.utils.plots as myplots
 
-import utils.colors as mycolors
+import compbio.utils.colors as mycolors
 
 def parse():
     r =Reads('data/yeast_reads_aligned.txt')
@@ -244,7 +244,7 @@ def check_motifs():
     s = 'AAACACTTGGTGATTTGAATGTAATTTGAACGTTTAAAAAATTCCAAGGGAATATTACTGTTTCGGGAATATAACGTTTGATCGCTAGCGCACCCAGATGAGAATCCGCATGGATGGGTTGTTAGTATTTCTATTGTGAAACCGCTTTGTTCTGGAGGGCGAGAAAAAGTTACGGTCACTCTATCTTTTTTATAATTTGGTCT'
     import hexamers
     motifs = hexamers.parse_known_motifs('/Users/bh0085/Programming/Python/compbio/data/Yeast_known_motifs.txt')
-    import utils.sequtils as seq
+    import compbio.utils.sequtils as seq
     print s
     m = seq.motifs_in_seq(s,motifs)
     

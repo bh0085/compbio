@@ -1,8 +1,8 @@
 import re
 import inspect
 import subprocess
-import utils.path_mgr as pm
-from utils.path_mgr import *
+import compbio.utils.path_mgr as pm
+from compbio.utils.path_mgr import *
 from Bio import SeqIO
 
 

@@ -33,6 +33,7 @@ def write(name = 'default',value = None, hardcopy = True, np = False, register= 
             pickle.dump(value, f)
         f.close()
 
+  
 
 #if readnet is called without a name, it just
 #returns the most recently globalized net.

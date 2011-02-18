@@ -7,7 +7,7 @@ from numpy import *
 
 import sys, os, random
 
-import utils.colors as colors
+import compbio.utils.colors as colors
 import matplotlib
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure

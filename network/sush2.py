@@ -13,7 +13,7 @@ import colors
 import mlpy
 import myrf
 import mysvm
-import utils.plots as myplots
+import compbio.utils.plots as myplots
 import matplotlib.patches as patches
 import s3
 import netwriter as nw

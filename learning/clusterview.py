@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from numpy import *
-import utils.colors as mycolors
+import compbio.utils.colors as mycolors
 import netutils as nu
 
 

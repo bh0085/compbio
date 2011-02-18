@@ -1,7 +1,7 @@
 import numpy as np
 from numpy import *
 import matplotlib.pyplot as plt
-import utils.colors as mycolors
+import compbio.utils.colors as mycolors
 
 def test_kmeans(seed = 0):
     k =2

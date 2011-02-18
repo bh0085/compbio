@@ -4,8 +4,8 @@ from compbio import *
 import numpy as np
 from numpy import *
 import matplotlib.pyplot as plt
-import utils.hilbert as h, utils.plots as plots, utils.colors as mycolors
-from utils.path_mgr import *
+import compbio.utils.hilbert as h, utils.plots as plots, utils.colors as mycolors
+from compbio.utils.path_mgr import *
 def mycGB():
   dobr = 0
   for root, dirs, files in os.walk('/data/genomes/Bacteria'):
@@ -55,7 +55,7 @@ def findseq():
   expand = lambda x, y: [np.min(x[0],y[0]), np.max(x[1],y[1])]
                     
   nprods = len(geneproducts.keys())
-  import utils.colors
+  import compbio.utils.colors
   colors = utils.colors.getct(nprods)
   cshow = range(10)
   clam = lambda x: x in cshow and colors[x]  or [1,0,0]
@@ -69,7 +69,7 @@ def findseq():
 
 
   #utils.plots.spacefill(ax, rs, cs)
-  import utils.hilbert as h
+  import compbio.utils.hilbert as h
 
   speed_hash = h.gInterp(grecf0)
 

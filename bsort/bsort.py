@@ -1,6 +1,6 @@
 from numpy import *
 import numpy as np
-import utils.plots as myplots
+import compbio.utils.plots as myplots
 import matplotlib.pyplot as plt
 import scipy.signal as ss
 

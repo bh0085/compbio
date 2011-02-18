@@ -3,7 +3,7 @@ from numpy import *
 import netutils as nu
 import itertools as it
 import matplotlib.pyplot as plt
-import utils.plots as myplots
+import compbio.utils.plots as myplots
 
 import netwriter as nw
 min_thr = .1

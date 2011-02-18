@@ -11,7 +11,7 @@ import pickle
 import subprocess
 import random
 import mlpy
-import utils.colors as mycolors
+import compbio.utils.colors as mycolors
 import netwriter as nw
 
 default_name = 'fRN'

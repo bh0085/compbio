@@ -4,9 +4,8 @@ import numpy as np
 from numpy import *
 import matplotlib.pyplot as plt
 from compbio.biopython import biohilbert as bh
-from utils import hilbert as h
+from compbio.utils import hilbert as h
 import matplotlib.patches as patch
-
 
 
 keylist = '''
@@ -15,41 +14,36 @@ keylist = '''
 "[,]": move left, right
 ";": preview
 '''
+
+
 class HSensitive:
   movestep = .05
-  def __init__(self, axes, bert):
+  def __init__(self, axes, bert,actor_kwargs):
+    self.actor_kwargs = actor_kwargs
     self.axes = axes
     self.figure = axes.figure
     self.canvas = axes.figure.canvas
+    self.fig_drawn = 0
 
     self.press = None
     self.background = None
     self.highlight = None
-    self.preview_artist = None
-    
     self.pressed = None
-    self.preview_verts = None
+
+    self.fg_artists = []
+    self.preview_artists = None
     self.preview_angle = 86
     self.preview_angle_step = 4
 
     self.zoomwin = .005
     self.zoomloc = 0
     self.movestep = .05
-
     self.actor = bert
-    
-    # draw everything but the selected patch and store the pixel buffer
-    canvas = self.canvas
-    axes = self.axes
-    self.canvas.draw()
-    #self.background = self.canvas.copy_from_bbox(self.axes.bbox)
-    self.calls = 0
-    global keylist
-    print keylist
+    self.preview_auto = 0
 
   def connect(self):
-
-    print 'connection'
+    self.ciddraw = self.canvas.mpl_connect(
+      'draw_event' , self.on_draw )
     self.cidpress = self.canvas.mpl_connect(
       'button_press_event', self.on_press)
     self.cidrelease = self.canvas.mpl_connect(
@@ -60,11 +54,12 @@ class HSensitive:
       'key_press_event', self.on_keypress)
 
   def zoomin(self):
-    print 'zooming in'
+    self.actor.setActorScope(self.getWindow())
+    self.redraw_all()
     
   def zoomout(self):
-    print 'zoooming out'
-
+    self.actor.setActorScope([-.75,1.75])
+    self.redraw_all()
 
   def moveright(self):
     self.zoomloc += self.movestep
@@ -83,12 +78,16 @@ class HSensitive:
     preview_angles = [90,88,83,70,30,10,0,-10,-30,-70,-83,-88,-90]
     preview_lvls =   [5,4,4,2,1,1,1,1,1,2,4,4,5]
   
-    self.preview_verts = self.actor.preview_zoom(
+    self.preview_artists = self.actor.preview_zoom(
+      self.axes, self.preview_artists,
       frac_window[0],frac_window[1],
       **{'angle':preview_angles[mod(self.preview_angle,
                                     len(preview_angles))],
          'lvl':preview_lvls[mod(self.preview_angle,
                                 len(preview_angles))]})    
+    for p in self.preview_artists:
+      p.set_animated = True
+      #p.set_axes(self.axes)
 
   def preview_less(self):
     self.preview_angle -=1
@@ -98,31 +97,38 @@ class HSensitive:
     self.preview_zoom()
 
   def update_preview(self):
-    if  self.preview_verts == None:
+    if  self.preview_artists == None:
       return
-    
-    if not self.preview_artist:
-      self.preview_artist =[]
-      self.preview_artist.append(self.axes.plot([0,0],[1,1],
-                                                animated = True,
-                                                linewidth = 20,
-                                                color = 'white',
-                                                alpha = .9, zorder = 1)[0])
-      self.preview_artist.append(self.axes.plot([0,0],[1,1],
-                                           animated = True,
-                                           linewidth = 2,
-                                                color = 'black',
-                                           alpha = 1, zorder = 2)[0])
-
-    for p in self.preview_artist:
-      p.set_xdata(self.preview_verts[0])
-      p.set_ydata(self.preview_verts[1])
-      #redraw the animated portion
+    for p in self.preview_artists:
       self.axes.draw_artist(p)    
+      self.canvas.blit(self.axes.bbox)
+  def redraw_all(self):
+
+
+    if self.fig_drawn:
+      self.actor.draw_holding(self.axes)
+
+    self.axes.clear()
+    self.axes.set_autoscale_on(False)
+    self.axes.set_xlim(self.actor.get_xlim())
+    self.axes.set_ylim(self.actor.get_ylim())
   
-    # and blit just the redrawn area
+    
+    self.actor.draw_bg(self.axes)
+    self.canvas.draw()
+
+    self.actor.draw_fg(self.axes,self.fg_artists, **self.actor_kwargs)
+    self.actor.draw_overlay(self.axes)
+    
+    for a in self.fg_artists:
+      a.set_animated(True)
+      self.axes.draw_artist(a)
+      
     self.canvas.blit(self.axes.bbox)
-       
+    #self.canvas.draw()
+    #return
+    self.background = self.canvas.copy_from_bbox(self.axes.bbox)
+    self.fig_drawn = 1
 
   def update_bg(self):
     if not self.background:    
@@ -134,11 +140,15 @@ class HSensitive:
   def update_all(self):
     self.update_bg()
     self.update_highlight()
+    if self.preview_auto:
+      self.preview_zoom()
     self.update_preview()
 
   def on_keypress(self, event):
     if event.key == 'enter':
       self.zoomin()
+    if event.key == '\\':
+      self.zoomout()
     if event.key == '[':
       self.moveleft()
     if event.key == ']':
@@ -149,14 +159,19 @@ class HSensitive:
       self.preview_less()
     if event.key == "'":
       self.preview_more()
-    
+    if event.key == 'r':
+      self.redraw_all()
+    if event.key == 'p':
+      self.preview_auto = 1-self.preview_auto
+    if event.key == 'escape':
+      self.disconnect()
     self.update_all()
   def update_highlight(self):
     #make sure that the highlight object is nonnull
     if not self.highlight:
       self.highlight =self.axes.plot([0,1],[0,1],
-                                     linewidth = 5,
-                                     color = 'white',
+                                     linewidth = 4,
+                                     color = 'red',
                                      animated = True)[0]  
     v = self.getverts()
     self.highlight.set_xdata(v[0])
@@ -171,6 +186,10 @@ class HSensitive:
     self.update_bg()
     self.press = event
     self.pressed = True
+
+  def on_draw(self, event):
+    if not self.fig_drawn:
+      self.redraw_all()
 
   def getpt(self, event):
     frac =  self.actor.frac_for_point([event.xdata, event.ydata])
@@ -203,58 +222,31 @@ class HSensitive:
     self.pressed = False
 
   def disconnect(self):
-    'disconnect all the stored connection ids'
-    self.patch.figure.canvas.mpl_disconnect(self.cidpress)
-    self.patch.figure.canvas.mpl_disconnect(self.cidrelease)
-    self.patch.figure.canvas.mpl_disconnect(self.cidmotion)
+    'disdisconnect all the stored disconnection ids'
+    self.canvas.mpl_disconnect(self.ciddraw )
+    self.canvas.mpl_disconnect(self.cidrelease )
+    self.canvas.mpl_disconnect(self.cidmotion)
+    self.canvas.mpl_disconnect(self.cidkeyboard )
+    self.canvas.mpl_disconnect(self.cidpress )
+    #self.figure.clear()
+    plt.close()
 
 
-def run():
-  fig = plt.figure(1)
-  ax = fig.add_subplot(111)
 
-  ax.set_autoscale_on(False)
-  ax.set_xlim([0,1])
-  ax.set_ylim([0,-1])
-
-  actor = h_container(6)
-  actor.draw(ax)
-  
-  hs = HSensitive(ax, actor)
-  hs.connect()
-
-  plt.show()
 def show_actor(actor,
                fig = 1,
                actor_kwargs = {}
                ):
   
-  f = plt.figure(fig)
+  f = plt.figure(fig, figsize = [10,10])
+  for call in f.canvas.callbacks.callbacks['key_press_event'].items():
+    f.canvas.mpl_disconnect(call[0])
+
   ax = f.add_axes([0,0,1,1])
   ax.set_autoscale_on(False)
   ax.set_xlim(actor.get_xlim())
   ax.set_ylim(actor.get_ylim())
-
-  actor.draw(ax, **actor_kwargs)
-  hs = HSensitive(ax,actor)
+  hs = HSensitive(ax,actor, actor_kwargs)
   hs.connect()
-
   plt.show()
 
-class h_container():
-  def __init__(self,lvls):
-    self.hilbert = h.Hilbert(lvls)
-
-  def draw(self,ax):
-    ax.plot(self.hilbert.curve[:,0], self.hilbert.curve[:,1])
-  
-  def verts_for_range(self, fracs):
-    v = array(self.hilbert.vertices(fracs[0],fracs[1]))
-    return v.T
-
-  def frac_for_point(self, ptxy):
-    return float(self.hilbert.closest(ptxy)) / len(self.hilbert.curve)
-  def get_xlim(self):
-    return array([0,1])
-  def get_ylim(self):
-    return array([0,-1])

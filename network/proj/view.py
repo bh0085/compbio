@@ -2,8 +2,8 @@ import matplotlib.pyplot as plt
 import netutils as nu
 from numpy import *
 import numpy as np
-import utils.seismic as sm
-import utils.plots as myplots
+import compbio.utils.seismic as sm
+import compbio.utils.plots as myplots
 
 def view_in():
     na = nu.net_affinity()

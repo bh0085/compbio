@@ -3,4 +3,4 @@ from numpy import *
 import gagd
 import numpy as np
 from pyfann import libfann as fann
-import utils.plots as myplots
+import compbio.utils.plots as myplots
