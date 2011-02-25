@@ -56,7 +56,7 @@ def gbk_elements(f):
 
 def gbk_speeded(elt_lists, speedfun):
   el_out = []
-  for elts in elt_lists[0:5]:
+  for elts in elt_lists[0:10]:
 
     el_out.append(dict(children = [dict(
             gc = e['gc'],

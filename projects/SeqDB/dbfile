@@ -3,29 +3,26 @@ from sqlalchemy import Column, Integer, String, Unicode, DateTime, ForeignKey, U
 
 def MakeClasses(metadata):
   Base = declarative_base(metadata=metadata)
-  class GBID(Base):
-      __tablename__ = 'gbid'
+  class File(Base):
+      __tablename__ = 'file'
       __table_args__ = (UniqueConstraint('name'), {})
       id = Column(Integer, primary_key=True)
       name = Column(String, index = True)
-      offset = Column(Integer)
-      def __init__(self, name, offset):
+      def __init__(self, name):
           self.name = name
-          self.offset = offset
   
   sgjBase = declarative_base(metadata = metadata)
-  class GBID_SequenceJoin(sgjBase):
+  class File_GBIDJoin(sgjBase):
     __tablename__ = 'gbid_sequencejoin'
-    __table_args__ = (UniqueConstraint('sequence'), {})
 
     id = Column(Integer, primary_key=True)
-    sequence = Column(Integer, 
-                      ForeignKey('sequence.id'),
+    file = Column(Integer, 
+                      ForeignKey('file.id'),
                       index = True)
     gbid = Column(Integer,
                   ForeignKey('gbid.id'))
-    def __init__(self, gbid, sequence):
+    def __init__(self, file, gbid):
       self.gbid = gbid
-      self.sequence = sequence
-  return dict(GBID = GBID, GBID_SequenceJoin = GBID_SequenceJoin)
+      self.file = file
+  return dict(File = File, File_GBIDJoin = File_GBIDJoin)
   

@@ -59,7 +59,6 @@ def genomic_16s(nwk, ali, genomes):
 def halo_16s(clade, ali):
   arch_list = clade.get_terminals()
   gbids_nwk = [clade_gbid(elt) for elt in arch_list]
-  gbids_16s = [elt.annotations['comment'][9:] for elt in ali]
 
   ali_idxs = [gbids_16s.index(g) for g in gbids_nwk]
   #ali_recs = [ali[i] for i in ali_idxs]
@@ -73,4 +72,4 @@ def halo_16s(clade, ali):
       sub_a.append(ali[a])
 
   #and remove gaps:
-  ungapped = 
+  ungapped = blah
