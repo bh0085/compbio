@@ -20,6 +20,7 @@ def main():
 
   os.chdir(os.path.dirname(inspect.stack()[0][1]))
   inp, out = sys.argv[1:]
+  print inp, out
   inp_dic = pickle.load(open(os.path.join('scr_inputs', inp)))
   filename = inp_dic['filename']
   align = AlignIO.parse(filename)
