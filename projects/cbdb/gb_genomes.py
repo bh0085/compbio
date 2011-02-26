@@ -51,7 +51,7 @@ class gbgenome():
                           'subfeatureobj':relation('SubFeature',backref='qualifiers')}
                  )
             ]
-  def fill_db(self, name = 'bacterial_genomes', reset = True,
+  def fill_db(self, name = 'bacterial_genomes', reset = False,
               postgres = False, host = 'broad'):
     dbi = cbdb.getName(
                        name,
@@ -69,6 +69,11 @@ class gbgenome():
     
 
     for p in paths:
+      
+      if count < 1668:
+        count += 1
+        continue
+      count += 1
       fopen = open(p)
       for rec in SeqIO.parse(fopen, 'genbank'):
         f0 = rec.features[0]
@@ -144,6 +149,5 @@ class gbgenome():
           print 'committing update'
           dbi.Session.commit()
           print 'update commited!'
-        count += 1
       dbi.Session.commit()
     
