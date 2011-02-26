@@ -16,8 +16,8 @@ def make(script_name,input_dicts, mem_req = None):
     out_file = os.path.join(scr_path, 'scr_output/'+ script_name+ str(i))
     pickle.dump(d,inp_handle)
     
-    l = 'bsub -q compbio-week %s -i %s -o %s %s'.format(\
-      (lambda x: x == None and ' ' or ' -R {0} '.format(x))(mem_req),
+    l = 'bsub -q compbio-week %s -i %s -o %s %s' % (\
+      (lambda x: x == None and ' ' or ' -R %s ' % (x))(mem_req),
       inp_file, out_file, os.path.join(scr_path, script_name))
     # subprocess.Popen(l, shell = True)
     print l
