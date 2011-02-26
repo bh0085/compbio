@@ -1,0 +1,97 @@
+from Bio import SeqIO
+import itertools as it
+from matplotlib import pyplot as plt
+from numpy import *
+
+from compbio.biopython import biohilbert
+from compbio.utils import memo as mem
+from compbio.tests import drag_hilbert2 as dh2
+
+
+def run(reset = True):
+
+  if reset:
+    parsed = SeqIO.parse("daux.gbk", 'genbank').next()
+    mem.write('parsed', parsed)
+  else:
+    parsed , sxs= mem.read('parsed')
+    if not sxs: raise Exception()
+
+  src = it.ifilter(lambda x: x.type == 'source', parsed.features).next()
+  
+  start, finish = src.location.start.position, src.location.end.position
+  dlt = finish - start + 1
+
+  win_len = 1000
+  win_ofs = 100
+  
+  n_wins = floor( (dlt - win_len) / win_ofs)   
+
+
+
+  nuclist = ['G','C','A','T']
+  dinucs = []52
+  [[ dinucs.append( nuclist[j] + nuclist[i] ) for i in range(4)] for j in range(4)]
+  dndict = {}.fromkeys(dinucs,0)
+   
+  
+  fdict = {}
+  fdicts = []
+  ct = 0
+  for f in parsed.features:    
+    ct += 1
+    idstr = 'ID'+str(ct)
+    start, finish = f.location.start.position, \
+        f.location.end.position
+    seq = parsed.seq[start:finish]
+
+    this_dict = {'g':seq.count('G'),
+                   'c':seq.count('C'),
+                   'len':len(seq),
+                 'f':f
+                   }
+    for k in dndict.keys():
+      this_dict[k] = seq.count(k)
+    fdicts.append(this_dict)
+
+  bh = biohilbert.BioHilbert(angle = 88,
+                            lvls = 6)
+
+  gcs = array([ float((x['g'] + x['c'])) / x['len'] for x in fdicts])
+  skew = array([ float((x['g'] - x['c'])) /max([ x['g'] + x['c'],1.0]) for x in fdicts])
+
+  elts = [{'end':fdicts[i]['f'].location.end.position,
+           'start':fdicts[i]['f'].location.start.position,
+           'gc':gcs[i],
+           'skew':skew[i],
+           'type':fdicts[i]['f'].type}
+          for i in range(len(fdicts)) ]
+
+  
+
+  alphafun = lambda x: x['type'] == 'CDS' and .9 or \
+      .1
+  speedfun = lambda x: x['type'] == 'CDS' and 100 or 1
+                           zfun = speedfun
+  bh.init(elts, 
+          speedfun = speedfun, zfun = zfun,
+          alphafun = alphafun,
+          colorfun = lambda x: x['skew'] > 0 and 'red' or \
+            'blue',
+          ndraw = 100)
+  actor_kwargs = {
+    'skeleton':2,
+    'skelwidth':6,
+    'skelalpha':.8,
+    'skeloff':0,
+    'qdraw':True
+    }
+  
+  dh2.show_actor(bh, actor_kwargs = actor_kwargs) 
+
+  
+
+  return
+
+
+

@@ -1,0 +1,26 @@
+class taxdmp():
+  tables = [dict(name = 'Node',
+                 cols = :{'tax_id':[[Integer],
+                                    {}],
+                          'parent_tax_id', [[Integer],
+                                            {}],
+                          'rank', [[String],
+                                   {}],
+                          'embl_code',[[String],
+                                       {}
+                          }),
+            dict(name = 'Name',
+                 cols = {}),
+            dict(name = 'Gencode',
+                 cols = {}),
+            dict(name = 'Citation')]
+            
+'''   
+citations.dmp
+delnodes.dmp
+division.dmp
+gencode.dmp
+merged.dmp
+names.dmp
+nodes.dmp
+'''

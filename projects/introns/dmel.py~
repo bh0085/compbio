@@ -1,0 +1,7 @@
+from compbio.utils import config
+import os
+
+def run():
+  gpath = os.path.join(config.compbio_path(), 'genomes')
+  
+  

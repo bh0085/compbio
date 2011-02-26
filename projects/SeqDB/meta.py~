@@ -1,0 +1,7 @@
+from sqlalchemy import MetaData
+from sqlalchemy.orm import scoped_session, sessioknamke
+
+__all__ = ['Session', 'engine', 'metadata']
+engine = None
+Session = scoped_session(sessionmake(autocommit = True))
+metadata =MetaData()

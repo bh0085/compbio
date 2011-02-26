@@ -1,0 +1,12 @@
+from Bio import SeqIO
+import compbio.config as config
+def add_archaea(Session):
+  path = os.path.join(root, 'sequences/16s/rdb_13s_archaea.gbk')
+
+def import_alignment(Session, filename):
+  f = open(filename)
+  for r in SeqIO.parse(f, 'genbank'):
+    print f
+    break
+
+  

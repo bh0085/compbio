@@ -1,0 +1,60 @@
+from sqlalchemy import Column, Integer, String, Unicode, ForeignKey, UniqueConstraint
+from sqlalchemy.orm import relation
+from compbio.projects import cbdb
+from compbio import config
+import os
+import numpy as np
+
+class gbalign():
+  def get_maps():
+    return dict()
+
+  def get_tables():
+    #by convention, store alignment files in dataPath/alignments.
+    return [dict(name = 'Alignment',
+                 attrs={'id':Column(Integer, primary_key = True)}),
+            dict(name = 'Sequence',
+                 attrs={'id':Column(String, primary_key = True),
+                        'file_name':Column(String)
+                        'file_offset':Column(Integer),
+                        'sequence':Column(String),
+                        'source_taxon':Column(Integer,index = True),
+                        'source_organism':Column(String),
+                        'gb_accession':Column(String),
+                        'annotations':Column(String),
+                        'alignmentid':Column(Integer, ForeignKey('Alignment'))
+                        'alignment':relation("Alignment")})
+            ]
+  def fill_db(self, name = '16s', reset = True):
+    dbi = cbdb.getName(name, tables = self.get_tables(), 
+                       reset = np.mod(reset,2))
+    paths = []
+    for r,ds, fs in os.walk(config.dataPath(os.path.join('alignments',name))):
+      for f in fs:
+        if 'gbk' in name: paths.append(os.path.join(root, f))
+        
+    count = 0 
+    for p in paths:
+      fopen = open(p)
+      a = dbi.Alignment()
+      dbi.Session.add(a)
+      for rec in SeqIO.parse(fopen, 'genbank'):
+        seq = dbi.Sequence(file_name = p,
+                           file_offset = fopen.tell(),
+                           sequence = rec.seq.__str__(),
+                           source_taxon = rec.features[0]\
+                             .qualifiers['db_xref'][0][6:],
+                           source_organism = rec.features[0]\
+                             .qualifiers['organism'][0],
+                           gb_accession = rec.id,
+                           annotations = rec.annotations,
+                           alignment = a)
+        dbi.Session.add(seq)
+        if np.mod(count, 1000) == 0:
+          print p , rec.source_organism
+          dbi.Session.commit()
+        count += 1
+      dbi.Session.commit()
+    
+                           
+        
