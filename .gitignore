@@ -1,5 +1,5 @@
-data
+data/
 *.pyc
 *~
 *.memo
-bin
+bin/
