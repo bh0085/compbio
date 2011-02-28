@@ -1,1 +1,0 @@
-../algo/blast/api/seqsrc_multiseq.c

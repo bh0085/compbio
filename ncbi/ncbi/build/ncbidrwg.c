@@ -1,1 +1,0 @@
-ncbidraw.c

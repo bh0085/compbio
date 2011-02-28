@@ -1,1 +1,0 @@
-../util/tables/sm_blosum90.c

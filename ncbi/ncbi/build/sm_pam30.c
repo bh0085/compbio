@@ -1,1 +1,0 @@
-../util/tables/sm_pam30.c

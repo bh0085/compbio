@@ -1,1 +1,0 @@
-../algo/blast/core/ncbi_std.h

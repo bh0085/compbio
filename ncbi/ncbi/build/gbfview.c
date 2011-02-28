@@ -1,1 +1,0 @@
-../desktop/gbfview.c

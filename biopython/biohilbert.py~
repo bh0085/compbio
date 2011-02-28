@@ -1,9 +1,0 @@
-import itertools as it
-
-class BioHilbert():
-  def initGB(gb):
-    src = it.ifilter(lambda x: x.type == 'source')
-    self.ofs = src.location.start.position
-    self.n = src.location.end.position - self.ofs
-    
-    

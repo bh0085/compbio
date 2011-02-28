@@ -1,1 +1,0 @@
-../asnlib/asnout.h

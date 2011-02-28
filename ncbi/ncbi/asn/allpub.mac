@@ -1,3 +1,0 @@
-#
-mpwsh 'Directory "::asn:"; Delete -i asnpub.all; Catenate general.asn biblio.asn medline.asn pub.asn > asnpub.all; Exit {Status}'
-echo "allpub.mac: Done."

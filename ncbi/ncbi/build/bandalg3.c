@@ -1,1 +1,0 @@
-../tools/bandalg3.c

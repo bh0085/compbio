@@ -1,1 +1,0 @@
-../gif/pictogif.c

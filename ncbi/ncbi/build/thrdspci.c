@@ -1,1 +1,0 @@
-../biostruc/cdd/thrdspci.c

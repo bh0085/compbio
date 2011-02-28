@@ -1,1 +1,0 @@
-../util/tables/sm_pam70.c

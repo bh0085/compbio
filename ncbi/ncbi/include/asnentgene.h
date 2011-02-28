@@ -1,1 +1,0 @@
-../asnstat/asnentgene.h

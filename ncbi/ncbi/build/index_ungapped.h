@@ -1,1 +1,0 @@
-../algo/blast/core/index_ungapped.h

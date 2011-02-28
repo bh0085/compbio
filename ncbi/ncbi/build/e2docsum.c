@@ -1,1 +1,0 @@
-../desktop/e2docsum.c

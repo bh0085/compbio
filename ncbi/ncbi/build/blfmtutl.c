@@ -1,1 +1,0 @@
-../tools/blfmtutl.c

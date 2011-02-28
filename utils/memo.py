@@ -5,7 +5,7 @@ import os
 import pickle
 import cPickle
 from numpy import *
-from compbio.utils import path_mgr as pm
+import compbio.config as config
 
 verbose_utils = True
 def claim_reset():
@@ -19,13 +19,13 @@ def claim_reset():
 
 def write(name = 'default',value = None, hardcopy = True, np = False, register= 'a'):
     caller_name = inspect.stack()[1][3]
-    savename = caller_name + '_' +name
+    savename = caller_name + '_' +name + '.memo'
  
     globals()['lastname_'+caller_name +register] = name
     globals()['last_'+caller_name+register] = value
 
     if hardcopy:
-        path = os.path.join(pm.getd() , savename)
+        path = os.path.join(config.getTempPath(), savename)
         f = open(path,'w')
         if np:
             save( f,value)
@@ -51,11 +51,11 @@ def read(name = 'default', hardcopy = True,np = False, register = 'a'):
     except Exception as e:
         if not hardcopy:
             return out, sxs
-        savename = caller_name +'_'+name
-        path =  os.path.join(pm.getd(),savename)
+        savename = caller_name +'_'+name + '.memo'
+        path =  os.path.join(config.getTempPath(),savename)
 
         if hardcopy:
-            path = os.path.join(pm.getd(), savename)
+            path = os.path.join(config.getTempPath(), savename)
             f = open(path,'r')
             if np:
                 out = load(f)

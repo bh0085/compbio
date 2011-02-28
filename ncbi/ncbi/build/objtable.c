@@ -1,1 +1,0 @@
-../object/objtable.c

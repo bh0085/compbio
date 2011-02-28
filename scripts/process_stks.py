@@ -23,7 +23,7 @@ def main():
   print inp, out
   inp_dic = pickle.load(open(os.path.join('scr_inputs', inp)))
   filename = inp_dic['filename']
-  align = AlignIO.parse(filename, 'stockholm')
+  align = AlignIO.parse(open(filename), 'stockholm')
   r0 = align.next()
 
   fout = open(out, 'w')

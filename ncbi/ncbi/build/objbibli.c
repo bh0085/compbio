@@ -1,1 +1,0 @@
-../object/objbibli.c

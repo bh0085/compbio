@@ -1,1 +1,0 @@
-../vibrant/palette.c

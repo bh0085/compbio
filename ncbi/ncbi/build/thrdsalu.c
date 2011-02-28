@@ -1,1 +1,0 @@
-../biostruc/cdd/thrdsalu.c

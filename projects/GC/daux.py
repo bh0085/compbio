@@ -86,7 +86,7 @@ def mycoplasma_elements():
   #
   #lambda
   root = compbio.config.root
-  gdir = os.path.join(root, 'genomes/Bacteria')
+  gdir = os.path.join(root, 'data/genomes/Bacteria')
 
   gbks = []
   for root, dirs, files in os.walk(gdir):
@@ -104,9 +104,9 @@ def run(reset = 0, **kwargs):
 
   if reset > 1:
     e_lists = mycoplasma_elements()
-    mem.write('lists', e_lists,register = 'not')
+    mem.write('lists', e_lists,register = 'not', hardcopy = False)
   else:
-    e_lists , sxs= mem.read('lists', register = 'not')
+    e_lists , sxs= mem.read('lists', register = 'not', hardcopy = False)
     if not sxs: raise Exception()
 
 

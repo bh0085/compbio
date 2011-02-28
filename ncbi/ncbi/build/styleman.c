@@ -1,1 +1,0 @@
-../desktop/styleman.c

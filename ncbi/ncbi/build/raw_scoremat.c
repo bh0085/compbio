@@ -1,1 +1,0 @@
-../util/tables/raw_scoremat.c

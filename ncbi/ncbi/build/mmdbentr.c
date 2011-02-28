@@ -1,1 +1,0 @@
-../biostruc/mmdbentr.c

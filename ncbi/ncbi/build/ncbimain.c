@@ -1,1 +1,0 @@
-../corelib/ncbimain.c

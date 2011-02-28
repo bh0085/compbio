@@ -1,1 +1,0 @@
-../biostruc/cdd/thrdspea.c

@@ -1,1 +1,0 @@
-../desktop/smdlg3.c

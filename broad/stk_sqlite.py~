@@ -1,4 +1,0 @@
-for r, d, fs in os.walk(config.getDataPath(config.getDataURL('unseen_data'))):
-  for f in fs:
-    if '.stk' in f:
-      print f

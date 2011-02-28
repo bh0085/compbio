@@ -6,6 +6,9 @@ def absPath(localPath):
   global root
   return os.path.join(root, localPath)
 
+def getTempPath():
+  return dataPath('temp')
+
 def dataPath(url):
   if url.count(':') == 0:
     host_name = 'localhost'

@@ -1,1 +1,0 @@
-../vibrant/prim3d3.c

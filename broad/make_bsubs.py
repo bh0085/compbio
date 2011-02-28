@@ -9,6 +9,7 @@ def make(script_name,input_dicts, mem_req = None):
   fopen = open(bsub_path, 'w')
     
   
+  ls = []
   for i in range(len(input_dicts)):
     d = input_dicts[i]
     inp_file = os.path.join(scr_path, 'scr_inputs/'+ script_name+ str(i))
@@ -19,7 +20,11 @@ def make(script_name,input_dicts, mem_req = None):
     l = 'bsub -q compbio-week %s -i %s -o %s %s' % (\
       (lambda x: x == None and ' ' or ' -R %s ' % (x))(mem_req),
       inp_file, out_file, os.path.join(scr_path, script_name))
-    subprocess.Popen(l, shell = True)
+    ls.append(l)
+  cmd = 'ssh tin "' + ';'.join(ls) + '"'
+  print cmd
+  raise Exception()
+  subprocess.Popen(l, shell = True)
     
 
     

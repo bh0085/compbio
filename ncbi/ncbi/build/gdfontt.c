@@ -1,1 +1,0 @@
-../gif/gdfontt.c

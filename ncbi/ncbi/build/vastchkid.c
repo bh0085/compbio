@@ -1,1 +1,0 @@
-../biostruc/vastchkid.c
