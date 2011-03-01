@@ -13,6 +13,7 @@ def make(script_name,input_dicts, mem_req = None):
     inp_handle = open(config.scriptInputPath(inp_file),'w')
     out_file =script_name+ str(i)
     pickle.dump(d,inp_handle)
+    inp_handle.close()
     
     l = 'bsub -q compbio-week %s -o %s %s %s' % (\
       (lambda x: x == None and ' ' or ' -R %s ' % \
