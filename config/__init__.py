@@ -18,7 +18,12 @@ def dataPath(url):
     host_name = url.split(':')[0]
     volume_name = url.split(':')[1]
     localpath = url.split(':')[2]
-  
+
+  if host_name == '':
+    host_name = 'localhost'
+  if volume_name == '':
+    volume_name = 'cb'
+
   if volume_name == '/':volume_prefix = '/'
   elif volume_name == 'cb':volume_prefix = globals()['root']
   elif volume_name == '~':volum_prefix = os.environ['HOME']
@@ -43,3 +48,12 @@ def postgresPath(dbname, host = None):
     return 'postgres://benh@node1386.broadinstitute.org/'+dbname
   else:
     return 'postgres://bh0085@localhost/'+dbname
+
+def scriptInputPath(name):
+  return os.path.join(os.path.join(globals()['root'], 
+                                   'scripts/scr_inputs'),
+                      name)
+def scriptOutputPath(name):
+  return os.path.join(os.path.join(globals()['root'],
+                                   'scripts/scr_outputs'),
+                      name)
