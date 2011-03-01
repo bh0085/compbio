@@ -16,7 +16,7 @@ def make_params():
         inp_dicts.append({'filename':filename})
         print f
       
-  make_bsubs.make('process_stks', inp_dicts)
+  make_bsubs.make('process_stks.py', inp_dicts)
 
 def main():
 

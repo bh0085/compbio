@@ -16,7 +16,7 @@ def make(script_name,input_dicts, mem_req = None):
     
     l = 'bsub -q compbio-week %s -i %s -o %s %s' % (\
       (lambda x: x == None and ' ' or ' -R %s ' % (x))(mem_req),
-      inp_file, out_file, script_name)
+      inp_file, '${HOME}/bsub_logs/'+inp_file, script_name)
     ls.append(l)
   cmd = "ssh tin '" + '; '.join(ls) + "'"
   subprocess.Popen(cmd, shell = True)
