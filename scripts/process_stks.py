@@ -23,11 +23,10 @@ def main():
   name= sys.argv[1:]
 
   f0 = open(os.environ['HOME'] + '/hello.txt','w')
-  f0.write(inp.__str__())
-  f0.write(out.__str__())
+  f0.write(name.__str__())
   f0.close()
 
-  inp_dic = pickle.load(open(config.scriptInputPath(inp)))
+  inp_dic = pickle.load(open(config.scriptInputPath(name)))
   
   filename = inp_dic['filename']
   align = AlignIO.parse(open(filename), 'stockholm')
@@ -35,7 +34,7 @@ def main():
   print 'hey whatsup'
   
 
-  fout = open(config.scriptOutputPath(out), 'w')
+  fout = open(config.scriptOutputPath(name), 'w')
   fout.write(r0.__str__())
   fout.close()
 
