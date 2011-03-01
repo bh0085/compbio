@@ -19,4 +19,9 @@ def make(script_name,input_dicts, mem_req = None):
          (x))(mem_req), '${HOME}/bsub_logs/'+inp_file, script_name, inp_file)
     ls.append(l)
   cmd = "ssh tin '" + '; '.join(ls) + "'"
-  subprocess.Popen(cmd, shell = True)
+
+  prc0 = subprocess.Popen("rsync -rv ${COMPBIO_PATH}/scripts/scr_inputs/ tin:'${COMPBIO_PATH}/scripts/scr_inputs/'", shell = True, stdout = subprocess.PIPE)
+  c0 = prc0.communicate()
+  print 'RSYNCed inputs directory'
+  prc1 = subprocess.Popen(cmd, shell = True, stdout=subprocess.PIPE)
+  print 'Sent batch commands out'

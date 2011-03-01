@@ -29,7 +29,7 @@ def main():
 
   inp_dic = pickle.load(open(config.scriptInputPath(name)))
   
-  filename = inp_dic['file_url']
+  file_url = inp_dic['file_url']
   align = AlignIO.parse(open(config.dataPath(file_url)), 'stockholm')
   r0 = align.next()
   print 'hey whatsup'
