@@ -20,7 +20,7 @@ def make_params():
 
 def main():
 
-  inp, out = sys.argv[1:]
+  name= sys.argv[1:]
 
   f0 = open(os.environ['HOME'] + '/hello.txt','w')
   f0.write(inp.__str__())
