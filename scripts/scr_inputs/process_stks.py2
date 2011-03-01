@@ -1,6 +1,6 @@
 (dp0
-S'filename'
+S'file_url'
 p1
-S'/Users/bh0085/compbio/data/unseen_data/hammerhead.stk'
+S'::unseen_data/hammerhead.stk'
 p2
 s.
