@@ -14,9 +14,9 @@ def make(script_name,input_dicts, mem_req = None):
     out_file =script_name+ str(i)
     pickle.dump(d,inp_handle)
     
-    l = 'bsub -q compbio-week %s -i %s -o %s %s' % (\
-      (lambda x: x == None and ' ' or ' -R %s ' % (x))(mem_req),
-      inp_file, '${HOME}/bsub_logs/'+inp_file, script_name)
+    l = 'bsub -q compbio-week %s -o %s %s %s' % (\
+      (lambda x: x == None and ' ' or ' -R %s ' % \
+         (x))(mem_req), '${HOME}/bsub_logs/'+inp_file, script_name, inp_file)
     ls.append(l)
   cmd = "ssh tin '" + '; '.join(ls) + "'"
   subprocess.Popen(cmd, shell = True)
