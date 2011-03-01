@@ -12,8 +12,9 @@ def make_params():
     for f in fs:
       print fs
       if '.stk' in f:
-        filename = os.path.join(r, f)
-        inp_dicts.append({'filename':filename})
+        filename = os.path.join(r,f)
+        file_url = '::'+filename[filename.index('unseen'):]
+        inp_dicts.append({'file_url':file_url})
         print f
       
   make_bsubs.make('process_stks.py', inp_dicts)
@@ -28,8 +29,8 @@ def main():
 
   inp_dic = pickle.load(open(config.scriptInputPath(name)))
   
-  filename = inp_dic['filename']
-  align = AlignIO.parse(open(filename), 'stockholm')
+  filename = inp_dic['file_url']
+  align = AlignIO.parse(open(config.dataPath(file_url)), 'stockholm')
   r0 = align.next()
   print 'hey whatsup'
   
