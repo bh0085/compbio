@@ -19,4 +19,4 @@ def make(script_name,input_dicts, mem_req = None):
       inp_file, out_file, script_name)
     ls.append(l)
   cmd = "ssh tin '" + '; '.join(ls) + "'"
-  subprocess.Popen(l, shell = True)
+  subprocess.Popen(cmd, shell = True)
