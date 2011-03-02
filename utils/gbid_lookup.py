@@ -1,10 +1,11 @@
+#!/usr/bin/env python
+
 import compbio.config as config
 import os
 
-def lookup(accession, 
-           data_volume = 'cb', depth = 20):
+def split_prefixes(volume_name = 'cb'):
   path = config.dataPath(config.dataURL('genbank/gb_acclist.genbank', 
-                                        volume_name = data_volume)
+                                        volume_name =volume_name)
                          )
   path_home = os.path.dirname(path)
   fopen = open(path)
@@ -21,15 +22,20 @@ def lookup(accession,
     else: raise Exception()
 
     prefix = l[0:pend]
-    prefixes.get(prefix, open(os.path.join(path_home, prefix), 'w')).write(l)
-    if len(prefixes.keys()) > 5:
-      break
+    
+    if not prefixes.has_key(prefix):
+      print 'getting pre'
+      prefixes[prefix] =  open(os.path.join(path_home, prefix), 'a')
+    f = prefixes[prefix]
+    f.write(l)
+
     count += 1
-    if count > 1000:
+    if count > 100000:
       count = 0
       long_count += 1
-      print prefix
+      print prefix, l
       if long_count > 10:
+        print prefixes
         long_count = 0 
         while prefixes:
           f = prefixes.pop(prefixes.keys()[0])
@@ -40,3 +46,6 @@ def lookup(accession,
     p.close()
 
   
+if __name__ == '__main__':
+  split_prefixes()
+  exit()
