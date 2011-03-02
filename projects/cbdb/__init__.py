@@ -21,9 +21,9 @@ def gettable():
   return test_tables
 
 
-def makeWithNameAndTables(name,
+def makeWithNameAndTables(name, tables = None,
                           postgres = False,
-                          tables = None, reset = 0, host = None):
+                          reset = 0, host = None):
 
   #Connect an engine to the database
   engine = connectDB(name, postgres = postgres, host = host)
@@ -42,6 +42,7 @@ def makeWithNameAndTables(name,
     #if inp != 'y': raise Exception('Insert cancelled - either permit deletion or rerun with "reset = 0"')
     print 'Deleting the current database for %s' % name
     
+    print postgres
     if not postgres:
       dbtables = map(lambda x: x[0], Session.execute('''SELECT name FROM sqlite_master WHERE type='table';''').fetchall())
       for t in base.metadata.tables:
@@ -70,6 +71,7 @@ def makeWithNameAndTables(name,
 
 #return an engine connected to the name
 def connectDB(name, postgres =False, **kwargs):
+  print postgres
   if postgres:
     try:
       engine = create_engine(config.postgresPath(name,**kwargs))
@@ -83,6 +85,7 @@ def connectDB(name, postgres =False, **kwargs):
       engine = create_engine(config.postgresPath(name,**kwargs))
     return engine
   else:
+    print config.sqlitePath(name)
     engine = create_engine(config.sqlitePath(name))
     return engine
 
