@@ -4,7 +4,7 @@ import compbio.config as config
 import compbio.broad.make_bsubs as make_bsubs
 import sys, inspect, os, pickle
 from Bio import AlignIO
-
+import compbio.projects.cbdb.gb_alignment as gba
 def make_params():
 
   inp_dicts =[]
@@ -15,6 +15,7 @@ def make_params():
         filename = os.path.join(r,f)
         file_url = '::'+filename[filename.index('unseen'):]
         inp_dicts.append({'file_url':file_url})
+        inp_dicts.append({'ali_name':os.path.splitext(os.path.basename(f))[0]})
         print f
       
   make_bsubs.make('process_stks.py', inp_dicts, mem_req = 2000)
@@ -30,15 +31,10 @@ def main():
   file_url = inp_dic['file_url']
   print 'file_url: %s' % file_url
   print 'parsing alignment'
-  align = AlignIO.parse(open(config.dataPath(file_url)), 'stockholm')
-  print 'alignment parsed: reading record'
-  r0 = align.next()
-  print 'record read, writing to the filesystem'
 
-  fout = open(config.scriptOutputPath(name), 'w')
-  fout.write(r0.__str__())
-  fout.close()
-
+  p = config.dataPath(file_url)
+  gba.fill_from_rfam_stk( p, reset = True)
+  
 if __name__ == '__main__':
   main()
   exit()

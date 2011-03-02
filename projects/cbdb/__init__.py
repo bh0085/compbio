@@ -38,8 +38,9 @@ def makeWithNameAndTables(name,
   
   #Connect to the dbfile; if it does not exist then create one.
   if reset:
-    inp = raw_input('Really delete existing database for "{0}"? [y/n]'.format('hi'))
-    if inp != 'y': raise Exception('Insert cancelled - either permit deletion or rerun with "reset = 0"')
+    #inp = raw_input('Really delete existing database for "{0}"? [y/n]'.format('hi'))
+    #if inp != 'y': raise Exception('Insert cancelled - either permit deletion or rerun with "reset = 0"')
+    print 'Deleting the current database for %s' % name
     
     if not postgres:
       dbtables = map(lambda x: x[0], Session.execute('''SELECT name FROM sqlite_master WHERE type='table';''').fetchall())
