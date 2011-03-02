@@ -44,4 +44,4 @@ def fill_db():
 if __name__ == '__main__':
   print 'filling db'
   fill_db()
-  exit 0
+  exit(0)
