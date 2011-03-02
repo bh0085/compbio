@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import compbio.projects.cbdb.adapters as adapters
 from sqlalchemy import Column, Integer, String, Unicode, ForeignKey
 import compbio.config as config
