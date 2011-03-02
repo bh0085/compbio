@@ -14,8 +14,8 @@ def make_params():
       if '.stk' in f:
         filename = os.path.join(r,f)
         file_url = '::'+filename[filename.index('unseen'):]
-        inp_dicts.append({'file_url':file_url})
-        inp_dicts.append({'ali_name':os.path.splitext(os.path.basename(f))[0]})
+        inp_dicts.append({'file_url':file_url,
+                          'ali_name':os.path.splitext(os.path.basename(f))[0]})
         print f
       
   make_bsubs.make('process_stks.py', inp_dicts, mem_req = 2000)
