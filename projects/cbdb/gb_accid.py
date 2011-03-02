@@ -41,7 +41,7 @@ def fill_db():
                       rec_sep,
                       reset = True)
                       
-if __name__ = '__main__':
+if __name__ == '__main__':
   print 'filling db'
   fill_db()
   exit 0
