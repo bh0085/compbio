@@ -10,6 +10,7 @@ def lookup(accession,
   fopen = open(path)
   prefixes = {}
   count = 0
+  long_count = 0
   for l in fopen.xreadlines():
     if l[1].isdigit(): pend = 1
     elif l[2].isdigit(): pend = 2
@@ -24,9 +25,17 @@ def lookup(accession,
     if len(prefixes.keys()) > 5:
       break
     count += 1
-    if count > 10000:
+    if count > 1000:
       count = 0
+      long_count += 1
       print prefix
+      if long_count > 10:
+        long_count = 0 
+        while prefixes:
+          f = prefixes.pop(prefixes.keys()[0])
+          f.close()
+
+
   for k, p in prefixes.iteritems():
     p.close()
 
