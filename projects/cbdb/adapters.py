@@ -30,7 +30,7 @@ def fileMap2DB(dbname,
     l0 = ''
     for l in rec_iterfun(fopen):
       #read ahead until the record seperator is encountered.
-      count == 1
+      count += 1
       l0 += l
       if rec_sep in l0:
         l = l0
