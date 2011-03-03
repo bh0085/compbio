@@ -17,7 +17,7 @@ def get_tables():
                        'version':Column(Integer)})]
 
 def file_default():
-  return config.dataPath('::unseen_data/gb_acclist.genbank')
+  return config.dataPath('::genbank/gb_acclist.genbank')
 
 
 def fill_db():
