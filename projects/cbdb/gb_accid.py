@@ -32,13 +32,14 @@ def fill_db():
   col_sep = ','
   rec_sep = '\n'
 
-  adapters.fileMap2DB('gb_accid',
+  adapters.fileMap2DB2('gb_accid',
                       table_files,
                       table_names,
                       table_defs,
                       column_maps,
                       col_sep,
                       rec_sep,
+                      500000,
                       reset = True)
                       
 if __name__ == '__main__':
