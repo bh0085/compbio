@@ -8,29 +8,20 @@ import itertools as it
 from sqlalchemy.exc import OperationalError
 import psycopg2
 from sqlalchemy.sql import text
-def gettable():
-  test_tables = [{'name':'Table2',
-                'attrs':{'table1id':Column(Integer,
-                                           ForeignKey('table1.id'),
-                                           index = True)}},
-               {'name':'Table1',
-                'attrs':{'name':Column(String),
-                         't2s':relation('Table2', backref = 'table1')}
-                         }
-               ]
-  return test_tables
 
+#import gb_alignment, gb_genomes, ncbi_tax, ncbi_tax_gbjoin
+__all__ = ['gb_alignment', 
+           'gb_sequence', 
+           'ncbi_tax',
+           'ncbi_tax_gbjoin']
 
-def makeWithNameAndTables(name, tables = None,
+def makeWithNameAndTables(name,  tables,
                           postgres = False,
                           reset = 0, host = None):
 
   #Connect an engine to the database
   engine = connectDB(name, postgres = postgres, host = host)
-  #Generate some test tables if none have been provided
-  if not tables:
-    print 'Tables not included, generating test tables.'
-    tables = gettable()
+
   #And generate a metadata object for the tables provided
   base, table_list = metadataWithTables(tables)
   Session = scoped_session(sessionmaker(autocommit = False, 
@@ -89,7 +80,7 @@ def connectDB(name, postgres =False, **kwargs):
     engine = create_engine(config.sqlitePath(name))
     return engine
 
-def getName(name, postgres = False, tables = None,host = None, reset = 0):
+def getName(name,tables = None, postgres = False, host = None, reset = 0):
   if reset or not name in globals().keys():
     makeWithNameAndTables(name,postgres = postgres, tables = tables, reset = np.mod(reset,2),host = host)
   return globals()[name]
