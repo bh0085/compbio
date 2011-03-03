@@ -59,7 +59,7 @@ def fill_db(start = None, finish = None):
                       column_maps,
                       col_sep,
                       rec_sep,
-                      321166*1,
+                      321166*10,
                       reset = True)
                       
 if __name__ == '__main__':

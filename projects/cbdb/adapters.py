@@ -95,5 +95,4 @@ def fileMap2DB2(dbname,
       print 'commiting ' + str(len(lines))
       dbi.Session.commit()
       print 'done committing, through with %5.3f ' % ((float(fopen.tell()))/maxsize)
-      return
   return
