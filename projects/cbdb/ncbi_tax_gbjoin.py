@@ -14,7 +14,7 @@ def get_maps():
 def get_tables():
   return [dict(name = 'TaxGBJoin',
                attrs = { 'gbid':Column(Integer,primary_key= True),
-                         'taxid':Column(Integer)})]
+                         'taxid':Column(Integer,index = True)})]
 
 def file_default():
   return config.dataPath('::ncbi/gi_taxid_nucl.dmp')
@@ -59,7 +59,7 @@ def fill_db(start = None, finish = None):
                       column_maps,
                       col_sep,
                       rec_sep,
-                      321166*10,
+                      321166,
                       reset = True)
                       
 if __name__ == '__main__':

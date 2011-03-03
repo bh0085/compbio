@@ -94,5 +94,7 @@ def fileMap2DB2(dbname,
       dbi.Session.add_all(cls)
       print 'commiting ' + str(len(lines))
       dbi.Session.commit()
+      
+      if fopen.tell() > 900000: return
       print 'done committing, through with %5.3f ' % ((float(fopen.tell()))/maxsize)
   return
