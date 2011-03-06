@@ -38,14 +38,15 @@ def get_maps():
 def get_tables():
   return [dict(name = 'Node',
                attrs = {'id':Column(Integer,primary_key = True),
-                        'parent_taxid': Column(Integer, ForeignKey('node.id')),
+                        'parent_taxid': Column(Integer, ForeignKey('node.id'),
+                                               index = True),
                         'parent':relation('Node',
                                           primaryjoin="Node.id==Node.parent_taxid",
                                           remote_side="Node.id",
                                           backref = backref("children",
                                                             remote_side="Node.parent_taxid",
                                                             primaryjoin="Node.parent_taxid==Node.id")),
-                        'rank': Column(String),
+                        'rank': Column(String,index = True),
                         'embl_code':Column(String),
                         'mit_gencodeid':Column(Integer,ForeignKey('gencode.id')),
                         'gencodeid':Column(Integer, ForeignKey('gencode.id')),
@@ -58,11 +59,11 @@ def get_tables():
                         'comments':Column(String)
                        }),
           dict(name = 'Name',
-               attrs = {'nodeid':Column(Integer, ForeignKey('node.id')),
+               attrs = {'nodeid':Column(Integer, index = True, ForeignKey('node.id')),
                         'node':relation('Node',backref = 'names'),
-                        'name_txt':Column(String),
+                        'name_txt':Column(String, index = True),
                         'unique_name':Column(String),
-                        'name_class':Column(String)
+                        'name_class':Column(String, index = True)
                        }),
           dict(name = 'Gencode',
                attrs = {'id':Column(Integer,primary_key=True),
