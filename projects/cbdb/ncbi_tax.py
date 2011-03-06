@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from sqlalchemy import Column, Integer, String, Unicode, DateTime, ForeignKey, UniqueConstraint
-from sqlalchemy.orm import relation
+from sqlalchemy.orm import relation, backref
 from compbio.projects import cbdb
 from compbio import config
 import os
@@ -40,7 +40,11 @@ def get_tables():
                attrs = {'id':Column(Integer,primary_key = True),
                         'parent_taxid': Column(Integer, ForeignKey('node.id')),
                         'parent':relation('Node',
-                                          primaryjoin="Node.id==Node.parent_taxid"),
+                                          primaryjoin="Node.id==Node.parent_taxid",
+                                          remote_side="Node.id",
+                                          backref = backref("children",
+                                                            remote_side="Node.parent_taxid",
+                                                            primaryjoin="Node.parent_taxid==Node.id")),
                         'rank': Column(String),
                         'embl_code':Column(String),
                         'mit_gencodeid':Column(Integer,ForeignKey('gencode.id')),
@@ -74,10 +78,9 @@ def get_tables():
                         'url':Column(String),
                         'text':Column(String),
                         'taxid_list':Column(String)})]
-def fill_db( reset = False):
+def fill_db( reset = True):
   dbi = cbdb.getName('taxdmp', tables = get_tables(), reset = np.mod(reset, 2))
   filepath = config.dataPath('ncbi/taxdmp')
-  fsize = os.path.getsize(filepath)
   maps = get_maps()
 
   record_sep = '\t|\n'
@@ -94,6 +97,8 @@ def fill_db( reset = False):
   count = 0
   for k,v in fill_tables.iteritems():
     fopen = open(os.path.join(filepath, v))
+    fsize = os.path.getsize(os.path.join(filepath,v))
+
     mapped_class = dbi.__dict__[k]
     mapped_columns = maps[k]
     l0 = ''
@@ -110,6 +115,7 @@ def fill_db( reset = False):
       dbi.Session.merge(cls)
       if np.mod(count, 1000) == 0:
         dbi.Session.commit()
+      
         print k, v, count, cols, '{0:4}%'.format(100 * float(fopen.tell()) / fsize)
     dbi.Session.commit()
   return
