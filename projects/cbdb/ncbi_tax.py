@@ -40,7 +40,7 @@ def get_tables():
                attrs = {'id':Column(Integer,primary_key = True),
                         'parent_taxid': Column(Integer, ForeignKey('node.id')),
                         'parent':relation('Node',
-                                          primaryjoin="Node.parent_taxid==Node.id",
+                                          primaryjoin="Node.id==Node.parent_taxid",
                                           backref = 'children'),
                         'rank': Column(String),
                         'embl_code':Column(String),
