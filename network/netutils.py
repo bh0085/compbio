@@ -12,10 +12,11 @@ import subprocess
 import random
 import mlpy
 import compbio.utils.colors as mycolors
-import netwriter as nw
+import compbio.utils.memo as mem
 import inspect
 import pickle
 import inspect
+import compbio.config as config
 
 default_name = 'unsup'
 
@@ -23,7 +24,7 @@ def parse_net(name = default_name,number = 0, reset = 0):
     
     net_dir = os.path.abspath(os.path.dirname(inspect.getfile(inspect.currentframe())))
     if not reset:
-        net,sxs = nw.rn2(name = name)
+        net,sxs = mem.read(name = name)
         if not sxs: raise Exception('error reading ' + name)
     else:
         if name == 'unsup':
@@ -77,12 +78,48 @@ def parse_net(name = default_name,number = 0, reset = 0):
                        'weights':map(wtfun,l)}
 
         net =  (trg_d, tf_d)
-        nw.wn2( name,net, hardcopy = True)
+        mem.write( name,net, hardcopy = True)
     return net
 
 
+def print_soheil():
+  n_tfs = 8
+  trgs, tfs = parse_net()
+  trg_subset = dict([ (tgkey, v )for tgkey, v in trgs.iteritems() if len(v['weights']) >= n_tfs])
+  for k in trg_subset.keys()[20:]: trg_subset.pop(k)
+  
+  TS = load_TS()
+  
+  tpts = arange(20)
+  for k, tg in trg_subset.iteritems():
+    t_lines = [''] * len(tpts)
+    gts = array(TS[k])[tpts]
+    for i in range(len(gts)):
+      
+      t_lines[i] += '{0:20}'.format(gts[i])
+    sorted_weights = argsort(tg['weights'])[0:n_tfs]
+    tfs= [tg['tfs'][i] for i in sorted_weights]
+    for tf in tfs:
+      fts = array(TS[tf])[tpts]
+      for i in range(len(gts)):
+        t_lines[i] += ' {0:20}'.format(fts[i])
+
+    
+    
+    keys = ['{0:20}'.format(k)]
+    keys.extend(['{0:20}'.format(tf) for tf in tfs])
+
+    l0 = ' '.join(keys)
+    fname = '{0}.txt'.format(k)
+    fopened = open(config.dataPath('network/'+fname),'w')
+    fopened.write(l0 + '\n' + '\n'.join(t_lines))
+    fopened.close()
+
+
+  
+
 def parse_TS():
-    f = open('TC.geneexp').read()
+    f = open(config.dataPath('network/TC.geneexp')).read()
     elts =f.split('\n')
     seqdict = {}
     for e in elts:
@@ -93,10 +130,10 @@ def parse_TS():
         for i in matches[1:]:
             seqdict[name].append(float(i.group(1)))
 
-    pickle.dump(seqdict,open('TC.pickle','w'))
+    pickle.dump(seqdict,open(config.dataPath('network/TC.pickle'),'w'))
 
 def parse_CL():
-    f = open('CL.geneexp').read()
+    f = open(config.dataPath('network/CL.geneexp')).read()
     elts =f.split('\n')
     seqdict = {}
     for e in elts:
@@ -107,7 +144,7 @@ def parse_CL():
         for i in matches[1:]:
             seqdict[name].append(float(i.group(1)))
 
-    pickle.dump(seqdict,open('CL.pickle','w'))
+    pickle.dump(seqdict,open(config.dataPath('network/CL.pickle','w')))
 
 def load_CL(reset = 0):
     hardcopy = True
@@ -115,11 +152,11 @@ def load_CL(reset = 0):
 
     if not reset:
         #no reason to use name... only one cl is available
-        out, sxs = nw.rn2( default_name, hardcopy = hardcopy, np = False)
+        out, sxs = mem.read( default_name, hardcopy = hardcopy, np = False)
         if not sxs: raise Exception()
     else:
-        out = pickle.load(open(os.path.join(net_dir, 'CL.pickle')))
-        nw.wn2( default_name, out,  hardcopy = hardcopy, np = False)
+        out = pickle.load(open(config.dataPath('network/CL.pickle')))
+        mem.write( default_name, out,  hardcopy = hardcopy, np = False)
 
     return out
 
@@ -128,11 +165,11 @@ def load_TS(reset = 0):
     net_dir = os.path.abspath(os.path.dirname(inspect.getfile(inspect.currentframe())))
     if not reset:
         #no reason to use name... only one cl is available
-        out, sxs = nw.rn2(default_name, hardcopy = hardcopy, np = False)
+        out, sxs = mem.read(default_name, hardcopy = hardcopy, np = False)
         if not sxs: raise Exception()
     else:
-        out = pickle.load(open(os.path.join(net_dir,'TC.pickle')))
-        nw.wn2(default_name , out, hardcopy = hardcopy, np = False)
+        out = pickle.load(open(config.dataPath('network/TC.pickle')))
+        mem.write(default_name , out, hardcopy = hardcopy, np = False)
 
     return out
 
@@ -147,7 +184,7 @@ def net_square_affinity(name = default_name, reset = 0):
 
     hardcopy = True
     if not reset:
-        net,sxs= nw.rn2(name,hardcopy = hardcopy, np = np)
+        net,sxs= mem.read(name,hardcopy = hardcopy, np = np)
         if not sxs: raise Exception()
     else:
         nw.claim_reset()
@@ -183,13 +220,13 @@ def net_square_affinity(name = default_name, reset = 0):
 
 
         net = N
-        nw.wn2(name, net,hardcopy = hardcopy,np = True)
+        mem.write(name, net,hardcopy = hardcopy,np = True)
     return net
 
 def net_affinity(name = default_name ,reset = 0):
     hardcopy = True
     if not reset:
-        net, sxs = nw.rn2(name, hardcopy = hardcopy, np = True)
+        net, sxs = mem.read(name, hardcopy = hardcopy, np = True)
         if not sxs: raise Exception()
     else:
         nw.claim_reset()
@@ -257,14 +294,14 @@ def net_genegene(name = default_name, reset = 0):
     hardcopy = True
 
     if not reset:
-        out, sxs = nw.rn2(name,hardcopy = hardcopy, np = True)
+        out, sxs = mem.read(name,hardcopy = hardcopy, np = True)
         if not sxs: raise Exception()
     else:
         nw.claim_reset()
         sq = net_square_affinity(name, reset = mod(reset,2))
         genegene = dot(sq,sq.T)
         out = genegene
-        nw.wn2(name,genegene, hardcopy = hardcopy, np =True)
+        mem.write(name,genegene, hardcopy = hardcopy, np =True)
     return out
 
 
@@ -272,10 +309,10 @@ def net_genegene(name = default_name, reset = 0):
 #Write keys of targets to a file when an affinity matrix is created
 def net_sq_keyidxs(name = default_name, write = None ):
     if write != None:
-        nw.wn2(name, write, hardcopy = True, np = False)
+        mem.write(name, write, hardcopy = True, np = False)
         idxs = write
     else:
-        idxs,sxs = nw.rn2(name, hardcopy = True, np = False)
+        idxs,sxs = mem.read(name, hardcopy = True, np = False)
         if not sxs: raise Exception()
     return idxs
 
@@ -283,20 +320,20 @@ def net_sq_keyidxs(name = default_name, write = None ):
 #Write keys of targets to a file when an affinity matrix is created
 def net_trg_keyidxs(name = default_name, write = None ):
     if write != None:
-        nw.wn2(name, write, hardcopy = True, np = False)
+        mem.write(name, write, hardcopy = True, np = False)
         idxs = write
     else:
-        idxs,sxs = nw.rn2(name, hardcopy = True, np = False)
+        idxs,sxs = mem.read(name, hardcopy = True, np = False)
         if not sxs: raise Exception()
     return idxs
 
 #Write keys of tfs to a file when an affinity matrix is created
 def net_tf_keyidxs(name =default_name, write = None):            
     if write != None:
-        nw.wn2(name, write, hardcopy = True, np = False)
+        mem.write(name, write, hardcopy = True, np = False)
         idxs = write
     else:
-        idxs,sxs = nw.rn2(name, hardcopy = True, np = False)
+        idxs,sxs = mem.read(name, hardcopy = True, np = False)
         if not sxs: raise Exception()
     return idxs
 
@@ -304,7 +341,7 @@ def net_tf_keyidxs(name =default_name, write = None):
 def net_genegene_norm(name = default_name, reset = 0):
     hardcopy = True
     if not reset:
-        out, sxs =  nw.rn2(name,hardcopy = hardcopy,np = True)
+        out, sxs =  mem.read(name,hardcopy = hardcopy,np = True)
         if not sxs: raise Exception()
     else:
         nw.claim_reset()
@@ -409,7 +446,7 @@ def expr_TS_binary(reset = 0 ,
                    name = default_name,
                    hardcopy = True ):
     if not reset:
-        out, sxs =  nw.rn2(name,hardcopy = hardcopy)
+        out, sxs =  mem.read(name,hardcopy = hardcopy)
         if not sxs: raise Exception()
     else:
         nw.claim_reset()        
@@ -441,7 +478,7 @@ def expr_TS_binary(reset = 0 ,
             
             if mod(count, 10) == 0: print count
 
-        nw.wn2( name, (all_states,mixes), hardcopy = hardcopy)
+        mem.write( name, (all_states,mixes), hardcopy = hardcopy)
         out= (all_states,mixes)
     return out
 def expr_CL_binary(reset = 0 , 

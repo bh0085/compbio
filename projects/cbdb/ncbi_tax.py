@@ -36,7 +36,10 @@ def get_maps():
 def get_tables():
   return [dict(name = 'Node',
                attrs = {'id':Column(Integer,primary_key = True),
-                        'parent_taxid': Column(Integer),
+                        'parent_taxid': Column(Integer, ForeignKey('node.id')),
+                        'parent':relation('Node',
+                                          primaryjoin="Node.parent_taxid==Node.id",
+                                          backref = 'children'),
                         'rank': Column(String),
                         'embl_code':Column(String),
                         'mit_gencodeid':Column(Integer,ForeignKey('gencode.id')),
@@ -73,6 +76,7 @@ def get_tables():
 def fill_db( reset = False):
   dbi = cbdb.getName('taxdmp', tables = get_tables(), reset = np.mod(reset, 2))
   filepath = config.dataPath('ncbi/taxdmp')
+  fsize = os.path.getsize(filepath)
   maps = get_maps()
 
   record_sep = '\t|\n'
@@ -85,6 +89,7 @@ def fill_db( reset = False):
                  'Name':'names.dmp',
                  'Citation':'citations.dmp'}
 
+                 
   count = 0
   for k,v in fill_tables.iteritems():
     fopen = open(os.path.join(filepath, v))
@@ -104,11 +109,14 @@ def fill_db( reset = False):
       dbi.Session.merge(cls)
       if np.mod(count, 1000) == 0:
         dbi.Session.commit()
-        print k, v, count, cols
+        print k, v, count, cols, '{0:4}%'.format(100 * float(fopen.tell()) / fsize)
     dbi.Session.commit()
   return
 
-
+if __name__ == '__main__':
+  print 'filling db'
+  fill_db()
+  exit(0)
 
                     
       

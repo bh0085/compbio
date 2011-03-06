@@ -10,10 +10,12 @@ import psycopg2
 from sqlalchemy.sql import text
 
 #import gb_alignment, gb_genomes, ncbi_tax, ncbi_tax_gbjoin
-__all__ = ['gb_alignment', 
-           'gb_sequence', 
-           'ncbi_tax',
-           'ncbi_tax_gbjoin']
+__all__ = [os.path.splitext(f)[0] 
+           for f in os.listdir(os.path.dirname(globals()['__file__'])) 
+           if os.path.splitext(f)[-1] == '.py' and f[0:2] != '__']
+
+def tableDefs(name):
+  return globals()[name].get_tables()
 
 def makeWithNameAndTables(name,  tables,
                           postgres = False,
@@ -79,6 +81,7 @@ def connectDB(name, postgres =False, **kwargs):
     print config.sqlitePath(name)
     engine = create_engine(config.sqlitePath(name))
     return engine
+
 
 def getName(name,tables = None, postgres = False, host = None, reset = 0):
   if reset or not name in globals().keys():
