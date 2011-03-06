@@ -59,7 +59,7 @@ def get_tables():
                         'comments':Column(String)
                        }),
           dict(name = 'Name',
-               attrs = {'nodeid':Column(Integer, index = True, ForeignKey('node.id')),
+               attrs = {'nodeid':Column(Integer, ForeignKey('node.id'), index = True),
                         'node':relation('Node',backref = 'names'),
                         'name_txt':Column(String, index = True),
                         'unique_name':Column(String),
