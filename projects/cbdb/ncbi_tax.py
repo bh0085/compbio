@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from sqlalchemy import Column, Integer, String, Unicode, DateTime, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relation
 from compbio.projects import cbdb
