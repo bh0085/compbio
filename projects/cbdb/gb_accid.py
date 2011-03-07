@@ -5,14 +5,14 @@ from sqlalchemy import Column, Integer, String, Unicode, ForeignKey
 import compbio.config as config
 
 def get_maps():
-  return dict(GBAcc = {'id': 2,
+  return dict(GBAcc = {'gbid': 2,
                       'accession':0,
                       'version':1})
                       
               
 def get_tables():
   return [dict(name = 'GBAcc',
-               attrs = {'id':Column(Integer,index = True),
+               attrs = {'gbid':Column(Integer,index = True),
                        'accession':Column(String, index = True),
                        'version':Column(Integer)})]
 
