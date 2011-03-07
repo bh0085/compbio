@@ -60,7 +60,8 @@ def get_tables():
                       'sequence':Column(String),
                       'source_taxon':Column(Integer,index = True),
                       'source_organism':Column(String),
-                      'gb_accession':Column(String),
+                      'gb_accession':Column(String,index = True),
+                      'gb_accession_version':Column(Integer),
                       'gb_accession_range':Column(String),
                       'gb_id':Column(Integer, index = True),
                       'annotations':Column(String),
@@ -84,13 +85,17 @@ def fill_from_rfam_stk( p, reset = True):
   count = 0
   for rec in SeqIO.parse(fopen, 'stockholm'):
     acc = rec.annotations['accession']
-    accid, accrange = acc.split('/')
-
+    accidv, accrange = acc.split('/')
+    acv_split =  accidv.split('.')
+    accid = acv_split[0]
+    accid_version = (lambda x: len(x) == 1 and 1 or x[1])(acv_split)
+    
     seq = dbi.Sequence(name = rec.name,
                        file_name = p,
                        file_offset = fopen.tell(),
                        sequence = rec.seq.__str__(),
                        gb_accession = accid,
+                       gb_accession_version = accid_version,
                        gb_accession_range = accrange,
                        gb_id = None,
                        annotations = rec.annotations.__str__(),
