@@ -38,7 +38,6 @@ def clade_taxa(clade):
   tgb_dbi = cbdb.getName('tax_gbs', ncbi_tax_gbjoin.get_tables())
   gba_dbi = cbdb.getName('gb_accjoin', gb_accid.get_tables())
   
-
   ids = []
   for t in terminal_gbaccs:
     gbid = gba_dbi.Session.query(gba_dbi.GBAcc).filter_by(accession = t).all()
@@ -46,12 +45,42 @@ def clade_taxa(clade):
       continue
     
     taxid = tgb_dbi.Session.query(tgb_dbi.TaxGBJoin).filter_by(gbid = gbid[0].id).one().taxid
-    tax_node = tax_dbi.Session.query(tax_dbi.Node).filter_by(id = taxid).one()
-    
+    node = tax_dbi.Session.query(tax_dbi.Node).filter_by(id = taxid).one()    
+    g = getGenealogy(node)
+    print map(lambda x: x.names[map(lambda y: y.name_class, x.names).index('scientific name')].name_txt, g)    
+
     ids.append(gbid)
-    raise Exception
 
   raise Exception()
+
+def taxRoot():
+  tax_dbi = taxDBI()
+  root_node = tax_dbi.Session.query(tax_dbi.Name).filter_by(name_txt  = 'root').one().node
+  return root_node
+  
+def gbaDBI():
+  gba_dbi = cbdb.getName('gb_accjoin', gb_accid.get_tables())
+  return gba_dbi
+
+def tgbDBI():
+  tgb_dbi = cbdb.getName('tax_gbs', ncbi_tax_gbjoin.get_tables())
+  return tgb_dbi
+
+def taxDBI():
+  tax_dbi = cbdb.getName('taxdmp', ncbi_tax.get_tables())
+  return tax_dbi
+
+def getGenealogy(node):
+  root_node =taxRoot()
+  dbi = taxDBI()
+
+  path = []
+  cur = node
+  while cur != root_node:
+    path.append(cur)
+    cur = cur.parent
+  path.append(cur)
+  return path[::-1]
 
 def rna4gbid( gbid, dbname = '16s'): 
   #print 'giving a random RNA because the taxonomy atabase is not yet created!'

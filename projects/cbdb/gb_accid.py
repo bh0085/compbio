@@ -12,7 +12,7 @@ def get_maps():
               
 def get_tables():
   return [dict(name = 'GBAcc',
-               attrs = {'id':Column(Integer,primary_key = True),
+               attrs = {'id':Column(Integer,index = True),
                        'accession':Column(String, index = True),
                        'version':Column(Integer)})]
 

@@ -97,7 +97,7 @@ def print_soheil():
     for i in range(len(gts)):
       
       t_lines[i] += '{0:20}'.format(gts[i])
-    sorted_weights = argsort(tg['weights'])[0:n_tfs]
+    sorted_weights = argsort(tg['weights'])[::-1][0:n_tfs]
     tfs= [tg['tfs'][i] for i in sorted_weights]
     for tf in tfs:
       fts = array(TS[tf])[tpts]
