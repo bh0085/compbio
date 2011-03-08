@@ -24,7 +24,7 @@ def terminal_maps(tree, reset = False):
 
 def taxnode_accessions(nodes):
   
-  ali_dbi = cbdb.getName('group2.stk', gb_ali.get_tables())
+  ali_dbi = cbdb.getName('hammerhead.stk', gb_ali.get_tables())
   tgb_dbi = sqt.tgbDBI()
   gba_dbi = sqt.gbaDBI()
 
@@ -45,11 +45,11 @@ Session.query(tgb_dbi.TaxGBJoin).filter_by(taxid = n).all()]
     node_accessions[nodes.keys()[i]] =acc_matches
 
 
+  bar.finish()
   print 
   print 'finding accession matches in rfam family'
   matches ={}
   ct = 0 
-  bar.finish()
   bar = pbar.simple(len(nodes))
   for k,v in node_accessions.iteritems():
     
@@ -60,6 +60,7 @@ Session.query(tgb_dbi.TaxGBJoin).filter_by(taxid = n).all()]
     for acc in v:
       g2match = [x.id for  x in ali_dbi.Session.query(ali_dbi.Sequence).filter_by(gb_accession=acc).all()]
       if g2match: matches[k].extend(g2match)
+  bar.finish()
   return matches, node_accessions
                     
                     
