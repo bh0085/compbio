@@ -17,8 +17,27 @@ def claim_reset():
 #if writenet is called without a name, use the value
 #default.
 
-def write(name = 'default',value = None, hardcopy = True, np = False, register= 'a'):
-    caller_name = inspect.stack()[1][3]
+def getOrSet(function, **kwargs):
+  reset = kwargs.get('reset', False)
+  name = kwargs.get('name','default')
+  hardcopy = kwargs.get('hardcopy', True)
+  register = kwargs.get('register', 'a')
+  np = kwargs.get('np', False)
+  caller_name = inspect.stack()[1][3]
+  if not reset:
+    out, sxs = read(name = name, hardcopy = hardcopy, np = np, 
+                    register = register, caller_name = caller_name)
+    assert sxs, 'Data recovery failed for name ' + caller_name
+  else:
+    out = function()
+    write(name = name, value = out,  hardcopy = hardcopy, np = np,
+          register = register, caller_name = caller_name)
+  return out
+    
+
+def write(name = 'default',value = None, hardcopy = True, np = False, 
+          register= 'a', caller_name = None):
+    if not caller_name: caller_name = inspect.stack()[1][3]
     savename = caller_name + '_' +name + '.memo'
  
     globals()['lastname_'+caller_name +register] = name
@@ -37,11 +56,12 @@ def write(name = 'default',value = None, hardcopy = True, np = False, register= 
 
 #if readnet is called without a name, it just
 #returns the most recently globalized net.
-def read(name = 'default', hardcopy = True,np = False, register = 'a'):
+def read(name = 'default', hardcopy = True,np = False, 
+         register = 'a', caller_name = None):
     sxs = False
     out = -1
 
-    caller_name = inspect.stack()[1][3]
+    if not caller_name:caller_name = inspect.stack()[1][3]
     try:
         lname = globals()['lastname_'+caller_name+register]
         if lname == name or name == 'default':

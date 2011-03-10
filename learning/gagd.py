@@ -65,7 +65,7 @@ def eval_func(chromosome):
 
 
 class GAGD():
-	def makeMotifTemplate(self):
+  def makeMotifTemplate(self):
 		nhc = self.nhc
 		ntg = self.ntg
 		ntg_s = self.ntg_s
@@ -74,7 +74,7 @@ class GAGD():
 	
 	
 	
-	def initMotifSimulation(self,
+  def initMotifSimulation(self,
 				nhc,
 				ntg,
 				ntg_s,
@@ -86,7 +86,7 @@ class GAGD():
 		self.ntf_u = ntf_u #how many unshared tfs per tg.
 
 
-    def sample_genome(self):
+  def sample_genome(self):
 
         random.seed()
         hcc_allowed = range(0,self.ntf_s)
@@ -162,7 +162,7 @@ class GAGD():
         print g
         return g, ga
         
-    def make_cxns_from_genome(self,genome):
+  def make_cxns_from_genome(self,genome):
     #reverse the genome to read through by popping
         genome = genome[::-1]
 
@@ -234,7 +234,7 @@ class GAGD():
                                  ogc_cxns,
                                  ogc_ws)
         
-    def init_net(self):
+  def init_net(self):
             
         ng = self.ntg
         nc = self.nhc
@@ -246,12 +246,12 @@ class GAGD():
         out_mod_sizes = [1 for i in range(self.ntg)]
         self.mynn = MyNN(in_mod_sizes, h_mod_sizes, out_mod_sizes)
     
-    def set_data(self,xdat, ydat):
+  def set_data(self,xdat, ydat):
         self.mynn.set_data(xdat,ydat)
         
-    def set_trainer(self):
+  def set_trainer(self):
         self.mynn.set_trainer()
-    def train(self):
+  def train(self):
         self.mynn.train()
 
     
@@ -466,7 +466,7 @@ class Net():
 
 
 class Pop():
-	def def 
+  pass
 
 #DEMO CLASS FROM PYBRAINZ DOC
 class MyPB():

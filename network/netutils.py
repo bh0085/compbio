@@ -187,7 +187,6 @@ def net_square_affinity(name = default_name, reset = 0):
         net,sxs= mem.read(name,hardcopy = hardcopy, np = np)
         if not sxs: raise Exception()
     else:
-        nw.claim_reset()
         trgs, tfs = parse_net(name)
         k0 = trgs.keys()
         k1 = tfs.keys()
@@ -229,7 +228,6 @@ def net_affinity(name = default_name ,reset = 0):
         net, sxs = mem.read(name, hardcopy = hardcopy, np = True)
         if not sxs: raise Exception()
     else:
-        nw.claim_reset()
         trgs, tfs = parse_net(name, reset = mod(reset,2))
         k0 = trgs.keys()
         k1 = tfs.keys()
@@ -263,17 +261,18 @@ def net_affinity(name = default_name ,reset = 0):
                 print w_tf
 
         net = N
-        nw.writenet(name, net,hardcopy = hardcopy, np = True)
+        mem.write(name, net,hardcopy = hardcopy, np = True)
     return net
 
 def net_jcf(name = default_name, reset = 0):
     hardcopy = False
     try:
         if reset: raise Exception('compute')
-        return nw.readnet(name,hardcopy = hardcopy)
+        out, sxs =mem.read(name,hardcopy = hardcopy)
+        assert sxs
+        return out
     except Exception as e:
         if e.args[0] != 'compute': raise Exception()
-        nw.claim_reset()
 
         square_aff = net_square_affinity(name, reset = mod(reset,2))
         import pymat
@@ -282,7 +281,7 @@ def net_jcf(name = default_name, reset = 0):
         
         inp = {'array':arr}
         output = pymat.runmat(command, inp)
-        nw.writenet(name, output, hardcopy = hardcopy)
+        mem.write(name, output, hardcopy = hardcopy)
         return output
 
     

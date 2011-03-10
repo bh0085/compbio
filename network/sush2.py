@@ -9,16 +9,16 @@ import numpy as np
 import pickle
 import subprocess
 import netutils as nu
-import colors
+import compbio.utils.colors as colors
 import mlpy
-import myrf
-import mysvm
+import compbio.learning.myrf as myrf
+import compbio.learning.mysvm as mysvm
 import compbio.utils.plots as myplots
 import matplotlib.patches as patches
-import s3
+import compbio.network.s3 as s3
 import netwriter as nw
-import gagd
-import synth_fann as sf
+import compbio.learning.gagd as gagd
+import compbio.learning.synth_fann as sf
 
 default_name = 'unsup'
 min_tf_perc = .7
@@ -871,7 +871,7 @@ def draw_expr(x_expr,y_expr, expr_fig = 0 ):
     #cc = (cc - np.min(cc)) / (np.max(cc) - np.min(cc))
     #colors = array([1,1,1])[newaxis,newaxis,:] + array([0,-1,-1])[newaxis,newaxis,:]*cc[:,:,newaxis]
     colors = color_array(cc)
-    myplots.scatter_backdrop(f,nx,colors)
+    myplots.scatter_backdrop(f,colors)
     
 def draw_xy(xset, yset):
     
