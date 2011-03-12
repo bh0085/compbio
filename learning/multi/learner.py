@@ -23,8 +23,8 @@ class Learner():
     self.ny = shape(y_data)[0]
     self.splitTraining()
 
-  def splitTraining(self, seed= 0, train_frac = .8):
-    random.seed(seed)
+  def splitTraining(self, seed= -1, train_frac = .8):
+    if seed != -1: random.seed(seed)
     inds = arange(self.nt)
     random.shuffle(inds)
     self.train_idxs = inds[0:floor(train_frac *self.nt)]
@@ -74,11 +74,28 @@ class Learner():
                                color = ct[i]) 
         myplots.maketitle(ax, name, subtitle =subtitle )
 
-    #f1.show()
-    #f1.canvas.draw()
-    #f.show()
-    #f.canvas.draw()
+  def testParams(self, model_class, res = 10, dim = 1):
+    if type(res) == type(0): res = (res,) * dim
+    assert type(res[0]) == type(0), 'please input an integer res'
 
+    assert len(res) < 3, 'dimensions > 3 not yet implemented...'
+    if len(res) == 2:
+      test_vals = [[(i,res[0]),(j,res[1])] 
+                   for i in arange( res[0])
+                   for j in arange( res[1])
+                   ]
+    else:
+      test_vals = [[(i,res[0])] 
+                   for i in arange(res[0])]
+
+    
+    rms = zeros(res)
+    for t in test_vals:
+      rms[map(lambda x: x[0], t)] = random.random()
+        #self.setModel(model_class(params = params)
+    out = {}
+    out['test_rms'] = rms
+    return  out
 def randomDependent(nx, ny, nt):
   xvals = random.random((nx,nt))
 
