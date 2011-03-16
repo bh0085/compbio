@@ -37,16 +37,16 @@ def hideaxes(ax, visible = False):
     ax.get_xaxis().set_visible(visible)
 
 def maketitle(ax, title, subtitle = None,alpha = 1):
-    ax.annotate(title,[.05,.9],
-                xycoords = 'axes fraction',
+    ax.annotate(title,[.05,.97],
+                xycoords = 'figure fraction',
                 verticalalignment = 'bottom',
                 size = 'x-large',
                 alpha = alpha
                 )
     if subtitle:
-        ax.annotate(subtitle, [.05,.9],
+        ax.annotate(subtitle, [.05,.97],
                     size = 'large',
-                    xycoords = 'axes fraction',
+                    xycoords = 'figure fraction',
                     xytext = [0,-5],
                     textcoords = 'offset points'
                     ,verticalalignment = 'top',

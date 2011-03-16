@@ -10,6 +10,20 @@ import compbio.projects.cbdb.gb_alignment as gba
 from Bio.Alphabet import IUPAC, Gapped
 
 def init(reset = False):
+  '''
+  Read in the 16s tree of life and a random clade corresponding to the
+  halobacteria.
+
+  inputs:
+    reset [False]
+
+  output:
+    tree  <biopython tree>, the entire 16s tree of life
+    halo  <biopython clade>, a clade of the tree of life
+
+  usage:
+    tree, halo = init()
+'''
   
   if reset: 
     nwk = Phylo.read(config.dataPath('sequences/16s.newick'),"newick")
@@ -22,36 +36,63 @@ def init(reset = False):
   return nwk, halo
   
 def clade_gbacc(clade):
+  '''
+  Run on a clade from the tree of life I have been using, returns a
+  genbank accession number for any clade corresponding to a 16s accession.
+
+  inputs:
+    clade: <biopython clade>
+   
+  outputs:
+    gbacc: genbank accession
+'''
   gbid = re.compile('__([^_]*)__').search(clade.name)
   return gbid.group(1)
 
 
-def write_nwk(tree):
-  #tree = Phylo.BaseTree.Tree(node)
-  fout =config.dataPath('::trees/halo.newick')
-  Phylo.write(tree,open(fout,'w'), 'newick')
-
 def clade_taxa(clade):
+  '''
+  Get an ncbi genealogy for a clade - e.g: the minimal ncbi node containing
+  every terminal of a clade as well as the ncbi nodes at each leaf.
+
+  inputs:
+    clade: <biopython clade>
+    
+  outputs:
+    genealogy: the shared ncbi genealogy of every terminal
+    nodes:     ncbi taxnodes for every terminal
+'''
   terminal_gbaccs = map(lambda x: clade_gbacc(x), clade.get_terminals())
   
   tax_dbi = cbdb.getName('taxdmp', ncbi_tax.get_tables())
   tgb_dbi = cbdb.getName('tax_gbs', ncbi_tax_gbjoin.get_tables())
-  gba_dbi = cbdb.getName('gb_accjoin', gb_accid.get_tables())
+  gba_dbi = cbdb.getName('gb_accjoin', gb_acc_idjoin.get_tables())
   
   ids = []
+  taxnodes = []
+  genealogies = []
   for t in terminal_gbaccs:
-    gbid = gba_dbi.Session.query(gba_dbi.GBAcc).filter_by(accession = t).all()
+    gbid = gba_dbi.Session.query(gba_dbi.GBAcc).filter_by(accession = t).one()
     if not gbid:
-      continue
+      raise Exception('uh oh... is the gbacc db still borked?')
     
-    taxid = tgb_dbi.Session.query(tgb_dbi.TaxGBJoin).filter_by(gbid = gbid[0].id).one().taxid
+    taxid = tgb_dbi.Session.query(tgb_dbi.TaxGBJoin).filter_by(gbid = gbid.id).one().taxid
     node = tax_dbi.Session.query(tax_dbi.Node).filter_by(id = taxid).one()    
     g = getGenealogy(node)
     print map(lambda x: x.names[map(lambda y: y.name_class, x.names).index('scientific name')].name_txt, g)    
 
     ids.append(gbid)
+    taxnodes.append(node)
+    genealogies.append(g)
 
-  raise Exception()
+  mlen = np.min([len(g) for g in genealogies])
+  shared = 0
+  for i in range(mlen):
+    if len(nonzero([g[i] != genealogies[0][i] for g in genealogies])[0]):
+      break
+  fully_shared = i
+
+  return(genealogies[0:fully_shared], taxnodes)
 
 def taxRoot():
   tax_dbi = taxDBI()

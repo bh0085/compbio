@@ -3,6 +3,8 @@ from numpy import *
 import numpy as np
 import matplotlib.colors as mplcolors
 import matplotlib
+import matplotlib.pyplot as plt
+import compbio.utils.memo as mem
 def getct(n, seed = 0, forceRB = True,BW = False):
     random.seed(seed)
     ct = []
@@ -27,67 +29,81 @@ def pmcolor(val,threshold = 0):
     else:
         return [0,0,0]
 
-def blackbody(contrast = 1.5, polypow = 5):
-  #def setBB():
-  #  bbpath = 
-  dstr = '2deg'
-  import inspect
-  import os
-  import re
-  thisdir= os.path.dirname(inspect.stack()[0][1])
-  bbcols = [re.split(re.compile('\s+'),l) for l in \
-            open(os.path.join(thisdir,'blackbody.tab')).readlines()
-            if dstr in l]
-  rgb = []
-  for b in bbcols:
-    rgb.append(array(b[7:10],float))
-  
-  rgb = array(rgb)
-  npts = 256
-  ntot = len(rgb)
-  #DON'T TOUCH THE SCALE!!!!
-  scl = 34.5
-  
-  #xvals = logspace(0.,scl,npts)/pow(10,scl) - .5
-  xvals =  arctan(linspace(-contrast,contrast,npts))/pi*2 
-  scaling = (linspace(-1,1,npts)**3)*(linspace(-1,1,npts)**polypow)
-  d2 = [xvals[:], 
-       scaling[:]]
-  inds = argmax(np.abs(d2),0)
-  xvals = array([d2[inds[i]][i] for i in range(len(inds))])
-  
-  
-  xvals = (xvals * .5) + .5
+def blackbody(reset = False, **kwargs):
+  '''Generate a colormap according to a logarithm of the blackbody spectrum. Colormap is transformed by an arctangent to place whites at .5 in a band with width determined by the [contrast] and then by taking the max with a gaussian peaked at 0,1 with width determined by [width]
 
-  matplotlib.pyplot.plot(xvals)
-  matplotlib.pyplot.plot(xvals[::-1])
-#.5
-  #xvals =  xvals - min(xvals)
-  #xvals /= max(xvals)
+kwargs: 
+ reset
+ contrast   [.64]   adjusts arctangent slope near zero.
+ width      [.01]   adjust gaussian thresholding near endpoints.
+ flip       [False] Hot areas are blue if flip is false.
+ flip_ends  [False] Gaussian threshold swaps high and low colors.
 
-  #print xvals[499]
-  #print xvals[500]
+For a usage example, see compbio/fun/ocean.py'''
+  def setBB( **kwargs  ): 
+    dstr = '2deg'
+    import inspect
+    import os
+    import re
 
-  #print xvals
-  x0s = log(linspace(1,scl,ntot))/log(scl)
+    contrast = kwargs.get('contrast', .64)
+    width = kwargs.get('width', .01)
+    flip_ends = kwargs.get('flip_ends', False)
+    flip = kwargs.get('flip',False)
+    thisdir= os.path.dirname(inspect.stack()[0][1])
+    bbcols = [re.split(re.compile('\s+'),l) for l in \
+              open(os.path.join(thisdir,'blackbody.tab')).readlines()
+              if dstr in l]
+    rgb = []
+    for b in bbcols:
+      rgb.append(array(b[7:10],float))
+    
+    rgb = array(rgb)
+    npts = 512
+    ntot = len(rgb)
+    #DON'T TOUCH THE SCALE!!!!
+    scl = 33.5
+    
+    #xvals = logspace(0.,scl,npts)/pow(10,scl) - .5
+    xvals =  arctan(linspace(-contrast,contrast,npts))/pi*2 
+    #scaling = (linspace(-1,1,npts)**3)*(linspace(-1,1,npts)**polypow)
+    #width = .001
+    scaling = exp( - ( 1-abs(linspace(-1,1,npts))) **2 / width)
+    
+    scaling *= array([-1 if x <0 else 1 for x in linspace(-1,1,npts)])
+    if flip_ends:
+      scaling *= -1
 
-  vals =array([ interp(xvals,
-                       ,x0s,
-                       [e[i] for e in rgb])
-          for i in range(3)])
-
-  return vals
-  xs=linspace(0,1,npts)
-
-  cdict = dict(
-      red = [  (xs[i],  vals[0,i], vals[0,i]) for i in range(npts)],
-      green = [ ( xs[i], vals[1,i], vals[1,i]) for i in range(npts)],
-      blue = [  (xs[i], vals[2,i], vals[2,i]) for i in range(npts)])
-  
-  #out = zip(vals)
-  cmap = matplotlib.colors.LinearSegmentedColormap('bb',cdict) 
-  
-  return cmap
+    d2 = [xvals[:], 
+         scaling[:]]
+    inds = argmax(np.abs(d2),0)
+    xvals = array([d2[inds[i]][i] for i in range(len(inds))])
+    
+    xvals = (xvals * .5) + .5
+    f0 = float(argmin(var(rgb,1))) / ntot
+    k = -2.0 * (2. * f0  - 1) / (f0**2)  /2
+    lspace = log(linspace(1, 1 + k,ntot)) / log(1 + k)
+    #x0s = log(linspace(1,1 + scl,ntot))/log(1 + scl)
+    
+    vals =array([ interp(xvals,
+                         lspace,
+                         [e[i] for e in rgb])
+                  for i in range(3)])
+    midpoint = argmin(var(vals,0))
+    
+#    raise Exception()
+    if flip: vals = vals[:,::-1]
+    xs=linspace(0,1,npts)
+    cdict = dict(
+        red = [  (xs[i],  vals[0,i], vals[0,i]) for i in range(npts)],
+        green = [ ( xs[i], vals[1,i], vals[1,i]) for i in range(npts)],
+        blue = [  (xs[i], vals[2,i], vals[2,i]) for i in range(npts)])
+    
+    #out = zip(vals)
+    cmap = matplotlib.colors.LinearSegmentedColormap('bb',cdict) 
+    return cmap
+  out = mem.getOrSet(setBB, reset = reset, **kwargs)
+  return out
     
   
 def imgcolor(arr ,normal = True, 

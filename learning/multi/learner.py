@@ -7,6 +7,8 @@ import compbio.utils.plots as myplots
 import compbio.utils.colors as mycolors
 from regression_models import *
 from orange_models import *
+import itertools as it
+import compbio.utils.pbar as pbar
 
 class Learner():
   def __init__(self,x_data, y_data, coupling):
@@ -17,13 +19,12 @@ class Learner():
     self.xvals = x_data
     self.yvals = y_data
     self.coupling = coupling
-
     self.nt = shape(x_data)[1]
     self.nx = shape(x_data)[0]
     self.ny = shape(y_data)[0]
     self.splitTraining()
 
-  def splitTraining(self, seed= -1, train_frac = .8):
+  def splitTraining(self, seed= -1, train_frac = .6):
     if seed != -1: random.seed(seed)
     inds = arange(self.nt)
     random.shuffle(inds)
@@ -74,27 +75,56 @@ class Learner():
                                color = ct[i]) 
         myplots.maketitle(ax, name, subtitle =subtitle )
 
-  def testParams(self, model_class, res = 10, dim = 1):
-    if type(res) == type(0): res = (res,) * dim
-    assert type(res[0]) == type(0), 'please input an integer res'
+  def testParams(self, model_class,
+                 prediction= 'test', res = 10, dim = 1):
 
-    assert len(res) < 3, 'dimensions > 3 not yet implemented...'
-    if len(res) == 2:
-      test_vals = [[(i,res[0]),(j,res[1])] 
-                   for i in arange( res[0])
-                   for j in arange( res[1])
-                   ]
-    else:
-      test_vals = [[(i,res[0])] 
-                   for i in arange(res[0])]
-
+    #set up the grid of prediction parameters
     
+    if len(shape(res)) == 0: res = (res,) * dim
+    test_vals =list( it.product(*[[(x,r) for x in arange(r)] 
+                                  for r in res]))
+
+    #shall we predict holdout  or training set?
+    if prediction == 'training':
+      xyfun = self.xyTrain
+      predictfun = self.predictTraining
+    else:
+      xyfun = self.xyTest
+      predictfun = self.predictTest
+
+    #set initial values for output variables
+    ntest = len( xyfun()[1][0])
     rms = zeros(res)
+    pdicts = reshape(array([{} for i in range(product(res))]),res)
+    test_preds = reshape(\
+      array([ zeros(ntest) for i in range(product(res))]),\
+        concatenate([res+(ntest,)]))
+    
+    #test the learning method for each parameter
+    bar = pbar.simple(len(test_vals))
+    ct = 0
     for t in test_vals:
-      rms[map(lambda x: x[0], t)] = random.random()
-        #self.setModel(model_class(params = params)
+      ct += 1
+      bar.update(ct)
+      pdict = {}
+      idxs = zip(map(lambda x: x[0], t))
+
+      self.setModel(model_class(params = t,
+                                pdict = pdicts[idxs][0]))
+      self.learn()      
+      xtest, ytest = xyfun()
+      ypred = predictfun()
+      rms[idxs] = std(ytest - ypred)
+      test_preds[idxs] = ypred
+    bar.finish()
+      
+    #create a dictionary of all of the output variables
     out = {}
+    out['pdicts'] = pdicts
     out['test_rms'] = rms
+    out['test_preds'] = test_preds
+    out['actual_preds'] = ytest
+    print ytest
     return  out
 def randomDependent(nx, ny, nt):
   xvals = random.random((nx,nt))

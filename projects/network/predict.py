@@ -6,6 +6,9 @@ from numpy import *
 import matplotlib.pyplot as plt
 import compbio.learning.multi.orange_models as om
 import compbio.learning.multi.regression_models as rm
+import compbio.utils.colors as mycolors
+import compbio.utils.plots as myplots
+import compbio.utils.heatmap as hm
 
 def learnGene(gene_name = 'FBgn0014931', 
               model = None ):
@@ -32,13 +35,45 @@ def gVals(gene_name):
   
 
 def heatMapGene(gene_name = 'FBgn0014931', 
-                model_class = None):
-  if model_class == None: model_class = om.KNNModel
+                model_class = None,
+                res = 5,
+                prediction ='training'):
+  plt.clf()
+  if model_class == None: model_class = om.NuSVMModel
   xvals,yvals,coupling = gVals(gene_name)
   learner = l.Learner(xvals,yvals,coupling)
-  vals = learner.testParams(model_class, res = 10, dim = 2)
+  vals = learner.testParams(model_class, 
+                            prediction=prediction
+                            ,res = res, dim = 2)
   err = vals['test_rms']
-  plt.imshow(err, interpolation = 'nearest')
+  annotations = vals['pdicts']
+  f=plt.gcf()
+  ax = f.add_subplot('211')
+
+  ax2 = f.add_subplot('212')
+  ax = hm.heatMap(err, annotations,axes = ax)
+  
+  myplots.maketitle(ax,  'gene: {0}'.format(gene_name), 
+                    'heatmap for different learning parameters')
+  
+  preds = vals['test_preds']
+  best_p = preds[unravel_index(argmin(vals['test_rms']),
+                               shape(preds)[:2])]
+  worst_p = preds[unravel_index(argmax(vals['test_rms']),
+                               shape(preds)[:2])]
+  ax2.plot(worst_p,
+           linestyle = ':',
+           linewidth = 4 ,
+           color = 'blue')
+  ax2.plot(best_p,
+           linestyle = ':',
+           linewidth = 4,
+           color = 'red')
+  ax2.plot(vals['actual_preds'][0])
+
+#ax2.plot(sorted(reshape(err, (prod(shape(err))))))
+  
+  #plt.imshow(err, interpolation = 'nearest', cmap = mycolors.blackbody())
   
 def cycleGenes(rng = [0,10], model_class = None):
   trgs, tfs = netio.getNet()

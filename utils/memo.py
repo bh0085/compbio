@@ -29,7 +29,7 @@ def getOrSet(function, **kwargs):
                     register = register, caller_name = caller_name)
     assert sxs, 'Data recovery failed for name ' + caller_name
   else:
-    out = function()
+    out = function(**kwargs)
     write(name = name, value = out,  hardcopy = hardcopy, np = np,
           register = register, caller_name = caller_name)
   return out

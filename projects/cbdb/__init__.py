@@ -11,8 +11,9 @@ from sqlalchemy.sql import text
 
 #import gb_alignment, gb_genomes, ncbi_tax, ncbi_tax_gbjoin
 __all__ = [os.path.splitext(f)[0] 
-           for f in os.listdir(os.path.dirname(globals()['__file__'])) 
+           for f in os.listdir(os.path.dirname(globals()['__file__'])) #
            if os.path.splitext(f)[-1] == '.py' and f[0:2] != '__']
+#__all__ = ['ncbi_tax']
 
 def tableDefs(name):
   return globals()[name].get_tables()
