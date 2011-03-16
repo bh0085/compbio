@@ -41,7 +41,6 @@ def gba_map_gbids(dbname):
   else:
     gbacc_dbi = cbdb.getName('gb_acc_idjoin' , gb_accid.get_tables())
     for s in dbi.Session.query(dbi.Sequence).all():
-      
       try:
         gbid =  gbacc_dbi.Session.query(gbacc_dbi.GBAcc).\
             filter_by(accession = s.gb_accession).one().gbid
