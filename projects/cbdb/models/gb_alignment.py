@@ -123,7 +123,7 @@ def fill_all_rdb16s(reset = True):
         print count, p, seq.source_organism
         dbi.Session.commit()
       count += 1
-    dbi.Session.commit
+    dbi.Session.commit()
 
         
 
