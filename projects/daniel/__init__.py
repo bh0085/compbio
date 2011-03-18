@@ -37,6 +37,8 @@ def parseNet(num =  1,method = 'tree', reset = False):
     
     ntf = np.max(tf) + 1
     nexp = len(description.values()[0]) + 1
+
+    raise Exception()
     
     grid = zeros((ntf,nexp))
     for vals in zip(weight,tf,exp): grid[vals[1], vals[2]] = float(vals[0])

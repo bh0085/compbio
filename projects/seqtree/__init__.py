@@ -2,18 +2,24 @@ from compbio.projects import SeqDB as sqd
 from compbio import config
 from compbio.utils import memo as mem, gbid_lookup as gbl
 from Bio import Phylo, Align, AlignIO
-import re
+import re, itertools as it
 from numpy import * 
 import compbio.projects.cbdb as cbdb
-from compbio.projects.cbdb import *
-import compbio.projects.cbdb.gb_alignment as gba
 from Bio.Alphabet import IUPAC, Gapped
+import numpy as np
+
 
 def init(reset = False):
   '''
   Read in the 16s tree of life and a random clade corresponding to the
   halobacteria.
 
+  At each node, sets metadata from the databases that I have grabbed.
+  Metadata (node.m) for terminal nodes includes:
+    taxnode   -- ncbi taxon of the node
+    gbacc     -- genbank accession number of the 16s for the node
+    gbid      -- genbank id of the 16s for the node
+    
   inputs:
     reset [False]
 
@@ -31,6 +37,9 @@ def init(reset = False):
   else: 
     nwk, sxs = mem.read(register = '16s_tree')
     assert sxs
+
+  for n in it.chain(nwk.get_terminals(),nwk.get_nonterminals()): n.m = {}
+  add_db_metadata(nwk)
 
   halo = nwk.find_clades(dict(name = 'Halobacteria')).next()
   return nwk, halo
@@ -50,7 +59,7 @@ def clade_gbacc(clade):
   return gbid.group(1)
 
 
-def clade_taxa(clade):
+def db_metadata(tree):
   '''
   Get an ncbi genealogy for a clade - e.g: the minimal ncbi node containing
   every terminal of a clade as well as the ncbi nodes at each leaf.
@@ -62,58 +71,31 @@ def clade_taxa(clade):
     genealogy: the shared ncbi genealogy of every terminal
     nodes:     ncbi taxnodes for every terminal
 '''
-  terminal_gbaccs = map(lambda x: clade_gbacc(x), clade.get_terminals())
+  tax_dbi = cbdb.getName('taxdmp')
+  tgb_dbi = cbdb.getName('tax_gbs')
+  gba_dbi = cbdb.getName('gb_acc_idjoin')
   
-  tax_dbi = cbdb.getName('taxdmp', ncbi_tax.get_tables())
-  tgb_dbi = cbdb.getName('tax_gbs', ncbi_tax_gbjoin.get_tables())
-  gba_dbi = cbdb.getName('gb_accjoin', gb_acc_idjoin.get_tables())
-  
-  ids = []
-  taxnodes = []
-  genealogies = []
-  for t in terminal_gbaccs:
-    gbid = gba_dbi.Session.query(gba_dbi.GBAcc).filter_by(accession = t).one()
-    if not gbid:
-      raise Exception('uh oh... is the gbacc db still borked?')
-    
-    taxid = tgb_dbi.Session.query(tgb_dbi.TaxGBJoin).filter_by(gbid = gbid.id).one().taxid
-    node = tax_dbi.Session.query(tax_dbi.Node).filter_by(id = taxid).one()    
-    g = getGenealogy(node)
-    print map(lambda x: x.names[map(lambda y: y.name_class, x.names).index('scientific name')].name_txt, g)    
+  #terminal_gbaccs = map(lambda x: clade_gbacc(x), clade.get_terminals())  
+  for t in clade.get_terminals():
+    try:
+      t.m['gbacc'] = clade_gbacc(t)
+      t.m['gbid'] = gba_dbi.Session.query(gba_dbi.GBAcc).\
+          filter_by(accession = t.m['gbacc']).one().gbid
+      taxid = tgb_dbi.Session.query(tgb_dbi.TaxGBJoin).\
+          filter_by(gbid = t.m['gbid']).one().taxid
+      t.m['taxnode'] = tax_dbi.Session.query(tax_dbi.Node).\
+          filter_by(id = taxid).one()  
+    except: pass
 
-    ids.append(gbid)
-    taxnodes.append(node)
-    genealogies.append(g)
-
-  mlen = np.min([len(g) for g in genealogies])
-  shared = 0
-  for i in range(mlen):
-    if len(nonzero([g[i] != genealogies[0][i] for g in genealogies])[0]):
-      break
-  fully_shared = i
-
-  return(genealogies[0:fully_shared], taxnodes)
 
 def taxRoot():
-  tax_dbi = taxDBI()
+  tax_dbi = cbdb.getName('taxdmp')
   root_node = tax_dbi.Session.query(tax_dbi.Name).filter_by(name_txt  = 'root').one().node
   return root_node
-  
-def gbaDBI():
-  gba_dbi = cbdb.getName('gb_accjoin', gb_accid.get_tables())
-  return gba_dbi
-
-def tgbDBI():
-  tgb_dbi = cbdb.getName('tax_gbs', ncbi_tax_gbjoin.get_tables())
-  return tgb_dbi
-
-def taxDBI():
-  tax_dbi = cbdb.getName('taxdmp', ncbi_tax.get_tables())
-  return tax_dbi
 
 def getGenealogy(node):
   root_node =taxRoot()
-  dbi = taxDBI()
+  dbi = cbdb.getName('taxdmp')
 
   path = []
   cur = node
@@ -125,7 +107,7 @@ def getGenealogy(node):
 
 def rna4gbid( gbid, dbname = '16s'): 
   #print 'giving a random RNA because the taxonomy atabase is not yet created!'
-  dbi = cbdb.getName(dbname, gba.get_tables())
+  dbi = cbdb.getName(dbname)
   seq_num=  floor(1000 * random.random())
   seq = dbi.Session.query(dbi.Sequence)[seq_num].sequence
   return seq
@@ -133,7 +115,6 @@ def rna4gbid( gbid, dbname = '16s'):
 def get_leaf_16s(clade):
   cltree = Phylo.BaseTree.Tree(clade)
   leaves = clade.get_terminals()
-  
   
   l0 = leaves[0]
   p0 = clade.get_path(l0)[-3]
@@ -154,6 +135,8 @@ def get_leaf_16s(clade):
     l.name = 'SEQ%i  '%(ct)
     names.append(l.name)
     ct += 1
+
+  raise Exception()
   arr = array([list(x) for x in rrnas])
   letters = sum( not_equal(arr, ord('-')), 0)
 
@@ -169,10 +152,5 @@ def get_leaf_16s(clade):
   AlignIO.write(align,open(config.dataPath('alignments/halo_16s.fasta'),'w'), 'fasta')
   AlignIO.write(align,open(config.dataPath('alignments/halo_16s.nexus'),'w'), 'nexus')
 
-  t0 = Phylo.BaseTree.Tree(p0)
+  #t0 = Phylo.BaseTree.Tree(p0)
   Phylo.write(t0,open(config.dataPath('trees/halo_16s.newick'), 'w'), 'newick')
-
-  print map(lambda x: x.seq.__str__(), align)
-  raise Exception()
-  print letters
-  return rrnas
