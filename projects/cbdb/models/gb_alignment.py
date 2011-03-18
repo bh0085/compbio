@@ -5,7 +5,7 @@ from sqlalchemy.orm import relation
 import compbio.projects.cbdb
 import compbio.utils.gbid_lookup as gbl
 from compbio import config
-import os, re
+import os, re, sys
 import numpy as np
 from Bio import SeqIO
 import compbio.utils.pbar as pbar
