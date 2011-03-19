@@ -7,7 +7,8 @@ import numpy as np
 import compbio.utils.memo as mem
 import itertools as it
 import matplotlib.pyplot as plt
-
+import scipy.signal as ss
+import matplotlib
 
 def parseNet(num =  1,method = 'tree', reset = False):
   '''
@@ -37,13 +38,11 @@ def parseNet(num =  1,method = 'tree', reset = False):
     
     ntf = np.max(tf) + 1
     nexp = len(description.values()[0]) + 1
-
-    raise Exception()
     
     grid = zeros((ntf,nexp))
     for vals in zip(weight,tf,exp): grid[vals[1], vals[2]] = float(vals[0])
     
-    return grid
+    return grid, description
   return mem.getOrSet(setNet,
     reset = reset, 
     register = method,
@@ -52,6 +51,180 @@ def parseNet(num =  1,method = 'tree', reset = False):
     num = num)
   
   
+def sig_grid(num = 1 ,  method = 'tree', reset = False,
+             plot_kcs = False):
+  grid, descriptions = parseNet(num= num, method = method, reset = reset)
+
+  #Make lambdas to split experiments into categories
+  col_choosers = dict(
+    general_exp = lambda x: x['Perturbations'] == 'NA' and x['Time']  == 'NA' \
+      and x['OverexpressedGenes'] == 'NA' and x['DeletedGenes'] == 'NA',
+    general_ts = lambda x: x['Perturbations'] == 'NA' and x['Time']  != 'NA' \
+      and x['OverexpressedGenes'] == 'NA' and x['DeletedGenes'] == 'NA',
+    drug_perturbation = lambda x: x['Perturbations'] != 'NA' and x['Time']  == 'NA' \
+      and x['OverexpressedGenes'] == 'NA' and x['DeletedGenes'] == 'NA',
+    drug_perturbation_ts = lambda x: x['Perturbations'] != 'NA' and x['Time']  != 'NA' \
+      and x['OverexpressedGenes'] == 'NA' and x['DeletedGenes'] == 'NA',
+    genetic_perturbation = lambda x: x['Perturbations'] == 'NA' and x['Time']  == 'NA' \
+      and ( x['OverexpressedGenes'] != 'NA' or x['DeletedGenes'] != 'NA'),
+    genetic_perturbation_ts = lambda x: x['Perturbations'] == 'NA' and x['Time']  != 'NA' \
+      and ( x['OverexpressedGenes'] != 'NA' or x['DeletedGenes'] != 'NA'),
+    genetic_perturbation_drug= lambda x: x['Perturbations'] != 'NA' and x['Time']  == 'NA' \
+      and ( x['OverexpressedGenes'] != 'NA' or x['DeletedGenes'] != 'NA'),
+    general_perturbation_drug_ts = lambda x: x['Perturbations'] != 'NA' and x['Time']  != 'NA' \
+      and ( x['OverexpressedGenes'] != 'NA' or x['DeletedGenes'] != 'NA' ),
+    )
+  
+  #Split experiments
+  exps = {}
+  for k, v in col_choosers.iteritems():
+    vs = [ dict(zip(descriptions.keys() , elt))
+          for elt in  zip(*descriptions.values()) ]    
+    exps[k] = nonzero( [v(e) for e in vs ])[0]
+
+  f = plt.figure(1, facecolor = 'w')
+  f.clear()
+  axdims= .9
+  ax_box = array([.05,.05,axdims,axdims])
+  ax0 = f.add_axes([0,0,1,1])
+  import compbio.utils.plots as myplots
+  ax0.annotate( 'Heatmaps of experimental significance in TF-Gene edge prediction',
+                ax_box[0:2] + ax_box[2:4], xycoords = 'axes fraction',
+                ha = 'right', va = 'bottom',
+                xytext = [0,10], textcoords= 'offset pixels',
+                size = 'xx-large')
+  ax0.annotate( 'TFs',
+                ax_box[0:2] + [0,ax_box[3]], xycoords = 'axes fraction',
+                ha = 'right', va = 'top',rotation = 90,
+                xytext = [-10,0], textcoords= 'offset pixels',
+                size = 'x-large')
+  ax0.annotate( 'Experiments',
+                ax_box[0:2] + [0,ax_box[3]], xycoords = 'axes fraction',
+                ha = 'left', va = 'bottom',
+                xytext = [0, 10], textcoords= 'offset pixels',
+                size = 'x-large')
+
+  kwts = float(sum([len(v) for  v in exps.values()]))
+  mwidth = .015
+  msize = mwidth*kwts
+  kw_total = kwts +  ( msize * (len(exps)-1))
+  ofs = 0
+
+
+  #Mark experiments that knock out TFS
+  tf_kn_matches =[ sorted(list(it.chain(\
+          nonzero([ 'G{0},'.format(t) in x+',' 
+                    for x in  descriptions['DeletedGenes'] ])[0],
+          nonzero([ 'G{0},'.format(t) in x+',' 
+                    for x in  descriptions['OverexpressedGenes'] ])[0])))
+                   for t in range(shape(grid)[0])]
+
+  knockout_tfs = nonzero([len(k) for k in tf_kn_matches])[0]
+  knockout_cells = array(list(it.chain(*[ [(i, exp) for exp in tf_kn_matches[i] ] 
+                               for i in range(len(tf_kn_matches))])))
+  knockout_vals = grid[zip(*knockout_cells)]
+  allow_tf_kn = False
+  if not allow_tf_kn: grid[zip(*knockout_cells)] = 0
+
+  saturation = [np.percentile(grid[nonzero(greater(grid,0))],10),
+                np.percentile(grid[nonzero(greater(grid,0))],90)]
+  tf_srt = argsort(np.mean(grid,1))
+  all_bps = []
+  expsums = [np.mean( grid.T[v,:], 1) for v in exps.values()]
+  max_sum = np.max((list(it.chain(*expsums))))
+
+  #For each experiment class, plot a heatmap and overlay per exp sums
+  for k , v in exps.iteritems():
+    #Axes positioning
+    wid = len(v)
+    ax_ofs =  array([ofs/kw_total, 0, (wid) / kw_total,1.])
+    ax_box = array([.05,.05,0.,0.])
+    ax_ofs = (ax_ofs * axdims) + ax_box
+    
+
+    #Make heatmap axes.
+    ax = f.add_axes(ax_ofs, frameon = False)
+    sums = np.mean(grid.T[v,:],1)
+    exp_srt = argsort(sums)[::-1]
+    hm.heatMap( grid.T[v[exp_srt],:][:,tf_srt], axes = ax,
+                vmin = saturation[0],
+                vmax = saturation[1])
+
+    #Make overlay axes.
+    ax2 = f.add_axes(array(ax_ofs) +  array([0,0,0,0]),
+                     frameon = True,
+                     axisbg = 'none',
+                     xticks = [],
+                     yticks = [])
+    
+    #Make the axes look the way I like em
+    for a in ax2.spines.values():
+      a.set_linewidth(2)
+      a.set_alpha(.5)
+    these_knockouts = nonzero([c [1]in v for c in knockout_cells])
+    kc = knockout_cells[these_knockouts]
+    kv = knockout_vals[these_knockouts]
+    
+    #If plot kcs is selected, plot the cells corresponding to TF deletion/OE
+    if plot_kcs:  
+      if len(kc) > 0:
+        ax.scatter(*zip(*[( list(v).index(x[1]),x[0]) for x in kc]), s =50, 
+                  color = 'none', edgecolor = 'black', linewidth = 3)
+    color = 'blue'
+    ax2.plot(sums[exp_srt],
+            linewidth = 4, color = color)
+    all_bps.append(sums)
+    ax2.set_xlim([0,wid])
+    ax2.set_ylim([0,max_sum])
+    ax.set_xlim([0,wid])
+    ax.set_ylim([0,shape(grid)[0]])
+    ax2.set_xticks([])
+
+    #Annotate each axios
+    tbb = matplotlib.transforms.Bbox(ax2.bbox).translated(0,-20)
+    t = ax2.text(-2,0, k, 
+                 va = 'bottom', ha = 'right',
+                 rotation = 90, color = 'black',
+                 size = 'x-large', family = 'serif')
+    ofs +=  wid + msize
+
+
+  #Make the boxplot figure
+  f2 = plt.figure(3)
+  plt.clf()
+  ko_sums =  [  mean(grid.T[g[0],:],0) 
+                for g in it.groupby(sorted(\
+        [ko[1] for ko in knockout_cells]))\
+                  ]
+  ax3 = f2.add_subplot('111')
+  boxplots = ax3.boxplot([bp for bp in all_bps+ [ko_sums]], widths= .5)
+  for p in boxplots.values():
+      for e in p: e.set_linewidth(4)
+    
+  #Annotate the boxplot figure
+  ann_str = ''
+  for i in range(9):
+    ann_str += '{0}: {1}\n'.format(i+1, (exps.keys() + ['TF Knockout/OE'])[i])
+  ax3.annotate(ann_str, [0,1],xycoords = 'axes fraction',
+               xytext = [10,-10], textcoords = 'offset pixels',
+               va = 'top', ha = 'left')
+  ax3.set_title('''Boxplot of mean significances per experiment type for {3} learning method, Net {4} 
+
+Filtered out were {0} cells corresponding to {1} TFs Knocked out or OverExpressed.
+{2} of these cells have nonzero importance and are plotted at x=9'''.\
+                  format(len(knockout_cells), len(knockout_tfs),
+                         len(nonzero(knockout_vals)[0]), 
+                         method, num))
+  ax3.set_ylabel('significance')
+  ax3.set_xlabel('experiment class')
+  
+  f.savefig(config.dataPath('daniel/figs/{0}_net{1}_heatmaps.tiff'.format(method, num)),
+            format = 'tiff')
+    
+  f2.savefig(config.dataPath('daniel/figs/{0}_net{1}_boxplots.tiff'.format(method, num)),
+            format = 'tiff')
+    
+
 def linearize(array):
   return reshape(array, product(shape(array)))
 
@@ -79,8 +252,8 @@ def compare(num = 1, reset = False,
     ax = f.add_subplot('111')
     
   
-  net_svm = parseNet(num = num, method = 'svm', reset = reset)
-  net_tree = parseNet(num = num, method = 'tree', reset = reset)
+  net_svm, descriptions = parseNet(num = num, method = 'svm', reset = reset)
+  net_tree, descriptions  = parseNet(num = num, method = 'tree', reset = reset)
 
   if shape(net_svm) != shape(net_tree):
 
@@ -112,7 +285,6 @@ the shapes do not match'''
   srted = argsort(reshape(net_tree,product(shape(net_tree))))
   srted = srted[nonzero(greater(net_svm[srted] * net_tree[srted], 0))[0]]
   
-  #box_indices = numpy.dot(ndims**numpy.arange(ndims), binassign)
 
 
   print 'Correlation coefficient: '

@@ -7,13 +7,15 @@
   ecosystem is populated to throw in metadata that can only
   be set once all of the relevant databases have been created.
 '''
-import compbio.projects.cbdb as cbdb
+import compbio.projects.cbdb
 def gba_fill_data(dbname):
   gba_map_gbids(dbname)
   gba_map_taxa(dbname)
 
 def gba_map_gbids(dbname):
-  dbi = cbdb.getName(dbname, tables =gb_alignment.get_tables())
+  cbdb = compbio.projects.cbdb
+
+  dbi = cbdb.getName(dbname)
   count = 0 
   fail_count =0
   sxs_count =0
@@ -38,7 +40,7 @@ def gba_map_gbids(dbname):
         count = 0
       print prefix
   else:
-    gbacc_dbi = cbdb.getName('gb_acc_idjoin' , gb_accid.get_tables())
+    gbacc_dbi = cbdb.getName('gb_acc_idjoin')
     for s in dbi.Session.query(dbi.Sequence).all():
       try:
         gbid =  gbacc_dbi.Session.query(gbacc_dbi.GBAcc).\
@@ -57,10 +59,9 @@ def gba_map_gbids(dbname):
 
   print fail_count, sxs_count
 def gba_map_taxa(dbname):
-  seq_dbi = cbdb.getName(dbname,
-                         tables = gb_alignment.get_tables())
-  tgb_dbi = cbdb.getName('tax_gbs',
-                         ncbi_tax_gbjoin.get_tables())
+  cbdb = compbio.projects.cbdb
+  seq_dbi = cbdb.getName(dbname)
+  tgb_dbi = cbdb.getName('tax_gbs')
 
   count = 0 
   for  s in seq_dbi.Session.query(seq_dbi.Sequence):

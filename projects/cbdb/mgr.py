@@ -88,7 +88,9 @@ def makeWithNameAndTables(name,  tables,
  
 
   #Create a dbi storing the session and table types.xs
-  attrs = dict(Session = Session, 
+  Session.q = Session.query
+  attrs = dict(Session = Session,
+               S = Session,
                base = base,
                **table_list)
   dbi = type(name+'DBI', (object,), attrs)

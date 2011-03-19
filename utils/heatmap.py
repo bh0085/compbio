@@ -40,7 +40,7 @@ def heatMap(grid,
     ax = figure.add_subplot(111)
     
   ax.imshow(grid.T, cmap = cmap, interpolation = 'nearest',
-            origin = 'lower', aspect = 'auto')
+            origin = 'lower', aspect = 'auto', **kwargs)
 
   xticks, xticklabels, yticklabels = [], [], []
   yticks = []
@@ -104,8 +104,8 @@ def heatMap(grid,
   ax.set_xticklabels(xticklabels)
   ax.set_yticks(yticks)
   ax.set_yticklabels(yticklabels)
-  ax.set_xlabel(xlabel)
-  ax.set_ylabel(ylabel)
+  if xlabel != 'none': ax.set_xlabel(xlabel)
+  if ylabel != 'none': ax.set_ylabel(ylabel)
 
   return ax
 

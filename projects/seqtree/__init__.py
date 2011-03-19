@@ -39,7 +39,7 @@ def init(reset = False):
     assert sxs
 
   for n in it.chain(nwk.get_terminals(),nwk.get_nonterminals()): n.m = {}
-  add_db_metadata(nwk)
+  db_metadata(nwk)
 
   halo = nwk.find_clades(dict(name = 'Halobacteria')).next()
   return nwk, halo
@@ -59,7 +59,7 @@ def clade_gbacc(clade):
   return gbid.group(1)
 
 
-def db_metadata(tree):
+def db_metadata(clade):
   '''
   Get an ncbi genealogy for a clade - e.g: the minimal ncbi node containing
   every terminal of a clade as well as the ncbi nodes at each leaf.
