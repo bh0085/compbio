@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 '''
   This contains a bunch of utilities useful for filling already
   created databases with additional metadata.
@@ -77,3 +78,11 @@ def gba_map_taxa(dbname):
       print 'committing'
       count = 0
   seq_dbi.Session.commit()
+
+import sys
+if __name__ = '__main__':
+  args = sys.args[1:]
+  dbname = args[0]
+  print 'making metadata for {0}'.format(dbname)
+  gba_fill_data(dbname)
+  
