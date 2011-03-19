@@ -3,6 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relation, scoped_session, sessionmaker
 import os
 import numpy as np
+
 import itertools as it
 from sqlalchemy.exc import OperationalError
 import psycopg2
@@ -32,9 +33,7 @@ def getTables(name):
 
   #Try to figure out the database type from the file extension
   #(not including .sqlite)
-  print 'WHAT THE HELL?'
-  print os
-  print 'WHAT THE HELL!?'
+
   name_exts =os.path.splitext(name)
   if len(name_exts) > 1:
     tablefun = ext_lookups.get(name_exts[-1], None)

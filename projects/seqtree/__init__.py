@@ -9,7 +9,7 @@ from Bio.Alphabet import IUPAC, Gapped
 import numpy as np
 
 
-def init(reset = False):
+def init(**kwargs):
   '''
   Read in the 16s tree of life and a random clade corresponding to the
   halobacteria.
@@ -30,19 +30,12 @@ def init(reset = False):
   usage:
     tree, halo = init()
 '''
-  
-  if reset: 
+  def setTree(**kwargs):
     nwk = Phylo.read(config.dataPath('sequences/16s.newick'),"newick")
-    mem.write(value = nwk, register = '16s_tree')
-  else: 
-    nwk, sxs = mem.read(register = '16s_tree')
-    assert sxs
-
-  for n in it.chain(nwk.get_terminals(),nwk.get_nonterminals()): n.m = {}
-  db_metadata(nwk)
-
-  halo = nwk.find_clades(dict(name = 'Halobacteria')).next()
-  return nwk, halo
+    for n in it.chain(nwk.get_terminals(),nwk.get_nonterminals()): n.m = {}
+    db_metadata(nwk)
+    return nwk
+  return mem.getOrSet(setTree, register = 'init', reset = kwargs.get('reset',False))
   
 def clade_gbacc(clade):
   '''
@@ -83,8 +76,7 @@ def db_metadata(clade):
           filter_by(accession = t.m['gbacc']).one().gbid
       taxid = tgb_dbi.Session.query(tgb_dbi.TaxGBJoin).\
           filter_by(gbid = t.m['gbid']).one().taxid
-      t.m['taxnode'] = tax_dbi.Session.query(tax_dbi.Node).\
-          filter_by(id = taxid).one()  
+      t.m['taxid'] = taxid
     except: pass
 
 

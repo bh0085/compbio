@@ -42,7 +42,7 @@ def gba_map_gbids(dbname):
       print prefix
   else:
     gbacc_dbi = cbdb.getName('gb_acc_idjoin')
-    for s in dbi.Session.query(dbi.Sequence).all():
+    for s in dbi.Session.query(dbi.Sequence):
       try:
         gbid =  gbacc_dbi.Session.query(gbacc_dbi.GBAcc).\
             filter_by(accession = s.gb_accession).one().gbid
