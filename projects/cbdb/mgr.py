@@ -26,7 +26,8 @@ def getTables(name):
   name_lookups = {
     'taxdmp':cbdb.ncbi_tax.get_tables,
     'tax_gbs':cbdb.ncbi_tax_gbjoin.get_tables,
-    'gb_acc_idjoin':cbdb.gb_accid.get_tables
+    'gb_acc_idjoin':cbdb.gb_accid.get_tables,
+    '16s': cbdb.gb_alignment.get_tables
     }
 
   #Try to figure out the database type from the file extension
