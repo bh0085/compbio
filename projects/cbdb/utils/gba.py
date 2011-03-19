@@ -8,6 +8,7 @@
   ecosystem is populated to throw in metadata that can only
   be set once all of the relevant databases have been created.
 '''
+from sqlalchemy import func
 import compbio.projects.cbdb
 def gba_fill_data(dbname):
   gba_map_gbids(dbname)
@@ -22,30 +23,17 @@ def gba_map_gbids(dbname):
   sxs_count =0
 
 
-  kind = 'dbsearch'
-  if kind == 'filesearch':
-
-    for s in dbi.Session.query(dbi.Sequence):    
-      acc = s.gb_accession.split('.')[0]
-      prefix = re.compile('[A-Z]*').search(acc).group()
-      try:
-        gbid =  gbl.search_sorted(prefix, acc)
-        s.gb_id = gbid
-        sxs_count +=1
-      except Exception, e:
-        fail_count +=1
-      count += 1
-      if count > 100:
-        dbi.Session.flush()
-        dbi.Session.commit()
-        count = 0
-      print prefix
-  else:
-    gbacc_dbi = cbdb.getName('gb_acc_idjoin')
-    for s in dbi.Session.query(dbi.Sequence):
+  gbacc_dbi = cbdb.getName('gb_acc_idjoin')
+  slc_n = 10000
+  slc_ofs = 0
+  max_ofs =dbi.S.q(func.max(dbi.Sequence.id)).scalar() 
+  while slc_ofs < max_ofs:
+    for s in dbi.Session.query(dbi.Sequence).\
+          filter(dbi.Sequence.id>=slc_ofs).\
+          filter(dbi.Sequence.id<(slc_ofs+slc_n)):
       try:
         gbid =  gbacc_dbi.Session.query(gbacc_dbi.GBAcc).\
-            filter_by(accession = s.gb_accession).one().gbid
+            filter_by(accession = s.gb_accession).first().gbid
         s.gb_id = gbid
         sxs_count += 1
       except:
@@ -56,28 +44,37 @@ def gba_map_gbids(dbname):
         dbi.Session.commit()
         count = 0
         print 'adding'
+    slc_ofs += slc_n
+
   dbi.Session.commit()
 
   print fail_count, sxs_count
 def gba_map_taxa(dbname):
   cbdb = compbio.projects.cbdb
-  seq_dbi = cbdb.getName(dbname)
+  dbi = cbdb.getName(dbname)
   tgb_dbi = cbdb.getName('tax_gbs')
 
   count = 0 
-  for  s in seq_dbi.Session.query(seq_dbi.Sequence):
-    gbid = s.gb_id
-    count += 1
-    if gbid:
-      taxid = tgb_dbi.Session.query(tgb_dbi.TaxGBJoin).\
-          filter_by(gbid = gbid).one()
-      s.source_taxon = taxid.taxid
-    if count > 100:
-      
-      seq_dbi.Session.commit()
-      print 'committing'
-      count = 0
-  seq_dbi.Session.commit()
+  slc_n = 10000
+  slc_ofs = 0
+  max_ofs =dbi.S.q(func.max(dbi.Sequence.id)).scalar() 
+  while slc_ofs < max_ofs:
+    for  s in dbi.Session.query(dbi.Sequence).\
+          filter(dbi.Sequence.id>=slc_ofs).\
+          filter(dbi.Sequence.id<(slc_ofs+slc_n)):
+      gbid = s.gb_id
+      count += 1
+      if gbid:
+        taxid = tgb_dbi.Session.query(tgb_dbi.TaxGBJoin).\
+            filter_by(gbid = gbid).first()
+        s.source_taxon = taxid.taxid
+      if count > 100:
+        
+        dbi.Session.commit()
+        print 'committing'
+        count = 0
+    slc_ofs += slc_n
+  dbi.Session.commit()
 
 import sys
 if __name__ == '__main__':
