@@ -17,7 +17,7 @@ def map_paml(clade, dbi):
         filter_by(source_taxon = nodeid).all()
     seq_lists.append([e.sequence for e in dbelts])
     
-  taxids = dbi.S.q(dbi.Sequence.source_taxon).all()
+  taxids = [x [0] for x in dbi.S.q(dbi.Sequence.source_taxon).all()]
   tidxs = [t.m['taxnode'].id for t in clade.get_terminals()]
   matches = [t for t in taxids if t in tidxs]
 
