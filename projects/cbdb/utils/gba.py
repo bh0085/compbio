@@ -80,7 +80,7 @@ def gba_map_taxa(dbname):
   seq_dbi.Session.commit()
 
 import sys
-if __name__ = '__main__':
+if __name__ == '__main__':
   args = sys.args[1:]
   dbname == args[0]
   print 'making metadata for {0}'.format(dbname)
