@@ -61,7 +61,7 @@ def run_paml(tree_in,ali_in, runid= 'T%05i' % (0,)):
   subprocess.call(command,
                   shell = True)
   os.chdir(old_cwd)
-  rstfile = os.path.join(config.dataPath('paml'),'rst')
+  rstfile = os.path.join(run_d,'rst')
   return rstfile
   
   
@@ -163,6 +163,7 @@ def rst_parser(rstfile):
                                                  name = node.name),
                    probs = m_probs[idx])
     node.seq_probs = m_probs
+    
     m_clades.append(node)
   
   t_clades = []

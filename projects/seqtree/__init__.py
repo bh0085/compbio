@@ -30,16 +30,22 @@ def init(**kwargs):
   usage:
     tree, halo = init()
 '''
+  
+  print 'testing...'
   def setTree(**kwargs):
     nwk = Phylo.read(config.dataPath('sequences/16s.newick'),"newick")
     for n in it.chain(nwk.get_terminals(),nwk.get_nonterminals()): n.m = {}
     db_metadata(nwk)
+    print "SETTING TREE!!!"
     return nwk
+
+  print mem.rl(**kwargs)
+  
   return mem.getOrSet(setTree,
                       name = kwargs.get('name', 'default_tree'),
                       update = kwargs.get('update', None),
                       register = 'init', 
-                      reset = kwargs.get('reset',False))
+                      reset = mem.rl(**kwargs))
   
 def clade_gbacc(clade):
   '''
@@ -73,8 +79,10 @@ def db_metadata(clade):
   gba_dbi = cbdb.getName('gb_acc_idjoin')
   
   #terminal_gbaccs = map(lambda x: clade_gbacc(x), clade.get_terminals())  
-  for t in clade.get_terminals():
+
+  for idx, t in enumerate(clade.get_terminals()):
     try:
+      t.m['id'] = idx
       t.m['gbacc'] = clade_gbacc(t)
       t.m['gbid'] = gba_dbi.Session.query(gba_dbi.GBAcc).\
           filter_by(accession = t.m['gbacc']).one().gbid
@@ -82,6 +90,9 @@ def db_metadata(clade):
           filter_by(gbid = t.m['gbid']).one().taxid
       t.m['taxid'] = taxid
     except: pass
+  max_idx = idx
+  for idx, t in enumerate(clade.get_nonterminals()):
+    t.m['id'] = max_idx + idx
 
 
 def taxRoot():

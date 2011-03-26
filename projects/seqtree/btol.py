@@ -30,12 +30,90 @@ import compbio.projects.cbdb as cbdb
 from compbio.projects.cbdb.helpers import ncbi, ali 
 import compbio.projects.seqtree as sqt
 import compbio.utils.memo as mem
+import compbio.utils.bsub as bsub
 from numpy import *
 import matplotlib.pyplot as plt
 
+
 def run(**kwargs):
+  BT = getBTOL(**mem.sr(kwargs))
+  seqnodes = BT.investigatePhylum(**kwargs)
+  recs, seqelts, seqtuples = seq_recs(seqnodes)
+  align = align_seqnodes(recs)
+  tree = phyml.tree(align)
+  rstfile= paml.run_paml(tree, align)
+  anc_tree = paml.rst_parser(rstfile)
+
+  anc_alignment = [SeqRecord(elt.m['seq'], 
+                             id = None,
+                             name = elt.name,
+                             annotations = {'scores':elt.m['probs']})
+                   for elt in anc_tree.get_nonterminals()]
+  
+
+  return (tree, anc_tree), (align, anc_alignment)
+
+
+def seq_recs(seqnodes, **kwargs):
+  seqtuples = sorted([
+      (sn.seqs[k].replace('-',''),sn.id, sn.seqids[k], k)
+      for sn in seqnodes if len(sn.seqs) > 0  
+      for k  in sn.seqs ], key = lambda x: x[0])
+  
+  seqletters, seqelts = zip(*[(k,list(g)) 
+                              for k, g in it.groupby(seqtuples, key = lambda x: x[0])])
+  recs = [ (SeqRecord(Seq(elt), id = str(seqelts[i][0][3]), name = seqelts[i][0][1]))
+            for i,elt in enumerate(seqletters) ]
+  
+  return recs,  seqelts, seqtuples
+def align_seqnodes(recs,**kwargs):
+  align = muscle.align(recs[0:5])
+  return align
+
+def run_batch(run_id):
+  input_dict = bsub.load_inp(run_id)
+  rank_name = input_dict['rank_name']
+  taxon_id  = input_dict['taxid']
+  
+  seqnodes = BT.investigatePhylum(p_node = p_node)
+  recs, seqelts, seqtuples = seq_recs(seqnodes)
+  align = align_seqnodes(recs)
+  tree = phyml.tree(align, run_id = run_id_str)
+  rstfile= paml.run_paml(tree, align, run_id = run_id_str)
+  anc_tree = paml.rst_parser(rstfile)
+
+  anc_alignment = [SeqRecord(elt.m['seq'], 
+                             id = None,
+                             name = elt.name,
+                             annotations = {'scores':elt.m['probs']})
+                   for elt in anc_tree.get_nonterminals()]
+  out_dict = dict(anc_tree=anc_tree,
+                  anc_align= anc_alignment,
+                  term_tree = tree,
+                  term_align = align)
+  
+def make_batches(aliname, rank_name = 'phylum', do_bsub = False, **kwargs):
+  BT = getBTOL(**mem.sr(kwargs))
+  tree_tax = BT.getTaxon(rank_name)
+  ali_tax = ali.get_taxon_forall(aliname, rank_name)
+  union_tax = set(tree_tax).union(set(ali_tax))
+  union_taxids = [e.id for e in union_tax if e]
+
+  batch_pdicts = [dict(taxid = taxid,
+                       rank_name = rank_name)
+                  for taxid in union_taxids]
+
+
+  cmds = []
+  for idx,  d in enumerate(batch_pdicts):
+    run_id=bsub.get_run_id(idx, prefix = rank_name)
+    bsub.save_inp(d, run_id)
+    cmds.append(bsub.cmd(inspect.stack()[0][1],run_id, do_bsub = do_bsub))
+  return cmds
+
+def getBTOL(**kwargs):
   def setBTOL(**kwargs):
-    B = BTOL(mod(kwargs.get('reset', 0), 2))
+    B = BTOL(**mem.sr(kwargs))
     if not B.treeInitialized():
       print 'Underlying tree structure apparently uninitialized: initializing\n...'
       B.initTree()
@@ -43,45 +121,16 @@ def run(**kwargs):
       B.saveTree()
       print '...\nDone'
     return B
-
-  BT =  mem.getOrSet(setBTOL, register = 'BTOL', **kwargs)
-  seqnodes = BT.investigatePhylum(**kwargs)
-  recs, seqelts, seqtuples = seq_recs(seqnodes)
-  align = align_seqnodes(recs)
-  tree = phyml.tree(align)
-  rstfile= paml.run_paml(tree, align)
-  anc_tree = paml.rst_parser(rstfile)
-  
-  
-
-  return tree, anc_tree
-
-
-def seq_recs(seqnodes, **kwargs):
-  seqtuples = sorted([
-      (sn.seqs[k].replace('-',''),sn.src, sn.seqids[k], k)
-      for sn in seqnodes if len(sn.seqs) > 0  
-      for k  in sn.seqs ], key = lambda x: x[0])
-  
-  seqletters, seqelts = zip(*[(k,list(g)) 
-                              for k, g in it.groupby(seqtuples, key = lambda x: x[0])])
-  recs = [ (SeqRecord(Seq(elt), name = 'S'+seqelts[i][0][2], id = seqelts[i][0][3]))
-            for i,elt in enumerate(seqletters) ]
-  return recs,  seqelts, seqtuples
-def align_seqnodes(recs,**kwargs):
-  align = muscle.align(recs[0:7])
-  return align
-
-def batch():
-  #pnames = 
-  pass
+  return mem.getOrSet(setBTOL, **mem.rc(kwargs, register = 'BTOL'))
 
 class BTOL():
   '''BTOL Class - see module doc: btol?'''
   def __init__(self,
-               reset = False):
-    '''Init with the default tree/dicts from seqtree'''
-    self.t  = sqt.init(reset = mod(reset, 2))
+               **kwargs):
+    self.t  = sqt.init(**mem.sr(kwargs))
+
+
+
   def treeInitialized(self):
     if not 'phylum' in it.chain(*[ leaf.m.keys() for leaf in self.t.get_terminals()[0:10]]):
       return False
@@ -146,18 +195,17 @@ class BTOL():
                **kwargs):
     def setTaxon(BTInstance = None, rank = None, **kwargs):
       assert rank; assert BTInstance
-      leafnodes = BTInstance.leafNodes(**mem.skw(**kwargs))
+      leafnodes = BTInstance.leafNodes(**mem.sr(kwargs))
       leaf_families = [ncbi.get_taxon(node, rank=rank) 
                        if node else None for node in leafnodes]
       return leaf_families
     return mem.getOrSet(setTaxon,
-                        **dict(rank = rank, 
-                               BTInstance = self,
-                               on_fail = 'compute',
-                               hardcopy = False,
-                               register = rank,
-                               reset = mem.rl(**kwargs),
-                               ))
+                        **mem.sr(kwargs, 
+                                 rank = rank, 
+                                 BTInstance = self,
+                                 on_fail = 'compute',
+                                 hardcopy = False,
+                                 register = rank))
 
   def ali_in_tree(self,aliname = 'group2.stk',
                   rank = 'genus',
@@ -171,8 +219,8 @@ class BTOL():
     leafranks =[n.rank if n else None for n in leafnodes]
  
     ali_families = ali.get_taxon_forall(rank = rank,aliname = aliname,
-                                        **mem.skw(**kwargs))
-    leaf_families=  self.getTaxon(rank = rank, **mem.skw(**kwargs))
+                                        **mem.sr(kwargs))
+    leaf_families=  self.getTaxon(rank = rank, **mem.sr(kwargs))
 
     aset = set(ali_families)
     lset = set(leaf_families)
@@ -230,28 +278,28 @@ class BTOL():
   
   def investigatePhylum(self, 
                         aliname = 'group2.stk',
-                        **kwargs):
+                        p_node = None, **kwargs):
 
-    p_node = ncbi.taxon_with_name('phylum', 'Thermotogae')
-    ali_seqs = ali.get_seqs(aliname, **mem.skw(**kwargs))
-    ali_nodes = array(ali.get_taxnodes(aliname, **mem.skw(**kwargs)))
-    ali_phyla = array(ali.get_taxon_forall(aliname, rank = 'phylum',**mem.skw(**kwargs)))
+    if not p_node: p_node = ncbi.taxon_with_name('phylum', 'Thermotogae')
+    ali_seqs = ali.get_seqs(aliname, **mem.sr(kwargs))
+    ali_nodes = array(ali.get_taxnodes(aliname, **mem.sr(kwargs)))
+    ali_phyla = array(ali.get_taxon_forall(aliname,**mem.sr(kwargs, rank = 'phylum')))
     ali_inds = nonzero(equal(ali_phyla, p_node))[0]
     
     leaf_terminals = self.t.get_terminals()
-    leaf_nodes = array(self.leafNodes(**mem.skw(**kwargs)))
-    leaf_phyla = array(self.getTaxon('phylum', **mem.skw(**kwargs)))
+    leaf_nodes = array(self.leafNodes(**mem.sr(kwargs)))
+    leaf_phyla = array(self.getTaxon('phylum', **mem.sr(kwargs)))
     leaf_inds = nonzero(equal(leaf_phyla, p_node))[0]
         
     ap_sub = ali_phyla[ali_inds]
     lp_sub = leaf_phyla[leaf_inds]
 
     ag_sub = array(ali.get_taxon_forsome(ali_nodes[ali_inds],'genus','thermo',
-                                         **mem.skw(**kwargs)))
-    lg_sub = array(self.getTaxon('genus', **mem.skw(**kwargs)))[leaf_inds]
+                                         **mem.sr(kwargs)))
+    lg_sub = array(self.getTaxon('genus', **mem.sr(kwargs)))[leaf_inds]
 
     as_sub = array(ali.get_taxon_forsome(ali_nodes[ali_inds], 'species', 'thermo'))
-    ls_sub = array(self.getTaxon('species',**mem.skw(**kwargs)))[leaf_inds]
+    ls_sub = array(self.getTaxon('species',**mem.sr(kwargs)))[leaf_inds]
 
     db16 = cbdb.getName('16s')
     a_16s= [ db16.S.q(db16.Sequence).
@@ -264,11 +312,17 @@ class BTOL():
     
 
     leaf_sns = [ SeqNode(lg_sub[i],ls_sub[i] , leaf_nodes[idx], 
-                         [(x.sequence, str(x.gb_id)) for x in l_16s[i]],src = leaf_terminals[idx])
+                         [(x.sequence,x.gb_id) 
+                          for x in l_16s[i]],
+                         src = leaf_terminals[idx],
+                         node_id =  'btol:default:{0}'.format(leaf_terminals[idx].m['id']))
                  for i, idx in enumerate(leaf_inds)]
     ali_sns = [ SeqNode(ag_sub[i],as_sub[i] , ali_nodes[idx],
-                        [( x.sequence, str(x.gb_id)) for x in a_16s[i]],src = ali_seqs[idx])
-                 for i, idx in enumerate(ali_inds)]
+                        [( x.sequence,x.gb_id ) 
+                         for x in a_16s[i]],
+                        src = ali_seqs[idx], 
+                        node_id = 'ali:{0}:{1}'.format(aliname,ali_seqs[idx].id))
+                for i, idx in enumerate(ali_inds)]
 
     return list(it.chain(leaf_sns, ali_sns))
 
@@ -280,12 +334,14 @@ class SeqNode(object):
                species_node,
                term_node,
                seqs,
-               src = ''):
+               src = '',
+               node_id = '::'):
     self.family_node = family_node
     self.term_node = term_node
     self.species_node = species_node
     self.src = src
-    
+    self.id = node_id
+
     global sn_ct
     self.name = 'N%03i' % (sn_ct,)
     sn_ct += 1

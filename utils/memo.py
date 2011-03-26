@@ -23,31 +23,34 @@ def claim_reset():
 #  3: UPDATE a new value without calling the function
 
 
-def reset_level(**kwargs):
+
+def _make_reset_level(**kwargs):
+  '''Get the reset level for the current function'''
   reset = kwargs.get('reset', 0)
   if 'resets' in kwargs: 
-    reset = kwargs['resets'].get( inspect.stack()[1][3], reset) 
+    reset = kwargs['resets'].get( inspect.stack()[2][3], reset) 
     #raise Exception()
   return reset
-rl = reset_level
 
-def sub_reset_level(**kwargs):
+def _make_sub_reset_level(**kwargs):
   reset = kwargs.get('reset', 0)
   if 'resets' in kwargs: 
-    reset = kwargs['resets'].get( inspect.stack()[1][3], reset) 
+    reset = kwargs['resets'].get( inspect.stack()[2][3], reset) 
   return mod(reset,2)
-srl = sub_reset_level
 
-def sub_kwargs(**kwargs):
-  kwout = dict(**kwargs)
-  kwout['reset'] = mod(kwargs.get('reset', False),2)
-  return kwout
-skw = sub_kwargs
+def sub_reconcile(kw_new, kw_old = {}, **kwargs):
+  d0 = dict(kw_old)
+  d0.update(kw_new)
+  d0.update(kwargs)
+  d0['reset'] = _make_sub_reset_level(**d0)
+  return d0
+sr = sub_reconcile 
 
 def reconcile(kw_new, kw_old = {}, **kwargs):
   d0 = dict(kw_old)
   d0.update(kw_new)
   d0.update(kwargs)
+  d0['reset'] = _make_reset_level(**d0)
   return d0
 rc = reconcile
   
