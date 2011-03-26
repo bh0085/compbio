@@ -130,6 +130,12 @@ class Aligned:
         print ctrim #trimdots(self.consensus)
         print consform #trimdots(consform)
         
+
+def from_biopython(bp_alignment):
+  '''Take an alignment from biopython and generate an 'Aligned' object
+sufficient for tree building with PhyML etc.'''
+  
+
 #Parse a stockholm file (e.g an rfam alignment of families
 #Return an 'Aligned' object.
 def parse_stk():

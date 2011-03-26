@@ -1,5 +1,5 @@
 import compbio.config as config
-import re
+import re, os
 from numpy import *
 import numpy as np
 import compbio.utils.heatmap as hm
@@ -10,6 +10,27 @@ import matplotlib.pyplot as plt
 import scipy.signal as ss
 import matplotlib
 
+
+def figs():
+  print 'Drawing figs'
+  [sig_grid(method = method, num =num, reset = True, bp_means = True, bp_zeros = True, bp_logs = False) for method in ['tree', 'svm'] for num in [1,3]]
+  print '1 done'
+  [sig_grid(method = method, num =num, reset = True, bp_means = True, bp_zeros = False, bp_logs = False) for method in ['tree', 'svm'] for num in [1,3]]
+
+  print '2 done'
+  [sig_grid(method = method, num =num, reset = True, bp_means = True, bp_zeros = False, bp_logs = True) for method in ['tree', 'svm'] for num in [1,3]]
+
+  print '3 done'
+  [sig_grid(method = method, num =num, reset = True, bp_means = False, bp_zeros = True, bp_logs = False) for method in ['tree', 'svm'] for num in [1,3]]
+
+  print '4 done'
+  [sig_grid(method = method, num =num, reset = True, bp_means = False, bp_zeros = False, bp_logs = False) for method in ['tree', 'svm'] for num in [1,3]]
+  
+  print '5 done'
+  [sig_grid(method = method, num =num, reset = True, bp_means = False, bp_zeros = False, bp_logs = True) for method in ['tree', 'svm'] for num in [1,3]]
+  print 'done'
+
+  
 def parseNet(num =  1,method = 'tree', reset = False):
   '''
   Get one of daniel's nets. Allowable numbers are 1-3 and allowable
@@ -51,12 +72,8 @@ def parseNet(num =  1,method = 'tree', reset = False):
     num = num)
   
   
-def sig_grid(num = 1 ,  method = 'tree', reset = False,
-             plot_kcs = False):
-  grid, descriptions = parseNet(num= num, method = method, reset = reset)
-
-  #Make lambdas to split experiments into categories
-  col_choosers = dict(
+def sg_choosers():
+  return dict(
     general_exp = lambda x: x['Perturbations'] == 'NA' and x['Time']  == 'NA' \
       and x['OverexpressedGenes'] == 'NA' and x['DeletedGenes'] == 'NA',
     general_ts = lambda x: x['Perturbations'] == 'NA' and x['Time']  != 'NA' \
@@ -75,19 +92,8 @@ def sig_grid(num = 1 ,  method = 'tree', reset = False,
       and ( x['OverexpressedGenes'] != 'NA' or x['DeletedGenes'] != 'NA' ),
     )
   
-  #Split experiments
-  exps = {}
-  for k, v in col_choosers.iteritems():
-    vs = [ dict(zip(descriptions.keys() , elt))
-          for elt in  zip(*descriptions.values()) ]    
-    exps[k] = nonzero( [v(e) for e in vs ])[0]
-
-  f = plt.figure(1, facecolor = 'w')
-  f.clear()
-  axdims= .9
-  ax_box = array([.05,.05,axdims,axdims])
+def sg_big_hm_annotations(f, ax_box):
   ax0 = f.add_axes([0,0,1,1])
-  import compbio.utils.plots as myplots
   ax0.annotate( 'Heatmaps of experimental significance in TF-Gene edge prediction',
                 ax_box[0:2] + ax_box[2:4], xycoords = 'axes fraction',
                 ha = 'right', va = 'bottom',
@@ -104,12 +110,35 @@ def sig_grid(num = 1 ,  method = 'tree', reset = False,
                 xytext = [0, 10], textcoords= 'offset pixels',
                 size = 'x-large')
 
+def sig_grid(num = 1 ,  method = 'tree', reset = False,
+             plot_kcs = False,
+             bp_means = False,
+             bp_zeros = False,
+             bp_logs = True):
+  grid, descriptions = parseNet(num= num, method = method, reset = reset)
+
+  #Make lambdas to split experiments into categories
+  col_choosers = sg_choosers()
+  #Split experiments
+  exps = {}
+  for k, v in col_choosers.iteritems():
+    vs = [ dict(zip(descriptions.keys() , elt))
+          for elt in  zip(*descriptions.values()) ]    
+    exps[k] = nonzero( [v(e) for e in vs ])[0]
+
+  #Make and annotate the heatmap figure
+  f = plt.figure(1, facecolor = 'w')
+  f.clear()
+  axdims= .9
+  ax_box = array([.05,.05,axdims,axdims])
+  sg_big_hm_annotations(f, ax_box)
+
+  #Set up the sizes of each group axis in the heatmap figure
   kwts = float(sum([len(v) for  v in exps.values()]))
   mwidth = .015
   msize = mwidth*kwts
   kw_total = kwts +  ( msize * (len(exps)-1))
   ofs = 0
-
 
   #Mark experiments that knock out TFS
   tf_kn_matches =[ sorted(list(it.chain(\
@@ -118,7 +147,6 @@ def sig_grid(num = 1 ,  method = 'tree', reset = False,
           nonzero([ 'G{0},'.format(t) in x+',' 
                     for x in  descriptions['OverexpressedGenes'] ])[0])))
                    for t in range(shape(grid)[0])]
-
   knockout_tfs = nonzero([len(k) for k in tf_kn_matches])[0]
   knockout_cells = array(list(it.chain(*[ [(i, exp) for exp in tf_kn_matches[i] ] 
                                for i in range(len(tf_kn_matches))])))
@@ -126,6 +154,7 @@ def sig_grid(num = 1 ,  method = 'tree', reset = False,
   allow_tf_kn = False
   if not allow_tf_kn: grid[zip(*knockout_cells)] = 0
 
+  #Some more heatmap configuration.
   saturation = [np.percentile(grid[nonzero(greater(grid,0))],10),
                 np.percentile(grid[nonzero(greater(grid,0))],90)]
   tf_srt = argsort(np.mean(grid,1))
@@ -140,7 +169,6 @@ def sig_grid(num = 1 ,  method = 'tree', reset = False,
     ax_ofs =  array([ofs/kw_total, 0, (wid) / kw_total,1.])
     ax_box = array([.05,.05,0.,0.])
     ax_ofs = (ax_ofs * axdims) + ax_box
-    
 
     #Make heatmap axes.
     ax = f.add_axes(ax_ofs, frameon = False)
@@ -173,7 +201,12 @@ def sig_grid(num = 1 ,  method = 'tree', reset = False,
     color = 'blue'
     ax2.plot(sums[exp_srt],
             linewidth = 4, color = color)
-    all_bps.append(sums)
+
+    if bp_means: bpelts = sums
+    else: bpelts = grid.T[v,:].flatten()
+    if not( bp_zeros ): bpelts = bpelts[nonzero(bpelts)]
+    all_bps.append(bpelts)
+
     ax2.set_xlim([0,wid])
     ax2.set_ylim([0,max_sum])
     ax.set_xlim([0,wid])
@@ -192,15 +225,23 @@ def sig_grid(num = 1 ,  method = 'tree', reset = False,
   #Make the boxplot figure
   f2 = plt.figure(3)
   plt.clf()
-  ko_sums =  [  mean(grid.T[g[0],:],0) 
-                for g in it.groupby(sorted(\
-        [ko[1] for ko in knockout_cells]))\
-                  ]
+  
+
+  if bp_means:  bp_kos =  array([  mean(grid.T[g[0],:],0) 
+                             for g in it.groupby(sorted(\
+        [ko[1] for ko in knockout_cells]))
+                             ])
+  else: bp_kos = array(knockout_vals)
+  if not bp_zeros: bp_kos = bp_kos[nonzero(bp_kos)]
+
+  all_bps = all_bps +  [bp_kos]
+
   ax3 = f2.add_subplot('111')
-  boxplots = ax3.boxplot([bp for bp in all_bps+ [ko_sums]], widths= .5)
+  if bp_logs: all_bps = [log(b) for b in all_bps]
+  boxplots = ax3.boxplot([bp for bp in all_bps], widths= .5)
   for p in boxplots.values():
-      for e in p: e.set_linewidth(4)
-    
+      for e in p: e.set_linewidth(4)    
+
   #Annotate the boxplot figure
   ann_str = ''
   for i in range(9):
@@ -208,21 +249,39 @@ def sig_grid(num = 1 ,  method = 'tree', reset = False,
   ax3.annotate(ann_str, [0,1],xycoords = 'axes fraction',
                xytext = [10,-10], textcoords = 'offset pixels',
                va = 'top', ha = 'left')
-  ax3.set_title('''Boxplot of mean significances per experiment type for {3} learning method, Net {4} 
+  ax3.set_title('''Boxplot of significances per experiment type for {3} learning method, Net {4} 
 
 Filtered out were {0} cells corresponding to {1} TFs Knocked out or OverExpressed.
-{2} of these cells have nonzero importance and are plotted at x=9'''.\
+{2} of these cells have nonzero importance and are plotted at x=9,
+
+Showing Means: {5}, Showing zeros: {6}, Plotting logs {7}'''.\
                   format(len(knockout_cells), len(knockout_tfs),
                          len(nonzero(knockout_vals)[0]), 
-                         method, num))
+                         method, num,
+                         bp_means, bp_zeros, bp_logs))
   ax3.set_ylabel('significance')
   ax3.set_xlabel('experiment class')
   
   f.savefig(config.dataPath('daniel/figs/{0}_net{1}_heatmaps.tiff'.format(method, num)),
             format = 'tiff')
+
     
-  f2.savefig(config.dataPath('daniel/figs/{0}_net{1}_boxplots.tiff'.format(method, num)),
-            format = 'tiff')
+  plam = lambda: bp_zeros and not bp_logs and bp_means and 'zeros_means_nolog/'\
+      or not bp_zeros and bp_means and not bp_logs and 'nozeros_means_nolog/'\
+      or not bp_zeros and bp_means and bp_logs and 'nozeros_means_log/'\
+      or bp_zeros and not bp_means and not bp_logs and 'zeros_cells_nolog/'\
+      or not bp_zeros and not bp_means and not bp_logs and 'nozeros_cells_nolog/'\
+      or not bp_zeros and not bp_means and bp_logs and 'nozeros_cells_log/'
+
+  dataDir = config.dataPath('daniel/figs/{2}{0}_net{1}_boxplots.tiff'.\
+                              format(method, num,plam()))
+  print 'saving {0}'.format(dataDir)
+  if not os.path.isdir(os.path.dirname(dataDir)): os.mkdir(os.path.dirname(dataDir))
+  if os.path.isfile(dataDir): os.remove(dataDir)
+  f2.savefig(dataDir,    format = 'tiff')
+  
+  
+  
     
 
 def linearize(array):

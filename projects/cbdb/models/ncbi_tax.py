@@ -34,7 +34,12 @@ def get_maps():
                           'taxid_list':6}
               )
 
-
+def node_repr(self):
+  import compbio.projects.cbdb.helpers.ncbi as ncbi
+  sn = ncbi.sciname(self)
+  if sn: return '{0:15} ({1}) '.format(sn, self.rank) 
+  elif self.names: return '{0:15} ({1})'.format(sn, self.rank)
+  else: return '{0:30} ({1:15})'.format('[unnamed ncbi]',self.rank)
 def get_tables():
   return [dict(name = 'Node',
                attrs = {'id':Column(Integer,primary_key = True),
@@ -56,7 +61,8 @@ def get_tables():
                         'mit_gencode':relation('Gencode', 
                                       primaryjoin="Gencode.id==Node.mit_gencodeid"
                                                ),
-                        'comments':Column(String)
+                        'comments':Column(String),
+                        '__repr__':node_repr
                        }),
           dict(name = 'Name',
                attrs = {'nodeid':Column(Integer, ForeignKey('node.id'), index = True),

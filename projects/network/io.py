@@ -1,3 +1,14 @@
+#!/usr/bin/env python
+'''
+Utilities to read network data including patrick's unsup net 
+and the timecourse/cell line data.
+
+Reads stuff scattered around data/network into python variables.
+Any function can take kwargs including 'reset'. Setting reset=1
+will often fix problems with finding stuff that my utilies assume
+to be precomputed.
+'''
+
 import compbio.utils.memo as mem
 import compbio.config as config
 from numpy import *
@@ -5,7 +16,15 @@ import numpy as np,  itertools as it, os, re
 
 
 def getNet(**kwargs):
-  def setNet():
+  '''Get the saved network from patrick's files.
+
+  output: tuple of dicts keyed by gene/tf names
+
+          trgs: {gname: {color:0.}{weights:[0....]}{tfs:['tfname']}
+                 ...}
+          tfs : {tfname:{color:0.}{weights:[0....]}{tgs:['tfname']}
+                 ...}'''
+  def setNet(**kwargs):
     fpath = config.dataPath('network/patrick/unsup_patrick.txt')
     TC = getTC( reset = mod(kwargs.get('reset',0),2))
     CL = getCL( reset = mod(kwargs.get('reset',0),2))
@@ -56,7 +75,10 @@ def getNet(**kwargs):
   pass
 
 def getTC(**kwargs):
-  def setTC():
+  '''Timecourse data
+
+  output: dictionary keyed by gene names'''
+  def setTC(**kwargs):
     f = open(config.dataPath('network/TC.geneexp')).read()
     elts =f.split('\n')
     seqdict = {}
@@ -75,7 +97,10 @@ def getTC(**kwargs):
   return mem.getOrSet(setTC, **kwargs)
   
 def getCL(**kwargs):
-  def setCL():
+  '''Cell line data
+  
+  output: dict keyed by gene names'''
+  def setCL(**kwargs):
     f = open(config.dataPath('network/CL.geneexp')).read()
     elts =f.split('\n')
     seqdict = {}
@@ -94,7 +119,8 @@ def getCL(**kwargs):
   return mem.getOrSet(setCL, **kwargs)
 
 def getSush(**kwargs):
-  def setSush():
+  '''Get sushmita's regression weights and biases'''
+  def setSush(**kwargs):
     path = config.dataPath('network/network_predmodel/regressionwts/fRN')
     bias_files = [ os.path.join( path, f) for f in os.listdir(path)  if 'bias' in f ]
     nw_files = [ os.path.join( path, f) for f in os.listdir(path)  if 'nw' in f ]

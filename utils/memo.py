@@ -17,26 +17,76 @@ def claim_reset():
 #if writenet is called without a name, use the value
 #default.
 
+#Basically, getorset can do three things
+#  1: SET the stored value for the output of a function
+#  2: GET the stored value for the output of function
+#  3: UPDATE a new value without calling the function
+
+
+def reset_level(**kwargs):
+  reset = kwargs.get('reset', 0)
+  if 'resets' in kwargs: 
+    reset = kwargs['resets'].get( inspect.stack()[1][3], reset) 
+    #raise Exception()
+  return reset
+rl = reset_level
+
+def sub_reset_level(**kwargs):
+  reset = kwargs.get('reset', 0)
+  if 'resets' in kwargs: 
+    reset = kwargs['resets'].get( inspect.stack()[1][3], reset) 
+  return mod(reset,2)
+srl = sub_reset_level
+
+def sub_kwargs(**kwargs):
+  kwout = dict(**kwargs)
+  kwout['reset'] = mod(kwargs.get('reset', False),2)
+  return kwout
+skw = sub_kwargs
+
+def reconcile(kw_new, kw_old = {}, **kwargs):
+  d0 = dict(kw_old)
+  d0.update(kw_new)
+  d0.update(kwargs)
+  return d0
+rc = reconcile
+  
 def getOrSet(function, **kwargs):
   reset = kwargs.get('reset', False)
-  name = kwargs.get('name','default')
-  hardcopy = kwargs.get('hardcopy', True)
   register = kwargs.get('register', 'a')
+  name = kwargs.get('name',register)
+  hardcopy = kwargs.get('hardcopy', True)
   np = kwargs.get('np', False)
+  update = kwargs.get('update', None)
+  on_fail = kwargs.get('on_fail', 'error')
   caller_name = inspect.stack()[1][3]
-  if not reset:
+  
+  
+  if update != None:
+    out = update
+    write(name = name, value = out,  hardcopy = hardcopy, np = np,
+          register = register, caller_name = caller_name)
+  elif not reset:
     out, sxs = read(name = name, hardcopy = hardcopy, np = np, 
                     register = register, caller_name = caller_name)
-    assert sxs, 'Data recovery failed for name ' + caller_name
-  else:
+    if not sxs:
+      if on_fail == 'compute': 
+        print 'memo.py:\n  Fetch failed for {0}, name: {1}\n  "compute" flag is set'.\
+            format(caller_name,name)
+        print '  computing a new value {1}'
+        reset = True
+      else: assert 0, 'Data recovery failed for name ' + caller_name
+
+  if reset:
     out = function(**kwargs)
     write(name = name, value = out,  hardcopy = hardcopy, np = np,
           register = register, caller_name = caller_name)
   return out
     
 
-def write(name = 'default',value = None, hardcopy = True, np = False, 
+def write(name = None,value = None, hardcopy = True, np = False, 
           register= 'a', caller_name = None):
+    if name == None: name = register
     if not caller_name: caller_name = inspect.stack()[1][3]
     savename = caller_name + '_' +name + '.memo'
  
@@ -56,15 +106,16 @@ def write(name = 'default',value = None, hardcopy = True, np = False,
 
 #if readnet is called without a name, it just
 #returns the most recently globalized net.
-def read(name = 'default', hardcopy = True,np = False, 
+def read(name = None, hardcopy = True,np = False, 
          register = 'a', caller_name = None):
+    if name == None: name = register
     sxs = False
     out = -1
 
     if not caller_name:caller_name = inspect.stack()[1][3]
     try:
         lname = globals()['lastname_'+caller_name+register]
-        if lname == name or name == 'default':
+        if lname == name or name == register:
             return globals()['last_'+caller_name+register], True
         else: 
             raise Exception()
@@ -76,7 +127,10 @@ def read(name = 'default', hardcopy = True,np = False,
 
         if hardcopy:
             path = os.path.join(config.getTempPath(), savename)
-            f = open(path,'r')
+            try:
+              f = open(path,'r')
+            except Exception as e:
+              return out, sxs
             if np:
                 out = load(f)
                 sxs = True

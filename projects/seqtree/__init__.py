@@ -35,7 +35,11 @@ def init(**kwargs):
     for n in it.chain(nwk.get_terminals(),nwk.get_nonterminals()): n.m = {}
     db_metadata(nwk)
     return nwk
-  return mem.getOrSet(setTree, register = 'init', reset = kwargs.get('reset',False))
+  return mem.getOrSet(setTree,
+                      name = kwargs.get('name', 'default_tree'),
+                      update = kwargs.get('update', None),
+                      register = 'init', 
+                      reset = kwargs.get('reset',False))
   
 def clade_gbacc(clade):
   '''
