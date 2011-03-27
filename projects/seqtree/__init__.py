@@ -38,14 +38,12 @@ def init(**kwargs):
     db_metadata(nwk)
     print "SETTING TREE!!!"
     return nwk
-
-  print mem.rl(**kwargs)
   
   return mem.getOrSet(setTree,
-                      name = kwargs.get('name', 'default_tree'),
-                      update = kwargs.get('update', None),
-                      register = 'init', 
-                      reset = mem.rl(**kwargs))
+                      **mem.rc( name = kwargs.get('name', 'default_tree'),
+                                update = kwargs.get('update', None),
+                                on_fail = 'compute',
+                                register = 'init')
   
 def clade_gbacc(clade):
   '''
