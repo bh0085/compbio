@@ -53,7 +53,7 @@ def run_paml(tree_in,ali_in, run_id= 'T%05i' % (0,)):
   command = 'baseml {0} '.format(ctlfilepath)
 
   #fix a damned paml bug.
-  sed_command = "echo {0} | xargs sed -i '' '1 s/$/\ \ I/'"\
+  sed_command = "sed -i {0} -e '1 s/$/\ \ I/'"\
       .format(alifilepath)
   
   subprocess.call(sed_command, shell = True)
