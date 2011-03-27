@@ -20,7 +20,7 @@ Using the metric on the tree, it is able to compute distances between sequence
 
 '''
 import inspect
-import itertools as it, os
+import itertools as it, os, subprocess
 import compbio.utils.pbar as pbar
 
 import Bio.Phylo.Newick as nt
@@ -69,7 +69,7 @@ def seq_recs(seqnodes, **kwargs):
   
   return recs,  seqelts, seqtuples
 def align_seqnodes(recs,**kwargs):
-  align = muscle.align(recs[0:5])
+  align = muscle.align(recs)
   return align
 
 
@@ -348,7 +348,7 @@ def run_anc(input_dict,run_id = None):
   
 def make_anc_batches(aliname, rank_name = 'phylum', 
                      do_bsub = False,
-                     run = True, nrun = 0, 
+                     run = False, nrun = 0, 
                      **kwargs):
   BT = getBTOL(**mem.sr(kwargs))
   tree_tax = BT.getTaxon(rank_name)
@@ -368,8 +368,11 @@ def make_anc_batches(aliname, rank_name = 'phylum',
     bsub.save_inp(d, run_id)
     cmds.append(bsub.cmd(os.path.abspath(inspect.stack()[0][1]),'run_anc',run_id, do_bsub = do_bsub, run_id = run_id))
 
-  #if run:
-    
+  if run:
+    for c in cmds:
+      out = subprocess.call(c, shell = True)
+      print out
+
   return cmds
                
 
@@ -389,6 +392,7 @@ if __name__ == "__main__":
   bsub.save_out( output_dict, run_id)
 
   exit(0)
+
 
 
 
