@@ -40,10 +40,10 @@ def init(**kwargs):
     return nwk
   
   return mem.getOrSet(setTree,
-                      **mem.rc( name = kwargs.get('name', 'default_tree'),
-                                update = kwargs.get('update', None),
+                      **mem.rc( kwargs, 
+                                name = kwargs.get('name', 'default_tree'),
                                 on_fail = 'compute',
-                                register = 'init')
+                                register = 'init'))
   
 def clade_gbacc(clade):
   '''
