@@ -35,7 +35,7 @@ def get_taxon_forall(aliname,
                      **kwargs):
   def setTaxon(aliname = None, rank = None,**kwargs):
     assert aliname != None and rank != None
-    nodes = get_taxnodes(aliname,**mem.skw(**kwargs))
+    nodes = get_taxnodes(aliname,**mem.sr(kwargs))
     taxon = [ncbi.get_taxon(node, rank=rank) 
              if node else None for node in nodes]
     return taxon
@@ -50,7 +50,7 @@ def get_taxon_forall(aliname,
 def get_taxnodes(dbname, **kwargs):
   def set_taxnodes(**kwargs):
     
-    all_seqs = get_seqs(dbname,**mem.skw(**kwargs))
+    all_seqs = get_seqs(dbname,**mem.sr(kwargs))
     seq_taxa = [s.source_taxon 
                    if s.source_taxon else None 
                    for s in all_seqs]

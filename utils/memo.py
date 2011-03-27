@@ -76,7 +76,6 @@ def getOrSet(function, **kwargs):
       if on_fail == 'compute': 
         print 'memo.py:\n  Fetch failed for {0}, name: {1}\n  "compute" flag is set'.\
             format(caller_name,name)
-        print '  computing a new value {1}'
         reset = True
       else: assert 0, 'Data recovery failed for name ' + caller_name
 

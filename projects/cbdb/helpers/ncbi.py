@@ -1,11 +1,32 @@
+#!/usr/bin/env python
+'''
+A suite of helpers for the sqlite ncbi databases. Mostly for taxdmp.
+
+Computes and caches in memory the outcome of various database calls.
+
+Functions returning taxnode(s) after global queries to taxdmp:
+  get_rank(rankname) 
+  get_root()
+  get_node(nodeid)
+  
+Functions taking a node and returning other nodes:
+  get_ancestors(node)
+  get_taxon(node, rank) 
+
+Other:
+  sciname(node)
+  taxon_with_name(rank, name)
+'''
+
 import compbio.projects.cbdb as cbdb
 import compbio.utils.memo as mem
 
-def get_rank(rankname = 'phylum'):
+def get_rank(rankname):
   dbi = cbdb.getName('taxdmp')
   rank = dbi.S.q(dbi.Node).\
       filter_by(rank = rankname).all()
   return rank
+
 
 def get_root():
   dbi = cbdb.getName('taxdmp')

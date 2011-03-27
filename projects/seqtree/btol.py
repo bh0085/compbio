@@ -4,7 +4,9 @@ The btol class contains an instances of the microbial tree of life annotated
 with nodes in the ncbi taxonomy whenever nodes are available for the genbank
 accessions with which terminals are marked.
 
-BTOL contains methods with which to map non-terminal nodes to phyla when
+BTOL contains one batch processing script at the moment
+
+BTOL also contains methods with which to map non-terminal nodes to phyla when
 possible, to fetch sequences from mapped alignment databases and put them
 at appropriate nodes and to fetch genomes as well.
 
@@ -18,7 +20,7 @@ Using the metric on the tree, it is able to compute distances between sequence
 
 '''
 import inspect
-import itertools as it
+import itertools as it, os
 import compbio.utils.pbar as pbar
 
 import Bio.Phylo.Newick as nt
@@ -70,46 +72,6 @@ def align_seqnodes(recs,**kwargs):
   align = muscle.align(recs[0:5])
   return align
 
-def run_batch(run_id):
-  input_dict = bsub.load_inp(run_id)
-  rank_name = input_dict['rank_name']
-  taxon_id  = input_dict['taxid']
-  
-  seqnodes = BT.investigatePhylum(p_node = p_node)
-  recs, seqelts, seqtuples = seq_recs(seqnodes)
-  align = align_seqnodes(recs)
-  tree = phyml.tree(align, run_id = run_id_str)
-  rstfile= paml.run_paml(tree, align, run_id = run_id_str)
-  anc_tree = paml.rst_parser(rstfile)
-
-  anc_alignment = [SeqRecord(elt.m['seq'], 
-                             id = None,
-                             name = elt.name,
-                             annotations = {'scores':elt.m['probs']})
-                   for elt in anc_tree.get_nonterminals()]
-  out_dict = dict(anc_tree=anc_tree,
-                  anc_align= anc_alignment,
-                  term_tree = tree,
-                  term_align = align)
-  
-def make_batches(aliname, rank_name = 'phylum', do_bsub = False, **kwargs):
-  BT = getBTOL(**mem.sr(kwargs))
-  tree_tax = BT.getTaxon(rank_name)
-  ali_tax = ali.get_taxon_forall(aliname, rank_name)
-  union_tax = set(tree_tax).union(set(ali_tax))
-  union_taxids = [e.id for e in union_tax if e]
-
-  batch_pdicts = [dict(taxid = taxid,
-                       rank_name = rank_name)
-                  for taxid in union_taxids]
-
-
-  cmds = []
-  for idx,  d in enumerate(batch_pdicts):
-    run_id=bsub.get_run_id(idx, prefix = rank_name)
-    bsub.save_inp(d, run_id)
-    cmds.append(bsub.cmd(inspect.stack()[0][1],run_id, do_bsub = do_bsub))
-  return cmds
 
 def getBTOL(**kwargs):
   def setBTOL(**kwargs):
@@ -357,8 +319,76 @@ class SeqNode(object):
                                       self.term_node.rank)
 
     
+
+def run_anc(input_dict,run_id = None):
+  assert run_id
+  rank_name = input_dict['rank_name']
+  taxon_id  = input_dict['taxid']
+  aliname = input_dict['aliname']
+  
+  BT = getBTOL()
+  p_node = ncbi.get_node(taxon_id)
+  seqnodes = BT.investigatePhylum(p_node = p_node)
+  recs, seqelts, seqtuples = seq_recs(seqnodes)
+  align = align_seqnodes(recs)
+  tree = phyml.tree(align, run_id = run_id)
+  rstfile= paml.run_paml(tree, align, run_id = run_id)
+  anc_tree = paml.rst_parser(rstfile)
+
+  anc_alignment = [SeqRecord(elt.m['seq'], 
+                             id = None,
+                             name = elt.name,
+                             annotations = {'scores':elt.m['probs']})
+                   for elt in anc_tree.get_nonterminals()]
+  out_dict = dict(anc_tree=anc_tree,
+                  anc_align= anc_alignment,
+                  term_tree = tree,
+                  term_align = align)
+  return out_dict
+  
+def make_anc_batches(aliname, rank_name = 'phylum', 
+                     do_bsub = False,
+                     run = True, nrun = 0, 
+                     **kwargs):
+  BT = getBTOL(**mem.sr(kwargs))
+  tree_tax = BT.getTaxon(rank_name)
+  ali_tax = ali.get_taxon_forall(aliname, rank_name)
+  union_tax = set(tree_tax).intersection(set(ali_tax))
+  union_taxids = [e.id for e in union_tax if e]
+
+  batch_pdicts = [dict(taxid = taxid,
+                       rank_name = rank_name,
+                       aliname = aliname)
+                  for taxid in union_taxids]
+
+
+  cmds = []
+  for idx,  d in enumerate(batch_pdicts):
+    run_id=bsub.get_run_id(idx, prefix = rank_name)
+    bsub.save_inp(d, run_id)
+    cmds.append(bsub.cmd(os.path.abspath(inspect.stack()[0][1]),'run_anc',run_id, do_bsub = do_bsub, run_id = run_id))
+
+  #if run:
+    
+  return cmds
                
 
+def usage():
+  print '''
+usage: btol.py run_id
+
+Run a batch process on BTOL with inputs stored in 
+data/batch/inputs/{run_id}.inp in pickle serial.
+'''
 if __name__ == "__main__":
-  run()
+  if len(sys.argv) < 3: usage()
+  run_id = sys.argv[2]
+  run_func = globals()[sys.argv[1]]
+  input_dict = bsub.load_inp(run_id)
+  output_dict = run_func(input_dict, run_id)
+  bsub.save_out( output_dict, run_id)
+
   exit(0)
+
+
+

@@ -16,7 +16,7 @@ import Bio.AlignIO as aio
 import compbio.config as config
 import re, itertools as it, subprocess, os
 
-def run_paml(tree_in,ali_in, runid= 'T%05i' % (0,)):
+def run_paml(tree_in,ali_in, run_id= 'T%05i' % (0,)):
   '''
   Given an input tree in the form of a Biopython tree
   with branch lengths and names, write to a file and 
@@ -24,25 +24,25 @@ def run_paml(tree_in,ali_in, runid= 'T%05i' % (0,)):
   ancestry in the path data/paml/rst  '''
 
   paml_d = config.dataPath('paml')
-  run_d = config.dataPath(os.path.join(paml_d , 'run_{0}'.format(runid)))
+  run_d = config.dataPath(os.path.join(paml_d , 'run_{0}'.format(run_id)))
   if not os.path.isdir(paml_d): os.mkdir(paml_d)
   if not os.path.isdir(run_d): os.mkdir(run_d)
   old_cwd = os.getcwd()
   os.chdir(run_d)
 
-  outfilepath = 'paml_tree_{0}.paml'.format(runid)
+  outfilepath = 'paml_tree_{0}.paml'.format(run_id)
   
-  treefilepath = 'paml_tree_{0}.newick'.format(runid)
+  treefilepath = 'paml_tree_{0}.newick'.format(run_id)
   treefile = open(treefilepath,'w')
   phylo.write(tree_in,treefile,'newick', plain = True)
   treefile.close()
 
-  alifilepath ='paml_tree_{0}.phylip' .format(runid)
+  alifilepath ='paml_tree_{0}.phylip' .format(run_id)
   alifile = open(alifilepath, 'w')
   aio.write(ali_in, alifile, 'phylip')
   alifile.close()
 
-  ctlfilepath= 'baseml_{0}.ctl'.format(runid)
+  ctlfilepath= 'baseml_{0}.ctl'.format(run_id)
   ctlfile = open(ctlfilepath,'w')
   ctlfile.write(make_baseml(treefilepath,
                             alifilepath,
