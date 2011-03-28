@@ -384,12 +384,23 @@ Run a batch process on BTOL with inputs stored in
 data/batch/inputs/{run_id}.inp in pickle serial.
 '''
 if __name__ == "__main__":
-  if len(sys.argv) < 3: usage()
-  run_id = sys.argv[2]
-  run_func = globals()[sys.argv[1]]
-  input_dict = bsub.load_inp(run_id)
-  output_dict = run_func(input_dict, run_id)
-  bsub.save_out( output_dict, run_id)
+  if len(sys.argv) == 1:
+    usage()
+  elif len(sys.argv) == 2:
+    run_fun =  globals()[sys.argv[1]]
+    if run_fun == make_anc_batches:
+      run_fun(do_bsub = True,
+              rank_name = 'phylum',
+              run = True)
+    else:
+      usage()
+      raise Exception('Unhandled case for btol with nargs = 1')
+  else:
+    run_id = sys.argv[2]
+    run_func = globals()[sys.argv[1]]
+    input_dict = bsub.load_inp(run_id)
+    output_dict = run_func(input_dict, run_id)
+    bsub.save_out( output_dict, run_id)
 
   exit(0)
 
