@@ -58,7 +58,7 @@ def run(**kwargs):
 
 def seq_recs(seqnodes, **kwargs):
   seqtuples = sorted([
-      (sn.seqs[k].replace('-',''),sn.id, sn.seqids[k], k)
+      (sn.seqs[k].replace('-',''),sn.id, sn.seqids[k], k, sn.seqranks[k])
       for sn in seqnodes if len(sn.seqs) > 0  
       for k  in sn.seqs ], key = lambda x: x[0])
   
@@ -269,18 +269,33 @@ class BTOL():
     l_16s= [ db16.S.q(db16.Sequence).
              filter_by(source_taxon = n.id).all() for n in leaf_nodes[leaf_inds]]
 
+    #fill any empty nodes... (those lacking 16s rRNA)
+    for idx, elt in enumerate(a_16s):
+      cur_node= ali_nodes[ali_inds[idx]]
+      while not elt:
+        cur_node = cur_node.parent
+        elt.extend(db16.S.q(db16.Sequence).filter_by(source_taxon = cur_node.id).all())
+
+    for idx, elt in enumerate(l_16s):
+      cur_node= leaf_nodes[leaf_inds[idx]]
+      while not elt:
+        cur_node = cur_node.parent
+        elt.extend(db16.S.q(db16.Sequence).filter_by(source_taxon = cur_node.id).all())
+
+
+
     all_lens = dict([ (k, [len(list( e)) for e in seqlist] )  
                       for seqlist,k in [[a_16s,'a_16s'],[l_16s,'l_16s']]])
     
 
     leaf_sns = [ SeqNode(lg_sub[i],ls_sub[i] , leaf_nodes[idx], 
-                         [(x.sequence,x.gb_id) 
+                         [(x.sequence,x.gb_id, x.source_taxon, ncbi.get_node(x.source_taxon).rank) 
                           for x in l_16s[i]],
                          src = leaf_terminals[idx],
                          node_id =  'btol:default:{0}'.format(leaf_terminals[idx].m['id']))
                  for i, idx in enumerate(leaf_inds)]
     ali_sns = [ SeqNode(ag_sub[i],as_sub[i] , ali_nodes[idx],
-                        [( x.sequence,x.gb_id ) 
+                        [( x.sequence,x.gb_id , x.source_taxon, ncbi.get_node(x.source_taxon).rank) 
                          for x in a_16s[i]],
                         src = ali_seqs[idx], 
                         node_id = 'ali:{0}:{1}'.format(aliname,ali_seqs[idx].id))
@@ -310,6 +325,8 @@ class SeqNode(object):
 
     self.seqs = dict([(self.name+'_%02i'%idx , seq[0]) for idx, seq in enumerate(seqs)])
     self.seqids = dict([(self.name+'_%02i'%idx , seq[1]) for idx, seq in enumerate(seqs)])
+    self.seqranks = dict([(self.name+'_%02i'%idx , seq[3]) for idx, seq in enumerate(seqs)])
+    self.seqtaxa = dict([(self.name+'_%02i'%idx , seq[2]) for idx, seq in enumerate(seqs)])
 
 
   def __repr__(self):
@@ -330,6 +347,7 @@ def run_anc(input_dict,run_id = None):
   p_node = ncbi.get_node(taxon_id)
   seqnodes = BT.investigatePhylum(p_node = p_node)
   recs, seqelts, seqtuples = seq_recs(seqnodes)
+
   align = align_seqnodes(recs)
   tree = phyml.tree(align, run_id = run_id)
   rstfile= paml.run_paml(tree, align, run_id = run_id)
@@ -389,7 +407,8 @@ if __name__ == "__main__":
   elif len(sys.argv) == 2:
     run_fun =  globals()[sys.argv[1]]
     if run_fun == make_anc_batches:
-      run_fun(do_bsub = True,
+      run_fun('group2.stk', 
+              do_bsub = True,
               rank_name = 'phylum',
               run = True)
     else:
