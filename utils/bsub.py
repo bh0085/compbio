@@ -13,9 +13,9 @@ class eyeball(object):
            ):
     
     if name == None:
-      runid_prefix = os.path.splitext(os.path.basename(scr_path))[0]
+      runid_prefix = os.path.splitext(os.path.basename(scr_path))[0][-5:]
     else:
-      runid_prefix = runid_prefix
+      runid_prefix = runid_prefix[-5:]
 
     raise Exception()
 
