@@ -20,11 +20,11 @@ class eyeball(object):
 
     do_bsub = True
     cmds = []
-    self.run_ids = []
+    self.run_names , self.run_ids = [], []
     for idx,  d in enumerate(inp_dicts):
       run_id=get_run_id(idx, prefix = runid_prefix)
       save_inp(d, run_id)
-      self.run_ids.append(run_id)
+      self.run_names.append(run_id)
       cmds.append(cmd(scr_path,\
                         ' '.join(scriptargs),\
                         run_id,\
@@ -33,6 +33,9 @@ class eyeball(object):
     for c in cmds:
       out = subprocess.Popen(c, stdout = subprocess.PIPE, shell = True).\
           communicate()
+      self.run_ids.append(re.compile('Job <([\d]+)>').search(out).group(1))
+
+    raise Exception()
     
         
 
