@@ -42,6 +42,7 @@ class eyeball(object):
         communicate()[0]
     lines = '\n'.split(jobs)
     cols, lines = lines[0],lines[1:]
+    raise Exception()
     return lines
     
   def await():
