@@ -29,7 +29,6 @@ class eyeball(object):
                         run_id,\
                         do_bsub = do_bsub,\
                         run_id = run_id))
-    raise Exception()
     for c in cmds:
       out = subprocess.Popen(c, stdout = subprocess.PIPE, shell = True).\
           communicate()
