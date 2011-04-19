@@ -20,7 +20,7 @@ class eyeball(object):
     self.run_ids = []
     for idx,  d in enumerate(inp_dicts):
       run_id=get_run_id(idx, prefix = runid_prefix)
-      bsub.save_inp(d, run_id)
+      save_inp(d, run_id)
       self.run_ids.append(run_ids)
       cmds.append(cmd(os.path.abspath(inspect.stack()[0][1]),\
                              ' '.join(scriptargs),\
