@@ -27,7 +27,9 @@ def seismic(yvecs_in,
             labelinds =None,
             fig = None,
             stacked = False,
-            ymarkpts = None):
+            ymarkpts = None,
+            xmarkpts = None,
+            xmark_colors = None):
 
         
 
@@ -43,7 +45,6 @@ def seismic(yvecs_in,
     if labelinds == None:
         labelinds = arange(n)
 
-
     if not ax:
         if not fig: 
             fig = plt.figure(0)
@@ -53,14 +54,10 @@ def seismic(yvecs_in,
             ax = fig.add_axes([0,0,1,1],frameon = False)
         else:
             ax = fig.add_subplot(subplot)
-
     if xax == None:
         xax = arange(nx)
-
     xbounds = [min(xax),max(xax)]
-
     xax = array(xax)
-    
     plt.axis(axison)
 
     #Just color everything blue if color is unspecified
@@ -79,10 +76,8 @@ def seismic(yvecs_in,
     max_y = np.max(yvecs)
     max_sum_y = np.max(np.sum(yvecs,0))
     for i in range(n):
-        if not labelspace:
-            fracmax = 1
-        else:
-            fracmax = .75
+        if not labelspace: fracmax = 1
+        else: fracmax = .75
 
         yfrac = 1.0/2.0/(n) * fracmax
         ypad = 1.1
@@ -104,9 +99,21 @@ def seismic(yvecs_in,
                             edgecolor = edgecolor,
                             linewidth =linewidth,
                             facecolor = colors[i])
+            if xmarkpts != None:
+              if not shape(xmarkpts): these_marks = [xmarkpts]
+              elif not shape(xmarkpts[i]): these_marks = [xmarkpts[i]]
+              else: these_marks = xmarkpts[i]
+              if not xmark_colors:
+                xmark_colors = ['black'] * len(these_marks)
+              for idx,xm in enumerate(these_marks):
+                xmark_ys = [interp( xmarkpts[i],xax[xinds], yup),
+                            interp(xmarkpts[i], xax[xinds], ydown)]
+
+                ax.plot([xm] *2 , xmark_ys, color =xmark_colors[idx], linewidth = 2)
+                print xmark_ys, [xm] * 2
+                print xax[xinds]
+              
         else:
-
-
             if i == 0: ydown = array(ysofar)
             yofs = 0
             scl = 1.0/max_sum_y
@@ -123,16 +130,11 @@ def seismic(yvecs_in,
             ymarkpts = [min(ysofar),max(ysofar)]
 
         if not stacked:
-            if i in labelinds:
-                dolabel = True
-            else:
-                dolabel = False
-        elif i == n -1:
-            dolabel = True
-        else:
-            dolabel = False
+            if i in labelinds: dolabel = True
+            else: dolabel = False
+        elif i == n -1:    dolabel = True
+        else:  dolabel = False
 
-        print dolabel
         if dolabel:
 
             if y_marked:

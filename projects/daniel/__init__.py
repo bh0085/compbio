@@ -9,7 +9,8 @@ import itertools as it
 import matplotlib.pyplot as plt
 import scipy.signal as ss
 import matplotlib
-
+import compbio.utils.colors as mycolors
+import compbio.utils.seismic as seismic
 
 def figs():
   print 'Drawing figs'
@@ -46,19 +47,22 @@ def parseNet(num =  1,method = 'tree', reset = False):
     split_re = re.compile('\s')
     
     desc_open = open(description_path)
-    description_cols = split_re.split(desc_open.readline().strip())
+    description_cols = split_re.split(desc_open.readline().strip()) + ['Exp_Index']
     description_vals = [split_re.split(l.strip()) for l in desc_open.readlines()]
+    for idx, d in enumerate(description_vals): d.append(idx)
     
+
     data_open = open(data_path)
     weight, tf, exp = zip(*[array(split_re.split(l.strip()), float) 
                            for l in data_open.readlines()])
+    exp  = [ e -1 for e in exp]
     description = {}
     for i in range(len(description_cols)): 
       description[description_cols[i]] = [d[i] for d in description_vals]
       
     
     ntf = np.max(tf) + 1
-    nexp = len(description.values()[0]) + 1
+    nexp = len(description.values()[0]) 
     
     grid = zeros((ntf,nexp))
     for vals in zip(weight,tf,exp): grid[vals[1], vals[2]] = float(vals[0])
@@ -74,21 +78,21 @@ def parseNet(num =  1,method = 'tree', reset = False):
   
 def sg_choosers():
   return dict(
-    general_exp = lambda x: x['Perturbations'] == 'NA' and x['Time']  == 'NA' \
+    general = lambda x: x['Perturbations'] == 'NA' and x['Time']  == 'NA' \
       and x['OverexpressedGenes'] == 'NA' and x['DeletedGenes'] == 'NA',
     general_ts = lambda x: x['Perturbations'] == 'NA' and x['Time']  != 'NA' \
       and x['OverexpressedGenes'] == 'NA' and x['DeletedGenes'] == 'NA',
-    drug_perturbation = lambda x: x['Perturbations'] != 'NA' and x['Time']  == 'NA' \
+    drug = lambda x: x['Perturbations'] != 'NA' and x['Time']  == 'NA' \
       and x['OverexpressedGenes'] == 'NA' and x['DeletedGenes'] == 'NA',
-    drug_perturbation_ts = lambda x: x['Perturbations'] != 'NA' and x['Time']  != 'NA' \
+    drug_ts = lambda x: x['Perturbations'] != 'NA' and x['Time']  != 'NA' \
       and x['OverexpressedGenes'] == 'NA' and x['DeletedGenes'] == 'NA',
-    genetic_perturbation = lambda x: x['Perturbations'] == 'NA' and x['Time']  == 'NA' \
+    genetic = lambda x: x['Perturbations'] == 'NA' and x['Time']  == 'NA' \
       and ( x['OverexpressedGenes'] != 'NA' or x['DeletedGenes'] != 'NA'),
-    genetic_perturbation_ts = lambda x: x['Perturbations'] == 'NA' and x['Time']  != 'NA' \
+    genetic_ts = lambda x: x['Perturbations'] == 'NA' and x['Time']  != 'NA' \
       and ( x['OverexpressedGenes'] != 'NA' or x['DeletedGenes'] != 'NA'),
-    genetic_perturbation_drug= lambda x: x['Perturbations'] != 'NA' and x['Time']  == 'NA' \
+    drug_genetic = lambda x: x['Perturbations'] != 'NA' and x['Time']  == 'NA' \
       and ( x['OverexpressedGenes'] != 'NA' or x['DeletedGenes'] != 'NA'),
-    general_perturbation_drug_ts = lambda x: x['Perturbations'] != 'NA' and x['Time']  != 'NA' \
+    drug_genetic_ts = lambda x: x['Perturbations'] != 'NA' and x['Time']  != 'NA' \
       and ( x['OverexpressedGenes'] != 'NA' or x['DeletedGenes'] != 'NA' ),
     )
   
@@ -111,11 +115,32 @@ def sg_big_hm_annotations(f, ax_box):
                 size = 'x-large')
 
 def sig_grid(num = 1 ,  method = 'tree', reset = False,
-             plot_kcs = False,
+             plot_kcs = True,
              bp_means = False,
-             bp_zeros = False,
-             bp_logs = True):
+             bp_zeros = True, zero_ofs = 1e-6,
+             bp_logs = True,
+             show_kos = False,
+             filter_rows_and_cols = False):
   grid, descriptions = parseNet(num= num, method = method, reset = reset)
+
+  
+  if filter_rows_and_cols:
+    #Filter out bad rows and columns
+    good_exps = nonzero(np.max(grid,0))[0]
+    tf_new_idxs = list(argsort(np.max(grid,1))[::-1])
+    grid = grid[tf_new_idxs]
+    good_tfs = nonzero(np.max(grid,1))[0]
+
+    
+    #Relabel the descriptions to take filtration into account
+    for k, value in descriptions.iteritems():
+      if 'Genes' in k:
+        descriptions[k] = [re.sub(re.compile('(\d+)'),lambda x:  x.group() in tf_new_idxs and str(tf_new_idxs.index(int(x.group()))) or x.group(), g) for g in value]
+      descriptions[k] = list(array(descriptions[k])[good_exps])
+      
+    grid = grid[good_tfs, :]
+    grid = grid[ :,good_exps]
+
 
   #Make lambdas to split experiments into categories
   col_choosers = sg_choosers()
@@ -125,6 +150,127 @@ def sig_grid(num = 1 ,  method = 'tree', reset = False,
     vs = [ dict(zip(descriptions.keys() , elt))
           for elt in  zip(*descriptions.values()) ]    
     exps[k] = nonzero( [v(e) for e in vs ])[0]
+
+  
+  #Mark experiments that knock out TFS
+  tf_kn_matches =[ sorted(list(it.chain(\
+          nonzero([ 'G{0},'.format(t) in x+',' 
+                    for x in  descriptions['DeletedGenes'] ])[0],
+          nonzero([ 'G{0},'.format(t) in x+',' 
+                    for x in  descriptions['OverexpressedGenes'] ])[0])))
+                   for t in range(shape(grid)[0])]
+  knockout_tfs = nonzero([len(k) for k in tf_kn_matches])[0]
+  knockout_cells = array(list(it.chain(*[ [(i, exp) for exp in tf_kn_matches[i] ] 
+                               for i in range(len(tf_kn_matches))])))
+  knockout_vals = grid[zip(*knockout_cells)]
+  
+  do_final_bps = True
+  kn_exps = {}
+  kn_exps['ko'] = []
+  kn_exps['ko_ts'] = []
+  
+
+  
+  def getBPS(**kwargs):
+    xlabels = []
+    nz_frac_std  = []
+    nz_frac_mean = []
+    nz_val_std   = []
+    nz_val_mean  = []
+    for k, ecols in exps.iteritems():
+      these_knockouts = array([c for c in knockout_cells if c[1] in ecols])
+      exp_cells = array([(i,j) for j in ecols for i in arange(shape(grid)[0])])
+      if these_knockouts != []:
+        kns_found = [c for c in exp_cells 
+                     if  np.sum(greater( np.product(c==these_knockouts,1),0),0)]
+        if k[-2:]== 'ts': kn_exps['ko'] += kns_found
+        else: kn_exps['ko_ts'] += kns_found
+
+        nokns_found = [c for c in exp_cells 
+                       if not np.sum(greater( np.product(c==these_knockouts,1),0),0)]
+      else:
+        nokns_found = exp_cells
+
+      cexp = [grid[zip(*exp_cells[\
+              nonzero(equal(exp_cells[:,1],col))[0]])] \
+                         for col in ecols] 
+      
+      colwise_fracs = [mean(1.*greater(col,0)) for col in cexp]
+      colwise_exprs = [mean(col[nonzero(greater(col,0))]) for col in cexp]
+      colwise_exprs = [c if not isnan(c) else 0 for c in colwise_exprs]
+
+      nz_frac_std.append(std(colwise_fracs)/sqrt(len(colwise_fracs)))
+      nz_frac_mean.append(mean(colwise_fracs))
+      nz_val_std.append(std(colwise_exprs)/sqrt(len(colwise_exprs)))
+      nz_val_mean.append(mean(colwise_exprs))
+
+      #if k == 'general': raise Exception()
+      
+      if isnan(nz_val_mean[-1]): raise Exception()
+      
+      xlabels.append(k)
+
+    for k, ecells in kn_exps.iteritems():
+      ecells = array(ecells)
+      nz_frac_std.append(0)
+      nz_val_std.append(0)
+      nz_frac_mean.append(mean(greater(grid[zip(*ecells)],0)))
+      nz_val_mean.append(mean(grid[zip(*ecells[greater(grid[zip(*ecells)],0)])]))
+      xlabels.append(k)
+
+    return xlabels, array(nz_frac_std),array(nz_val_std),array(nz_frac_mean), array(nz_val_mean)
+  xlabels, nz_frac_std,nz_val_std,nz_frac_mean, nz_val_mean = mem.getOrSet(getBPS,on_fail = 'compute', reset = True)
+  
+  args = [xlabels.index(x) for x in 
+          ['general','general_ts', 'drug', 'drug_ts', 
+           'genetic', 'genetic_ts', 'drug_genetic', 'drug_genetic_ts', 'ko','ko_ts']]
+  xlabels, nz_frac_std,nz_cal_std,nz_frac_mean,nz_val_mean =\
+      array(xlabels)[args],nz_frac_std[args],nz_val_std[args],nz_frac_mean[args],nz_val_mean[args]
+
+  f = plt.figure(0)
+  f.clear()
+
+  nkeys = len(xlabels)
+  if show_kos: xi = arange(nkeys)
+  else: xi = arange(nkeys -2)
+  y1 = nz_val_mean[xi]
+  s1 =  nz_val_std[xi]
+  #y1 = log10(nz_val_mean)
+  y2 = nz_frac_mean[xi]
+  s2 =  nz_frac_std[xi]
+
+  #y2 = log10(nz_frac_mean)
+  #m1 = floor(min(y1))
+  #m2 = floor(min(y2))
+  #y1 = y1 - m1
+  #y2 = y2 - m2
+  a1 = f.add_subplot(211, ylim =[0, max(y1)+max(s1)], title = 'mean value of nonzero influences\n standard error across experiments')
+  a2 = f.add_subplot(212, ylim =[0,max(y2)+ max(s2)], title = 'mean values of fraction nonzero influences\n standard error across experiments' )
+
+
+  colors = mycolors.getct(nkeys)
+  wofs = .15
+  b1 = a1.bar(xi+wofs,y1,1.-wofs*2, linewidth = 3,color = colors,  ecolor = 'black')
+  b2 = a2.bar(xi+wofs,y2,1.-wofs*2, linewidth = 3,color = colors,  ecolor = 'black' )
+  p1,c1,b1 = a1.errorbar(xi+.5, y1, yerr = s1,capsize = 15, elinewidth = 4, color = 'black',linewidth = 0, ecolor = 'black')
+  p2,c2,b2 = a2.errorbar(xi+.5, y2, yerr = s2,capsize = 15, elinewidth = 4, color = 'black',linewidth =0, ecolor = 'black')
+  for c in c1:c.set_alpha(1.)
+  for c in c2:c.set_color('black')
+  for c in a2.get_children() + a1.get_children():
+      try: 
+        if not c in [p1,p2]: c.set_linewidth(4)
+      except: pass
+      continue
+  a2.set_xticklabels([])
+  for i in xi:
+    a2.text( float(i) + .5,0,xlabels[i] , rotation = '-15',size = '16', ha = 'left',va='top')
+  #raise Exception()
+  f.savefig(config.dataPath('daniel/figs/latest/{1:03d}_{0}.tiff'.format('no_kos' if not show_kos else 'kos', num )),format = 'tiff')
+
+  #raise Exception()
+
+  return
+
 
   #Make and annotate the heatmap figure
   f = plt.figure(1, facecolor = 'w')
@@ -140,17 +286,7 @@ def sig_grid(num = 1 ,  method = 'tree', reset = False,
   kw_total = kwts +  ( msize * (len(exps)-1))
   ofs = 0
 
-  #Mark experiments that knock out TFS
-  tf_kn_matches =[ sorted(list(it.chain(\
-          nonzero([ 'G{0},'.format(t) in x+',' 
-                    for x in  descriptions['DeletedGenes'] ])[0],
-          nonzero([ 'G{0},'.format(t) in x+',' 
-                    for x in  descriptions['OverexpressedGenes'] ])[0])))
-                   for t in range(shape(grid)[0])]
-  knockout_tfs = nonzero([len(k) for k in tf_kn_matches])[0]
-  knockout_cells = array(list(it.chain(*[ [(i, exp) for exp in tf_kn_matches[i] ] 
-                               for i in range(len(tf_kn_matches))])))
-  knockout_vals = grid[zip(*knockout_cells)]
+
   allow_tf_kn = False
   if not allow_tf_kn: grid[zip(*knockout_cells)] = 0
 
@@ -225,7 +361,6 @@ def sig_grid(num = 1 ,  method = 'tree', reset = False,
   #Make the boxplot figure
   f2 = plt.figure(3)
   plt.clf()
-  
 
   if bp_means:  bp_kos =  array([  mean(grid.T[g[0],:],0) 
                              for g in it.groupby(sorted(\
@@ -237,14 +372,16 @@ def sig_grid(num = 1 ,  method = 'tree', reset = False,
   all_bps = all_bps +  [bp_kos]
 
   ax3 = f2.add_subplot('111')
-  if bp_logs: all_bps = [log(b) for b in all_bps]
+  if bp_logs: all_bps = [log(b + zero_ofs) for b in all_bps]
+  bp_lzero = log(zero_ofs)
+
   boxplots = ax3.boxplot([bp for bp in all_bps], widths= .5)
   for p in boxplots.values():
       for e in p: e.set_linewidth(4)    
 
   #Annotate the boxplot figure
   ann_str = ''
-  for i in range(9):
+  for i in range(8):
     ann_str += '{0}: {1}\n'.format(i+1, (exps.keys() + ['TF Knockout/OE'])[i])
   ax3.annotate(ann_str, [0,1],xycoords = 'axes fraction',
                xytext = [10,-10], textcoords = 'offset pixels',
@@ -266,7 +403,8 @@ Showing Means: {5}, Showing zeros: {6}, Plotting logs {7}'''.\
             format = 'tiff')
 
     
-  plam = lambda: bp_zeros and not bp_logs and bp_means and 'zeros_means_nolog/'\
+  plam = lambda: filter_rows_and_cols and 'nonzero_exps_and_tfs_cells_log/'\
+      or bp_zeros and not bp_logs and bp_means and 'zeros_means_nolog/'\
       or not bp_zeros and bp_means and not bp_logs and 'nozeros_means_nolog/'\
       or not bp_zeros and bp_means and bp_logs and 'nozeros_means_log/'\
       or bp_zeros and not bp_means and not bp_logs and 'zeros_cells_nolog/'\
@@ -282,7 +420,40 @@ Showing Means: {5}, Showing zeros: {6}, Plotting logs {7}'''.\
   
   
   
-    
+
+  mean_xvals = [ mean(all_bps[i][nonzero(greater(all_bps[i],bp_lzero))]) for i in range(len(all_bps))]
+  pdfs, xvals = zip(*[histogram(x, bins=50, range=[-15,8], normed=False) for x in all_bps])
+  import compbio.utils.colors as colors
+  c = colors.getct(len(pdfs))
+  f3 = plt.figure(3)
+  f3.clear()
+                                   
+  sax = f3.add_subplot('111')
+  seismic.seismic([array(x,float)/ sum(x) for x in pdfs], xax = xvals[0][:-1],stacked = False, colors = c, xmarkpts = mean_xvals, ax = sax)
+  
+
+  f4 = plt.figure(4)
+  f4.clear()
+  ax = f4.add_subplot('121')
+  ax.set_title('(log base 10) of Percentage Nonzero for Experiment Classes')
+  percs = log10(array([100*float(len(nonzero(greater(x,bp_lzero))[0])) / len(x) for x in all_bps]))
+  ax.plot(percs,linewidth = 6)
+  ax.set_yticks(percs)
+
+  names = exps.keys() + ['TF Knockout/OE']
+  ax.set_yticklabels(['{1}\n{0}'.format('%2.2f' % (10**p), names[idx]) for idx,p in enumerate(percs)])
+  
+  ax2 = f4.add_subplot('122')
+  ax2.set_title('Mean of Nonzero Experiments for Experiment Classes')
+  means = array([mean(bp[nonzero(greater(bp,bp_lzero))]) for bp in all_bps])
+  ax2.plot(arange(1,9), means,linewidth = 6)
+  ax2.boxplot( [bp[nonzero(greater(bp,bp_lzero))] for bp in all_bps], widths = .5)
+  ax2.set_yticks(means)
+
+  names = exps.keys() + ['TF Knockout/OE']
+  ax2.set_yticklabels(['{1}\n{0}'.format('%2.2f' % (p), names[idx]) for idx,p in enumerate(means)])
+  
+  
 
 def linearize(array):
   return reshape(array, product(shape(array)))

@@ -1,0 +1,30 @@
+rna sequences to check out:
+
+Ribosomal alignments:
+
+5sRNA in rfam 
+(annotated, aligned)
+
+All the rest in ribosomal rna database 
+(old european one has structures...
+does the new american one have structures?) 
+(annotated, aligned)
+
+Micro Nmir:
+
+rfam has microRNAs
+mirBase has mature sequences... in the case of mir1 for example, 
+dicer splices the hairpin according to the secondary structure leaving
+you with a 'mature sequence' which is used by argonaut for silencing.
+Argonaut only uses a seven base subsequence of the mature sequence.
+
+At three levels then, we have differing selection. 2nd struct, mature
+sequences and the seven base complement.
+
+RNAse P:
+tRNA processing.
+Is it in rfam?
+
+Signal recognition RNA:
+Nucleosomal RNA
+e.g: u12

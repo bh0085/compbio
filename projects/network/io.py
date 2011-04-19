@@ -13,6 +13,7 @@ import compbio.utils.memo as mem
 import compbio.config as config
 from numpy import *
 import numpy as np,  itertools as it, os, re
+import bdtnp
 
 
 def getNet(**kwargs):
@@ -142,3 +143,60 @@ def getSush(**kwargs):
   return mem.getOrSet(setSush, **kwargs)
     
 		
+def getBDTNP(protein = False,misc = False, **kwargs):
+  def setBDTNP( protein = False, misc = False, **kwargs):
+     gene_cols, misc_cols, rows, row_nns = bdtnp.parser.read()
+     mapfile = open(config.dataPath('flybase/gene_map.tsv'))
+     map_rows = []
+     for l in mapfile.xreadlines(): 
+       l = l.replace('\n','')
+       if  l != '' and l[0] != '#' : map_rows.append(l.split('\t'))
+     syms = [x[0] for x in map_rows]
+     fbids= [x[1] for x in map_rows]
+
+     times = set(it.chain(*[x['steps'] for x in gene_cols.values()]))
+     for g in gene_cols.values() + misc_cols.values():
+       gene_rows = zeros((len(rows), len(times)))
+       for i,t in enumerate(times):
+         if t in g['steps']: row = rows[:, g['idxs'][g['steps'].index(t)]]
+         else: row = zeros(len(rows)) 
+         gene_rows[:,i] = row
+
+       #if g['info']['short_name'] == 'danr': raise Exception()
+       g['vals'] = gene_rows
+
+     protein_cols = dict([(k,val) for k,val in gene_cols.iteritems() 
+                          if val['info']['type'] == 'protein'])
+     mrna_cols = dict([(k,val) for k,val in gene_cols.iteritems() 
+                       if val['info']['type'] == 'mRNA'])
+     
+     #things that are wonky include:
+     # 1) Protein data (where column names do not match flybase symbols)
+     # 2) Weird elements such as Traf1 that are not present in the network anyway
+     # 3) FBgn0031375 / CG31670 which is apparently absent from the map and I fix.
+     mrna_idxs = [syms.index(k) if k in syms  else 
+                  syms.index('erm') if k == 'CG31670' else -1 
+                  for k in mrna_cols.keys()]
+     mrna_fbids = [fbids[idx] if idx != -1 else '' for idx in mrna_idxs] 
+
+     protein_idxs = [syms.index(k[:-1]) if k[:-1] in syms   else -1 
+                  for k in protein_cols.keys()]
+     protein_fbids = [fbids[idx] if idx != -1 else '' for idx in protein_idxs] 
+     
+
+     if misc:
+       return misc_cols
+     if protein:
+       return dict( [(protein_fbids[i], protein_cols.values()[i]) 
+        for i, elt in enumerate(protein_idxs) if elt != -1])
+     else:
+       return dict( [(mrna_fbids[i], mrna_cols.values()[i]) 
+        for i, elt in enumerate(mrna_idxs) if elt != -1])
+  
+  return mem.getOrSet(setBDTNP,
+                      **mem.rc(kwargs,
+                               register ='protein' if protein else \
+                                 'misc' if misc else 'mrna',
+                               protein = protein,
+                               misc = misc,
+                               on_fail = 'compute'))
