@@ -42,8 +42,9 @@ class eyeball(object):
         communicate()[0]
     lines = jobs.split('\n')
     cols, lines = lines[0],lines[1:]
+    col_starts = {}
     for term in cols.split('\S+'):
-      col_starts(term = cols.index(term))
+      col_starts.update(term = cols.index(term))
     raise Exception()
     return lines
     
