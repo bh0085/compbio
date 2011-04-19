@@ -4,28 +4,35 @@ for p in ['batch','batch/inputs','batch/outputs','batch/logs']:
   if not os.path.isdir(config.dataPath(p)):
     os.mkdir(config.dataPath(p))
 
-class eyeball():
-  def make(scr_path, args, inp_dicts,
-           do_bsub = True,
+class eyeball(object):
+  def __init__(self,
+               scr_path, scriptargs, inp_dicts,
            ):
+      do_bsub = True
       cmds = []
+      self.run_ids = []
       for idx,  d in enumerate(batch_pdicts):
         run_id=bsub.get_run_id(idx, prefix = rank_name)
         bsub.save_inp(d, run_id)
+        self.run_ids.append(run_ids)
         cmds.append(bsub.cmd(os.path.abspath(inspect.stack()[0][1]),\
-                               'run_anc',\
+                               ' '.join(scriptargs),\
                                run_id,\
                                do_bsub = do_bsub,\
                                run_id = run_id))
-
       if run:
         for c in cmds:
           out = subprocess.Popen(c, stdout = subprocess.PIPE, shell = True).\
               communicate()
-          
+        
 
   def statii():
-    pass
+    jobs = subprocess.Popen'bjobs '+ ' '.join(self.run_ids), shell = True, stdout = subprocess.PIPE).\
+        communicate()[0]
+    lines = '\n'.split(jobs)
+    cols, lines = lines[0],lines[1:]
+    
+    
   def await():
     pass
 
