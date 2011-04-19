@@ -44,8 +44,10 @@ class eyeball(object):
     cols, lines = lines[0],lines[1:]
     col_starts = {}
     for term in re.compile('\s+').split(cols):
-      col_starts.update((term, cols.index(term)))
-    raise Exception()
+      col_starts.update([(term, cols.index(term))])
+    
+    for l in lines:
+      status
     return lines
     
   def await():
