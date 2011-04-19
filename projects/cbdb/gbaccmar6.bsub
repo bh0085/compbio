@@ -1,0 +1,92 @@
+Sender: LSF System <lsf@node1330>
+Subject: Job 4725951: </home/radon00/benh/compbio/projects/cbdb/gb_accid.py> Exited
+
+Job </home/radon00/benh/compbio/projects/cbdb/gb_accid.py> was submitted from host <node1390> by user <benh> in cluster <cromwell>.
+Job was executed on host(s) <node1330>, in queue <compbio-week>, as user <benh> in cluster <cromwell>.
+</home/radon00/benh> was used as the home directory.
+</home/radon00/benh/compbio/projects/cbdb> was used as the working directory.
+Started at Sun Mar  6 22:53:27 2011
+Results reported at Sun Mar  6 22:57:47 2011
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+/home/radon00/benh/compbio/projects/cbdb/gb_accid.py
+------------------------------------------------------------
+
+TERM_OWNER: job killed by owner.
+Exited with exit code 1.
+
+Resource usage summary:
+
+    CPU time   :    250.30 sec.
+    Max Memory :       138 MB
+    Max Swap   :       412 MB
+
+    Max Processes  :         3
+    Max Threads    :         4
+
+The output (if any) follows:
+
+filling db
+False
+sqlite:////home/radon00/benh/compbio/data/dbs/gb_accjoin.sqlite
+no primary key for GBAcc, making one
+Deleting the current database for gb_accjoin
+False
+commiting 19531
+done committing, through with 0.000 
+commiting 19531
+done committing, through with 0.000 
+commiting 19531
+done committing, through with 0.000 
+commiting 19531
+done committing, through with 0.000 
+commiting 19531
+done committing, through with 0.001 
+commiting 19531
+done committing, through with 0.001 
+commiting 19531
+done committing, through with 0.001 
+commiting 19531
+done committing, through with 0.001 
+commiting 19531
+done committing, through with 0.001 
+commiting 19531
+done committing, through with 0.001 
+commiting 19531
+done committing, through with 0.001 
+commiting 19531
+Traceback (most recent call last):
+  File "/home/radon00/benh/compbio/projects/cbdb/gb_accid.py", line 47, in <module>
+    fill_db()
+  File "/home/radon00/benh/compbio/projects/cbdb/gb_accid.py", line 43, in fill_db
+    reset = True)
+  File "/home/radon00/benh/compbio/projects/cbdb/adapters.py", line 96, in fileMap2DB2
+    dbi.Session.commit()
+  File "/broad/software/free/Linux/redhat_5_x86_64/pkgs/python_2.6.5/lib/python2.6/site-packages/SQLAlchemy-0.6beta3-py2.6.egg/sqlalchemy/orm/scoping.py", line 129, in do
+    return getattr(self.registry(), name)(*args, **kwargs)
+  File "/broad/software/free/Linux/redhat_5_x86_64/pkgs/python_2.6.5/lib/python2.6/site-packages/SQLAlchemy-0.6beta3-py2.6.egg/sqlalchemy/orm/session.py", line 655, in commit
+    self.transaction.commit()
+  File "/broad/software/free/Linux/redhat_5_x86_64/pkgs/python_2.6.5/lib/python2.6/site-packages/SQLAlchemy-0.6beta3-py2.6.egg/sqlalchemy/orm/session.py", line 368, in commit
+    self._prepare_impl()
+  File "/broad/software/free/Linux/redhat_5_x86_64/pkgs/python_2.6.5/lib/python2.6/site-packages/SQLAlchemy-0.6beta3-py2.6.egg/sqlalchemy/orm/session.py", line 352, in _prepare_impl
+    self.session.flush()
+  File "/broad/software/free/Linux/redhat_5_x86_64/pkgs/python_2.6.5/lib/python2.6/site-packages/SQLAlchemy-0.6beta3-py2.6.egg/sqlalchemy/orm/session.py", line 1332, in flush
+    self._flush(objects)
+  File "/broad/software/free/Linux/redhat_5_x86_64/pkgs/python_2.6.5/lib/python2.6/site-packages/SQLAlchemy-0.6beta3-py2.6.egg/sqlalchemy/orm/session.py", line 1410, in _flush
+    flush_context.execute()
+  File "/broad/software/free/Linux/redhat_5_x86_64/pkgs/python_2.6.5/lib/python2.6/site-packages/SQLAlchemy-0.6beta3-py2.6.egg/sqlalchemy/orm/unitofwork.py", line 255, in execute
+    UOWExecutor().execute(self, tasks)
+  File "/broad/software/free/Linux/redhat_5_x86_64/pkgs/python_2.6.5/lib/python2.6/site-packages/SQLAlchemy-0.6beta3-py2.6.egg/sqlalchemy/orm/unitofwork.py", line 745, in execute
+    self.execute_save_steps(trans, task)
+  File "/broad/software/free/Linux/redhat_5_x86_64/pkgs/python_2.6.5/lib/python2.6/site-packages/SQLAlchemy-0.6beta3-py2.6.egg/sqlalchemy/orm/unitofwork.py", line 760, in execute_save_steps
+    self.save_objects(trans, task)
+  File "/broad/software/free/Linux/redhat_5_x86_64/pkgs/python_2.6.5/lib/python2.6/site-packages/SQLAlchemy-0.6beta3-py2.6.egg/sqlalchemy/orm/unitofwork.py", line 751, in save_objects
+    task.mapper._save_obj(task.polymorphic_tosave_objects, trans)
+  File "/broad/software/free/Linux/redhat_5_x86_64/pkgs/python_2.6.5/lib/python2.6/site-packages/SQLAlchemy-0.6beta3-py2.6.egg/sqlalchemy/orm/mapper.py", line 1467, in _save_obj
+    primary_key = c.inserted_primary_key
+  File "/broad/software/free/Linux/redhat_5_x86_64/pkgs/python_2.6.5/lib/python2.6/site-packages/SQLAlchemy-0.6beta3-py2.6.egg/sqlalchemy/util.py", line 1422, in __get__
+    def __get__(self, obj, cls):
+KeyboardInterrupt
