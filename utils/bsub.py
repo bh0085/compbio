@@ -103,8 +103,8 @@ Returns the dictionary of inputs.
     ids = self.run_names
     self.ins = []
     for i in ids:
-      self.inds.append(load_inp(i))
-    return self.inds
+      self.ins.append(load_inp(i))
+    return self.ins
   
   def unfinished(self):
     stats = self.statii()
