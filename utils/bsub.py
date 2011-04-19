@@ -33,6 +33,8 @@ class eyeball(object):
     for c in cmds:
       out = subprocess.Popen(c, stdout = subprocess.PIPE, shell = True).\
           communicate()
+    
+    raise Exception()
         
 
   def statii(self):
