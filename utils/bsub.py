@@ -183,3 +183,4 @@ def tmp_fnames(run_id, num):
   names = [os.path.join(tmp_dir, run_id + '_tmp{0:03d}'.format(idx))
                         for idx in range(num)]
                    
+  return names
