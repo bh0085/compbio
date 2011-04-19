@@ -55,7 +55,7 @@ class eyeball(object):
     
     statii = []
     for l in lines:
-      statii.append( l[col_starts['STAT']:col_starts['QUEUE']])
+      statii.append( l[col_starts['STAT']:col_starts['QUEUE']].strip())
     return statii
       
   def outputs(self):
