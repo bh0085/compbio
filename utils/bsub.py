@@ -184,3 +184,10 @@ def tmp_fnames(run_id, num):
                         for idx in range(num)]
                    
   return names
+
+def mat_tmp_fnames(run_id, num):
+  tmp_dir = config.dataPath('batch/tmp')
+  names = [os.path.join(tmp_dir, run_id + '_tmp{0:03d}.mat'.format(idx))
+                        for idx in range(num)]
+                   
+  return names
