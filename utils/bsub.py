@@ -1,6 +1,6 @@
 import pickle, os, itertools as it,re
 import compbio.config as config
-import inspect
+import inspect, subprocess
 
 for p in ['batch','batch/inputs','batch/outputs','batch/logs']:
   if not os.path.isdir(config.dataPath(p)):
