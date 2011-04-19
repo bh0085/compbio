@@ -58,20 +58,20 @@ class eyeball(object):
       statii.append( l[col_starts['JOB_NAME']:col_starts['SUBMIT_TIME']])
     return lines
       
-  def outputs():
+  def outputs(self):
     statii = self.statii()
     return [load_out(run_id) if statii[idx] else None 
             for idx, run_id in enumerate(self.run_ids)]
 
 
-  def inputs():
+  def inputs(self):
     ids = self.run_ids
     self.ins = []
     for i in ids:
       self.inds.append(load_inp(i))
     return self.inds
   
-  def unfinished():
+  def unfinished(self):
     stats = self.statii()
     return [s for s in stats if not s == 'DONE']
 
