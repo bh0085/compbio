@@ -135,7 +135,7 @@ def save_out(out_dict, run_id):
   out_file.close()
   return out_name
 
-def load_out(run_ids):
+def load_out(run_id):
   input_dir = config.dataPath('batch/outputs')
   input_name = os.path.join(input_dir, run_id + '.out')
   inp_file = open(input_name)
