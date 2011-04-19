@@ -47,7 +47,7 @@ class eyeball(object):
       col_starts.update([(term, cols.index(term))])
     
     for l in lines:
-      status
+      status = l[col_starts['JOB_NAME']:col_starts['SUBMIT_TIME']]
     return lines
     
   def await():
