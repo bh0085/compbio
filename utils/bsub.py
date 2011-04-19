@@ -32,7 +32,7 @@ class eyeball(object):
                         run_id = run_id))
     for c in cmds:
       out = subprocess.Popen(c, stdout = subprocess.PIPE, shell = True).\
-          communicate()
+          communicate()[0]
       self.run_ids.append(re.compile('Job <([\d]+)>').search(out).group(1))
 
     raise Exception()
