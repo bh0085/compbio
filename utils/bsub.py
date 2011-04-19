@@ -18,7 +18,7 @@ class eyeball(object):
     do_bsub = True
     cmds = []
     self.run_ids = []
-    for idx,  d in enumerate(batch_pdicts):
+    for idx,  d in enumerate(inp_dicts):
       run_id=bsub.get_run_id(idx, prefix = runid_prefix)
       bsub.save_inp(d, run_id)
       self.run_ids.append(run_ids)
