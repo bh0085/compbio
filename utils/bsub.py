@@ -56,11 +56,12 @@ class eyeball(object):
     statii = []
     for l in lines:
       statii.append( l[col_starts['STAT']:col_starts['QUEUE']].strip())
+    statii = [s for s in statii if s != '']
     return statii
       
   def outputs(self):
     statii = self.statii()
-    return [load_out(run_id) if statii[idx] else None 
+    return [load_out(run_id) if statii[idx] == 'DONE' else None 
             for idx, run_id in enumerate(self.run_ids)]
 
 
