@@ -55,7 +55,7 @@ class eyeball(object):
     
     statii = []
     for l in lines:
-      statii.append( l[col_starts['JOB_NAME']:col_starts['SUBMIT_TIME']])
+      statii.append( l[col_starts['STAT']:col_starts['QUEUE']])
     return statii
       
   def outputs(self):
