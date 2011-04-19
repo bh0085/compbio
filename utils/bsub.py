@@ -58,11 +58,12 @@ def cmd(scr_path, *args, **kwargs ):
   assert run_id
   run_str = scr_path+ ' '  + ' '.join(args) 
   if do_bsub:
-    cmd = 'bsub -q compbio-week -o {2} -P {0} -R \'rusage[mem=3]\'  "{1}" '\
+    cmd = 'bsub -q compbio-week -J {3} -o {2} -P {0} -R \'rusage[mem=3]\'  "{1}" '\
         .format(project, 
                 run_str,
                 os.path.join(config.dataPath('batch/logs'),\
-                               '{0}.log'.format(run_id) ))
+                               '{0}.log'.format(run_id) ),
+                run_id)
   else:
     cmd = '{0}'\
         .format(run_str)
