@@ -34,7 +34,7 @@ class eyeball(object):
         
 
   def statii():
-    jobs = subprocess.Popen'bjobs '+ ' '.join(self.run_ids), shell = True, stdout = subprocess.PIPE).\
+    jobs = subprocess.Popen('bjobs '+ ' '.join(self.run_ids), shell = True, stdout = subprocess.PIPE).\
         communicate()[0]
     lines = '\n'.split(jobs)
     cols, lines = lines[0],lines[1:]
