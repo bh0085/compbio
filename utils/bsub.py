@@ -17,6 +17,8 @@ class eyeball(object):
     else:
       runid_prefix = runid_prefix
 
+    raise Exception()
+
     do_bsub = True
     cmds = []
     self.run_ids = []
