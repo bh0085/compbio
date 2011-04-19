@@ -7,23 +7,30 @@ for p in ['batch','batch/inputs','batch/outputs','batch/logs']:
 class eyeball(object):
   def __init__(self,
                scr_path, scriptargs, inp_dicts,
+               name = None
            ):
-      do_bsub = True
-      cmds = []
-      self.run_ids = []
-      for idx,  d in enumerate(batch_pdicts):
-        run_id=bsub.get_run_id(idx, prefix = rank_name)
-        bsub.save_inp(d, run_id)
-        self.run_ids.append(run_ids)
-        cmds.append(bsub.cmd(os.path.abspath(inspect.stack()[0][1]),\
-                               ' '.join(scriptargs),\
-                               run_id,\
-                               do_bsub = do_bsub,\
-                               run_id = run_id))
-      if run:
-        for c in cmds:
-          out = subprocess.Popen(c, stdout = subprocess.PIPE, shell = True).\
-              communicate()
+    
+    if name == None:
+      runid_prefix = os.path.basename(scr_path) + '_'.join([''] + scriptargs)
+    else:
+      runid_prefix = runid_prefix
+
+    do_bsub = True
+    cmds = []
+    self.run_ids = []
+    for idx,  d in enumerate(batch_pdicts):
+      run_id=bsub.get_run_id(idx, prefix = runid_prefix)
+      bsub.save_inp(d, run_id)
+      self.run_ids.append(run_ids)
+      cmds.append(bsub.cmd(os.path.abspath(inspect.stack()[0][1]),\
+                             ' '.join(scriptargs),\
+                             run_id,\
+                             do_bsub = do_bsub,\
+                             run_id = run_id))
+    if run:
+      for c in cmds:
+        out = subprocess.Popen(c, stdout = subprocess.PIPE, shell = True).\
+            communicate()
         
 
   def statii():
