@@ -61,7 +61,7 @@ class eyeball(object):
   def outputs():
     statii = self.statii()
     return [load_out(run_id) if statii[idx] else None 
-            for idx, run_id in enumerate(self.run_ids)l]
+            for idx, run_id in enumerate(self.run_ids)]
 
 
   def inputs():
