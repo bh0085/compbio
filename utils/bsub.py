@@ -13,7 +13,7 @@ class eyeball(object):
            ):
     
     if name == None:
-      runid_prefix = os.path.basename(scr_path) + '_'.join([''] + scriptargs)
+      runid_prefix = os.path.splitext(os.path.basename(scr_path))[0]
     else:
       runid_prefix = runid_prefix
 
