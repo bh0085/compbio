@@ -29,10 +29,9 @@ class eyeball(object):
                         run_id,\
                         do_bsub = do_bsub,\
                         run_id = run_id))
-    if run:
-      for c in cmds:
-        out = subprocess.Popen(c, stdout = subprocess.PIPE, shell = True).\
-            communicate()
+    for c in cmds:
+      out = subprocess.Popen(c, stdout = subprocess.PIPE, shell = True).\
+          communicate()
         
 
   def statii():
