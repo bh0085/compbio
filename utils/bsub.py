@@ -17,7 +17,6 @@ class eyeball(object):
     else:
       runid_prefix = runid_prefix[-5:]
 
-    raise Exception()
 
     do_bsub = True
     cmds = []
