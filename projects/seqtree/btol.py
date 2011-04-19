@@ -384,7 +384,8 @@ def make_anc_batches(aliname, rank_name = 'phylum',
   for idx,  d in enumerate(batch_pdicts):
     run_id=bsub.get_run_id(idx, prefix = rank_name)
     bsub.save_inp(d, run_id)
-    cmds.append(bsub.cmd(os.path.abspath(inspect.stack()[0][1]),'run_anc',run_id, do_bsub = do_bsub, run_id = run_id))
+    cmds.append(bsub.cmd(os.path.abspath(inspect.stack()[0][1]),'run_anc',run_id,\
+                           do_bsub = do_bsub, run_id = run_id))
 
   if run:
     for c in cmds:
@@ -397,7 +398,7 @@ def make_anc_batches(aliname, rank_name = 'phylum',
 def usage():
   print '''
 usage: btol.py run_id
-
+1
 Run a batch process on BTOL with inputs stored in 
 data/batch/inputs/{run_id}.inp in pickle serial.
 '''
