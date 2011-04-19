@@ -2,6 +2,13 @@ import pickle, os, itertools as it,re
 import compbio.config as config
 import inspect, subprocess
 
+#A class and a bunch of routines for 
+#running and tracking the results of bsub.
+#
+#The main visible class here is eyeball which
+#can be called bit a script path and args as well
+#as a list of dictionaries representing input.
+
 for p in ['batch','batch/inputs','batch/outputs','batch/logs']:
   if not os.path.isdir(config.dataPath(p)):
     os.mkdir(config.dataPath(p))
@@ -46,12 +53,27 @@ class eyeball(object):
     for term in re.compile('\s+').split(cols):
       col_starts.update([(term, cols.index(term))])
     
+    statii = []
     for l in lines:
-      status = l[col_starts['JOB_NAME']:col_starts['SUBMIT_TIME']]
+      statii.append( l[col_starts['JOB_NAME']:col_starts['SUBMIT_TIME']])
     return lines
-    
-  def await():
-    pass
+      
+  def outputs():
+    statii = self.statii()
+    return [load_out(run_id) if statii[idx] else None 
+            for idx, run_id in enumerate(self.run_ids)l]
+
+
+  def inputs():
+    ids = self.run_ids
+    self.ins = []
+    for i in ids:
+      self.inds.append(load_inp(i))
+    return self.inds
+  
+  def unfinished():
+    stats = self.statii()
+    return [s for s in stats if not s == 'DONE']
 
 
 def cmd(scr_path, *args, **kwargs ):
@@ -94,6 +116,7 @@ def save_inp(inp_dict,run_id):
   inp_file = open(input_name, 'w')
   pickle.dump(inp_dict, inp_file)
   inp_file.close()
+  return input_name
 
 def load_inp(run_id):
   input_dir = config.dataPath('batch/inputs')
@@ -110,3 +133,12 @@ def save_out(out_dict, run_id):
   out_file = open(out_name, 'w')
   pickle.dump(out_dict, out_file)
   out_file.close()
+  return out_name
+
+def load_out(run_ids):
+  input_dir = config.dataPath('batch/outputs')
+  input_name = os.path.join(input_dir, run_id + '.out')
+  inp_file = open(input_name)
+  inp_dict = pickle.load( inp_file)
+  inp_file.close()
+  return(inp_dict)
