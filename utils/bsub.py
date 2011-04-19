@@ -1,5 +1,7 @@
 import pickle, os, itertools as it,re
 import compbio.config as config
+import inspect
+
 for p in ['batch','batch/inputs','batch/outputs','batch/logs']:
   if not os.path.isdir(config.dataPath(p)):
     os.mkdir(config.dataPath(p))
@@ -22,11 +24,11 @@ class eyeball(object):
       run_id=get_run_id(idx, prefix = runid_prefix)
       save_inp(d, run_id)
       self.run_ids.append(run_id)
-      cmds.append(cmd(os.path.abspath(inspect.stack()[0][1]),\
-                             ' '.join(scriptargs),\
-                             run_id,\
-                             do_bsub = do_bsub,\
-                             run_id = run_id))
+      cmds.append(cmd(scr_path,\
+                        ' '.join(scriptargs),\
+                        run_id,\
+                        do_bsub = do_bsub,\
+                        run_id = run_id))
     if run:
       for c in cmds:
         out = subprocess.Popen(c, stdout = subprocess.PIPE, shell = True).\
