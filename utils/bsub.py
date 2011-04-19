@@ -40,8 +40,10 @@ class eyeball(object):
   def statii(self):
     jobs = subprocess.Popen('bjobs '+ ' '.join(self.run_ids), shell = True, stdout = subprocess.PIPE).\
         communicate()[0]
-    lines = '\n'.split(jobs)
+    lines = jobs.split('\n')
     cols, lines = lines[0],lines[1:]
+    for term in cols.split('\S+'):
+      col_starts(term = cols.index(term))
     raise Exception()
     return lines
     
