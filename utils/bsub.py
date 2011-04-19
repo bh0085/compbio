@@ -9,15 +9,30 @@ import inspect, subprocess
 #can be called bit a script path and args as well
 #as a list of dictionaries representing input.
 
-for p in ['batch','batch/inputs','batch/outputs','batch/logs']:
+for p in ['batch','batch/inputs','batch/outputs','batch/logs','batch/tmp']:
   if not os.path.isdir(config.dataPath(p)):
     os.mkdir(config.dataPath(p))
 
 class eyeball(object):
+  '''The class eyeball wraps all calls to bsub in my libraries. 
+
+Eyeball has methods to check the status of bsub jobs underway as well as to recover program output once runs have terminated.
+
+'''
   def __init__(self,
                scr_path, scriptargs, inp_dicts,
                name = None
            ):
+    '''
+    Create an eye with a set of jobs. Run them.
+
+inputs:
+  scr_path:    the path of the script to be run. [String]
+  scriptargs:  command line args to the script.  [String x nargs]
+  inp_dicts:   input dicts for each instance of script
+               implicitly sets the number of calls to script.
+
+'''
     
     if name == None:
       runid_prefix = os.path.splitext(os.path.basename(scr_path))[0][-5:]
@@ -45,6 +60,10 @@ class eyeball(object):
         
 
   def statii(self):
+    '''
+    Return the run statuses of programs launched under the control of
+this eye. Uses bjobs.
+'''
     jobs = subprocess.Popen('bjobs '+ ' '.join(self.run_ids), shell = True, stdout = subprocess.PIPE).\
         communicate()[0]
     lines = jobs.split('\n')
@@ -60,13 +79,28 @@ class eyeball(object):
     return statii
       
   def outputs(self):
+    '''
+    Get the outputs of programs run by this eye.
+
+For programs that have been run, returns the output dictionary.
+For programs that have not yet been completed, returns: None
+'''
+    #Note that even though the functions I am calling ask for 'ids',
+    #I use the field i.run_names...
+    #this is because I use a different id that than the bsub job id which
+    #is what that run_ids field is named after
     statii = self.statii()
     return [load_out(run_id) if statii[idx] == 'DONE' else None 
-            for idx, run_id in enumerate(self.run_ids)]
+            for idx, run_id in enumerate(self.run_names)]
 
 
   def inputs(self):
-    ids = self.run_ids
+    '''
+    Get the inputs of programs run by this eye.
+
+Returns the dictionary of inputs.
+'''
+    ids = self.run_names
     self.ins = []
     for i in ids:
       self.inds.append(load_inp(i))
@@ -143,3 +177,9 @@ def load_out(run_id):
   inp_dict = pickle.load( inp_file)
   inp_file.close()
   return(inp_dict)
+
+def tmp_fnames(run_id, num):
+  tmp_dir = config.dataPath('batch/tmp')
+  names = [os.path.join(tmp_dir, run_id + '_tmp{0:03d}'.format(idx))
+                        for idx in range(num)]
+                   
