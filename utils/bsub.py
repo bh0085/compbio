@@ -122,7 +122,7 @@ Returns the dictionary of inputs.
 echo "connecting to remote server"; 
 ssh gliese '
 echo "copying files to remote server"; 
-scp tin:{1} `python -c '\''import compbio.config as config ; print config.dataPath("{2}")'\''`; 
+scp tin:{1} `python -c \'import compbio.config as config ; print config.dataPath("{2}")\'`; 
 echo "copying successful"; 
 exit' 
 '''.format(where,
@@ -130,7 +130,9 @@ exit'
            self.datapath)
 
     print cmdstr    
-    stdout = subprocess.Popen( cmdstr, shell = True,
+    stdout = subprocess.Popen( cmdstr, 
+                               shell = True,
+                               executable = '/
                                stdout = subprocess.PIPE).communicate()
     print stdout
     return
