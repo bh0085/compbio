@@ -132,7 +132,6 @@ exit'
     print cmdstr    
     stdout = subprocess.Popen( cmdstr, 
                                shell = True,
-                               executable = '/
                                stdout = subprocess.PIPE).communicate()
     print stdout
     return
