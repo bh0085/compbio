@@ -21,7 +21,7 @@ Eyeball has methods to check the status of bsub jobs underway as well as to reco
 '''
   def __init__(self,
                scr_path, scriptargs, inp_dicts,
-               data = 'batch/eye/last.out',
+               datapath = 'batch/eye/last.out',
                name = None
            ):
     '''
