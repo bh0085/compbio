@@ -9,7 +9,7 @@ def absPath(localPath):
 def getTempPath():
   return dataPath('temp')
 
-def dataPath(url):
+def dataPath(url, make = True):
   if url.count(':') == 0:
     host_name = 'localhost'
     volume_name = 'cb'
@@ -30,7 +30,11 @@ def dataPath(url):
   else: volume_prefix = os.path.join('/Volumes', volume_name)
   assert host_name == socket.gethostname() or \
       host_name == 'localhost'
-  return os.path.join(os.path.join(volume_prefix,'data'), localpath)
+
+  path = os.path.join(os.path.join(volume_prefix,'data'), localpath)
+  if make and not os.path.isdir(os.path.dirname(path)):
+    os.makedirs(os.path.dirname(path))
+  return path
 
 def dataURL(localpath, volume_name = 'cb',  host_name = 'localhost'):
   return ':'.join([host_name, volume_name, localpath]) 
