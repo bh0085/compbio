@@ -1,5 +1,5 @@
-import parser 
-import exp
+#import parser 
+#import exp
 import os
 from compbio import config
 all = ['parser', 'exp']

@@ -6,6 +6,20 @@ def absPath(localPath):
   global root
   return os.path.join(root, localPath)
 
+def compPath(path, absolute = False):
+  if absolute:
+    return os.path.join(os.environ['COMPBIO_PATH'], path)
+  else:
+    return os.path.relpath(os.path.abspath(path), \
+                             os.environ['COMPBIO_PATH']) 
+  
+def progPath(path, absolute = False):
+  if absolute:
+    return os.path.join(os.environ['PROGRAMMING_PATH'], path)
+  else:
+    return os.path.relpath(os.path.abspath(path), \
+                             os.environ['PROGRAMMING_PATH']) 
+  
 def getTempPath():
   return dataPath('temp')
 
