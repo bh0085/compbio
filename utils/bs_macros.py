@@ -10,5 +10,11 @@ def runmat(script, input_dict, run_id):
         format(*(tmpnames+[script]) )
     sub = spc.Popen(cstr,shell = True, stdout = spc.PIPE).\
         communicate()[0]
-    out_dict = sio.loadmat(tmpnames[1])['out_struct']
+
+    
+    struct = sio.loadmat(tmpnames[1])['out_struct']
+    o00= out_dict[0][0]
+    fns = o00._fieldnames
+    out_dict = dict( [(fn, o00.__getattribute__(fn)) 
+                     for fn in fns ])
     return out_dict

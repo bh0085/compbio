@@ -1,6 +1,6 @@
 import pickle, os, itertools as it,re
 import compbio.config as config
-import inspect, subprocess
+import inspect, subprocess, time
 
 #A class and a bunch of routines for 
 #running and tracking the results of bsub.
@@ -9,7 +9,7 @@ import inspect, subprocess
 #can be called bit a script path and args as well
 #as a list of dictionaries representing input.
 
-for p in ['batch','batch/inputs','batch/outputs','batch/logs','batch/tmp']:
+for p in ['batch','batch/inputs','batch/outputs','batch/logs','batch/tmp','batch/eye']:
   if not os.path.isdir(config.dataPath(p)):
     os.mkdir(config.dataPath(p))
 
@@ -21,6 +21,7 @@ Eyeball has methods to check the status of bsub jobs underway as well as to reco
 '''
   def __init__(self,
                scr_path, scriptargs, inp_dicts,
+               data = 'batch/eye/last.out',
                name = None
            ):
     '''
@@ -33,12 +34,13 @@ inputs:
                implicitly sets the number of calls to script.
 
 '''
-    
+    self.datapath = datapath
     if name == None:
       runid_prefix = os.path.splitext(os.path.basename(scr_path))[0][-5:]
     else:
       runid_prefix = runid_prefix[-5:]
 
+    self.name = runid_prefix
 
     do_bsub = True
     cmds = []
@@ -109,7 +111,40 @@ Returns the dictionary of inputs.
   def unfinished(self):
     stats = self.statii()
     return [s for s in stats if not s == 'DONE']
+  def package(self, out_datapath):
+    outputs = self.outputs()
+    pickle.save(open(config.dataPath(self.datapath),'w'),
+                outputs)
+  def export(self, where = 'gliese'):
+    cmdstr ='''echo "connecting to remote server"; ssh gliese 'echo "copying files to remote server"; scp tin:{1} `python -c '\''import compbio.config as config ; print config.dataPath("{2}")'\''`; echo "copying successful"; exit' '''.format(where,config.dataPath(self.datapath), self.datapath)
 
+    stdout = subprocess.Popen( cmdstr, shell = True,
+                               stdout = subprocess.PIPE).communicate()
+    print stdout
+    return
+  def awaitAndExport(self):
+    print '''Entering a loop to await completion of all tasks for eye with name {0}'''.format(self.name)
+    count = 0 
+    while 1:
+      count += 1
+      print '''Looping. [iter = {0}]'''.format(count)
+      print 'statii:'
+      time.sleep(1)
+      statii = self.statii()
+      svals = dict('DONE': 1,
+                   'EXIT': -1,
+                   'RUN': 0,
+                   'PEND': 0)
+      for k in svals.keys():
+        print k: '   {0:02d}'.format(statii.count(k))
+      vals = array([svals[k] for k in statii])
+      if len(nonzero(not_equal(vals,1))[0]) == 0:
+        break
+      if len(nonzero(equal(vals,-1))[0]) > 0:
+        raise Exception('Sorry but one of your scripts failed.')
+
+    self.package()
+    self.export()
 
 def cmd(scr_path, *args, **kwargs ):
 
