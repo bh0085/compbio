@@ -79,7 +79,9 @@ this eye. Uses bjobs.
       statii.append( l[col_starts['STAT']:col_starts['QUEUE']].strip())
     statii = [s for s in statii if s != '']
     return statii
-      
+
+  
+
   def outputs(self):
     '''
     Get the outputs of programs run by this eye.
@@ -129,7 +131,7 @@ Returns the dictionary of inputs.
       count += 1
       print '''Looping. [iter = {0}]'''.format(count)
       print 'statii:'
-      time.sleep(1)
+      time.sleep(10)
       statii = self.statii()
       svals = dict(DONE= 1,
                    EXIT= -1,
@@ -154,14 +156,16 @@ def cmd(scr_path, *args, **kwargs ):
        kwargs.get('inp_dict',{}),
        kwargs.get('do_bsub', True)]
   assert run_id
+  Rmem = kwargs.get('mem', '1')
   run_str = scr_path+ ' '  + ' '.join(args) 
   if do_bsub:
-    cmd = 'bsub -q compbio-week -J {3} -o {2} -P {0} -R \'rusage[mem=3]\'  "{1}" '\
+    cmd = 'bsub -q compbio-week -J {3} -o {2} -P {0} -R \'rusage[mem={4}]\'  "{1}" '\
         .format(project, 
                 run_str,
                 os.path.join(config.dataPath('batch/logs'),\
                                '{0}.log'.format(run_id) ),
-                run_id)
+                run_id,
+                Rmem)
   else:
     cmd = '{0}'\
         .format(run_str)
