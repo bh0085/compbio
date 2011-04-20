@@ -115,7 +115,7 @@ Returns the dictionary of inputs.
     return [s for s in stats if not s == 'DONE']
   def package(self):
     outputs = self.outputs()
-    pickle.save(open(config.dataPath(self.datapath),'w'),
+    pickle.dump(open(config.dataPath(self.datapath),'w'),
                 outputs)
   def export(self, where = 'gliese'):
     cmdstr ='''echo "connecting to remote server"; ssh gliese 'echo "copying files to remote server"; scp tin:{1} `python -c '\''import compbio.config as config ; print config.dataPath("{2}")'\''`; echo "copying successful"; exit' '''.format(where,config.dataPath(self.datapath), self.datapath)
