@@ -118,8 +118,18 @@ Returns the dictionary of inputs.
     pickle.dump(outputs,
                 open(config.dataPath(self.datapath),'w'))
   def export(self, where = 'gliese'):
-    cmdstr ='''echo "connecting to remote server"; ssh gliese 'echo "copying files to remote server"; scp tin:{1} `python -c '\''import compbio.config as config ; print config.dataPath("{2}")'\''`; echo "copying successful"; exit' '''.format(where,config.dataPath(self.datapath), self.datapath)
+    cmdstr ='''
+echo "connecting to remote server"; 
+ssh gliese '
+echo "copying files to remote server"; 
+scp tin:{1} `python -c '\''import compbio.config as config ; print config.dataPath("{2}")'\''`; 
+echo "copying successful"; 
+exit' 
+'''.format(where,
+           config.dataPath(self.datapath), 
+           self.datapath)
 
+    print cmdstr    
     stdout = subprocess.Popen( cmdstr, shell = True,
                                stdout = subprocess.PIPE).communicate()
     print stdout
