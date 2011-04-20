@@ -113,7 +113,7 @@ Returns the dictionary of inputs.
   def unfinished(self):
     stats = self.statii()
     return [s for s in stats if not s == 'DONE']
-  def package(self, out_datapath):
+  def package(self):
     outputs = self.outputs()
     pickle.save(open(config.dataPath(self.datapath),'w'),
                 outputs)
