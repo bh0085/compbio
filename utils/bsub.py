@@ -122,7 +122,7 @@ Returns the dictionary of inputs.
 echo "connecting to remote server"; 
 ssh gliese '
 echo "copying files to remote server"; 
-scp tin:{1} `python -c \'import compbio.config as config ; print config.dataPath("{2}")\'`; 
+scp tin:{1} `python -c '\\''import compbio.config as config ; print config.dataPath("{2}")'\\''`; 
 echo "copying successful"; 
 exit' 
 '''.format(where,
@@ -137,12 +137,11 @@ exit'
     return
   def awaitAndExport(self):
     print '''Entering a loop to await completion of all tasks for eye with name {0}'''.format(self.name)
-    count = 0 
+    count = 0
     while 1:
       count += 1
       print '''Looping. [iter = {0}]'''.format(count)
       print 'statii:'
-      time.sleep(10)
       statii = self.statii()
       svals = dict(DONE= 1,
                    EXIT= -1,
@@ -155,7 +154,9 @@ exit'
         break
       if len(nonzero(equal(vals,-1))[0]) > 0:
         raise Exception('Sorry but one of your scripts failed.')
+      time.sleep(10)
 
+      
     self.package()
     self.export()
 
