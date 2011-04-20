@@ -1,7 +1,7 @@
 import pickle, os, itertools as it,re
 import compbio.config as config
 import inspect, subprocess, time
-
+from numpy import *
 #A class and a bunch of routines for 
 #running and tracking the results of bsub.
 #
