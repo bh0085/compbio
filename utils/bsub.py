@@ -131,10 +131,10 @@ Returns the dictionary of inputs.
       print 'statii:'
       time.sleep(1)
       statii = self.statii()
-      svals = dict('DONE'= 1,
-                   'EXIT'= -1,
-                   'RUN'= 0,
-                   'PEND'= 0)
+      svals = dict(DONE= 1,
+                   EXIT= -1,
+                   RUN= 0,
+                   PEND= 0)
       for k in svals.keys():
         print '   {1}:{0:02d}'.format(statii.count(k),k)
       vals = array([svals[k] for k in statii])
