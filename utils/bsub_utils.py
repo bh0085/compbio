@@ -34,7 +34,7 @@ this eye. Uses bjobs.
 
 if __name__ == '__main__':
     print 'hello'
-    exit (0)
+    exit(0)
     assert len(sys.argv) > 2
     if sys.argv[1] == 'bjobs':
         ids = sys.argv[2:]
