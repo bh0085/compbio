@@ -1,6 +1,31 @@
-import os
-import socket
+import os, pipes, socket, subprocess as spc
 root = os.environ['COMPBIO_PATH']
+
+def remotePath(abspath, host = 'tin', root = 'comp'):
+  '''Get the location of the a file on the remote file system
+from one of the roots ['compbio', 'programming']'''
+  
+  if root == 'prog':
+    subfun = progPath
+    subterm =  'progPath'
+  else:
+    subfun = compPath
+    subterm =  'compPath'    
+  
+  scr = pipes.quote('''
+echo `python -c {0}`'''.format(pipes.quote('''
+import compbio.config as config
+import os, inspect
+print config.{1}('{0}', absolute = True)
+'''.format( subfun(abspath),
+            subterm
+            ))))
+
+
+  ssh_scr = 'ssh {1} {0}'.format(scr, host)
+  out = spc.Popen(ssh_scr, shell = True, stdout = spc.PIPE).\
+      communicate()[0]
+  return out.strip()
 
 def absPath(localPath):
   global root
