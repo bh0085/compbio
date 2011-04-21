@@ -4,6 +4,7 @@ import sys
 import subprocess, re
 from numpy import roll
 import simplejson as sjson
+import compbio.config as cfg
 
 #Scripts designed to be called from the command line.
 def bjobs(jobids):
