@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
-import sys  
-import subprocess, re
+import subprocess, re, os, sys
 from numpy import roll
 import simplejson as sjson
 import compbio.config as cfg
