@@ -2,8 +2,11 @@ import pickle, os, itertools as it,re
 import compbio.config as cfg
 import inspect, subprocess as spc, time
 import compbio.utils.remote_utils as rutils
-import compbio.utils.bsub_utils as butils
+#import compbio.utils.bsub_utils as butils
+from compbio.utils.bsub_utils import *
 from numpy import *
+import simplejson as sjson
+
 '''
 Two classes and a disorganized bunch of routines for running bsub.
 
@@ -45,11 +48,11 @@ remote_make_tests which runs a batch of clustering algorithms in matlab.
     print 'Fetching remote log path'
     remote_logpath=  cfg.remotePath(cfg.dataPath('batch/logs'))
 
-    run_id = get_run_id(1, 'bcl_ll')
+    self.run_id = get_run_id(1, 'bcl_ll')
     print 'Creating bsub commands'
     self.bscmd = cmd(remote_script, 
                 func = func, 
-                run_id = run_id,
+                run_id = self.run_id,
                 log_dir =remote_logpath)
 
   def launch(self):
@@ -62,7 +65,12 @@ remote_make_tests which runs a batch of clustering algorithms in matlab.
   def status(self):
     scrpath= '${COMPBIO_PATH}/utils/bsub_utils.py'
     cmd = '{0} {1} {2}'.format(scrpath, 'bjobs', self.run_jobid)
-    return rutils.ssh_exec(cmd, host = 'tin')
+    return sjson.loads(rutils.ssh_exec(cmd, host =self.host))
+
+  def output(self):
+    scrpath =  '${COMPBIO_PATH}/utils/bsub_utils.py'
+    cmd = '{0} {1} {2}'.format(scrpath, 'bout', self.run_id)
+    return sjson.loads(rutils.ssh_exec(cmd, host =self.host))
 
 class eyeball(object):
   '''The class eyeball wraps all calls to bsub in my libraries. 
@@ -267,63 +275,3 @@ keywords:
   
   return cmd
 
-def get_run_num():
-  cur_id = max([int(e) for e in re.findall(\
-          re.compile('([0-9]+)'),' '.join(it.chain(*
-              [os.listdir(cfg.dataPath(d)) 
-               for d in  ['batch/inputs',
-                          'batch/outputs',
-                          'batch/logs']])))]+ [-1])
-  num = cur_id + 1
-  return num
-def get_run_id(num, prefix = 'R' ):
-  return '{0}%05i'.format(prefix) % (num,)
-
-def save_inp(inp_dict,run_id):
-  input_dir = cfg.dataPath('batch/inputs')
-  input_name = os.path.join(input_dir, run_id + '.inp')
-  inp_file = open(input_name, 'w')
-  pickle.dump(inp_dict, inp_file)
-  inp_file.close()
-  return input_name
-
-def load_inp(run_id):
-  input_dir = cfg.dataPath('batch/inputs')
-  input_name = os.path.join(input_dir, run_id + '.inp')
-  inp_file = open(input_name)
-  inp_dict = pickle.load( inp_file)
-  inp_file.close()
-  return(inp_dict)
-
-
-def save_out(out_dict, run_id):
-  out_dir = cfg.dataPath('batch/outputs')
-  out_name = os.path.join(out_dir, run_id + '.out')
-  out_file = open(out_name, 'w')
-  pickle.dump(out_dict, out_file)
-  out_file.close()
-  return out_name
-
-def load_out(run_id):
-  input_dir = cfg.dataPath('batch/outputs')
-  input_name = os.path.join(input_dir, run_id + '.out')
-  if not os.path.isfile(input_name):
-    return None
-  inp_file = open(input_name)
-  inp_dict = pickle.load( inp_file)
-  inp_file.close()
-  return(inp_dict)
-
-def tmp_fnames(run_id, num):
-  tmp_dir = cfg.dataPath('batch/tmp')
-  names = [os.path.join(tmp_dir, run_id + '_tmp{0:03d}'.format(idx))
-                        for idx in range(num)]
-                   
-  return names
-
-def mat_tmp_fnames(run_id, num):
-  tmp_dir = cfg.dataPath('batch/tmp')
-  names = [os.path.join(tmp_dir, run_id + '_tmp{0:03d}.mat'.format(idx))
-                        for idx in range(num)]
-                   
-  return names

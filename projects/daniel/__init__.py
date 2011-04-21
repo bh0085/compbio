@@ -114,32 +114,45 @@ def sg_big_hm_annotations(f, ax_box):
                 xytext = [0, 10], textcoords= 'offset pixels',
                 size = 'x-large')
 
-def sig_grid(num = 1 ,  method = 'tree', reset = False,
-             plot_kcs = True,
-             bp_means = False,
-             bp_zeros = True, zero_ofs = 1e-6,
-             bp_logs = True,
-             show_kos = False,
-             filter_rows_and_cols = False):
-  grid, descriptions = parseNet(num= num, method = method, reset = reset)
 
-  
+def dsi_boxplot(num = 1 ,  method = 'tree', reset = False,
+                plot_kcs = True,
+                bp_means = False,
+                bp_zeros = True, zero_ofs = 1e-6,
+                bp_logs = True,
+                show_kos = True,
+                filter_rows_and_cols = True):
+
+  grid, descriptions = parseNet(num= num, method = method, reset = reset)
+  grid = array(grid)
+  descriptions = dict(descriptions)
+  new_descriptions = {}
+
   if filter_rows_and_cols:
     #Filter out bad rows and columns
     good_exps = nonzero(np.max(grid,0))[0]
+
     tf_new_idxs = list(argsort(np.max(grid,1))[::-1])
-    grid = grid[tf_new_idxs]
-    good_tfs = nonzero(np.max(grid,1))[0]
+    new_grid = grid[tf_new_idxs]
+    good_tfs = nonzero(np.max(new_grid,1))[0]
 
     
     #Relabel the descriptions to take filtration into account
+    #Assumed that one based indexing may be causing havoc so subtract one from the group.
     for k, value in descriptions.iteritems():
       if 'Genes' in k:
-        descriptions[k] = [re.sub(re.compile('(\d+)'),lambda x:  x.group() in tf_new_idxs and str(tf_new_idxs.index(int(x.group()))) or x.group(), g) for g in value]
-      descriptions[k] = list(array(descriptions[k])[good_exps])
+        new_descriptions[k] = [re.sub(re.compile('(\d+)'),\
+                                        lambda x:  int(x.group()) in tf_new_idxs and str(tf_new_idxs.index(int(x.group()))) or x.group(), g) 
+                               for g in value]
+      else:
+        new_descriptions[k] = value
+      new_descriptions[k] = list(array(new_descriptions[k])[good_exps])
       
-    grid = grid[good_tfs, :]
-    grid = grid[ :,good_exps]
+    new_grid = new_grid[good_tfs, :]
+    new_grid = new_grid[ :,good_exps]
+    
+    grid = new_grid
+    descriptions = new_descriptions
 
 
   #Make lambdas to split experiments into categories
@@ -151,6 +164,8 @@ def sig_grid(num = 1 ,  method = 'tree', reset = False,
           for elt in  zip(*descriptions.values()) ]    
     exps[k] = nonzero( [v(e) for e in vs ])[0]
 
+  '''Remove 'general' as the values wind up being all zeros.'''
+  exps.pop('general')
   
   #Mark experiments that knock out TFS
   tf_kn_matches =[ sorted(list(it.chain(\
@@ -166,8 +181,10 @@ def sig_grid(num = 1 ,  method = 'tree', reset = False,
   
   do_final_bps = True
   kn_exps = {}
+
+  split_ko_ts = False
+  
   kn_exps['ko'] = []
-  kn_exps['ko_ts'] = []
   
 
   
@@ -177,14 +194,16 @@ def sig_grid(num = 1 ,  method = 'tree', reset = False,
     nz_frac_mean = []
     nz_val_std   = []
     nz_val_mean  = []
+    
+    nz_colvals = []
+
     for k, ecols in exps.iteritems():
       these_knockouts = array([c for c in knockout_cells if c[1] in ecols])
       exp_cells = array([(i,j) for j in ecols for i in arange(shape(grid)[0])])
       if these_knockouts != []:
         kns_found = [c for c in exp_cells 
                      if  np.sum(greater( np.product(c==these_knockouts,1),0),0)]
-        if k[-2:]== 'ts': kn_exps['ko'] += kns_found
-        else: kn_exps['ko_ts'] += kns_found
+        kn_exps['ko'] += kns_found
 
         nokns_found = [c for c in exp_cells 
                        if not np.sum(greater( np.product(c==these_knockouts,1),0),0)]
@@ -199,12 +218,13 @@ def sig_grid(num = 1 ,  method = 'tree', reset = False,
       colwise_exprs = [mean(col[nonzero(greater(col,0))]) for col in cexp]
       colwise_exprs = [c if not isnan(c) else 0 for c in colwise_exprs]
 
+      nz_colvals.append(colwise_exprs)
+      #if k == 'general_ts': raise Exception()
+
       nz_frac_std.append(std(colwise_fracs)/sqrt(len(colwise_fracs)))
       nz_frac_mean.append(mean(colwise_fracs))
       nz_val_std.append(std(colwise_exprs)/sqrt(len(colwise_exprs)))
       nz_val_mean.append(mean(colwise_exprs))
-
-      #if k == 'general': raise Exception()
       
       if isnan(nz_val_mean[-1]): raise Exception()
       
@@ -216,60 +236,81 @@ def sig_grid(num = 1 ,  method = 'tree', reset = False,
       nz_val_std.append(0)
       nz_frac_mean.append(mean(greater(grid[zip(*ecells)],0)))
       nz_val_mean.append(mean(grid[zip(*ecells[greater(grid[zip(*ecells)],0)])]))
+      nz_colvals.append(grid[zip(*ecells[greater(grid[zip(*ecells)],0)])])
       xlabels.append(k)
-
-    return xlabels, array(nz_frac_std),array(nz_val_std),array(nz_frac_mean), array(nz_val_mean)
-  xlabels, nz_frac_std,nz_val_std,nz_frac_mean, nz_val_mean = mem.getOrSet(getBPS,on_fail = 'compute', reset = True)
+      
+    return xlabels, array(nz_frac_std),array(nz_val_std),array(nz_frac_mean), array(nz_val_mean), [array(cv) for cv in nz_colvals]
+  xlabels, nz_frac_std,nz_val_std,nz_frac_mean, nz_val_mean, nz_colvals = mem.getOrSet(getBPS,on_fail = 'compute', reset = reset)
   
   args = [xlabels.index(x) for x in 
-          ['general','general_ts', 'drug', 'drug_ts', 
-           'genetic', 'genetic_ts', 'drug_genetic', 'drug_genetic_ts', 'ko','ko_ts']]
+          ['general_ts', 'drug', 'drug_ts', 
+           'genetic', 'genetic_ts', 'drug_genetic', 'drug_genetic_ts', 'ko']]
   xlabels, nz_frac_std,nz_cal_std,nz_frac_mean,nz_val_mean =\
       array(xlabels)[args],nz_frac_std[args],nz_val_std[args],nz_frac_mean[args],nz_val_mean[args]
+  nz_colvals = [nz_colvals[a] for a in args]
 
   f = plt.figure(0)
   f.clear()
 
-  nkeys = len(xlabels)
-  if show_kos: xi = arange(nkeys)
-  else: xi = arange(nkeys -2)
-  y1 = nz_val_mean[xi]
-  s1 =  nz_val_std[xi]
-  #y1 = log10(nz_val_mean)
-  y2 = nz_frac_mean[xi]
-  s2 =  nz_frac_std[xi]
 
-  #y2 = log10(nz_frac_mean)
-  #m1 = floor(min(y1))
-  #m2 = floor(min(y2))
-  #y1 = y1 - m1
-  #y2 = y2 - m2
-  a1 = f.add_subplot(211, ylim =[0, max(y1)+max(s1)], title = 'mean value of nonzero influences\n standard error across experiments')
-  a2 = f.add_subplot(212, ylim =[0,max(y2)+ max(s2)], title = 'mean values of fraction nonzero influences\n standard error across experiments' )
-
-
-  colors = mycolors.getct(nkeys)
-  wofs = .15
-  b1 = a1.bar(xi+wofs,y1,1.-wofs*2, linewidth = 3,color = colors,  ecolor = 'black')
-  b2 = a2.bar(xi+wofs,y2,1.-wofs*2, linewidth = 3,color = colors,  ecolor = 'black' )
-  p1,c1,b1 = a1.errorbar(xi+.5, y1, yerr = s1,capsize = 15, elinewidth = 4, color = 'black',linewidth = 0, ecolor = 'black')
-  p2,c2,b2 = a2.errorbar(xi+.5, y2, yerr = s2,capsize = 15, elinewidth = 4, color = 'black',linewidth =0, ecolor = 'black')
-  for c in c1:c.set_alpha(1.)
-  for c in c2:c.set_color('black')
-  for c in a2.get_children() + a1.get_children():
-      try: 
-        if not c in [p1,p2]: c.set_linewidth(4)
-      except: pass
-      continue
-  a2.set_xticklabels([])
-  for i in xi:
-    a2.text( float(i) + .5,0,xlabels[i] , rotation = '-15',size = '16', ha = 'left',va='top')
-  #raise Exception()
-  f.savefig(config.dataPath('daniel/figs/latest/{1:03d}_{0}.tiff'.format('no_kos' if not show_kos else 'kos', num )),format = 'tiff')
-
-  #raise Exception()
-
+  plot_type = 'dsi_final'
+  if plot_type == 'dsi_final':
+    margin = .05
+    wid0 = .75
+    
+    ax0 = f.add_axes([margin,margin, wid0 , 1. - 2* margin], title =  'Experminent mean significances: blue (red) lines denote quartiles (media).')
+    ax0.boxplot(nz_colvals[0:-1], widths = [.5] * (len(nz_colvals )-1))
+    ax0.set_yscale('log')
+    ax0.set_xticklabels(xlabels[:-1])
+    
+    ax1 = f.add_axes([2*margin +wid0, margin, (1 - margin) - (2 * margin + wid0), 1- 2* margin],sharey = ax0, title = 'TF knockout/OE')
+    ax1.boxplot(nz_colvals[-1:],widths = .5)
+    ax1.set_xticklabels(xlabels[-1:])
+  
+    f.savefig(config.dataPath('daniel/figs/final_bp_net{0}_{1}.tiff'.format(num, method)))
+  
+    return
+  elif plot_type == 'twoplots':
+    nkeys = len(xlabels)
+    if show_kos: xi = arange(nkeys)
+    else: xi = arange(nkeys -1)
+    
+    y1 = nz_val_mean[xi]
+    s1 =  nz_val_std[xi]
+    y2 = nz_frac_mean[xi]
+    s2 =  nz_frac_std[xi]
+    
+    a1 = f.add_subplot(211, ylim =[0, max(y1)+max(s1)], title = 'mean value of nonzero influences\n standard error across experiments')
+    a2 = f.add_subplot(212, ylim =[0,max(y2)+ max(s2)], title = 'mean values of fraction nonzero influences\n standard error across experiments' )
+    
+    colors = mycolors.getct(nkeys)
+    wofs = .15
+    b1 = a1.bar(xi+wofs,y1,1.-wofs*2, linewidth = 3,color = colors,  ecolor = 'black')
+    b2 = a2.bar(xi+wofs,y2,1.-wofs*2, linewidth = 3,color = colors,  ecolor = 'black' )
+    p1,c1,b1 = a1.errorbar(xi+.5, y1, yerr = s1,capsize = 15, elinewidth = 4, color = 'black',linewidth = 0, ecolor = 'black')
+    p2,c2,b2 = a2.errorbar(xi+.5, y2, yerr = s2,capsize = 15, elinewidth = 4, color = 'black',linewidth =0, ecolor = 'black')
+    for c in c1:c.set_alpha(1.)
+    for c in c2:c.set_color('black')
+    for c in a2.get_children() + a1.get_children():
+        try: 
+          if not c in [p1,p2]: c.set_linewidth(4)
+        except: pass
+        continue
+    a2.set_xticklabels([])
+    for i in xi:
+      a2.text( float(i) + .5,0,xlabels[i] , rotation = '-15',size = '16', ha = 'left',va='top')
+    f.savefig(config.dataPath('daniel/figs/latest/{1:03d}_{0}.tiff'.format('no_kos' if not show_kos else 'kos', num )),format = 'tiff')
+             
   return
+
+def sig_grid(num = 1 ,  method = 'tree', reset = False,
+             plot_kcs = True,
+             bp_means = False,
+             bp_zeros = True, zero_ofs = 1e-6,
+             bp_logs = True,
+             show_kos = False,
+             filter_rows_and_cols = False):
+
 
 
   #Make and annotate the heatmap figure
