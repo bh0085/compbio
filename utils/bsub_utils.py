@@ -32,7 +32,7 @@ this eye. Uses bjobs.
       run_id = d0['JOBID']
       job_dicts[run_id] = d0
 
-if __name__ = '__main__':
+if __name__ == '__main__':
     print 'hello'
     exit (0)
     assert len(sys.argv) > 2
