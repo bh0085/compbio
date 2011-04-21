@@ -1,21 +1,25 @@
 import pickle, os, itertools as it,re
 import compbio.config as cfg
-import inspect, subprocess, time
+import inspect, subprocess as spc, time
+import compbio.utils.remote_utils as rutils
 from numpy import *
-#A class and a bunch of routines for 
-#running and tracking the results of bsub.
-#
-#The main visible class here is eyeball which
-#can be called bit a script path and args as well
-#as a list of dictionaries representing input.
+'''
+Two classes and a disorganized bunch of routines for running bsub.
+
+local_launcher: allows spawning of single bsub tasks from the local machine.
+eyeball:        allows the spawing of many bsub tasks
+
+Both eyeball and local_launcher can check up on the status of spawned threads.
+
+'''
 
 for p in ['batch','batch/inputs','batch/outputs','batch/logs','batch/tmp','batch/eye']:
   if not os.path.isdir(cfg.dataPath(p)):
     os.mkdir(cfg.dataPath(p))
 
-class local_laucher(object):
+class local_launcher(object):
   def __init__(self, scriptfile, scriptroot,
-               func = func, run_id = run_id):
+               func = None, run_id = None, host = 'tin'):
     '''
 When calling scripts remotely I still have not worked out the most
 clear possible syntax. Right now, it is up to the user to specify
@@ -31,35 +35,33 @@ Anyway, having gotten those this script is pretty straightforward:
 Right now, all this version of local launch does is call the function 
 remote_make_tests which runs a batch of clustering algorithms in matlab.
 '''
+    self.host = host
     self.func = func
-    self.scriptname = scriptname
+    self.scriptfile = scriptfile
     print 'Fetching remote script path'
     remote_script =  cfg.remotePath(scriptfile,
                                        root = scriptroot)
     print 'Fetching remote log path'
     remote_logpath=  cfg.remotePath(cfg.dataPath('batch/logs'))
 
-    run_id = bsub.run_id(1, 'bcl_ll')
+    run_id = get_run_id(1, 'bcl_ll')
     print 'Creating bsub commands'
-    bscmd = bsub.cmd(remote_script, 
-                     func = func, 
-                     run_id = run_id,
-                     log_dir =remote_logpath)
-    
-    print 'Launching'
-    self.sshcmd = sshcmd
+    self.bscmd = cmd(remote_script, 
+                func = func, 
+                run_id = run_id,
+                log_dir =remote_logpath)
 
   def launch(self):
-    print 'Launching job for {0}.{1}'.format(self.scriptname, self.func)
-    prc = spc.Popen(self.sshcmd, stdout = spc.PIPE)
-    comm =prc.communicate()[0]
+    print 'Launching job for {0}.{1}'.format(self.scriptfile, self.func)
+    comm = rutils.ssh_exec(self.bscmd, host = self.host)
     self.run_jobid = re.compile('Job <([\d]+)>').\
         search(comm).group(1)
     print '  submitted with jobID: {0}'.format(self.run_jobid)
 
   def status(self):
-    job_c
-    
+    scrpath= '${COMPBIO_PATH}/utils/bsub_utils.py'
+    cmd = '{0} {1} {2}'.format(scrpath, 'bjobs', self.run_jobid)
+    return rutils.ssh_exec(cmd, host = 'tin')
 
 class eyeball(object):
   '''The class eyeball wraps all calls to bsub in my libraries. 
@@ -69,7 +71,7 @@ Eyeball has methods to check the status of bsub jobs underway as well as to reco
 '''
   def __init__(self,
                scr_path, inp_dicts,
-               func = func, 
+               func = None, 
                datapath = 'batch/eye/last.out',
                name = None
            ):
@@ -105,13 +107,15 @@ inputs:
       cmds.append(cmd(scr_path,
                       func = func,
                       run_id = run_id))
-    for c in cmds:
-      out = subprocess.Popen(c, stdout = subprocess.PIPE, \
-                               shell = True).\
-                               communicate()[0]
+    self.cmds = cmds
+  def launch(self):
+    for c in self.cmds:
+      out = spc.Popen(c, stdout = spc.PIPE, \
+                        shell = True).\
+                        communicate()[0]
       self.run_jobids.append(re.compile('Job <([\d]+)>').\
                             search(out).group(1))
-    
+
   def statii(self):
     '''
     Return the run statuses of programs launched under the control of
@@ -120,7 +124,6 @@ this eye. Uses bjobs.
     jobs = butils.bjobs(self.run_jobids) 
     statii = [j['STAT'] for j in jobs]
     return statii
-
   def outputs(self):
     '''
     Get the outputs of programs run by this eye.
@@ -169,9 +172,9 @@ exit'
            self.datapath)
 
     print cmdstr    
-    stdout = subprocess.Popen( cmdstr, 
+    stdout = spc.Popen( cmdstr, 
                                shell = True,
-                               stdout = subprocess.PIPE).communicate()
+                               stdout = spc.PIPE).communicate()
     print stdout
     return
   def awaitAndExport(self):
@@ -249,20 +252,16 @@ keywords:
     run_id = get_run_id(num, prefix = prefix)
 
   if func != None:
-    run_str = scr_path+' '+' '.join([func, run_id]+args) 
+    run_str = scr_path+' '+' '.join([func, run_id]+list(args)) 
   else:
     run_str = scr_path+ ' '  + ' '.join(args) 
-  if do_bsub:
-    cmd = 'bsub -q compbio-week -J {3} -o {2} -P {0} -R \'rusage[mem={4}]\'  "{1}" '\
-        .format(project, 
-                run_str,
-                os.path.join(log_dir,\
-                               '{0}.log'.format(run_id) ),
-                run_id,
-                Rmem)
-  else:
-    cmd = '{0}'\
-        .format(run_str)
+  cmd = 'bsub -q compbio-week -J {3} -o {2} -P {0} -R \'rusage[mem={4}]\'  "{1}" '\
+      .format(project, 
+              run_str,
+              os.path.join(log_dir,'{0}.log'.format(run_id) ),
+              run_id,
+              Rmem)
+
   
   return cmd
 

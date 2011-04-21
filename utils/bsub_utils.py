@@ -3,7 +3,6 @@
 import sys  
 import subprocess, re
 from numpy import roll
-
 import simplejson as sjson
 
 def bjobs(jobids):
@@ -41,7 +40,8 @@ if __name__ == '__main__':
     assert len(sys.argv) > 2
     if sys.argv[1] == 'bjobs':
         ids = sys.argv[2:]
-        print sjson.dumps(bjobs(ids))
+        sys.stdout.write(sjson.dumps(bjobs(ids)))
         exit(0)
     else:
         raise Exception()
+
