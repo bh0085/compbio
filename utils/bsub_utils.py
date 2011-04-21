@@ -14,7 +14,7 @@ this eye. Uses bjobs.
                             communicate()[0]
     lines = jobs.split('\n')
     cols, lines = lines[0],lines[1:]
-               col_starts = {}
+    col_starts = {}
 
     #Parse job list into columns
     terms =  re.compile('\s+').split(cols)
