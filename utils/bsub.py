@@ -89,6 +89,7 @@ inputs:
 
     #Set up internally useful vars.
     self.datapath = datapath
+    self.run_jobids = []
 
     #Use 'name' or 'scr' to set a prefix for runid generation
     if name == None:
