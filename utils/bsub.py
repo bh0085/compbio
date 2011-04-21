@@ -58,7 +58,7 @@ remote_make_tests which runs a batch of clustering algorithms in matlab.
     print '  submitted with jobID: {0}'.format(self.run_jobid)
 
   def status(self):
-    
+    job_c
     
 
 class eyeball(object):

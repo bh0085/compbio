@@ -1,8 +1,9 @@
-#/usr/bin/env python
+#!/usr/bin/env python
 
 import sys  
 import subprocess, re
 from numpy import roll
+
 def bjobs(jobids):
     '''
     Return the run statuses of programs launched under the control of
