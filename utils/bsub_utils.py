@@ -35,6 +35,7 @@ this eye. Uses bjobs.
                  for k in terms])
       run_id = d0['JOBID']
       job_dicts[run_id] = d0
+    return(job_dicts)
 
 if __name__ == '__main__':
     assert len(sys.argv) > 2
