@@ -4,6 +4,8 @@ import sys
 import subprocess, re
 from numpy import roll
 
+import simplejson as sjson
+
 def bjobs(jobids):
     '''
     Return the run statuses of programs launched under the control of
@@ -38,7 +40,7 @@ if __name__ == '__main__':
     assert len(sys.argv) > 2
     if sys.argv[1] == 'bjobs':
         ids = sys.argv[2:]
-        print ids
+        print sjson.dumps(bjobs(ids))
         exit(0)
     else:
         raise Exception()
