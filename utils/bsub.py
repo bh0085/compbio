@@ -2,6 +2,7 @@ import pickle, os, itertools as it,re
 import compbio.config as cfg
 import inspect, subprocess as spc, time
 import compbio.utils.remote_utils as rutils
+import compbio.utils.bsub_utils as butils
 from numpy import *
 '''
 Two classes and a disorganized bunch of routines for running bsub.
