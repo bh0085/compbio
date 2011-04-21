@@ -1,6 +1,7 @@
 #/usr/bin/env python
 
 import sys  
+import subprocess
 
 def bjobs(jobids):
     '''
