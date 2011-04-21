@@ -33,6 +33,8 @@ this eye. Uses bjobs.
       job_dicts[run_id] = d0
 
 if __name__ = '__main__':
+    print 'hello'
+    exit (0)
     assert len(sys.argv) > 2
     if sys.argv[1] == 'bjobs':
         ids = sys.argv[2:]
