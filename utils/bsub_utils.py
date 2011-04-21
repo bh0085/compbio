@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import subprocess, re, os, sys
+import subprocess, re, os, sys, pickle
 from numpy import roll
 import simplejson as sjson
 import compbio.config as cfg
@@ -38,7 +38,6 @@ this eye. Uses bjobs.
     return(job_dicts)
 def bout(run_id):
     return load_out(run_id)
-
 
 
 #Utility functions
