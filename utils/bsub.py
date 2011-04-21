@@ -124,7 +124,7 @@ inputs:
 this eye. Uses bjobs.
 '''
     jobs = butils.bjobs(self.run_jobids) 
-    statii = [j['STAT'] for j in jobs]
+    statii = [j['STAT'] for j in jobs.values()]
     return statii
   def outputs(self):
     '''
