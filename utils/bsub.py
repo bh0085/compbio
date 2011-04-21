@@ -187,7 +187,7 @@ exit'
                                stdout = spc.PIPE).communicate()
     print stdout
     return
-  def awaitAndExport(self):
+  def await(self):
     print '''Entering a loop to await completion of all tasks for eye with name {0}'''.format(self.name)
     count = 0
     while 1:
@@ -208,9 +208,6 @@ exit'
         raise Exception('Sorry but one of your scripts failed.')
       time.sleep(10)
 
-      
-    self.package()
-    self.export()
 
 
 
