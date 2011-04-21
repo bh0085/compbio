@@ -131,7 +131,7 @@ inputs:
     Return the run statuses of programs launched under the control of
 this eye. Uses bjobs.
 '''
-    jobs = butils.bjobs(self.run_jobids) 
+    jobs = bjobs(self.run_jobids) 
     statii = [j['STAT'].strip() for j in jobs.values()]
     return statii
   def outputs(self):
