@@ -111,7 +111,7 @@ if __name__ == '__main__':
         exit(0)
     elif sys.argv[1] == 'bout':
         run_id = sys.argv[2]
-        sys.stdoutwrite(sjson.dumps(bout(run_id)))
+        sys.stdout.write(sjson.dumps(bout(run_id)))
         exit(0)                  
     else:
         raise Exception()
