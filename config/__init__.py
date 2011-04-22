@@ -67,16 +67,18 @@ def dataPath(url, make = True):
   elif volume_name == 'cb':volume_prefix = globals()['root']
   elif volume_name == '~':volum_prefix = os.environ['HOME']
   else: volume_prefix = os.path.join('/Volumes', volume_name)
-  assert host_name == socket.gethostname() or \
-      host_name == 'localhost'
+  if host_name == socket.gethostname() or \
+        host_name == 'localhost':
+    path = os.path.join(os.path.join(volume_prefix,'data'), localpath)
+    if make and not os.path.isdir(os.path.dirname(path)):
+      os.makedirs(os.path.dirname(path))
+  else:
+    prc = spc
 
-  path = os.path.join(os.path.join(volume_prefix,'data'), localpath)
-  if make and not os.path.isdir(os.path.dirname(path)):
-    os.makedirs(os.path.dirname(path))
   return path
 
-def dataURL(localpath, volume_name = 'cb',  host_name = 'localhost'):
-  return ':'.join([host_name, volume_name, localpath]) 
+def dataURL(localpath, volume_name = 'cb',  host = 'localhost'):
+  return ':'.join([host, volume_name, localpath]) 
 
 def sqlitePath(dbname, **kwargs):
   url = dataURL(os.path.join('dbs',dbname+'.sqlite'),**kwargs)
