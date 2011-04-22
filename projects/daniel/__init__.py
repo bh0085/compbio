@@ -259,15 +259,22 @@ def dsi_boxplot(num = 1 ,  method = 'tree', reset = False,
     wid0 = .75
     
     ax0 = f.add_axes([margin,margin, wid0 , 1. - 2* margin], title =  'Experminent mean significances: blue (red) lines denote quartiles (media).')
-    ax0.boxplot(nz_colvals[0:-1], widths = [.5] * (len(nz_colvals )-1))
     ax0.set_yscale('log')
+    #ax0.set_autoscaley_on(False)
+    ax0.boxplot(nz_colvals[0:-1], widths = [.5] * (len(nz_colvals )-1))
     ax0.set_xticklabels(xlabels[:-1])
     
+
+    ax0.set_ylim([min(nz_colvals[-1]), max(nz_colvals[-1])/10])
+
     ax1 = f.add_axes([2*margin +wid0, margin, (1 - margin) - (2 * margin + wid0), 1- 2* margin],sharey = ax0, title = 'TF knockout/OE')
     ax1.boxplot(nz_colvals[-1:],widths = .5)
     ax1.set_xticklabels(xlabels[-1:])
-  
-    f.savefig(config.dataPath('daniel/figs/final_bp_net{0}_{1}.tiff'.format(num, method)))
+    
+    ax1.set_ylim([np.min([min(c) for c in nz_colvals]), np.max([max(c) for c in nz_colvals])])
+
+    f.savefig(config.dataPath('daniel/figs/final_bp_net{0}_{1}.ps'.format(num, method)),
+              dpi = 10)
   
     return
   elif plot_type == 'twoplots':
