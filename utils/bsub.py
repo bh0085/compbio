@@ -206,9 +206,12 @@ exit'
     count = 0
     while 1:
       count += 1
-      stat_str =  '''Looping. [iter = {0}]\n'''.format(count)
+      stat_str =  '''Status: waiting\nLooping. [iter = {0}]\n'''.format(count)
       stat_str += 'statii:\n'
-      statii = self.statii()
+
+      jobs = bjobs(self.run_jobids) 
+      statii = [j['STAT'].strip() for j in jobs.values()]
+
       svals = dict(DONE= 1,
                    EXIT= -1,
                    RUN= 0,
@@ -216,12 +219,15 @@ exit'
       for k in svals.keys():
         stat_str +=  '   {1}:{0:02d}\n'.format(statii.count(k),k)
       vals = array([svals[k] for k in statii])
-      save_data(statii, self.run_id, 'status')
+      save_data({'status': 'RUN','jobs':jobs}, self.run_id, 'status')
       if len(nonzero(not_equal(vals,1))[0]) == 0:
         break
       if len(nonzero(equal(vals,-1))[0]) > 0:
+        save_data({'status':'EXIT','jobs':jobs}, self.run_id, 'status')
         raise Exception('Sorry but one of your scripts failed.')
       time.sleep(10)
+    save_data({'status':'DONE','jobs':jobs}, self.run_id, 'status')
+                
 
 
 
