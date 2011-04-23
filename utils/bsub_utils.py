@@ -119,7 +119,7 @@ if __name__ == '__main__':
         ids = sys.argv[2:]
         sys.stdout.write(sjson.dumps(globals()[sys.argv[1]](ids)))
         exit(0)
-    elif sys.argv in ['bout', 'bstatus' ]:
+    elif sys.argv[1] in ['bout', 'bstatus' ]:
         #Dump data to json and write to stdout
         run_id = sys.argv[2]
         sys.stdout.write(sjson.dumps(globals()[sys.argv[1]](run_id)))
