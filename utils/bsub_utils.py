@@ -70,7 +70,7 @@ def locate_data(run_id, data_type):
     templates = {'output':'batch/outputs/{0}.pickle',
                  'input':'batch/inputs/{0}.pickle',
                  'status':'batch/statii/{0}.json'}
-    path = cfg.dataPath(templates[dict_type].format(run_id))
+    path = cfg.dataPath(templates[data_type].format(run_id))
 def clear_data(run_id, data_type):
     for d in data_types:
         path = locate_data(run_id, data_type)
