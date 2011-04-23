@@ -48,7 +48,7 @@ to the stdout and communication over ssh.
 usage:       bstatus(run_id)
 commandline: bsub_utils.py bstatus run_id
 '''
-    return load_status(run_id, 'output')
+    return load_data(run_id, 'status')
 
 #Utility functions
 def get_run_num():
