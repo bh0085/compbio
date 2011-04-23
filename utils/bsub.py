@@ -139,7 +139,7 @@ inputs:
                         communicate()[0]
       self.run_jobids.append(re.compile('Job <([\d]+)>').\
                             search(out).group(1))
-      if mod(i, 5) == 0 :
+      if mod(idxi, 5) == 0 :
         save_data('Jobs launched: {0}'.format(idx), self.run_id, 'status')
   def statii(self):
     '''
