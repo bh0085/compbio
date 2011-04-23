@@ -79,12 +79,18 @@ def clear_data(run_id, data_type):
 def save_data(contents, run_id, data_type):
     path = locate_data(run_id, data_type)
     fopen = open(path, 'w')
-    pickle.dump(contents, fopen)
+    if path[-4:] == 'ckle':
+        pickle.dump(contents, fopen)
+    else:
+        sjson.dump(contents, fopen)
     fopen.close()
 def load_data(run_id, data_type):
     path = locate_data(run_id, data_type)
     fopen = open(path)
-    contents = pickle.load(fopen)
+    if path[-4:] == 'ckle':
+        contents = pickle.load( fopen)
+    else:
+        contents = sjson.load( fopen)
     fopen.close()    
     return contents
     
@@ -108,18 +114,10 @@ def mat_tmp_fnames(run_id, num):
 
 if __name__ == '__main__':
     assert len(sys.argv) > 2
-    if sys.argv[1] in [ 'bjobs', 'bout' ]:
-        #Because data is saved in a pickled format,
-        #need to dump it into json format before
-        #returning
+    if sys.argv[1] in [ 'bjobs', 'bout', 'bstatus' ]:
+        #Dump data to json and write to stdout
         ids = sys.argv[2:]
         sys.stdout.write(sjson.dumps(globals()[sys.argv[1]](ids)))
-        exit(0)
-    elif sys.argv[1] in [ 'bstatus' ]:
-        #because statii are saved in json format,
-        #there is no need to use sjson.dumps
-        run_id = sys.argv[2]
-        sys.stdout.write(globals()[sys.argv[1]](run_id))
         exit(0)
     else:
         raise Exception()
