@@ -133,13 +133,14 @@ inputs:
                       run_id = run_id))
     self.cmds = cmds
   def launch(self):
-    for c in self.cmds:
+    for idx, c in enumerate(self.cmds):
       out = spc.Popen(c, stdout = spc.PIPE, \
                         shell = True).\
                         communicate()[0]
       self.run_jobids.append(re.compile('Job <([\d]+)>').\
                             search(out).group(1))
-
+      if mod(i, 5) == 0 :
+        save_data('Jobs launched: {0}'.format(idx), self.run_id, 'status')
   def statii(self):
     '''
     Return the run statuses of programs launched under the control of
