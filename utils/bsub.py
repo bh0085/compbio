@@ -215,7 +215,7 @@ exit'
       for k in svals.keys():
         stat_str +=  '   {1}:{0:02d}\n'.format(statii.count(k),k)
       vals = array([svals[k] for k in statii])
-      butils.save_data(statii, self.run_id, 'status')
+      save_data(statii, self.run_id, 'status')
       if len(nonzero(not_equal(vals,1))[0]) == 0:
         break
       if len(nonzero(equal(vals,-1))[0]) > 0:
