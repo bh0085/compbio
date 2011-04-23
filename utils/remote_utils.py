@@ -1,7 +1,7 @@
 import pipes , subprocess as spc
 import signal
 from signal import alarm, SIGALRM, SIGKILL
-import compbio.config as cfg
+import compbio.config
 from os import kill
 
 
@@ -27,6 +27,7 @@ def remote_datapath( path, host, volume = '' ):
 
 def scp_data(src_path, dest_path,
              src_host = None, dest_host = None):
+    cfg = compbio.config
     if src_host:
         src_url = src_host + ':' +cfg.dataPath(\
             cfg.dataURL(src_path, host = src_host))
