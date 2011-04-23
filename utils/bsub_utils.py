@@ -37,7 +37,7 @@ this eye. Uses bjobs.
       job_dicts[run_id] = d0
     return(job_dicts)
 def bout(run_id):
-    return load_data(run_id, 'output')
+    return load_data(run_id, 'output') 
 
 def bstatus(run_id):
     '''Get the status of a currently running job.
@@ -114,10 +114,15 @@ def mat_tmp_fnames(run_id, num):
 
 if __name__ == '__main__':
     assert len(sys.argv) > 2
-    if sys.argv[1] in [ 'bjobs', 'bout', 'bstatus' ]:
+    if sys.argv[1] in [ 'bjobs']:
         #Dump data to json and write to stdout
         ids = sys.argv[2:]
         sys.stdout.write(sjson.dumps(globals()[sys.argv[1]](ids)))
+        exit(0)
+    elif sys.argv in ['bout', 'bstatus' ]:
+        #Dump data to json and write to stdout
+        run_id = sys.argv[2]
+        sys.stdout.write(sjson.dumps(globals()[sys.argv[1]](run_id)))
         exit(0)
     else:
         raise Exception()
