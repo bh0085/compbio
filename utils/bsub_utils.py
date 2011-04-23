@@ -37,8 +37,18 @@ this eye. Uses bjobs.
       job_dicts[run_id] = d0
     return(job_dicts)
 def bout(run_id):
-    return load_out(run_id)
+    return load_data(run_id, 'output')
 
+def bstatus(run_id):
+    '''Get the status of a currently running job.
+By convention, statuses will be saved in json
+format so that bstatus is compatible with printing
+to the stdout and communication over ssh.
+
+usage:       bstatus(run_id)
+commandline: bsub_utils.py bstatus run_id
+'''
+    return load_status(run_id, 'output')
 
 #Utility functions
 def get_run_num():
@@ -53,40 +63,34 @@ def get_run_num():
 def get_run_id(num, prefix = 'R' ):
   return '{0}%05i'.format(prefix) % (num,)
 
-def save_inp(inp_dict,run_id):
-  input_dir = cfg.dataPath('batch/inputs')
-  input_name = os.path.join(input_dir, run_id + '.inp')
-  inp_file = open(input_name, 'w')
-  pickle.dump(inp_dict, inp_file)
-  inp_file.close()
-  return input_name
-
-def load_inp(run_id):
-  input_dir = cfg.dataPath('batch/inputs')
-  input_name = os.path.join(input_dir, run_id + '.inp')
-  inp_file = open(input_name)
-  inp_dict = pickle.load( inp_file)
-  inp_file.close()
-  return(inp_dict)
 
 
-def save_out(out_dict, run_id):
-  out_dir = cfg.dataPath('batch/outputs')
-  out_name = os.path.join(out_dir, run_id + '.out')
-  out_file = open(out_name, 'w')
-  pickle.dump(out_dict, out_file)
-  out_file.close()
-  return out_name
 
-def load_out(run_id):
-  input_dir = cfg.dataPath('batch/outputs')
-  input_name = os.path.join(input_dir, run_id + '.out')
-  if not os.path.isfile(input_name):
-    return None
-  inp_file = open(input_name)
-  inp_dict = pickle.load( inp_file)
-  inp_file.close()
-  return(inp_dict)
+def locate_data(run_id, data_type):
+    templates = {'output':'batch/outputs/{0}.pickle',
+                 'input':'batch/inputs/{0}.pickle',
+                 'status':'batch/statii/{0}.json'}
+    path = cfg.dataPath(templates[dict_type].format(run_id))
+def clear_data(run_id, data_type):
+    for d in data_types:
+        path = locate_data(run_id, data_type)
+        if os.path.isfile(path):
+            os.remove(path)
+def save_data(contents, run_id, data_type):
+    path = locate_data(run_id, data_type)
+    fopen = open(path, 'w')
+    pickle.dump(contents, fopen)
+    fopen.close()
+def load_data(run_id, data_type):
+    path = locate_data(run_id, data_type)
+    fopen = open(path)
+    contents = pickle.load(fopen)
+    fopen.close()    
+    return contents
+    
+    
+
+
 
 def tmp_fnames(run_id, num):
   tmp_dir = cfg.dataPath('batch/tmp')
@@ -104,14 +108,19 @@ def mat_tmp_fnames(run_id, num):
 
 if __name__ == '__main__':
     assert len(sys.argv) > 2
-    if sys.argv[1] == 'bjobs':
+    if sys.argv[1] in [ 'bjobs', 'bout' ]:
+        #Because data is saved in a pickled format,
+        #need to dump it into json format before
+        #returning
         ids = sys.argv[2:]
-        sys.stdout.write(sjson.dumps(bjobs(ids)))
+        sys.stdout.write(sjson.dumps(globals()[sys.argv[1]](ids)))
         exit(0)
-    elif sys.argv[1] == 'bout':
+    elif sys.argv[1] in [ 'bstatus' ]:
+        #because statii are saved in json format,
+        #there is no need to use sjson.dumps
         run_id = sys.argv[2]
-        sys.stdout.write(sjson.dumps(bout(run_id)))
-        exit(0)                  
+        sys.stdout.write(globals()[sys.argv[1]](run_id))
+        exit(0)
     else:
         raise Exception()
 

@@ -39,6 +39,7 @@ Anyway, having gotten those this script is pretty straightforward:
 Right now, all this version of local launch does is call the function 
 remote_make_tests which runs a batch of clustering algorithms in matlab.
 '''
+    self.scp_proc = None
     self.host = host
     self.func = func
     self.scriptfile = scriptfile
@@ -51,9 +52,9 @@ remote_make_tests which runs a batch of clustering algorithms in matlab.
     self.run_id = get_run_id(1, 'bcl_ll')
     print 'Creating bsub commands'
     self.bscmd = cmd(remote_script, 
-                func = func, 
-                run_id = self.run_id,
-                log_dir =remote_logpath)
+                     func = func, 
+                     run_id = self.run_id,
+                     log_dir =remote_logpath)
 
   def launch(self):
     print 'Launching job for {0}.{1}'.format(self.scriptfile, self.func)
@@ -62,15 +63,26 @@ remote_make_tests which runs a batch of clustering algorithms in matlab.
         search(comm).group(1)
     print '  submitted with jobID: {0}'.format(self.run_jobid)
 
-  def status(self):
+  def remote_status(self):
     scrpath= '${COMPBIO_PATH}/utils/bsub_utils.py'
     cmd = '{0} {1} {2}'.format(scrpath, 'bjobs', self.run_jobid)
     return sjson.loads(rutils.ssh_exec(cmd, host =self.host))
-
-  def output(self):
+  def remote_output(self):
     scrpath =  '${COMPBIO_PATH}/utils/bsub_utils.py'
     cmd = '{0} {1} {2}'.format(scrpath, 'bout', self.run_id)
     return sjson.loads(rutils.ssh_exec(cmd, host =self.host))
+  def fetch_start():
+    out = self.remote_meta()['outfile']
+    self.scp_proc = rutils.scp_data(outfile, outfile,
+                               src_host = self.host)
+  def fetch_await(maxtime = 10):
+    print 'Checking status of the remote job manager.'
+    print '...'
+    while 1:
+      status = self.remote_status()
+    if not self.scp_proc: self.fetch_start()
+    returnval = rutils.comm_timeout(scp_proc)
+    
 
 class eyeball(object):
   '''The class eyeball wraps all calls to bsub in my libraries. 
@@ -79,6 +91,7 @@ Eyeball has methods to check the status of bsub jobs underway as well as to reco
 
 '''
   def __init__(self,
+               run_id,
                scr_path, inp_dicts,
                func = None, 
                datapath = 'batch/eye/last.out',
@@ -98,6 +111,7 @@ inputs:
     #Set up internally useful vars.
     self.datapath = datapath
     self.run_jobids = []
+    self.run_id = run_id
 
     #Use 'name' or 'scr' to set a prefix for runid generation
     if name == None:
@@ -112,7 +126,7 @@ inputs:
     self.run_names , self.run_ids = [], []
     for idx,  d in enumerate(inp_dicts):
       run_id=get_run_id(idx, prefix = runid_prefix)
-      save_inp(d, run_id)
+      save_data(d, run_id,'input')
       self.run_names.append(run_id)
       cmds.append(cmd(scr_path,
                       func = func,
@@ -146,7 +160,7 @@ For programs that have not yet been completed, returns: None
     #this is because I use a different id that than the bsub job id which
     #is what that run_jobids field is named after
     statii = self.statii()
-    return [load_out(run_id) if statii[idx] == 'DONE' else None 
+    return [load_data(run_id, 'output') if statii[idx] == 'DONE' else None 
             for idx, run_id in enumerate(self.run_names)]
 
 
@@ -159,7 +173,7 @@ Returns the dictionary of inputs.
     ids = self.run_names
     self.ins = []
     for i in ids:
-      self.ins.append(load_inp(i))
+      self.ins.append(load_data(i, 'input'))
     return self.ins
   
   def unfinished(self):
@@ -188,20 +202,20 @@ exit'
     print stdout
     return
   def await(self):
-    print '''Entering a loop to await completion of all tasks for eye with name {0}'''.format(self.name)
     count = 0
     while 1:
       count += 1
-      print '''Looping. [iter = {0}]'''.format(count)
-      print 'statii:'
+      stat_str =  '''Looping. [iter = {0}]\n'''.format(count)
+      stat_str += 'statii:\n'
       statii = self.statii()
       svals = dict(DONE= 1,
                    EXIT= -1,
                    RUN= 0,
                    PEND= 0)
       for k in svals.keys():
-        print '   {1}:{0:02d}'.format(statii.count(k),k)
+        stat_str +=  '   {1}:{0:02d}\n'.format(statii.count(k),k)
       vals = array([svals[k] for k in statii])
+      butils.save_data(statii, self.run_id, 'status')
       if len(nonzero(not_equal(vals,1))[0]) == 0:
         break
       if len(nonzero(equal(vals,-1))[0]) > 0:

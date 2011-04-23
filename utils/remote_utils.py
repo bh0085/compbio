@@ -1,7 +1,7 @@
 import pipes , subprocess as spc
 import signal
 from signal import alarm, SIGALRM, SIGKILL
-
+import compbio.config as cfg
 from os import kill
 
 
@@ -14,15 +14,34 @@ def ssh_cmd(cmd, host = 'tin'):
     return  '''ssh {0} {1}'''.\
         format(host, pipes.quote(cmd))
 
-def scp_data(src_url, dest_url, timeout = 5):
-    prc = spc.Popen('scp -v {0} {1}'.\
-                        format(cfg.dataPath(src_url),
-                               cfg.dataPath(dest_url)),
-                    shell = True)
-    result = prc.communicate()
-
-def remote_datapath( path, host ):
+def remote_datapath( path, host, volume = '' ):
     timeout = 5
+    prc = spc.Popen('ssh {0} "pydatapath.py {1} {2}"'.\
+                        format(host, path, volume), 
+                    shell = True, stdout = spc.PIPE)    
+    out = comm_timeout(prc, timeout)
+    if out[0] == -9:
+        raise Exception('Process timeout')
+    else: 
+        return out[1]
+
+def scp_data(src_path, dest_path,
+             src_host = None, dest_host = None):
+    if src_host:
+        src_url = src_host + ':' +cfg.dataPath(\
+            cfg.dataURL(src_path, host = src_host))
+    else:
+        src_url = cfg.dataPath(src_path)
+    if dest_host:
+        dest_url = dest_host + ':' + cfg.dataPath(\
+            cfg.dataURL(dest_path, host =dest_host))
+    else:
+        dest_url = cfg.dataPath(dest_path)
+
+    prc = spc.Popen('scp {0} {1} '.\
+                        format(src_url, dest_url), 
+                    shell = True, stdout = spc.PIPE)    
+    return prc.communicate()
 
 class Alarm(Exception):
     pass
