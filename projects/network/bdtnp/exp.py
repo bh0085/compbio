@@ -119,13 +119,15 @@ def c2():
   sim_data = cell_data[rand_thousand]
   t = [ mean(sim_data, 0), std(sim_data,0)]
   t[1][equal(t[1],0)] = 0
-  sims = similarity(sim_data, transform = t, method = 'neg_dist')
+  metric = 'neg_dist'
+  sims = similarity(sim_data, transform = t, method = 'metric')
   
-  percs = logspace(-2,1.99,3)
+  percs = logspace(0,1.5,5)
   d_in = []
   for p in percs:
     d_in.append(dict(similarities = sims,
-                     self_similarity = percentile(sims, p)
+                     self_similarity = percentile(sims, p),
+                     metric = metric
                      ))
   launcher = bcl.launcher(d_in)
   return launcher
