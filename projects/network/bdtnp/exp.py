@@ -195,12 +195,12 @@ def cluster_tissues(nx = 20,ny = 500, timepoint = -1,
       assignments = np.argmax(all_sims,1)
 
 
-      ax = f.add_subplot(111, projection = '3d')
+      ax = f.add_subplot(111)
       #colors = [colors[i] for i in c]
       xs = misc['x']['vals'][::step,0]
       ys = misc['y']['vals'][::step,0]
       zs = misc['z']['vals'][::step,0]
-      ax.scatter(xs, ys, zs,s= 50, color =colors[assignments[::step]])
+      ax.scatter(xs, zs,s= 50, color =colors[assignments[::step]])
       #ax.set_title('''Virtual embryo cell (n={2}) clusters 
 #from similarities derived from {0} genes. 
 #Clusters derived at T = {1}, shown at T = {3}.'''\

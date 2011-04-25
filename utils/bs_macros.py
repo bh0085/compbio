@@ -9,6 +9,8 @@ def runmat(script, input_dict, run_id):
     cstr = '''matlab -nodesktop -nosplash -r "{2}('{0}', '{1}' )"'''.format(*(tmpnames + [script]))
     sxs = spc.Popen(cstr, shell = True, stdout = spc.PIPE).communicate(0)
     output = sio.loadmat(tmpnames[1])
-    return output
+    o00 = output['out_struct'][0][0]
+    dout =  = dict([(k, os.__getattribute__(k)) for k in o00._fieldnames])
+    return dout
 
     
