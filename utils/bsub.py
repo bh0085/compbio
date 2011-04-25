@@ -96,15 +96,18 @@ remote_make_tests which runs a batch of clustering algorithms in matlab.
     while 1:
       status = self.remote_status()
       stat_str = status['status']
+      print stat_str
+
+
       if stat_str in ['PEND' , 'RUN', 'UNK']:
-        continue
+        pass
       elif stat_str == 'EXIT':
         raise Exception()
       elif stat_str == 'DONE':
         break
 
-      print stat_str
       time.sleep(5)
+
       
       
     if not self.scp_proc: self.fetch_start()
@@ -265,7 +268,7 @@ exit'
     save_data({'status':'RUN','jobs':jobs}, self.run_id, 'status')
                 
   def complete():
-    save_data({'status':'DONE', 'outfile': self.datapath})
+    save_data({'status':'DONE', 'outfile': self.datapath},self.run_id, 'status')
 
 
 
