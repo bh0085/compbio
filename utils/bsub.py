@@ -271,7 +271,7 @@ exit'
         break
       if len(nonzero(equal(vals,-1))[0]) > 0:
         save_data({'status':'EXIT','jobs':jobs}, self.run_id, 'status')
-        raise Exception('Sorry but one of your scripts failed.')
+        raise Exception('Sorry but one of your scripts failed: {0}'.format(array(self.run_ids)[equal(vals,-1)]))
       time.sleep(20)
     save_data({'status':'RUN','jobs':jobs}, self.run_id, 'status')
                 

@@ -7,15 +7,15 @@ p_m_correlation:   plots the correlations between protein and mRNA
   levels for the four genes for which it is available and saves
   a figure for later reference.
 
-show_multi:
+show_multi 
   Shows the expression levels for a bunch of different mRNAs in
   the form of a 3 dimensional scatterplot.
 
-show_3d:
+show_3d
   Shows a single gene in a 3 dimensional scatterplot over the 
   embryo.
 
-cluster_tissues:
+cluster_tissues
   Representing nuclei by the expression levels of a set d of genes
   at a particular time point, clusters nuclei into medioid clusters
   using the max-sum algorithm from gifford's class.
@@ -84,6 +84,45 @@ def p_m_correlation():
                             ),format = 'tiff')
     
                        
+
+
+def c2():
+  mrnas = nio.getBDTNP()
+  misc = nio.getBDTNP(misc = True)
+  
+  vals = array([v['vals'] for v in mrnas.values()])
+  gvars = var(vals, 1)
+  gminvars = np.min(gvars,1)
+  gmedvars = median(gvars,1)
+
+  min20 = argsort(gminvars)[::-1][:20]
+  med20 = argsort(gmedvars)[::-1][:20]
+
+  int20 = set(min20).intersection(set(med20))
+  #of the twenty most variable genes, 14 have nonzero
+  #variance in all time points.
+  #we will use these 14 (int20) for the genetic coords
+  #in cross-timepoint clustering.
+
+  xgenes = array(list(int20))
+  cell_data = vals[xgenes].transpose(1,2,0)
+
+  #reshape with C-Style indexing.
+  #takes x first, then y, then z
+  cell_data = reshape(cell_data, (prod(shape(cell_data)[0:2]), shape(cell_data)[2] ))
+  inds = arange(len(cell_data))
+  np.random.seed(1)
+  np.random.shuffle(inds)
+  rand_thousand = inds[0:1000]
+  
+  sim_data = cell_data[rand_thousand]
+  t = [ mean(sim_data, 0), std(sim_data,0)]
+  t[1][equal(t[1],0)] = 0
+  sims = similarity(sim_data, transform = t, method = 'neg_dist')
+  
+  
+  
+  raise Exception()
 
 def cluster_tissues(nx = 20,ny = 500, timepoint = -1,
                     step = 4,
