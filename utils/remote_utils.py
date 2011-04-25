@@ -83,7 +83,7 @@ def scp_data(src_path, dest_path,
     prc = spc.Popen('scp {0} {1} '.\
                         format(src_url, dest_url), 
                     shell = True, stdout = spc.PIPE)    
-    return prc.communicate()
+    return prc
 
 
 
