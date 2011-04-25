@@ -70,11 +70,24 @@ remote_make_tests which runs a batch of clustering algorithms in matlab.
     cmd = '{0} {1} {2}'.format(scrpath, 'bstatus', self.run_id)
     return sjson.loads(rutils.ssh_exec(cmd, host =self.host))
   def remote_output(self):
+    '''NOT USED RIGHT NOW!
+    This method relies on using stdout to communicate
+    the output of remote execution but this seems silly.
+    
+    Calls that used to use this should migrate to remote_status
+    which by convention deals only in variables short enough to 
+    be transmitted by stdout
+    '''
+
     scrpath =  '${COMPBIO_PATH}/utils/bsruns.py'
     cmd = '{0} {1} {2}'.format(scrpath, 'bout', self.run_id)
     return sjson.loads(rutils.ssh_exec(cmd, host =self.host))
   def fetch_start(self):
-    self.outfile = self.remote_meta()['outfile']
+    '''
+    Make sure this is not called until execution is finished.
+    Otheriwse, the key 'outfile' may not yet be defined in the status dict.
+    '''
+    self.outfile = self.remote_status()['outfile']
     self.scp_proc = rutils.scp_data(self.outfile, self.outfile,
                                src_host = self.host)
   def fetch_await(self,maxtime = 10):
@@ -249,13 +262,19 @@ exit'
         save_data({'status':'EXIT','jobs':jobs}, self.run_id, 'status')
         raise Exception('Sorry but one of your scripts failed.')
       time.sleep(10)
-    save_data({'status':'DONE','jobs':jobs}, self.run_id, 'status')
+    save_data({'status':'RUN','jobs':jobs}, self.run_id, 'status')
                 
+  def complete():
+    save_data({'status':'DONE', 'outfile': self.datapath})
 
 
 
 
+def launch_actions(launch_instance, run_id):
+  '''Mostly just clear out any current outputs and statuses.
 
+  Unused right now.'''
+  clear_data(run_id, ['output',  'status'])
 
 def cmd(scr_path, *args, **kwargs ):
   '''
