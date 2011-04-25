@@ -160,7 +160,7 @@ inputs:
       self.run_jobids.append(re.compile('Job <([\d]+)>').\
                             search(out).group(1))
       if mod(idx, 5) == 0 :
-        save_data('Jobs launched: {0}'.format(idx), self.run_id, 'status')
+        save_data({'status':'RUN', 'str':'Jobs launched: {0}'.format(idx)}, self.run_id, 'status')
   def statii(self):
     '''
     Return the run statuses of programs launched under the control of
