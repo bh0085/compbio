@@ -340,7 +340,7 @@ keywords:
               run_id,
               Rmem)
   if do_clear:
-    clr_cmd = '''${COMPBIO_PATH}/utils/bsruns.py bclear {0}'''.\
+    clr_cmd = '''${COMPBIO_PATH}'''+'''/utils/bsruns.py bclear {0}'''.\
         format(run_id)
     cmd = '; '.join([sub_cmd,clr_cmd])
   else:

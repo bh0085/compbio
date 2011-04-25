@@ -71,7 +71,7 @@ def clear_data(run_id, data_types):
       data_types: a list of datatypes to be removed.
     '''
     for d in data_types:
-        path = locate_data(run_id, data_type)
+        path = locate_data(run_id, d)
         if os.path.isfile(path):
             os.remove(path)
 def save_data(contents, run_id, data_type):
