@@ -29,6 +29,7 @@ import compbio.config as config
 import matplotlib.pyplot as plt
 from numpy import *
 import numpy as np, textwrap as tw
+import cs874.bsub_clusters as bcl
 import os, inspect
 
 if not os.path.isdir(config.dataPath('figs/bdtnp')):
@@ -113,16 +114,22 @@ def c2():
   inds = arange(len(cell_data))
   np.random.seed(1)
   np.random.shuffle(inds)
-  rand_thousand = inds[0:1000]
+  rand_thousand = inds[0:100]
   
   sim_data = cell_data[rand_thousand]
   t = [ mean(sim_data, 0), std(sim_data,0)]
   t[1][equal(t[1],0)] = 0
   sims = similarity(sim_data, transform = t, method = 'neg_dist')
   
+  percs = logspace(-2,1.99,3)
+  d_in = []
+  for p in percs:
+    d_in.append(dict(similarities = sims,
+                     self_similarity = percentile(sims, p)
+                     ))
+  launcher = bcl.launcher(d_in)
+  return launcher
   
-  
-  raise Exception()
 
 def cluster_tissues(nx = 20,ny = 500, timepoint = -1,
                     step = 4,

@@ -54,8 +54,7 @@ def ssh_cmd(cmd, host = 'tin'):
 
 
 
-def remote_datapath( path, host, volume = '' ):
-    timeout = 5
+def remote_datapath( path, host, volume = '' , timeout = 100):
     prc = spc.Popen('ssh {0} "pydatapath.py {1} {2}"'.\
                         format(host, path, volume), 
                     shell = True, stdout = spc.PIPE)    

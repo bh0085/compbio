@@ -25,7 +25,8 @@ for p in ['batch','batch/inputs','batch/outputs','batch/logs','batch/tmp','batch
 
 class local_launcher(object):
   def __init__(self, scriptfile, scriptroot,
-               func = None, run_id = None, host = 'tin'):
+               func = None, run_id = None, host = 'tin',
+               input_dicts = []):
     '''
 When calling scripts remotely I still have not worked out the most
 clear possible syntax. Right now, it is up to the user to specify
@@ -50,14 +51,29 @@ remote_make_tests which runs a batch of clustering algorithms in matlab.
                                        root = scriptroot)
     print 'Fetching remote log path'
     remote_logpath=  cfg.remotePath(cfg.dataPath('batch/logs'))
-
     self.run_id = get_run_id(1, 'bcl_ll')
+    print 'Done!'
+
+    print
+
+    #now, transport the input_dicts
+    print 'Saving input dictionaries on the remote host'
+    input_path = locate_data(self.run_id, 'input')
+    input_path = input_path[input_path.index('batch'):]
+    save_data(input_dicts, self.run_id, 'input')
+    print '...copying'
+    comm = rutils.scp_data(input_path,input_path,dest_host = host).communicate()[0]
+    print 'Done!'
+    print
     print 'Creating bsub commands'
     self.bscmd = cmd(remote_script, 
                      func = func, 
                      run_id = self.run_id,
                      log_dir =remote_logpath,
                      do_clear = True)
+    print 'Done!'
+    print
+    print 'Launcher is ready to launch in the background or await with "quickRun"'
 
   def launch(self):
     print 'Launching job for {0}.{1}'.format(self.scriptfile, self.func)
