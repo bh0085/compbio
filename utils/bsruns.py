@@ -36,7 +36,7 @@ commandline: bsruns.py bstatus run_id
 '''
     try:
         out = load_data(run_id, 'status')
-    except Exception() e:
+    except Exception(), e:
         out = {'status': 'UNK'}
     return out
         
