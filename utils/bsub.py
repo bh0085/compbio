@@ -2,7 +2,6 @@ import pickle, os, itertools as it,re
 import compbio.config as cfg
 import inspect, subprocess as spc, time
 import compbio.utils.remote_utils as rutils
-#import compbio.utils.bsub_utils as butils
 from compbio.utils.bsub_utils import *
 from numpy import *
 import simplejson as sjson
@@ -64,11 +63,11 @@ remote_make_tests which runs a batch of clustering algorithms in matlab.
     print '  submitted with jobID: {0}'.format(self.run_jobid)
 
   def remote_status(self):
-    scrpath= '${COMPBIO_PATH}/utils/bsub_utils.py'
+    scrpath= '${COMPBIO_PATH}/utils/bsruns.py'
     cmd = '{0} {1} {2}'.format(scrpath, 'bstatus', self.run_jobid)
     return sjson.loads(rutils.ssh_exec(cmd, host =self.host))
   def remote_output(self):
-    scrpath =  '${COMPBIO_PATH}/utils/bsub_utils.py'
+    scrpath =  '${COMPBIO_PATH}/utils/bsruns.py'
     cmd = '{0} {1} {2}'.format(scrpath, 'bout', self.run_id)
     return sjson.loads(rutils.ssh_exec(cmd, host =self.host))
   def fetch_start():
