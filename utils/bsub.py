@@ -64,7 +64,7 @@ remote_make_tests which runs a batch of clustering algorithms in matlab.
 
   def remote_status(self):
     scrpath= '${COMPBIO_PATH}/utils/bsruns.py'
-    cmd = '{0} {1} {2}'.format(scrpath, 'bstatus', self.run_jobid)
+    cmd = '{0} {1} {2}'.format(scrpath, 'bstatus', self.run_id)
     return sjson.loads(rutils.ssh_exec(cmd, host =self.host))
   def remote_output(self):
     scrpath =  '${COMPBIO_PATH}/utils/bsruns.py'
@@ -79,6 +79,8 @@ remote_make_tests which runs a batch of clustering algorithms in matlab.
     print '...'
     while 1:
       status = self.remote_status()
+      raise Exception()
+      
     if not self.scp_proc: self.fetch_start()
     returnval = rutils.comm_timeout(scp_proc)
     

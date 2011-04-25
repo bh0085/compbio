@@ -1,3 +1,39 @@
+'''remote_utils.py
+
+A bunch of scripts for doing things on the remote machine including:
+
+ssh_exec()
+  Take a shell command, quote it appropriately and execute it via 
+  ssh.
+
+ssh_cmd()
+  Taks a shell command, quote it and prepend ssh for remote exec
+  via subprocess.Popen.
+
+remote_datapath():
+  Uses the config.dataPath() function on remote and/or local machines
+  to determine correct absolute paths for a datafile. Output can be
+  used to pinpoint files so that they can be sshd as in 'scp_data()'.
+
+  It is called with a timeout and so if the datapath query takes too
+  long to execute (presumably because ssh authentication has failed)
+  raises an exception.
+
+scp_data():
+  scps a file from src to dest with paths given relative to the 
+  /data directory on the src/host machines specified.
+  
+  Intended usage is to corral files from remotely executed scripts
+  when script output dictionaries contain an 'outfile' keyword.
+
+  See bsub_utils.py class local_launcher::fetch_start()
+
+comm_timeout():
+  Execute a subprocess with a timeout timer.
+  Useful for ssh when authentication may fail and script will
+  hang.
+'''
+
 import pipes , subprocess as spc
 import signal
 from signal import alarm, SIGALRM, SIGKILL
@@ -10,9 +46,13 @@ def ssh_exec( cmd , host = 'tin'):
     prc = spc.Popen(sshcmd, shell = True, stdout = spc.PIPE)
     return prc.communicate()[0]
     
+
+
 def ssh_cmd(cmd, host = 'tin'):
     return  '''ssh {0} {1}'''.\
         format(host, pipes.quote(cmd))
+
+
 
 def remote_datapath( path, host, volume = '' ):
     timeout = 5
@@ -24,6 +64,7 @@ def remote_datapath( path, host, volume = '' ):
         raise Exception('Process timeout')
     else: 
         return out[1]
+
 
 def scp_data(src_path, dest_path,
              src_host = None, dest_host = None):
@@ -44,11 +85,8 @@ def scp_data(src_path, dest_path,
                     shell = True, stdout = spc.PIPE)    
     return prc.communicate()
 
-class Alarm(Exception):
-    pass
 
-def alarm_handler(signum, frame):
-    raise Alarm
+
 
 def comm_timeout(proc, time):
     signal.signal(SIGALRM, alarm_handler)
@@ -65,6 +103,14 @@ def comm_timeout(proc, time):
         for pid in pids:
             kill(pid, SIGKILL)
         return -9, '', ''
+
+
+
+class Alarm(Exception):
+    pass
+
+def alarm_handler(signum, frame):
+    raise Alarm
 
 def get_process_children(pid):
     p = spc.Popen('ps --no-headers -o pid --ppid %d' % pid, shell = True,
