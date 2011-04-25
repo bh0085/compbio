@@ -319,7 +319,7 @@ keywords:
        kwargs.get('project','default'),
        kwargs.get('mem', '1'), 
        kwargs.get('log_dir',cfg.dataPath('batch/logs')),
-       kwages.get('do_clear',True)]
+       kwargs.get('do_clear',True)]
 
   #Set up a run_id if none is given.
   #By default increments to the max runid found.
