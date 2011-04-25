@@ -124,6 +124,11 @@ remote_make_tests which runs a batch of clustering algorithms in matlab.
     return outval
     
 
+  def quickRun(self):
+    self.launch()
+    self.fetch_await()
+    return self.output()
+
 class eyeball(object):
   '''The class eyeball wraps all calls to bsub in my libraries. 
 
