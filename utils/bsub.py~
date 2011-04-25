@@ -1,7 +1,0 @@
-def cmd(project = 'default',
-        input = {})
-
-
-
-def save_inp():
-        

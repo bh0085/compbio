@@ -1,8 +1,0 @@
-import compbio.config as config
-import os
-
-def lookup(accession, data_volume = 'cb'):
-  path = condig.dataPath(config.dataURL('genbank/gb_acclist.genbank', 
-                                        volume_name = data_volume)
-                         )
-  fsize = os.path.size(
