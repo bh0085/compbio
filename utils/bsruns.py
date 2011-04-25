@@ -9,6 +9,11 @@ run ID (as opposed to a bsub jobID) as the
 
 from compbio.utils.bsub_utils import *
 
+def bclear(run_id, clear_input = False):
+    types = ['output', 'status']
+    if clear_input: types = types + ['input']
+    clear_data(run_id, types)
+
 def bout(run_id):
     '''
 Returns the output of the program having a given runid.
@@ -35,7 +40,7 @@ commandline: bsruns.py bstatus run_id
         return {'status': 'UNK'}
 if __name__ == '__main__':
     assert len(sys.argv) > 2
-    if sys.argv[1] in ['bout', 'bstatus' ]:
+    if sys.argv[1] in ['bout', 'bstatus', 'bclear' ]:
         #Dump data to json and write to stdout
         run_id = sys.argv[2]
         sys.stdout.write(sjson.dumps(globals()[sys.argv[1]](run_id)))

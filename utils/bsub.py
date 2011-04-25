@@ -56,7 +56,8 @@ remote_make_tests which runs a batch of clustering algorithms in matlab.
     self.bscmd = cmd(remote_script, 
                      func = func, 
                      run_id = self.run_id,
-                     log_dir =remote_logpath)
+                     log_dir =remote_logpath,
+                     do_clear = True)
 
   def launch(self):
     print 'Launching job for {0}.{1}'.format(self.scriptfile, self.func)
@@ -169,7 +170,8 @@ inputs:
       self.run_names.append(run_id)
       cmds.append(cmd(scr_path,
                       func = func,
-                      run_id = run_id))
+                      run_id = run_id,
+                      do_clear = True))
     self.cmds = cmds
   def launch(self):
     for idx, c in enumerate(self.cmds):
@@ -224,6 +226,7 @@ Returns the dictionary of inputs.
     pickle.dump(outputs,
                 open(cfg.dataPath(self.datapath),'w'))
   def export(self, where = 'gliese'):
+    '''UNUSED This is the wrong way to do this.'''
     cmdstr ='''
 echo "connecting to remote server"; 
 ssh gliese '
@@ -267,7 +270,7 @@ exit'
       time.sleep(10)
     save_data({'status':'RUN','jobs':jobs}, self.run_id, 'status')
                 
-  def complete():
+  def complete(self):
     save_data({'status':'DONE', 'outfile': self.datapath},self.run_id, 'status')
 
 
@@ -305,16 +308,18 @@ keywords:
                 generation of a run_id.
   project:      a project to mark the bsub job with.
   mem: [1GB]    any custom memory requests
+  do_clear: [T/F] Clear any prior output/status msgs before running. 
   
 
 '''
-  func, name, run_id,project , Rmem, log_dir=\
+  func, name, run_id,project , Rmem, log_dir, do_clear=\
       [kwargs.get('func', None),
        kwargs.get('name', ''),
        kwargs.get('run_id',''),
        kwargs.get('project','default'),
        kwargs.get('mem', '1'), 
-       kwargs.get('log_dir',cfg.dataPath('batch/logs'))]
+       kwargs.get('log_dir',cfg.dataPath('batch/logs')),
+       kwages.get('do_clear',True)]
 
   #Set up a run_id if none is given.
   #By default increments to the max runid found.
@@ -328,12 +333,18 @@ keywords:
     run_str = scr_path+' '+' '.join([func, run_id]+list(args)) 
   else:
     run_str = scr_path+ ' '  + ' '.join(args) 
-  cmd = 'bsub -q compbio-week -J {3} -o {2} -P {0} -R \'rusage[mem={4}]\'  "{1}" '\
+  sub_cmd = 'bsub -q compbio-week -J {3} -o {2} -P {0} -R \'rusage[mem={4}]\'  "{1}" '\
       .format(project, 
               run_str,
               os.path.join(log_dir,'{0}.log'.format(run_id) ),
               run_id,
               Rmem)
+  if do_clear:
+    clr_cmd = '''${COMPBIO_PATH}/utils/bsruns.py bclear {0}'''.\
+        format(run_id)
+    cmd = '; '.join([sub_cmd,clr_cmd])
+  else:
+    cmd = sub_cmd
 
   
   return cmd
