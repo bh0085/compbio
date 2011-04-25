@@ -1,0 +1,10 @@
+import compbio.projects.cbdb as cbdb
+def phyla():
+  dbi = cbdb.getname('taxdmp')
+  phyla = dbi.S.q(dbi.Node).\
+      filter_by(rand = 'phylum').all()
+
+def sciname(node):
+  return [name.name_txt 
+          for name in node.names 
+          if name.name_type = 'scientific name']

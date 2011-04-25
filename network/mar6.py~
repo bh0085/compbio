@@ -1,0 +1,3 @@
+import network.netutils as nu
+
+trgs, tfs = nu.parse_net()

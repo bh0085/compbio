@@ -1,0 +1,4 @@
+import scipy.signal as ss
+def dist(dims):
+  if not shape(dims): dims = (dims, dims)
+  xy = reshape(vstack([mod((arange(100)),10) ,arange(100) / 10).T,(10,10,2))

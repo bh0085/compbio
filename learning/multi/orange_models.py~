@@ -1,0 +1,106 @@
+### orange_models.py --- 
+from numpy import * 
+import orange
+
+def get_ex(x,y,xb = False, yb = False):
+    
+    
+    ctype = orange.FloatVariable()
+    btype = orange.EnumVariable(values = orange.StringList(['0','1']))
+    if xb: xtype = btype
+    else: xtype = ctype
+    if yb: ytype = btype
+    else: ytype = ctype
+
+    #note that ny is not set.
+    #its gotta be 1
+    nx = len(x)
+    
+    #map x, y onto binary characters if required
+    if xb:
+        xdat = array(x,str)
+        xdat[less_equal(x,0)] = '0'
+        xdat[greater(x,0)] = '1'
+    else:
+        xdat = array(x)
+    if yb:
+        ydat = array(y,str)
+        ydat[less_equal(y,0)] = '0'
+        ydat[greater(y,0)] = '1'
+    else:
+        ydat = array(y)
+        
+    data = [list(elt) for elt in xdat.T]
+    
+    if len(shape(y)) != 1:
+        raise Exception("Sorry, y has to be 1 dimensional")
+    nt = len(y)
+
+    #stick ys on the end of the data example
+    for i in range(nt):
+        data[i].append(ydat[i])
+    domain = orange.Domain([xtype]*nx, ytype )
+
+    examples = orange.ExampleTable([orange.Example(domain, elt) for elt in data])
+
+    return examples
+
+
+def get_pred_ex(x, xb = False):
+  if xb: xtype = orange.EnumVariable(values = orange.StringList(['0','1']))
+  else: xtype = orange.FloatVariable()
+  
+  data = x.T
+  nx = len(x)
+  domain = orange.Domain([xtype]*nx)
+  examples = orange.ExampleTable([orange.Example(domain, list(elt)) for elt in data])
+  return examples
+
+def get_pred(regressor, examples):
+  p = []
+  for e in examples:
+    p.append(regressor(e))
+  return array(p,float)
+
+
+class KNNModel():
+  def learn(self, xvals, yvals, couplings):
+    self.regressors = []
+    self.regressor_idxs = []
+    ny = len(yvals)
+    for i in range(ny):
+      ysub = yvals[i]
+      idxs = nonzero(couplings[i])[0]
+      xsub = xvals[idxs]
+      data = get_ex(xsub, ysub)
+      k = 10
+
+      self.regressor_idxs.append(idxs)
+      self.regressors.append(orange.kNNLearner(data, k = k))
+
+      tdata = get_pred_ex(xsub)
+      pred = get_pred(self.regressors[i],tdata)
+
+      print self.regressors[i]
+      print tdata[0]
+      print pred[0:10]
+
+    
+
+
+  def predict(self,xvals):
+    ny = len(self.regressors)
+    predictions = []
+
+    for i in range(ny):
+      xsubs = xvals[self.regressor_idxs[i]]
+      data = get_pred_ex(xsubs)
+      predictions.append(get_pred(self.regressors[i],data))
+
+      print self.regressors[i]
+      print data[0]
+      print predictions[i][0:10]
+
+      raise Exception()
+    return predictions
+      

@@ -1,0 +1,3 @@
+import Bio.Phylo.BaseTree as bt
+class BTOL(bt):
+  def __init__

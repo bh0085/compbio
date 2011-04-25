@@ -1,0 +1,15 @@
+import compbio.config as config
+import Bio.AlignIO as aio
+
+def tree(alignment,runid = 'T%05' % (format(0),)):
+  old_cwd = os.getcwd()
+  new_wd = config.dataPath('phyml')
+  os.chdir(new_wd)
+
+  infile =  'infile{0}'.format(runid))
+  aio.write(alignment, 'phylip')
+  
+  command = 'phyml -i {0} --run_id {1}'.format(infile, runid)
+  subprocess.call(command, shell = True)
+  
+  os.chdir(old_cwd)

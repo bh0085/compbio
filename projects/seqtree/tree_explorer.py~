@@ -1,0 +1,10 @@
+def terminal_maps(tree, reset = False):
+  for t in tree.get_terminals():
+    acc = sqt.clade_gbacc(t)
+    gbid = gba_dbi.Session.query(gba_dbi.GBAcc).filter_by(accession = acc).all()
+    if not gbid: 
+      print '{0:20} for nodename: {1}'.format('failure', t.name)
+      continue
+    print '{0:20} for nodename: {1}'.format('sxs', t.name)
+    raise Exception()
+  

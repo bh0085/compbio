@@ -1,0 +1,4 @@
+import pipes
+def ssh_exec( cmd , host = 'tin'):
+    sshcmd = '''ssh {0} {1}'''.\
+        format(host, pipes.quote(cmd))

@@ -1,0 +1,16 @@
+import compbio.projects.cbdb
+import compbio.utils.memo as mem
+
+def get_nodes(dbname, **kwargs):
+  def set_nodes(**kwargs):
+    cbdb = compbio.projects.cbdb
+    dbname = kwargs['dbname']
+    dbi = cbdb.getName(dbname)
+    nodes = dbi.S.q(dbi.Sequence).all()
+    return nodes
+  kwargs['dbname'] = dbname
+  return mem.getOrSet(set_nodes, 
+                      hardcopy = False,
+                      name = dbname, 
+                      on_fail = 'compute', 
+                      **kwargs)
