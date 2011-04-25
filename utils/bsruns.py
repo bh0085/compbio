@@ -29,9 +29,10 @@ to the stdout and communication over ssh.
 usage:       bstatus(run_id)
 commandline: bsruns.py bstatus run_id
 '''
-    return load_data(run_id, 'status')
-
-
+    try:
+        return load_data(run_id, 'status')
+    except Exception(), e:
+        return {'status': 'UNK'}
 if __name__ == '__main__':
     assert len(sys.argv) > 2
     if sys.argv[1] in ['bout', 'bstatus' ]:
