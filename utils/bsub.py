@@ -3,8 +3,11 @@ import compbio.config as cfg
 import inspect, subprocess as spc, time
 import compbio.utils.remote_utils as rutils
 from compbio.utils.bsub_utils import *
+import compbio.utils.bsjobs
 from numpy import *
 import simplejson as sjson
+
+
 
 '''
 Two classes and a disorganized bunch of routines for running bsub.
@@ -166,7 +169,7 @@ inputs:
     Return the run statuses of programs launched under the control of
 this eye. Uses bjobs.
 '''
-    jobs = bjobs(self.run_jobids) 
+    jobs = compbio.utils.bsjobs.bjobs(self.run_jobids) 
     statii = [j['STAT'].strip() for j in jobs.values()]
     return statii
   def outputs(self):
