@@ -107,7 +107,7 @@ remote_make_tests which runs a batch of clustering algorithms in matlab.
       elif stat_str == 'DONE':
         break
 
-      time.sleep(5)
+      time.sleep(20)
 
       
       
@@ -272,7 +272,7 @@ exit'
       if len(nonzero(equal(vals,-1))[0]) > 0:
         save_data({'status':'EXIT','jobs':jobs}, self.run_id, 'status')
         raise Exception('Sorry but one of your scripts failed.')
-      time.sleep(10)
+      time.sleep(20)
     save_data({'status':'RUN','jobs':jobs}, self.run_id, 'status')
                 
   def complete(self):
