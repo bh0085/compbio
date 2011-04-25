@@ -39,7 +39,7 @@ def get_run_id(num, prefix = 'R' ):
     '''
     Get a generic run_id.
     '''
-  return '{0}%05i'.format(prefix) % (num,)
+    return '{0}%05i'.format(prefix) % (num,)
 
 
 def locate_data(run_id, data_type):
