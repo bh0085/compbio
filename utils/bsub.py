@@ -71,18 +71,33 @@ remote_make_tests which runs a batch of clustering algorithms in matlab.
     cmd = '{0} {1} {2}'.format(scrpath, 'bout', self.run_id)
     return sjson.loads(rutils.ssh_exec(cmd, host =self.host))
   def fetch_start():
-    out = self.remote_meta()['outfile']
-    self.scp_proc = rutils.scp_data(outfile, outfile,
+    self.outfile = self.remote_meta()['outfile']
+    self.scp_proc = rutils.scp_data(self.outfile, self.outfile,
                                src_host = self.host)
   def fetch_await(maxtime = 10):
     print 'Checking status of the remote job manager.'
     print '...'
     while 1:
       status = self.remote_status()
-      raise Exception()
+      stat_str = status['status']
+      if stat_str in ['PEND' , 'RUN']:
+        continue
+      elif stat_str == 'EXIT':
+        raise Exception()
+      elif stat_str == 'DONE':
+        break
       
     if not self.scp_proc: self.fetch_start()
-    returnval = rutils.comm_timeout(scp_proc)
+    returnval = rutils.comm_timeout(self.scp_proc)
+    return returnval
+  def output():
+    '''
+    Once the output has been fetched via scp from the remote
+    process, load it up in the form of a python dictionary.
+    '''
+    fopen = open(cfg.dataPath(self.outfile))
+    outval = pickle.load(fopen)
+    return outval
     
 
 class eyeball(object):
