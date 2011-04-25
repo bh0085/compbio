@@ -10,7 +10,7 @@ def runmat(script, input_dict, run_id):
     sxs = spc.Popen(cstr, shell = True, stdout = spc.PIPE).communicate(0)
     output = sio.loadmat(tmpnames[1])
     o00 = output['out_struct'][0][0]
-    dout =  = dict([(k, os.__getattribute__(k)) for k in o00._fieldnames])
+    dout   = dict([(k, os.__getattribute__(k)) for k in o00._fieldnames])
     return dout
 
     
