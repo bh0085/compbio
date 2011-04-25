@@ -112,7 +112,7 @@ remote_make_tests which runs a batch of clustering algorithms in matlab.
       
       
     if not self.scp_proc: self.fetch_start()
-    returnval = rutils.comm_timeout(self.scp_proc)
+    returnval = rutils.comm_timeout(self.scp_proc, 10)
     return returnval
   def output(self):
     '''
