@@ -35,9 +35,11 @@ usage:       bstatus(run_id)
 commandline: bsruns.py bstatus run_id
 '''
     try:
-        return load_data(run_id, 'status')
+        out = load_data(run_id, 'status')
     except Exception(), e:
-        return {'status': 'UNK'}
+        out = {'status': 'UNK'}
+    return out
+        
 if __name__ == '__main__':
     assert len(sys.argv) > 2
     if sys.argv[1] in ['bout', 'bstatus', 'bclear' ]:
