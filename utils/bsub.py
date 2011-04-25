@@ -232,7 +232,7 @@ exit'
       stat_str =  '''Status: waiting\nLooping. [iter = {0}]\n'''.format(count)
       stat_str += 'statii:\n'
 
-      jobs = bjobs(self.run_jobids) 
+      jobs = compbio.utils.bsjobs.bjobs(self.run_jobids) 
       statii = [j['STAT'].strip() for j in jobs.values()]
 
       svals = dict(DONE= 1,
