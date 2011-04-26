@@ -87,7 +87,8 @@ def p_m_correlation():
                        
 
 
-def c2( launcher = None, ncluster =2000, host = 'tin', reset = 0, step = 10):
+def c2( launcher = None, ncluster =2000, host = 'tin', 
+        reset = 0, step = 10, exemp_time = 'all'):
   mrnas = nio.getBDTNP()
   misc = nio.getBDTNP(misc = True)
   
@@ -100,16 +101,9 @@ def c2( launcher = None, ncluster =2000, host = 'tin', reset = 0, step = 10):
   med20 = argsort(gmedvars)[::-1][:20]
 
   int20 = set(min20).intersection(set(med20))
-  #of the twenty most variable genes, 14 have nonzero
-  #variance in all time points.
-  #we will use these 14 (int20) for the genetic coords
-  #in cross-timepoint clustering.
-
   xgenes = array(list(int20))
-  cell_data = vals[xgenes].transpose(1,2,0)
 
-  #reshape with C-Style indexing.
-  #takes x first, then y, then z
+  cell_data = vals[xgenes].transpose(1,2,0)
   scd = shape(cell_data)
   #times = reshape(zeros(shape(cell_data[0:2]))[:,:,newaxis , arange(shape(cell_data[1]))
   #                    , (prod(shape(cell_data)[0:2])))
@@ -118,7 +112,11 @@ def c2( launcher = None, ncluster =2000, host = 'tin', reset = 0, step = 10):
   cell_data = reshape(cell_data, (prod(shape(cell_data)[0:2]), shape(cell_data)[2] ))
   xy_data = reshape(xycoords, (prod(scd[0:2]),2 ))
     
-  inds = arange(len(cell_data))
+  if exemp_time == 'all':
+    inds = arange(len(cell_data))
+  else:
+    inds = arange(len(cell_data))[nonzero(equal(xy_data[:,0],exemp_time))[0]]
+  
   np.random.seed(1)
   np.random.shuffle(inds)
   rand_thousand = inds[0:ncluster]
@@ -130,13 +128,13 @@ def c2( launcher = None, ncluster =2000, host = 'tin', reset = 0, step = 10):
   metric = 'neg_dist'
   sims = similarity(sim_data, transform = t, method = metric)
 
-
+  name = 'll_{0}_{1}_{2}'.format(metric,ncluster,exemp_time)
   def setLauncher(**kwargs):
     sims= kwargs.get('sims')
     metric = kwargs.get('metric')
     name = kwargs.get('name')
     d_in = []
-    percs = logspace(.9,1.5,7)
+    percs = logspace(.1,1.5,8)
     for p in percs:
       d_in.append(dict(similarities = sims,
                        self_similarity = percentile(sims, p),
@@ -147,10 +145,10 @@ def c2( launcher = None, ncluster =2000, host = 'tin', reset = 0, step = 10):
   if launcher == None:
     output = mem.getOrSet(setLauncher,
                           **mem.rc(dict(sims = sims, metric = metric,
-                                        name = 'll_{0}_{1}'.format(metric,ncluster),
+                                        name = name,
                                         harcopy = True,
                                         reset = reset,
-                                        hard_reset = True,)))  
+                                        hard_reset = False,)))  
     return output
 
   def setC2(launcher = launcher, **kwargs):
@@ -166,11 +164,10 @@ def c2( launcher = None, ncluster =2000, host = 'tin', reset = 0, step = 10):
                         **mem.rc(dict(harcopy = True,
                                       launcher = launcher,
                                       reset = reset,
-                                      hard_reset = True,
-                                      name = 'c2_{0}'.format(ncluster))))
-  all_inds = array([  squeeze(o['inds']) for o in output[1:4] ])
+                                      hard_reset = False,
+                                      name =  'c2'+ name )))
+  all_inds = array([  squeeze(o['inds']) for o in output[:] ])
   
-
 
   xs = misc['x']['vals'][zip(*xy_data)] #zip(*sim_xy)]
   ys = misc['y']['vals'][zip(*xy_data)] #zip(*sim_xy)]

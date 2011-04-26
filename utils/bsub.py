@@ -172,7 +172,7 @@ inputs:
       runid_prefix = os.path.splitext(\
         os.path.basename(scr_path))[0][-5:]
     else:
-      runid_prefix = name[-5:]
+      runid_prefix = name
     self.name = runid_prefix
 
     #Make a list of commands and corresponding run_ids.
