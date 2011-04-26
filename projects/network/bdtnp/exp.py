@@ -87,7 +87,7 @@ def p_m_correlation():
                        
 
 
-def c2():
+def c2( launcher = None, ncluster =1000):
   mrnas = nio.getBDTNP()
   misc = nio.getBDTNP(misc = True)
   
@@ -110,27 +110,56 @@ def c2():
 
   #reshape with C-Style indexing.
   #takes x first, then y, then z
+  scd = shape(cell_data)
+  #times = reshape(zeros(shape(cell_data[0:2]))[:,:,newaxis , arange(shape(cell_data[1]))
+  #                    , (prod(shape(cell_data)[0:2])))
+  xycoords = (arange(scd[0])[:,newaxis,newaxis]*[1,0] +\
+                arange(scd[1])[newaxis,:,newaxis]*[0,1])
   cell_data = reshape(cell_data, (prod(shape(cell_data)[0:2]), shape(cell_data)[2] ))
+  xy_data = reshape(xycoords, (prod(scd[0:2]),2 ))
+    
   inds = arange(len(cell_data))
   np.random.seed(1)
   np.random.shuffle(inds)
-  rand_thousand = inds[0:100]
+  rand_thousand = inds[0:ncluster]
   
   sim_data = cell_data[rand_thousand]
+  sim_xy = xy_data[rand_thousand]
   t = [ mean(sim_data, 0), std(sim_data,0)]
   t[1][equal(t[1],0)] = 0
   metric = 'neg_dist'
-  sims = similarity(sim_data, transform = t, method = 'metric')
-  
   percs = logspace(0,1.5,5)
-  d_in = []
-  for p in percs:
-    d_in.append(dict(similarities = sims,
-                     self_similarity = percentile(sims, p),
-                     metric = metric
-                     ))
-  launcher = bcl.launcher(d_in)
-  return launcher
+  sims = similarity(sim_data, transform = t, method = metric)
+
+
+  if launcher == None:
+    d_in = []
+    for p in percs:
+      d_in.append(dict(similarities = sims,
+                       self_similarity = percentile(sims, p),
+                       metric = metric
+                       ))
+    launcher = bcl.launcher(d_in, host = None)
+    output = launcher.quickRun()
+  else:
+    output = launcher.output()
+  
+  all_inds = array([  squeeze(o['inds']) for o in output ])
+  
+  xs = misc['x']['vals'][zip(*sim_xy)]
+  ys = misc['y']['vals'][zip(*sim_xy)]
+  zs = misc['z']['vals'][zip(*sim_xy)]
+  
+  colors =array( mycolors.getct(shape(all_inds)[1]) )
+  f = plt.figure(0)
+  f.clear()
+  for i, inds in enumerate(all_inds):
+    ax = f.add_axes( [0,float(i) / len(all_inds),1., (1.) / len(all_inds)] )
+    i_sub = nonzero(greater(sim_xy[:,1], 2))[0]
+    cs = colors[inds[i_sub]]
+    x = xs[i_sub]
+    z = zs[i_sub]
+    plt.scatter(x,z, 100, c = cs)
   
 
 def cluster_tissues(nx = 20,ny = 500, timepoint = -1,

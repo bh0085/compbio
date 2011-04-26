@@ -13,6 +13,9 @@ from one of the roots ['compbio', 'programming']'''
     subfun = compPath
     subterm =  'compPath'    
   
+  if host == None:
+    return subfun(abspath).strip()
+
   scr = pipes.quote('''
 echo `python -c {0}`'''.format(pipes.quote('''
 import compbio.config as config
@@ -22,7 +25,7 @@ print config.{1}('{0}', absolute = True)
             subterm
             ))))
 
-
+  
   ssh_scr = 'ssh {1} {0}'.format(scr, host)
   out = spc.Popen(ssh_scr, shell = True, stdout = spc.PIPE).\
       communicate()[0]

@@ -48,12 +48,14 @@ remote_make_tests which runs a batch of clustering algorithms in matlab.
     self.scriptfile = scriptfile
     print 'Fetching remote script path'
     remote_script =  cfg.remotePath(scriptfile,
-                                       root = scriptroot)
+                                    root = scriptroot,
+                                    host = host)
     print 'Fetching remote log path'
-    remote_logpath=  cfg.remotePath(cfg.dataPath('batch/logs'))
+    remote_logpath=  cfg.remotePath(cfg.dataPath('batch/logs'),
+                                    host = host)
+
     self.run_id = get_run_id(1, 'bcl_ll')
     print 'Done!'
-
     print
 
     #now, transport the input_dicts
@@ -85,19 +87,6 @@ remote_make_tests which runs a batch of clustering algorithms in matlab.
   def remote_status(self):
     scrpath= '${COMPBIO_PATH}/utils/bsruns.py'
     cmd = '{0} {1} {2}'.format(scrpath, 'bstatus', self.run_id)
-    return sjson.loads(rutils.ssh_exec(cmd, host =self.host))
-  def remote_output(self):
-    '''NOT USED RIGHT NOW!
-    This method relies on using stdout to communicate
-    the output of remote execution but this seems silly.
-    
-    Calls that used to use this should migrate to remote_status
-    which by convention deals only in variables short enough to 
-    be transmitted by stdout
-    '''
-
-    scrpath =  '${COMPBIO_PATH}/utils/bsruns.py'
-    cmd = '{0} {1} {2}'.format(scrpath, 'bout', self.run_id)
     return sjson.loads(rutils.ssh_exec(cmd, host =self.host))
   def fetch_start(self):
     '''

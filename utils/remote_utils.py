@@ -41,16 +41,19 @@ import compbio.config
 from os import kill
 
 
-def ssh_exec( cmd , host = 'tin'):
+def ssh_exec( cmd , host = None):
     sshcmd = ssh_cmd(cmd, host = host)
     prc = spc.Popen(sshcmd, shell = True, stdout = spc.PIPE)
     return prc.communicate()[0]
     
 
 
-def ssh_cmd(cmd, host = 'tin'):
-    return  '''ssh {0} {1}'''.\
-        format(host, pipes.quote(cmd))
+def ssh_cmd(cmd, host = None):
+    if host == None:
+        return cmd
+    else:
+        return  '''ssh {0} {1}'''.\
+            format(host, pipes.quote(cmd))
 
 
 
