@@ -130,18 +130,32 @@ def c2( launcher = None, ncluster =2000, host = 'tin', reset = 0, step = 10):
   metric = 'neg_dist'
   sims = similarity(sim_data, transform = t, method = metric)
 
-  def setC2(launcher = launcher, **kwargs):
-    if launcher == None:
-      d_in = []
-      for p in percs:
-        percs = logspace(.9,1.5,7)
-        d_in.append(dict(similarities = sims,
+
+  def setLauncher(**kwargs):
+    sims= kwargs.get('sims')
+    metric = kwargs.get('metric')
+    name = kwargs.get('name')
+    d_in = []
+    percs = logspace(.9,1.5,7)
+    for p in percs:
+      d_in.append(dict(similarities = sims,
                        self_similarity = percentile(sims, p),
                        metric = metric
                        ))
-      launcher = bcl.launcher(d_in, host = host)
-      #return launcher
-      output = launcher.quickRun()
+    launcher = bcl.launcher(d_in, host = host, name = name)
+    return launcher  
+  if launcher == None:
+    output = mem.getOrSet(setLauncher,
+                          **mem.rc(dict(sims = sims, metric = metric,
+                                        name = 'll_{0}_{1}'.format(metric,ncluster),
+                                        harcopy = True,
+                                        reset = reset,
+                                        hard_reset = True,)))  
+    return output
+
+  def setC2(launcher = launcher, **kwargs):
+    if launcher == None:
+      raise Exception()
     else:
       output = launcher.output()
     return output
@@ -150,10 +164,10 @@ def c2( launcher = None, ncluster =2000, host = 'tin', reset = 0, step = 10):
   
   output = mem.getOrSet(setC2,
                         **mem.rc(dict(harcopy = True,
-                             launcher = launcher,
-                             reset = reset,
-                             hard_reset = True,
-                             name = 'n_{0}'.format(ncluster))))
+                                      launcher = launcher,
+                                      reset = reset,
+                                      hard_reset = True,
+                                      name = 'c2_{0}'.format(ncluster))))
   all_inds = array([  squeeze(o['inds']) for o in output[1:4] ])
   
 

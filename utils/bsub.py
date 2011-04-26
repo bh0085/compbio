@@ -58,7 +58,7 @@ remote_make_tests which runs a batch of clustering algorithms in matlab.
     remote_logpath=  cfg.remotePath(cfg.dataPath('batch/logs'),
                                     host = host)
 
-    self.run_id = get_run_id(1, 'bcl_ll')
+    self.run_id = run_id #get_run_id(1, 'bcl_ll')
     print 'Done!'
     print
 
