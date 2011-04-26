@@ -14,6 +14,8 @@ from one of the roots ['compbio', 'programming']'''
     subterm =  'compPath'    
   
   if host == None:
+    print abspath
+    print subfun(abspath)
     return subfun(abspath).strip()
 
   scr = pipes.quote('''
