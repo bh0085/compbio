@@ -87,7 +87,7 @@ def p_m_correlation():
                        
 
 
-def c2( launcher = None, ncluster =1000):
+def c2( launcher = None, ncluster =1000, host = None):
   mrnas = nio.getBDTNP()
   misc = nio.getBDTNP(misc = True)
   
@@ -139,7 +139,7 @@ def c2( launcher = None, ncluster =1000):
                        self_similarity = percentile(sims, p),
                        metric = metric
                        ))
-    launcher = bcl.launcher(d_in, host = None)
+    launcher = bcl.launcher(d_in, host = host)
     output = launcher.quickRun()
   else:
     output = launcher.output()
