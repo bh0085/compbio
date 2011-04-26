@@ -62,7 +62,9 @@ def getOrSet(function, **kwargs):
   np = kwargs.get('np', False)
   update = kwargs.get('update', None)
   on_fail = kwargs.get('on_fail', 'error')
+  hard_reset = kwargs.get('hard_reset', False)
   caller_name = inspect.stack()[1][3]
+
   
   
   if update != None:
@@ -80,6 +82,13 @@ def getOrSet(function, **kwargs):
       else: assert 0, 'Data recovery failed for name ' + caller_name
 
   if reset:
+    if hard_reset:
+        user_inp = raw_input('''
+This appears to be a hard function to compute ({0}:{1})
+Really Reset? (y/n)
+''')
+        assert user_inp == 'y'
+
     out = function(**kwargs)
     write(name = name, value = out,  hardcopy = hardcopy, np = np,
           register = register, caller_name = caller_name)

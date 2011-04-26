@@ -14,6 +14,7 @@ from one of the roots ['compbio', 'programming']'''
     subterm =  'compPath'    
   
   if host == None:
+    #IS THIS WHY THE LOCAL CALLS TO BSUB ARE FAILING?
     print abspath
     print subfun(abspath)
     return subfun(abspath).strip()

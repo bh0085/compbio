@@ -46,6 +46,10 @@ remote_make_tests which runs a batch of clustering algorithms in matlab.
     self.host = host
     self.func = func
     self.scriptfile = scriptfile
+
+    #NOTE THAT FOR SOME REASON THIS ALL FAILS WHEN HOST 
+    #IS SET TO NONE... THE SCRIPTS FAIL TO APPEND THE
+    #DATAPATH
     print 'Fetching remote script path'
     remote_script =  cfg.remotePath(scriptfile,
                                     root = scriptroot,

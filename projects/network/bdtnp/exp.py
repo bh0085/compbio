@@ -24,7 +24,7 @@ cluster_tissues
 '''
 
 from compbio.projects.network import io as nio, utils as nu
-from compbio.utils import colors as mycolors, path_mgr as pm
+from compbio.utils import colors as mycolors, path_mgr as pm, memo as mem
 import compbio.config as config
 import matplotlib.pyplot as plt
 from numpy import *
@@ -87,7 +87,7 @@ def p_m_correlation():
                        
 
 
-def c2( launcher = None, ncluster =1000, host = None):
+def c2( launcher = None, ncluster =2000, host = 'tin', reset = 0, step = 10):
   mrnas = nio.getBDTNP()
   misc = nio.getBDTNP(misc = True)
   
@@ -128,38 +128,66 @@ def c2( launcher = None, ncluster =1000, host = None):
   t = [ mean(sim_data, 0), std(sim_data,0)]
   t[1][equal(t[1],0)] = 0
   metric = 'neg_dist'
-  percs = logspace(0,1.5,5)
   sims = similarity(sim_data, transform = t, method = metric)
 
-
-  if launcher == None:
-    d_in = []
-    for p in percs:
-      d_in.append(dict(similarities = sims,
+  def setC2(launcher = launcher, **kwargs):
+    if launcher == None:
+      d_in = []
+      for p in percs:
+        percs = logspace(.9,1.5,7)
+        d_in.append(dict(similarities = sims,
                        self_similarity = percentile(sims, p),
                        metric = metric
                        ))
-    launcher = bcl.launcher(d_in, host = host)
-    output = launcher.quickRun()
-  else:
-    output = launcher.output()
+      launcher = bcl.launcher(d_in, host = host)
+      #return launcher
+      output = launcher.quickRun()
+    else:
+      output = launcher.output()
+    return output
+    #It appears that the bsub process failed for the first output.
+    #No big deal. Debug later.
   
-  all_inds = array([  squeeze(o['inds']) for o in output ])
+  output = mem.getOrSet(setC2,
+                        **mem.rc(dict(harcopy = True,
+                             launcher = launcher,
+                             reset = reset,
+                             hard_reset = True,
+                             name = 'n_{0}'.format(ncluster))))
+  all_inds = array([  squeeze(o['inds']) for o in output[1:4] ])
   
-  xs = misc['x']['vals'][zip(*sim_xy)]
-  ys = misc['y']['vals'][zip(*sim_xy)]
-  zs = misc['z']['vals'][zip(*sim_xy)]
+
+
+  xs = misc['x']['vals'][zip(*xy_data)] #zip(*sim_xy)]
+  ys = misc['y']['vals'][zip(*xy_data)] #zip(*sim_xy)]
+  zs = misc['z']['vals'][zip(*xy_data)] #zip(*sim_xy)]
   
   colors =array( mycolors.getct(shape(all_inds)[1]) )
   f = plt.figure(0)
   f.clear()
+  
+  all_tps = range(scd[1])
+  nc = len(all_inds)
+  nt = len(all_tps)
+
   for i, inds in enumerate(all_inds):
-    ax = f.add_axes( [0,float(i) / len(all_inds),1., (1.) / len(all_inds)] )
-    i_sub = nonzero(greater(sim_xy[:,1], 2))[0]
-    cs = colors[inds[i_sub]]
-    x = xs[i_sub]
-    z = zs[i_sub]
-    plt.scatter(x,z, 100, c = cs)
+    #compute similarity matrices 1000 at a time:
+    exemplars = sim_data[list(set(list(inds)))]
+    sim = similarity(cell_data, 
+                   exemplars, 
+                   transform = t,
+                   method = metric)
+    closest = argmax(sim, 1)
+
+    for j, tp in enumerate(all_tps):
+      ax = f.add_axes( [float(j)/nt,float(i) /nc,1./nt, 1. /nc] )
+      ax.set_yticks([])
+      ax.set_xticks([])
+      i_sub = nonzero(equal(xy_data[:,1], j) * greater(ys,0))[0]
+      cs = colors[closest[i_sub]]
+      x = xs[i_sub]
+      z = zs[i_sub]
+      plt.scatter(x[::step],z[::step], 40,alpha = .75, c = cs[::step], edgecolor = 'none')
   
 
 def cluster_tissues(nx = 20,ny = 500, timepoint = -1,
