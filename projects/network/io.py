@@ -14,6 +14,7 @@ import compbio.config as config
 from numpy import *
 import numpy as np,  itertools as it, os, re
 import bdtnp
+import bdtnp.parser
 
 
 def getNet(**kwargs):
