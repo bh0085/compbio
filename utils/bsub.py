@@ -276,11 +276,14 @@ exit'
         stat_str +=  '   {1}:{0:02d}\n'.format(statii.count(k),k)
       vals = array([svals[k] for k in statii])
       save_data({'status': 'RUN','jobs':jobs}, self.run_id, 'status')
-      if len(nonzero(not_equal(vals,1))[0]) == 0:
+      
+      #CURRENTLY ALLOWS ERRORS
+      if len(nonzero(equal(vals,0))[0]) == 0:
         break
-      if len(nonzero(equal(vals,-1))[0]) > 0:
-        save_data({'status':'EXIT','jobs':jobs}, self.run_id, 'status')
-        raise Exception('Sorry but one of your scripts failed: {0}'.format(array(self.run_names)[equal(vals,-1)]))
+      
+      #if len(nonzero(equal(vals,-1))[0]) > 0:
+      #  save_data({'status':'EXIT','jobs':jobs}, self.run_id, 'status')
+      #  print('Sorry but one of your scripts failed: {0}'.format(array(self.run_names)[equal(vals,-1)]))
 
       time.sleep(20)
     save_data({'status':'RUN','jobs':jobs}, self.run_id, 'status')

@@ -117,6 +117,7 @@ def c2( launcher = None, ncluster =2000, host = 'tin',
   else:
     inds = arange(len(cell_data))[nonzero(equal(xy_data[:,0],exemp_time))[0]]
   
+  raise Exception()
   np.random.seed(1)
   np.random.shuffle(inds)
   rand_thousand = inds[0:ncluster]
