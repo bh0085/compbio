@@ -218,7 +218,7 @@ returns a dictionary with the run id and the cause of failure.
 '''
     for idx, run_id in enumerate(self.run_names):
       try:
-        data = load_data(run_id) 
+        #data = load_data(run_id,output) 
         if statii[idx] == 'DONE':
           data = load_data(run_id, 'output')
         else:

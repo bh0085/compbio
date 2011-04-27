@@ -188,6 +188,7 @@ def dsi_boxplot(num = 1 ,  method = 'tree', reset = False,
   
   kn_exps['ko'] = []
   
+  raise Exception()
 
   
   def getBPS(**kwargs):
@@ -239,9 +240,13 @@ def dsi_boxplot(num = 1 ,  method = 'tree', reset = False,
       ecells = array(ecells)
       nz_frac_std.append(0)
       nz_val_std.append(0)
-      nz_frac_mean.append(mean(greater(grid[zip(*ecells)],0)))
-      nz_val_mean.append(mean(grid[zip(*ecells[greater(grid[zip(*ecells)],0)])]))
-      nz_colvals.append(grid[zip(*ecells[greater(grid[zip(*ecells)],0)])])
+      if len(ecells) == 0:
+        for arr in [nz_frac_mean, nz_val_mean, nz_colvals]:
+          arr.append(0.)
+      else:
+        nz_frac_mean.append(mean(greater(grid[zip(*ecells)],0)))
+        nz_val_mean.append(mean(grid[zip(*ecells[greater(grid[zip(*ecells)],0)])]))
+        nz_colvals.append(grid[zip(*ecells[greater(grid[zip(*ecells)],0)])])
       xlabels.append(k)
       
     return xlabels, array(nz_frac_std),array(nz_val_std),array(nz_frac_mean), array(nz_val_mean), [array(cv) for cv in nz_colvals]
