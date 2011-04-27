@@ -121,7 +121,9 @@ def dsi_boxplot(num = 1 ,  method = 'tree', reset = False,
                 bp_zeros = True, zero_ofs = 1e-6,
                 bp_logs = True,
                 show_kos = True,
-                filter_rows_and_cols = True):
+                log_scale = True,
+                filter_rows_and_cols = True,
+                boxplot = True):
 
   grid, descriptions = parseNet(num= num, method = method, reset = reset)
   grid = array(grid)
@@ -213,6 +215,9 @@ def dsi_boxplot(num = 1 ,  method = 'tree', reset = False,
       cexp = [grid[zip(*exp_cells[\
               nonzero(equal(exp_cells[:,1],col))[0]])] \
                          for col in ecols] 
+
+      if cexp == []:
+         continue
       
       colwise_fracs = [mean(1.*greater(col,0)) for col in cexp]
       colwise_exprs = [mean(col[nonzero(greater(col,0))]) for col in cexp]
@@ -244,7 +249,8 @@ def dsi_boxplot(num = 1 ,  method = 'tree', reset = False,
   
   args = [xlabels.index(x) for x in 
           ['general_ts', 'drug', 'drug_ts', 
-           'genetic', 'genetic_ts', 'drug_genetic', 'drug_genetic_ts', 'ko']]
+           'genetic', 'genetic_ts', 'drug_genetic', 'drug_genetic_ts', 'ko']
+          if x in xlabels]
   xlabels, nz_frac_std,nz_cal_std,nz_frac_mean,nz_val_mean =\
       array(xlabels)[args],nz_frac_std[args],nz_val_std[args],nz_frac_mean[args],nz_val_mean[args]
   nz_colvals = [nz_colvals[a] for a in args]
@@ -257,23 +263,41 @@ def dsi_boxplot(num = 1 ,  method = 'tree', reset = False,
   if plot_type == 'dsi_final':
     margin = .05
     wid0 = .75
+    cs = mycolors.getct(len(nz_colvals))
     
     ax0 = f.add_axes([margin,margin, wid0 , 1. - 2* margin], title =  'Experminent mean significances: blue (red) lines denote quartiles (media).')
-    ax0.set_yscale('log')
+    if log_scale: ax0.set_yscale('log')
     #ax0.set_autoscaley_on(False)
-    ax0.boxplot(nz_colvals[0:-1], widths = [.5] * (len(nz_colvals )-1))
+    if boxplot:
+      ax0.boxplot(nz_colvals[0:-1], widths = [.5] * (len(nz_colvals )-1))
+      ax0.hlines([mean(nz_colvals[-1])],-100, 100,color = 'red',linestyle = ':',linewidth = 1)
+    else:
+      ax0.bar(.2 + arange(len(nz_colvals[0:-1])), [median(c) for c in nz_colvals[0:-1]],
+              color = cs[:-1])
+  
     ax0.set_xticklabels(xlabels[:-1])
     
 
-    ax0.set_ylim([min(nz_colvals[-1]), max(nz_colvals[-1])/10])
+    if boxplot:
+      pass
+      #ax0.set_ylim([min(nz_colvals[:-1]), max(nz_colvals[:-1])/10])
 
-    ax1 = f.add_axes([2*margin +wid0, margin, (1 - margin) - (2 * margin + wid0), 1- 2* margin],sharey = ax0, title = 'TF knockout/OE')
-    ax1.boxplot(nz_colvals[-1:],widths = .5)
-    ax1.set_xticklabels(xlabels[-1:])
+    #ax1 = f.add_axes([2*margin +wid0, margin, (1 - margin) - (2 * margin + wid0), 1- 2* margin],sharey = ax0, title = 'TF knockout/OE')
+    #if boxplot:
+    #  ax1.boxplot(nz_colvals[-1:],widths = .5)
+    #else:
+    #  ax1.bar([.2],[mean(c) for c in nz_colvals[-1:]],
+    #          color = cs[-1:])
+
+    #ax1.set_xticklabels(xlabels[-1:])
     
-    ax1.set_ylim([np.min([min(c) for c in nz_colvals]), np.max([max(c) for c in nz_colvals])])
+    if boxplot:
+      pass
+      #ax1.set_ylim([np.min([min(c) for c in nz_colvals[:-1]]), np.max([max(c) for c in nz_colvals[:-1]])])
 
-    f.savefig(config.dataPath('daniel/figs/final_bp_net{0}_{1}.ps'.format(num, method)),
+    f.savefig(config.dataPath('daniel/figs/final_bp_net{0}_{1}_{2}.ps'.\
+                                format(num, method,
+                                       'log' if log_scale else 'lin')),
               dpi = 10)
   
     return
@@ -306,7 +330,10 @@ def dsi_boxplot(num = 1 ,  method = 'tree', reset = False,
     a2.set_xticklabels([])
     for i in xi:
       a2.text( float(i) + .5,0,xlabels[i] , rotation = '-15',size = '16', ha = 'left',va='top')
-    f.savefig(config.dataPath('daniel/figs/latest/{1:03d}_{0}.tiff'.format('no_kos' if not show_kos else 'kos', num )),format = 'tiff')
+    f.savefig(config.dataPath('daniel/figs/latest/{1:03d}_{0}_{2}.tiff'.\
+                                format('no_kos' if not show_kos else 'kos', 
+                                       num ,
+                                       'log' if log_scale else 'lin')),format = 'tiff')
              
   return
 

@@ -24,16 +24,20 @@ cluster_tissues
 '''
 
 from compbio.projects.network import io as nio, utils as nu
-from compbio.utils import colors as mycolors, path_mgr as pm, memo as mem
-import compbio.config as config
+from compbio.utils import colors as mycolors, path_mgr as pm
+from compbio.utils import memo as mem, seismic as seismic
+import compbio.config as cfg
 import matplotlib.pyplot as plt
+import pickle
 from numpy import *
 import numpy as np, textwrap as tw
 import cs874.bsub_clusters as bcl
 import os, inspect
+import scipy.io as sio
 
-if not os.path.isdir(config.dataPath('figs/bdtnp')):
-  os.mkdir(config.dataPath('figs/bdtnp'))
+
+if not os.path.isdir(cfg.dataPath('figs/bdtnp')):
+  os.mkdir(cfg.dataPath('figs/bdtnp'))
 
 def p_m_correlation():
   prots = nio.getBDTNP(protein = True)
@@ -81,14 +85,15 @@ def p_m_correlation():
       ax.scatter(p[0]['vals'][::,j],p[1]['vals'][::,j],
                  s = 20,alpha = .2,color = colors[j])
       
-  f.savefig(config.dataPath('figs/network/mrna_protein_levels.tiff',
+  f.savefig(cfg.dataPath('figs/network/mrna_protein_levels.tiff',
                             ),format = 'tiff')
     
                        
 
 
 def c2( launcher = None, ncluster =2000, host = 'tin', 
-        reset = 0, step = 10, exemp_time = 'all'):
+        reset = 0, step = 10, exemp_time = 'all',
+        doplot = False):
   mrnas = nio.getBDTNP()
   misc = nio.getBDTNP(misc = True)
   
@@ -181,6 +186,7 @@ def c2( launcher = None, ncluster =2000, host = 'tin',
   nc = len(all_inds)
   nt = len(all_tps)
 
+  all_members = []
   for i, inds in enumerate(all_inds):
     #compute similarity matrices 1000 at a time:
     exemplars = sim_data[list(set(list(inds)))]
@@ -189,17 +195,92 @@ def c2( launcher = None, ncluster =2000, host = 'tin',
                    transform = t,
                    method = metric)
     closest = argmax(sim, 1)
+    all_members.append(closest)
+    
+    
+    if doplot:
+      for j, tp in enumerate(all_tps):
+        ax = f.add_axes( [float(j)/nt,float(i) /nc,1./nt, 1. /nc] )
+        ax.set_yticks([])
+        ax.set_xticks([])
+        i_sub = nonzero(equal(xy_data[:,1], j) * greater(ys,0))[0]
+        cs = colors[closest[i_sub]]
+        x = xs[i_sub]
+        z = zs[i_sub]
+        plt.scatter(x[::step],z[::step], 40,alpha = .75, c = cs[::step], edgecolor = 'none')
+    
+  ct_data = xy_data
+  return all_members, ct_data
 
-    for j, tp in enumerate(all_tps):
-      ax = f.add_axes( [float(j)/nt,float(i) /nc,1./nt, 1. /nc] )
-      ax.set_yticks([])
-      ax.set_xticks([])
-      i_sub = nonzero(equal(xy_data[:,1], j) * greater(ys,0))[0]
-      cs = colors[closest[i_sub]]
-      x = xs[i_sub]
-      z = zs[i_sub]
-      plt.scatter(x[::step],z[::step], 40,alpha = .75, c = cs[::step], edgecolor = 'none')
+def cluster_exprs(all_members, ct_data,
+                  do_plot = False,
+                  cluster_type = '4d',
+                  cluster_id = 4):
+  mrnas = nio.getBDTNP()
+  misc = nio.getBDTNP(misc = True)
+
+  c = all_members[cluster_id]
+  c_unq = set(list(c))
   
+
+  tissues = dict([('t_{0}'.format(i) , dict(cts = ct_data[equal(c,elt)]))
+                  for i, elt in enumerate(c_unq)])
+  
+  nt = 6
+  counts = array([[sum(equal(v['cts'][:,1],t))
+                   for t in range(nt) ] 
+                  for v in tissues.values() ])
+  
+
+  if do_plot:
+    f = plt.figure(1)
+    f.clear()
+  
+    ax1 = f.add_subplot('121')
+    ax2 = f.add_subplot('122')
+    seismic.seismic(counts , ax = ax1,stacked = True,colors = mycolors.getct(len(counts)))
+    #seismic.seismic(np.sort(counts,0) , ax = ax2,stacked = False,colors = mycolors.getct(len(counts)))
+    ax2.hist(np.sum(counts,1))
+    
+  
+  all_exprs = []
+  for t, v in tissues.iteritems():
+    ct = v['cts']
+    exprs =dict( [(k,elt['vals'][zip(*ct)]) for k, elt in mrnas.iteritems()])
+    ys = misc['y']['vals'][zip(*ct)] #zip(*sim_xy)]
+    zs = misc['z']['vals'][zip(*ct)] #zip(*sim_xy)]
+    xs = misc['x']['vals'][zip(*ct)] #zip(*sim_xy)]
+
+    
+    
+    f = plt.figure(1)
+    f.clear()
+    ax1 = f.add_subplot('121', title = 'X-Z axis view for tissue {0}'.\
+                          format(t))
+    ax2 = f.add_subplot('122',title = 'Y-Z axis view for tissue {0}'.\
+                          format(t))
+    ax1.scatter(xs, zs)
+    ax2.scatter(ys, zs)
+
+    v['exprs'] = exprs
+    all_exprs.append(exprs)
+
+    sio.savemat(open(cfg.dataPath('soheil/expression_c{0}_n{1}_t{2}.mat'.\
+                                    format(cluster_type,cluster_id,t)),'w'),
+                exprs)
+    f.savefig(open(cfg.dataPath('soheil/expression_c{0}_n{1}_t{2}.tiff'.\
+                                    format(cluster_type,cluster_id,t)),'w'))
+  
+    
+    
+  exprs_out = dict([( k, [ mean(sub[k]) for sub in all_exprs ]) 
+                    for k in all_exprs[0].keys() ])
+
+  sio.savemat(open(cfg.dataPath('soheil/expression_c{0}_n{1}_intercluster.mat'.\
+                                    format(cluster_type,cluster_id)),'w'),
+              exprs_out)
+  raise Exception()
+
 
 def cluster_tissues(nx = 20,ny = 500, timepoint = -1,
                     step = 4,
@@ -276,7 +357,7 @@ def cluster_tissues(nx = 20,ny = 500, timepoint = -1,
 
   cluster(cluster_training, percentile(cluster_training,.2) )
   
-  fopen = open(config.dataPath('bdtnp/clustering/nuclei/idxs'))
+  fopen = open(cfg.dataPath('bdtnp/clustering/nuclei/idxs'))
   lines = fopen.readlines()
   c = [int(l.strip()) for l in lines]
   c_training_exemplars = set(c)
@@ -322,7 +403,7 @@ def cluster_tissues(nx = 20,ny = 500, timepoint = -1,
 #Clusters derived at T = {1}, shown at T = {3}.'''\
 #                     .format(nx,timepoint, len(xs),tp))
     
-      f.savefig(config.dataPath('figs/bdtnp/cluster_movie{0:02d}.tiff'.format(tp)), format = 'tiff')
+      f.savefig(cfg.dataPath('figs/bdtnp/cluster_movie{0:02d}.tiff'.format(tp)), format = 'tiff')
       
       
 def similarity(query,exemplars = None, 
@@ -373,7 +454,7 @@ args:
   
   return sims
 
-def make_movie(moviedir = config.dataPath('figs/bdtnp')):
+def make_movie(moviedir = cfg.dataPath('figs/bdtnp')):
   #
   # Now that we have graphed images of the dataset, we will stitch them
   # together using Mencoder to create a movie.  Each image will become
@@ -415,14 +496,14 @@ def make_movie(moviedir = config.dataPath('figs/bdtnp')):
 
 
 def cluster(similarities, self_sim):
-  if not os.path.isdir( config.dataPath('bdtnp/clustering/nuclei/')):
-    os.mkdir( config.dataPath('bdtnp/clustering/nuclei/'))
+  if not os.path.isdir( cfg.dataPath('bdtnp/clustering/nuclei/')):
+    os.mkdir( cfg.dataPath('bdtnp/clustering/nuclei/'))
 
   ny = len(similarities)
   simfile = open(\
-    config.dataPath('bdtnp/clustering/nuclei/Similarities.txt'),'w')
+    cfg.dataPath('bdtnp/clustering/nuclei/Similarities.txt'),'w')
   ssfile = open(\
-    config.dataPath('bdtnp/clustering/nuclei/Preferences.txt'),'w')
+    cfg.dataPath('bdtnp/clustering/nuclei/Preferences.txt'),'w')
   simlines = ['{0:05d}   {1:05d}  {2:g}\n'.\
                 format(i+1, j+1, similarities[i,j]) 
               for i in range(ny) for j in range(ny) if i != j]
