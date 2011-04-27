@@ -188,7 +188,7 @@ inputs:
                       run_id = run_id,
                       do_clear = True, 
                       mem = mem))
-    resets = zeros(len(run_names))
+    resets = zeros(len(self.run_names))
     self.cmds = cmds
   def launch(self):
     for idx, c in enumerate(self.cmds):
