@@ -216,6 +216,7 @@ For programs that have been run, returns the output dictionary.
 For programs that have not yet been completed, or that have failed,
 returns a dictionary with the run id and the cause of failure.
 '''
+    statii = self.statii()
     for idx, run_id in enumerate(self.run_names):
       try:
         #data = load_data(run_id,output) 

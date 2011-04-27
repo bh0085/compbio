@@ -1,4 +1,4 @@
-import compbio.config as config
+import compbio.config as cfg
 import re, os
 from numpy import *
 import numpy as np
@@ -42,8 +42,8 @@ def parseNet(num =  1,method = 'tree', reset = False):
     method =kwargs.get('method', 'tree')
     num = kwargs.get('num', 1)
 
-    description_path = config.dataPath('::daniel/net%s_chip_features.tsv') % num
-    data_path = config.dataPath('::daniel/informativeness/%s%s.txt') %(method,num)
+    description_path = cfg.dataPath('::daniel/net%s_chip_features.tsv') % num
+    data_path = cfg.dataPath('::daniel/informativeness/%s%s.txt') %(method,num)
     split_re = re.compile('\s')
     
     desc_open = open(description_path)
@@ -188,7 +188,6 @@ def dsi_boxplot(num = 1 ,  method = 'tree', reset = False,
   
   kn_exps['ko'] = []
   
-  raise Exception()
 
   
   def getBPS(**kwargs):
@@ -218,14 +217,18 @@ def dsi_boxplot(num = 1 ,  method = 'tree', reset = False,
                          for col in ecols] 
 
       if cexp == []:
-         continue
+        for arr in [nz_frac_std, nz_frac_mean,
+                    nz_val_std, nz_val_mean]:
+          arr.append(0.)
+        nz_colvals.append([])
+        xlabels.append(k)
+        continue
       
       colwise_fracs = [mean(1.*greater(col,0)) for col in cexp]
       colwise_exprs = [mean(col[nonzero(greater(col,0))]) for col in cexp]
       colwise_exprs = [c if not isnan(c) else 0 for c in colwise_exprs]
 
       nz_colvals.append(colwise_exprs)
-      #if k == 'general_ts': raise Exception()
 
       nz_frac_std.append(std(colwise_fracs)/sqrt(len(colwise_fracs)))
       nz_frac_mean.append(mean(colwise_fracs))
@@ -263,6 +266,12 @@ def dsi_boxplot(num = 1 ,  method = 'tree', reset = False,
   f = plt.figure(0)
   f.clear()
 
+  topen = open(cfg.dataPath('daniel/txt/net{0}_{1}'.format(num,method )),'w')
+  topen.write('\t'.join(['exp_class','mean_influence','std_influence','stderr_influence'])+'\n')
+  for idx, exp_class in enumerate(xlabels):
+    topen.write('{0}\t{1}\t{2}\t{3}\n'.format(exp_class,mean(nz_colvals[idx]),std(nz_colvals[idx]),\
+                                                std(nz_colvals[idx])/ len(nz_colvals[idx])))
+  topen.close()
 
   plot_type = 'dsi_final'
   if plot_type == 'dsi_final':
@@ -300,7 +309,7 @@ def dsi_boxplot(num = 1 ,  method = 'tree', reset = False,
       pass
       #ax1.set_ylim([np.min([min(c) for c in nz_colvals[:-1]]), np.max([max(c) for c in nz_colvals[:-1]])])
 
-    f.savefig(config.dataPath('daniel/figs/final_bp_net{0}_{1}_{2}.ps'.\
+    f.savefig(cfg.dataPath('daniel/figs/final_bp_net{0}_{1}_{2}.ps'.\
                                 format(num, method,
                                        'log' if log_scale else 'lin')),
               dpi = 10)
@@ -335,7 +344,7 @@ def dsi_boxplot(num = 1 ,  method = 'tree', reset = False,
     a2.set_xticklabels([])
     for i in xi:
       a2.text( float(i) + .5,0,xlabels[i] , rotation = '-15',size = '16', ha = 'left',va='top')
-    f.savefig(config.dataPath('daniel/figs/latest/{1:03d}_{0}_{2}.tiff'.\
+    f.savefig(cfg.dataPath('daniel/figs/latest/{1:03d}_{0}_{2}.tiff'.\
                                 format('no_kos' if not show_kos else 'kos', 
                                        num ,
                                        'log' if log_scale else 'lin')),format = 'tiff')
@@ -370,7 +379,7 @@ def sig_grid(num = 1 ,  method = 'tree', reset = False,
   allow_tf_kn = False
   if not allow_tf_kn: grid[zip(*knockout_cells)] = 0
 
-  #Some more heatmap configuration.
+  #Some more heatmap cfguration.
   saturation = [np.percentile(grid[nonzero(greater(grid,0))],10),
                 np.percentile(grid[nonzero(greater(grid,0))],90)]
   tf_srt = argsort(np.mean(grid,1))
@@ -479,7 +488,7 @@ Showing Means: {5}, Showing zeros: {6}, Plotting logs {7}'''.\
   ax3.set_ylabel('significance')
   ax3.set_xlabel('experiment class')
   
-  f.savefig(config.dataPath('daniel/figs/{0}_net{1}_heatmaps.tiff'.format(method, num)),
+  f.savefig(cfg.dataPath('daniel/figs/{0}_net{1}_heatmaps.tiff'.format(method, num)),
             format = 'tiff')
 
     
@@ -491,7 +500,7 @@ Showing Means: {5}, Showing zeros: {6}, Plotting logs {7}'''.\
       or not bp_zeros and not bp_means and not bp_logs and 'nozeros_cells_nolog/'\
       or not bp_zeros and not bp_means and bp_logs and 'nozeros_cells_log/'
 
-  dataDir = config.dataPath('daniel/figs/{2}{0}_net{1}_boxplots.tiff'.\
+  dataDir = cfg.dataPath('daniel/figs/{2}{0}_net{1}_boxplots.tiff'.\
                               format(method, num,plam()))
   print 'saving {0}'.format(dataDir)
   if not os.path.isdir(os.path.dirname(dataDir)): os.mkdir(os.path.dirname(dataDir))
