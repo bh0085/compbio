@@ -213,22 +213,19 @@ this eye. Uses bjobs.
     Get the outputs of programs run by this eye.
 
 For programs that have been run, returns the output dictionary.
-For programs that have not yet been completed, returns: None
+For programs that have not yet been completed, or that have failed,
+returns a dictionary with the run id and the cause of failure.
 '''
-    #Note that even though the functions I am calling ask for 'ids',
-    #I use the field i.run_names...
-    #this is because I use a different id that than the bsub job id which
-    #is what that run_jobids field is named after
-    statii = self.statii()
     for idx, run_id in enumerate(self.run_names):
       try:
         data = load_data(run_id) 
-        if statii[idx] == 'DONE' 
-        else dict(failure = 'job_stat({1}): {0}'.format(statii[idx], run_id),
-                  job = run_id)
+        if statii[idx] == 'DONE':
+          data = load_data(run_id, 'output')
+        else:
+          data = dict(failure = 'job_stat({1}): {0}'.format(statii[idx], run_id),
+                      job = run_id)
       except Exception(), e:
-        data = dict(failure = e, job =run_id)
-
+        data = dict(failure = e,text = 'Exception in eyeball collection\n probably, outfile does not exit) step', job =run_id)
       outputs.append(data)
     return outputs
 
