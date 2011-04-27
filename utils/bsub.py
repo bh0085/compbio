@@ -149,7 +149,7 @@ Eyeball has methods to check the status of bsub jobs underway as well as to reco
                scr_path, inp_dicts,
                mem = 3,
                func = None, 
-               datapath = 'batch/eye/last.out',
+               datapath = 'batch/eye/',
                name = None
            ):
     '''
@@ -164,9 +164,10 @@ inputs:
 '''
 
     #Set up internally useful vars.
-    self.datapath = datapath
     self.run_jobids = []
     self.run_id = run_id
+    self.datapath = datapath + self.run_id + '.out'
+
 
     #Use 'name' or 'scr' to set a prefix for runid generation
     if name == None:
@@ -219,8 +220,17 @@ For programs that have not yet been completed, returns: None
     #this is because I use a different id that than the bsub job id which
     #is what that run_jobids field is named after
     statii = self.statii()
-    return [load_data(run_id, 'output') if statii[idx] == 'DONE' else None 
-            for idx, run_id in enumerate(self.run_names)]
+    for idx, run_id in enumerate(self.run_names):
+      try:
+        data = load_data(run_id) 
+        if statii[idx] == 'DONE' 
+        else dict(failure = 'job_stat({1}): {0}'.format(statii[idx], run_id),
+                  job = run_id)
+      except Exception(), e:
+        data = dict(failure = e, job =run_id)
+
+      outputs.append(data)
+    return outputs
 
 
   def inputs(self):
