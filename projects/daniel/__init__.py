@@ -244,8 +244,9 @@ def dsi_boxplot(num = 1 ,  method = 'tree', reset = False,
       nz_frac_std.append(0)
       nz_val_std.append(0)
       if len(ecells) == 0:
-        for arr in [nz_frac_mean, nz_val_mean, nz_colvals]:
+        for arr in [nz_frac_mean, nz_val_mean]:
           arr.append(0.)
+        nz_colvals.append([])
       else:
         nz_frac_mean.append(mean(greater(grid[zip(*ecells)],0)))
         nz_val_mean.append(mean(grid[zip(*ecells[greater(grid[zip(*ecells)],0)])]))
