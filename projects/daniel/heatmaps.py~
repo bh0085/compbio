@@ -1,0 +1,8 @@
+def load(net = 2, num = 3000):
+    fopen = open(cfg.dataPath('daniel/heatplots/net{0}_top{1}_heatplot_matrix.txt'.format(net,num)),'w')
+    lines = fopen.readlines()
+    arr = ['\t'.split(l) for  l in lines if l.strip() != '']
+    
+
+    f = plt.figure(3)
+    f.imshow(arr, interpolation = 'nearest')
