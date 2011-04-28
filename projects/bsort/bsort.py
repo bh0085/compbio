@@ -26,17 +26,22 @@ def sample_array(nx = 100, ny = 100, t = 'default', perc_high = .02):
         
     return uval
 def run0(meth = 'moment', 
-         nx = 10, 
-         ny = 10, 
+         nx = 20, 
+         ny = 20, 
          fig = 1, 
          seed = 0,
          nfl = 200,
          itr = 2,
+         arr = None,
          transpose = False):
     '''Generates a random array and clusters red values along the diagonal.'''
     random.seed(seed)
-    s = sample_array(nx = nx, ny = ny,t = 'default',perc_high = .2)
-    
+    if arr == None:
+        s = sample_array(nx = nx, ny = ny,t = 'default',perc_high = .2)
+    else:
+        nx, ny  = shape(arr)
+        s = arr
+
     qbad = 0
 
     all_scores = []
@@ -47,8 +52,8 @@ def run0(meth = 'moment',
         dims = shape(s)
         score = makescore(temp, dims)
         all_scores.append(sorted(reshape(score,-1)))
-        if qbad:
-            score = score.T
+        #if qbad:
+            #score = score.T
         
         if meth == 'moment':
             s = get_moment_sort(s)
@@ -56,7 +61,8 @@ def run0(meth = 'moment',
             s = get_maxfirst(s)
         elif meth == 'rnd':
             this_dlt = []
-            s = rnd_shuffles(s,nfl = nfl, 
+            s = rnd_shuffles(s,
+                             nfl = nfl * (float(shape(s)[0])/max(shape(s))), 
                              score = score,
                              temp = temp,
                              deltas = this_dlt)
@@ -65,13 +71,16 @@ def run0(meth = 'moment',
         if transpose:
             qbad = 1-qbad
             s = s.T
+            #score = score.T
+
+        #if i > 10:
 
     #s = ss.medfilt2d(s,5)
 
     f2 = plt.figure(fig)
     f2.clear()
     ax = f2.add_subplot(111)
-    ax.imshow(s[:,:,newaxis]*[1,0,0])
+    ax.imshow(s[:,:,newaxis]*[1,0,0], interpolation = 'nearest')
     
     f3 = plt.figure(fig+1)
     f3.clear()
@@ -88,18 +97,34 @@ def run0(meth = 'moment',
 
 def makescore(temp,dims):
     score = zeros(dims) + 1
-    for i in range(len(score)):
-        score[i][i] = 20.* temp **.5
+    
+    lonax = greater(dims[1],dims[0])
+    londim= dims[lonax]
+    sdim = dims[1-lonax]
+    ldiag = arange(0,londim,1,int)
+    sdiag = array(floor(ldiag * (float(sdim)/londim)),int)
+    dvals = [ldiag, sdiag]
+    if lonax:dvals = dvals[::-1]
+    score[dvals] = 20.*temp ** .5
+
+    if lonax: score = score.T
+
+    #for i in range(len(score)):
+    #    score[i][i] = 20.* temp **.5
 
     if temp > .1:
-        g = ss.gaussian(15*temp**2,15*temp**2)[:,newaxis]*ss.gaussian(10,1)[newaxis,:]
+        g = ss.gaussian((londim/2)*temp**2,(londim/2)*temp**2)[:,newaxis]*\
+            ss.gaussian((sdim/2)*temp**2,(sdim/2)*temp**2)[newaxis,:]
+
         g/= sum(g)
         score = ss.convolve2d(score,g,'same','wrap')
         
     for i in range(1,len(score)):
-        score[i,arange(i-1)] = 0.
+        score[i,arange(sdiag[i])] *= .25
 
 
+        
+    if lonax: score = score.T
 
     return score
 
@@ -139,6 +164,16 @@ def get_maxfirst(arr):
     return out
 
 def rnd_shuffles(arr, nfl = 100,qbad = 0,score = None,temp = None, deltas = None):
+    '''
+    Use random shuffles to maximize the scoring function.
+    '''
+
+
+    print
+    print shape(score), shape(arr)
+    print nfl
+    print
+
     record_deltas = False
     if deltas != None:
         record_deltas = True
@@ -168,6 +203,7 @@ def rnd_shuffles(arr, nfl = 100,qbad = 0,score = None,temp = None, deltas = None
                 
         if record_deltas:
             deltas.append([diff,acc])
-
+            
+    
     return arr
                     

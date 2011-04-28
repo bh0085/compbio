@@ -218,6 +218,8 @@ returns a dictionary with the run id and the cause of failure.
 '''
     outputs = []
     statii = self.statii()
+    print statii
+
     for idx, run_id in enumerate(self.run_names):
       try:
         #data = load_data(run_id,output) 
