@@ -6,7 +6,8 @@ from numpy import *
 def runmat(script, input_dict, run_id):
     tmpnames = bsub.mat_tmp_fnames(run_id,2)
     sio.savemat(tmpnames[0],input_dict)
-    cstr = '''matlab -nojvm -nodisplay -nosplash -r "{2}('{0}', '{1}' ); exit"'''.format(*(tmpnames + [script]))
+    mat_cmd = '''"{2}('{0}', '{1}' ); exit"'''.format(*(tmpnames + [script]))
+    cstr = '''echo {0} | matlab -nojvm -nodisplay -nosplash '''.format(mat_cmd)
     sxs = spc.Popen(cstr, shell = True).communicate()
     output = sio.loadmat(tmpnames[1])
     o00 = output['out_struct'][0][0]
