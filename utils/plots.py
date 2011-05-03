@@ -38,8 +38,8 @@ def hideaxes(ax, visible = False):
 
 def maketitle(ax, title, subtitle = None,alpha = 1):
     ax.annotate(title,[.05,.97],
-                xycoords = 'figure fraction',
-                verticalalignment = 'bottom',
+                xycoords = 'axes fraction',
+                verticalalignment = 'top',
                 size = 'x-large',
                 alpha = alpha
                 )

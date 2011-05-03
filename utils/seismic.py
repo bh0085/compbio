@@ -162,7 +162,7 @@ def seismic(yvecs_in,
                                             facecolor = 'white',
                                             alpha = .5)
                     ax.add_patch(p)
-                    ystr = str(this_ymark)
+                    ystr ='{0:2.2g}'.format(this_ymark)
                     if yunits != '':
                         ystr+=str('\n(')+str(yunits)+')'
                     ax.annotate(ystr, 

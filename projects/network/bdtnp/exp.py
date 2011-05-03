@@ -32,12 +32,75 @@ import pickle
 from numpy import *
 import numpy as np, textwrap as tw
 import cs874.bsub_clusters as bcl
-import os, inspect
+import os, inspect, itertools as it
 import scipy.io as sio
 
 
 if not os.path.isdir(cfg.dataPath('figs/bdtnp')):
   os.mkdir(cfg.dataPath('figs/bdtnp'))
+
+
+def getClusteringInputs( ncluster =1000, host = 'tin', 
+                           reset = 0, step = 10, exemp_time = 'all',
+                           doplot = False):
+  mrnas = nio.getBDTNP()
+  misc = nio.getBDTNP(misc = True)
+  
+  vals = array([v['vals'] for v in mrnas.values()])
+  gvars = var(vals, 1)
+  gminvars = np.min(gvars,1)
+  gmedvars = median(gvars,1)
+
+  min20 = argsort(gminvars)[::-1][:20]
+  med20 = argsort(gmedvars)[::-1][:20]
+
+  int20 = set(min20).intersection(set(med20))
+  xgenes = array(list(int20))
+
+  cell_data = vals[xgenes].transpose(1,2,0)
+  scd = shape(cell_data)
+  #times = reshape(zeros(shape(cell_data[0:2]))[:,:,newaxis , arange(shape(cell_data[1]))
+  #                    , (prod(shape(cell_data)[0:2])))
+  xycoords = (arange(scd[0])[:,newaxis,newaxis]*[1,0] +\
+                arange(scd[1])[newaxis,:,newaxis]*[0,1])
+  cell_data = reshape(cell_data, (prod(shape(cell_data)[0:2]), shape(cell_data)[2] ))
+  xy_data = reshape(xycoords, (prod(scd[0:2]),2 ))
+    
+  if exemp_time == 'all':
+    inds = arange(len(cell_data))
+  else:
+    inds = arange(len(cell_data))[nonzero(equal(xy_data[:,1],exemp_time))[0]]
+  
+  np.random.seed(1)
+  np.random.shuffle(inds)
+  rand_thousand = inds[0:ncluster]
+  
+  sim_data = cell_data[rand_thousand]
+  sim_xy = xy_data[rand_thousand]
+  t = [ mean(sim_data, 0), std(sim_data,0)]
+  t[1][equal(t[1],0)] = 0
+  metric = 'neg_dist'
+  sims = similarity(sim_data, transform = t, method = metric)
+
+  name = 'll_{0}_{1}_{2}'.format(metric,ncluster,exemp_time)
+
+  d_in = []
+  percs = logspace(.1,1.5,8)
+  for p in percs:
+    d_in.append(dict(similarities = sims,
+                     self_similarity = percentile(sims, p),
+                     metric = metric
+                     ))
+  return d_in
+
+
+def launchClusters(ncluster = 2000):
+  dicts = list(it.chain(*[getClusteringInputs(ncluster = ncluster, host = 'tin',exemp_time = t)
+                          for t in [0,1,2,3,4,5,'all']]))
+  launcher = bcl.launcher(dicts, host = 'tin', name = 'apclustering_n{0}'.format(ncluster))
+  launcher.launch()
+  return launcher
+
 
 def p_m_correlation():
   prots = nio.getBDTNP(protein = True)
@@ -156,6 +219,8 @@ def c2( launcher = None, ncluster =1000, host = 'tin',
                                         reset = reset,
                                         hard_reset = False,)))  
     return output
+
+
 
   def setC2(launcher = launcher, **kwargs):
     if launcher == None:

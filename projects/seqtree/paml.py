@@ -16,7 +16,8 @@ import Bio.AlignIO as aio
 import compbio.config as config
 import re, itertools as it, subprocess, os
 
-def run_paml(tree_in,ali_in, run_id= 'T%05i' % (0,)):
+def run_paml(tree_in,ali_in, run_id= 'T%05i' % (0,),
+             verbose = False):
   '''
   Given an input tree in the form of a Biopython tree
   with branch lengths and names, write to a file and 
@@ -56,10 +57,13 @@ def run_paml(tree_in,ali_in, run_id= 'T%05i' % (0,)):
   sed_command = "sed -i -e '1 s/$/\ \ I/' {0}"\
       .format(alifilepath)
   
-  subprocess.call(sed_command, shell = True)
+  sprc = subprocess.Popen(sed_command, stdout = subprocess.PIPE, shell = True)
+  comms = sprc.communicate()
+  pprc = subprocess.Popen(    command, stdout = subprocess.PIPE, shell = True)
+  comms = pprc.communicate()
+  if verbose:
+    print comms[0]
 
-  subprocess.call(command,
-                  shell = True)
   os.chdir(old_cwd)
   rstfile = os.path.join(run_d,'rst')
   return rstfile
@@ -135,10 +139,11 @@ def rst_parser(rstfile):
     marginal.append(gdict)
 
   
-  m_nums = sorted(tree_internal_nums)
-  m_names= ['HN%03i' % (idx) for idx, item in enumerate(m_nums)]
+  m_nums = [str(num) for num in sorted([int(n) for n in tree_internal_nums])]
+  m_names= ['HN{0}'.format(item) for idx, item in enumerate(m_nums)]
   m_seqs =[''.join([m['data'][idx][0] for m in marginal])
            for idx in range(len(m_nums))]
+
   m_probs=[[float(m['data'][idx][1]) for m in marginal]
            for idx in range(len(m_nums))]
   

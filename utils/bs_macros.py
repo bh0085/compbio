@@ -11,7 +11,10 @@ def runmat(script, input_dict, run_id):
     sxs = spc.Popen(cstr, shell = True).communicate()
     output = sio.loadmat(tmpnames[1])
     o00 = output['out_struct'][0][0]
-    dout   = dict([(k, o00.__getattribute__(k)) for k in o00._fieldnames])
+    try:
+        dout   = dict([(k, o00.__getattribute__(k)) for k in o00._fieldnames])
+    except Exception, e:
+        dout = dict([(k, o00[i]) for i , k in enumerate([elt[0] for elt in o00.dtype.descr])])
     return dout
 
     
