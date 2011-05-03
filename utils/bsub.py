@@ -192,14 +192,19 @@ inputs:
     resets = zeros(len(self.run_names))
     self.cmds = cmds
   def launch(self):
+    prcs = []
     for idx, c in enumerate(self.cmds):
-      out = spc.Popen(c, stdout = spc.PIPE, \
-                        shell = True).\
-                        communicate()[0]
+      prcs.append(spc.Popen(c, stdout = spc.PIPE, shell = True))
+      time.sleep(.25)
       self.run_jobids.append(re.compile('Job <([\d]+)>').\
                             search(out).group(1))
       if mod(idx, 5) == 0 :
         save_data({'status':'RUN', 'str':'Jobs launched: {0}'.format(idx)}, self.run_id, 'status')
+    for idx, p in enumerate(prcs): 
+      print 'job{0}:'.format(idx)
+      print self.cmds[idx]
+      print p.communicate()[0]
+
   def statii(self):
     '''
     Return the run statuses of programs launched under the control of
