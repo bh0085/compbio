@@ -196,14 +196,15 @@ inputs:
     for idx, c in enumerate(self.cmds):
       prcs.append(spc.Popen(c, stdout = spc.PIPE, shell = True))
       time.sleep(.25)
-      self.run_jobids.append(re.compile('Job <([\d]+)>').\
-                            search(out).group(1))
+
       if mod(idx, 5) == 0 :
         save_data({'status':'RUN', 'str':'Jobs launched: {0}'.format(idx)}, self.run_id, 'status')
     for idx, p in enumerate(prcs): 
       print 'job{0}:'.format(idx)
       print self.cmds[idx]
-      print p.communicate()[0]
+      out = p.communicate()[0]     
+      self.run_jobids.append(re.compile('Job <([\d]+)>').\
+                               search(out).group(1))
 
   def statii(self):
     '''
