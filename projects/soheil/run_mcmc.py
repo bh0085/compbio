@@ -4,6 +4,7 @@ import compbio.utils.bsub_utils as bsu
 import compbio.config as cfg
 import compbio.utils.bs_macros as bsm
 import compbio.utils.bsub as bsub
+import compbio.utils.bsub_utils as butils
 
 
 def launch_many(run_id):
