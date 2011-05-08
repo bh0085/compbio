@@ -2,6 +2,8 @@
 import sys
 import compbio.utils.bsub_utils as bsu
 import compbio.config as cfg
+import compbio.utils.bs_macros as bsm
+import compbio.utils.bsub as bsub
 
 def launch_many(run_id):
     '''
