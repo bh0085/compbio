@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import sys
 import compbio.utils.bsub_utils as bsu
+import compbio.config as cfg
 
 def launch_many(run_id):
     '''
