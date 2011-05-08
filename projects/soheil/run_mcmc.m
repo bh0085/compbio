@@ -1,4 +1,4 @@
-function run_mcmc(mat_inp, mat_out)
+function input = run_mcmc(mat_inp, mat_out)
 %Takes filenames of:
 % input: a file that must currently exist on the filesystem
 %        containing a single matlab struct "parameters"
@@ -10,6 +10,7 @@ input = open(mat_inp)
 
 %output =....
 
+return
 
 
 %% test 7
