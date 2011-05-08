@@ -5,7 +5,7 @@ import compbio.config as cfg
 import compbio.utils.bs_macros as bsm
 import compbio.utils.bsub as bsub
 import compbio.utils.bsub_utils as butils
-from numpy import array
+from numpy import array, double
 
 
 def launch_many(run_id):
