@@ -18,6 +18,7 @@ def color_legend(fig,colors, labels,
         trg = fig
     else:
         trg = ax
+
     for i in range(n):
         c = colors[i]
         l = labels[i]
