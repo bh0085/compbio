@@ -15,6 +15,7 @@ data.
     print 'Launching all jobs!'
 
     #MAKE INPUTS 
+    ttnum = 4
     expr_filename = 'soheil/expression_c4d_n4_tt_{0}.mat'.format(ttnum)
     url = cfg.dataURL(expr_filename)
     remote_exprname = cfg.dataPath(url)
@@ -60,8 +61,6 @@ run mcmc in matlab using bs_macros.run_matlab.
 '''
     input_dict = butils.load_data(run_id,'input')
     return bsm.runmat('run_mcmc', input_dict, run_id)
-
-
 
 
 if __name__ == '__main__':
