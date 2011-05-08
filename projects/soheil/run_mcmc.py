@@ -26,20 +26,34 @@ data.
     remote_exprname = cfg.dataPath(url)
 
     inp_dicts = []
-    for iters in [2,4,8]:
-        inp_dict = dict(out_iter_num = iters,
-                        in_iter_num = 5,
-                        k = 6,
-                        beta = 4,
-                        f_mix = 1,
-                        f_sim = .9,
-                        f_en_in = .95,
-                        f_en_out = .95,
-                        th_cor = .5,
-                        trunc_value = 3,
-                        degree_bound = 3,
-                        filename = remote_exprname)
-        inp_dicts.append(inp_dict)
+
+    iters = [2,4,8]
+
+    inp_dicts = [dict(out_iter_num = iters,
+                      in_iter_num = double(5),
+                      k = double(6),
+                      beta = double(4),
+                      f_mix = double(1),
+                      f_sim = double(.9),
+                      f_en_in = .95,
+                      f_en_out = .95,
+                      th_cor = .5,
+                      trunc_value = 3,
+                      degree_bound = 3,
+                      filename = remote_exprname)
+                 for out_iter_num in array(iters,double)
+                 for in_iter_num in array([5],double)
+                 for k in array([6],double)
+                 for beta in array([4],double)
+                 for f_mix in array([1],double)
+                 for f_sim in array([.9],double)
+                 for f_en_in in array([.95],double)
+                 for f_en_out in array([.95],double)
+                 for th_cor in array([.5],double)
+                 for trunc_value in array([3],double)
+                 for degree_bound in array([3],double)
+                 for filename in [remote_exprname] ]
+
     
 
     #MAKE EYEBALL
