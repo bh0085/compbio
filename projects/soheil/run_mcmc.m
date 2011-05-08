@@ -297,7 +297,7 @@ stay_same=b2/total_num;
 get_worst_ratio=1-improv_ratio-stay_same;
 
 
-save(mat_output)
+save(mat_out)
 
 
 
