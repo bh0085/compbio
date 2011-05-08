@@ -28,7 +28,7 @@ data.
 
     inp_dicts = []
 
-    iters = [2,4,8]
+    iters = array([2,4,8],double)
 
     inp_dicts = [dict(out_iter_num = iters,
                       in_iter_num = double(5),
