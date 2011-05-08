@@ -292,15 +292,17 @@ b2=sum(sum(ratio_valid==1));
 b3=sum(sum(ratio_valid>1));
 
 total_num=g_num-b1;
-improv_ratio=(g_num-b1-b2-b3)/total_num;
+improve_ratio=(g_num-b1-b2-b3)/total_num;
 stay_same=b2/total_num;
 get_worst_ratio=1-improv_ratio-stay_same;
 
-
-save(mat_out)
-
-
-
+first_savepath = (strcat(mat_out ,'__tmp2.mat' )
+save(first_savepath)
+pout = struct()
+pout.total_num = total_num
+pout.improve_ratio = improve_ratio
+pout.stay_same = stay_same
+pout.matfile = first_savepath
 
 
 
