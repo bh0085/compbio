@@ -296,7 +296,7 @@ improve_ratio=(g_num-b1-b2-b3)/total_num;
 stay_same=b2/total_num;
 get_worst_ratio=1-improv_ratio-stay_same;
 
-first_savepath = (strcat(mat_out ,'__tmp2.mat' )
+first_savepath = (strcat(mat_out ,'__tmp2.mat' ))
 save(first_savepath)
 pout = struct()
 pout.total_num = total_num
