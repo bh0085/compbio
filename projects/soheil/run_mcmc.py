@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import sys, os
+import sys, os, inspect
 import compbio.utils.bsub_utils as bsu
 import compbio.config as cfg
 import compbio.utils.bs_macros as bsm
