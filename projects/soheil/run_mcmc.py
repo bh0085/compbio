@@ -42,17 +42,17 @@ data.
                       trunc_value = 3,
                       degree_bound = 3,
                       filename = remote_exprname)
-                 for out_iter_num in array(iters,double)
-                 for in_iter_num in array([5],double)
+                 for out_iter_num in array([20,40],double)
+                 for in_iter_num in array([50,100],double)
                  for k in array([6],double)
-                 for beta in array([4],double)
-                 for f_mix in array([1],double)
-                 for f_sim in array([.9],double)
-                 for f_en_in in array([.95],double)
-                 for f_en_out in array([.95],double)
-                 for th_cor in array([.5],double)
-                 for trunc_value in array([3],double)
-                 for degree_bound in array([3],double)
+                 for beta in array([2,4,6],double)
+                 for f_mix in array([.5,1,2],double)
+                 for f_sim in array([.5,.8,.9],double)
+                 for f_en_in in array([.75,.95],double)
+                 for f_en_out in array([.75,.95],double)
+                 for th_cor in array([.5,.6],double)
+                 for trunc_value in array([3,5],double)
+                 for degree_bound in array([3,5],double)
                  for filename in [remote_exprname] ]
 
     
@@ -70,7 +70,8 @@ data.
 
     
     #RETURN A LIST OF LAUNCHED JOBS
-    return dict(cmds=eyeball.cmds)
+    return dict(cmds=eyeball.cmds,
+                inputs = inp_dicts)
 
 
 
