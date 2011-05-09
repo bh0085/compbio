@@ -4,6 +4,13 @@ from numpy import *
 import numpy as np
 import matplotlib.patches as patches
 
+
+def fignum(num, size = (8,8)):
+    plt.close(num)
+    return plt.figure(num, size)
+
+    
+
 def color_legend(fig,colors, labels,
                  frameon = False,
                  markersize = 40,

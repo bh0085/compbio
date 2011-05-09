@@ -26,22 +26,18 @@ data.
     url = cfg.dataURL(expr_filename)
     remote_exprname = cfg.dataPath(url)
 
-    inp_dicts = []
-
-    iters = array([2,4,8],double)
-
-    inp_dicts = [dict(out_iter_num = iters,
-                      in_iter_num = double(5),
-                      k = double(6),
-                      beta = double(4),
-                      f_mix = double(1),
-                      f_sim = double(.9),
-                      f_en_in = .95,
-                      f_en_out = .95,
-                      th_cor = .5,
-                      trunc_value = 3,
-                      degree_bound = 3,
-                      filename = remote_exprname)
+    inp_dicts = [dict(out_iter_num = out_iter_num,
+                      in_iter_num = in_iter_num,
+                      k = k,
+                      beta = beta,
+                      f_mix = f_mix,
+                      f_sim = f_sim,
+                      f_en_in = f_en_in,
+                      f_en_out = f_en_out,
+                      th_cor = th_cor,
+                      trunc_value = trunc_value,
+                      degree_bound = degree_bound,
+                      filename = filename)
                  for out_iter_num in array([20,40],double)
                  for in_iter_num in array([50,100],double)
                  for k in array([6],double)

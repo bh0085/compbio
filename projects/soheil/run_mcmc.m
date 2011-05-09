@@ -298,12 +298,12 @@ get_worst_ratio=1-improve_ratio-stay_same;
 
 first_savepath = (strcat(mat_out ,'__tmp2.mat' ))
 save(first_savepath)
-pout = struct()
-pout.total_num = total_num
-pout.improve_ratio = improve_ratio
-pout.stay_same = stay_same
-pout.matfile = first_savepath
-save(mat_out, 'pout') 
+out_struct = struct()
+out_struct.total_num = total_num
+out_struct.improve_ratio = improve_ratio
+out_struct.stay_same = stay_same
+out_struct.matfile = first_savepath
+save(mat_out, 'out_struct') 
 
 
 
