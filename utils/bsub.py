@@ -146,20 +146,34 @@ Eyeball has methods to check the status of bsub jobs underway as well as to reco
 '''
   def __init__(self,
                run_id,
-               scr_path, inp_dicts,
+               scr_path, 
+               inp_dicts,
                mem = 2,
                func = None, 
                datapath = 'batch/eye/',
                name = None
            ):
     '''
-    Create an eye with a set of jobs. Run them.
+Create an eye with a set of jobs. Run them.
+
+NOTE 1: This was originally designed to construct
+run_ids on the fly but now, if input dictionaries have
+the field run_id defined, it will use the run_id value
+as a run_id for each process.
 
 inputs:
   scr_path:    the path of the script to be run. [String]
   scriptargs:  command line args to the script.  [String x nargs]
   inp_dicts:   input dicts for each instance of script
                implicitly sets the number of calls to script.
+
+kwds:
+  mem:         manually specify bsub memory requirements
+  datapath:    if we choose to package the output after launch, 
+               datapath specifies the location to save packaged data.
+  name:        if run_ids are not specified, name is used to put a
+               prefix on each run_id
+  func:        func to run
 
 '''
 
@@ -181,7 +195,11 @@ inputs:
     cmds = []
     self.run_names , self.run_ids = [], []
     for idx,  d in enumerate(inp_dicts):
-      run_id=get_run_id(idx, prefix = runid_prefix)
+      if d.has_key('run_id'):
+        run_id = d['run_id']
+      else:
+        run_id=get_run_id(idx, prefix = runid_prefix)
+
       save_data(d, run_id,'input')
       self.run_names.append(run_id)
       cmds.append(cmd(scr_path,
