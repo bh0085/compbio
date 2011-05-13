@@ -1,6 +1,6 @@
 import os, pipes, socket, subprocess as spc
 root = os.environ['COMPBIO_PATH']
-import compbio.utils.remote_utils as rutils
+import compbio.utils.remote_utils 
 
 def remotePath(abspath, host = 'tin', root = 'comp'):
   '''Get the location of the a file on the remote file system
@@ -80,6 +80,7 @@ def dataPath(url, make = True):
     if make and not os.path.isdir(os.path.dirname(path)):
       os.makedirs(os.path.dirname(path))
   else:
+    rutils =  compbio.utils.remote_utils 
     path = rutils.remote_datapath(localpath, 
                                   host_name, 
                                   volume = volume_name)
