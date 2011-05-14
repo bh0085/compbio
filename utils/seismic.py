@@ -23,13 +23,14 @@ def seismic(yvecs_in,
             xunits = '',
             label_y = True,
             label_x = True,
-            labelspace= True,
+            labelspace= False,
             labelinds =None,
             fig = None,
             stacked = False,
             ymarkpts = None,
             xmarkpts = None,
-            xmark_colors = None):
+            xmark_colors = None,
+            right_label_on = False):
 
         
 
@@ -155,7 +156,10 @@ def seismic(yvecs_in,
             dy = max(yup) - min(ydown)
             
             if label_y:
-                for x in xpts:
+                for idx, elt  in enumerate(zip(xpts, ('right','left'))):
+                    x, ha = elt
+                    if idx == 1 and right_label_on == False:
+                        continue
                     p = patches.ConnectionPatch([x,ypts[0]],[x,ypts[1]],'data','data',
                                             arrowstyle = '<->',
                                             edgecolor = 'black',
@@ -167,9 +171,10 @@ def seismic(yvecs_in,
                         ystr+=str('\n(')+str(yunits)+')'
                     ax.annotate(ystr, 
                                 [x, max(ypts)],
-                                xytext = [10,0],
+                                xytext = [10* (-1 if ha == 'right' else 1),0],
                                 textcoords='offset points',
-                                verticalalignment = 'top')
+                                verticalalignment = 'top',
+                                ha = ha)
             
             if i == 0 and label_x:
             
