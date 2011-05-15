@@ -157,6 +157,9 @@ def rst_parser(rstfile):
   #lines of the file... 
   term_nums = tree_terminal_nums
   term_names = re.compile('(N\S*):').findall(tree_actual_text)
+  if len(term_names) != len(term_nums):
+    print 'OOPS... COULDNT PARSE TERM NAMES FROM RST.'
+    raise Exception('Need to name nodes as N#*')
   
   m_clades = []
   for idx, m in enumerate(m_nums):
