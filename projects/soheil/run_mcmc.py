@@ -21,10 +21,10 @@ data.
     print 'Launching all jobs!'
 
     #MAKE INPUTS 
-    ttnum = 4
-    expr_filename = 'soheil/expression_c4d_n4_tt_{0}.mat'.format(ttnum)
-    url = cfg.dataURL(expr_filename)
-    remote_exprname = cfg.dataPath(url)
+    expr_filenames = ['soheil/expression_c4d_n4_tt_{0}.mat'.format(ttnum)
+                      for ttnum in range(70)] + ['soheil/expression_c4d_n4_intercluster.mat']
+    urls = [ cfg.dataURL(f) for f in expr_filenames ]
+    remote_exprnames =[  cfg.dataPath(url) for url in urls ]
 
     inp_dicts = [dict(out_iter_num = out_iter_num,
                       in_iter_num = in_iter_num,
@@ -38,20 +38,24 @@ data.
                       trunc_value = trunc_value,
                       degree_bound = degree_bound,
                       filename = filename)
-                 for out_iter_num in array([20,40],double)
-                 for in_iter_num in array([50,100],double)
+                 for out_iter_num in array([2,10,20,40],double)
+                 for in_iter_num in array([100],double)
                  for k in array([6],double)
-                 for beta in array([2,4,6],double)
-                 for f_mix in array([.5,1,2],double)
+                 for beta in array([4],double)
+                 for f_mix in array([.5,2,5],double)
                  for f_sim in array([.5,.8,.9],double)
-                 for f_en_in in array([.75,.95],double)
-                 for f_en_out in array([.75,.95],double)
-                 for th_cor in array([.5,.6],double)
-                 for trunc_value in array([3,5],double)
-                 for degree_bound in array([3,5],double)
-                 for filename in [remote_exprname] ]
+                 for f_en_in in array([.95,1.1],double)
+                 for f_en_out in array([.95,1.1],double)
+                 for th_cor in array([.6],double)
+                 for trunc_value in array([3],double)
+                 for degree_bound in array([3],double)
+                 for filename in remote_exprnames ]
 
     
+    print 'Filenames: '
+    print
+    print [d['filename'] for d in inp_dicts]
+    print
 
     #MAKE EYEBALL
     eyeball = bsub.eyeball(run_id, 

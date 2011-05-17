@@ -271,3 +271,22 @@ def spacefill(ax,rs, cs):
 
   ax.plot(xs,ys, zorder = -1, alpha = .2, color = 'black')
   ax.scatter(xs,ys,rs,color = cs)
+def padded_limits(ax, xvals, yvals, margin = .2):
+    dx = max(xvals) - min(xvals)
+    dy = max(yvals) - min(yvals)
+    ax.set_autoscaley_on(False)
+    ax.set_autoscalex_on(False)
+    ax.set_xlim([min(xvals) - dx *margin, max(xvals) + dx * margin])
+    ax.set_ylim([min(yvals) - dy *margin, max(yvals) + dy * margin])
+
+def rescale(arr, lims):
+    dl = lims[1] - lims[0]
+    da = np.max(arr) - np.min(arr)
+    print arr
+    arr_out = array(arr)
+    arr_out -= np.min(arr_out)
+    arr_out /= da
+    arr_out *= dl
+    print dl, da
+    arr_out += lims[0]
+    return arr_out
