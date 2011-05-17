@@ -56,6 +56,7 @@ data.
     print
     print [d['filename'] for d in inp_dicts]
     print
+    raise Exception()
 
     #MAKE EYEBALL
     eyeball = bsub.eyeball(run_id, 
