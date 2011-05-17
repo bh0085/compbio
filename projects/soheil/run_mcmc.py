@@ -52,11 +52,6 @@ data.
                  for filename in remote_exprnames ]
 
     
-    print 'Filenames: '
-    print
-    print [d['filename'] for d in inp_dicts]
-    print
-    raise Exception()
 
     #MAKE EYEBALL
     eyeball = bsub.eyeball(run_id, 
