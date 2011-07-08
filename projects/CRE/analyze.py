@@ -350,7 +350,7 @@ def write_seqs_to_motifs():
         name = k
         contents +=  '\n'.join(['A {0} 1 {1}'.format(k,len(cons)),
                            '{0}'.format(promoter_type),
-                           c])
+                           ''.join(c)])
         raise Exception()
 
 def get_mutants(**kwargs):
