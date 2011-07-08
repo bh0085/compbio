@@ -365,7 +365,7 @@ def get_motifs(**kwargs):
         mlines = prc.communicate(input = open(fpath).read())[0].splitlines()
         
         seqs = {}
-        for o in out:
+        for o in mlines:
             name = o[1]
             entry = seqs.get(name, [])
             entry.append({'motif':o[0],
