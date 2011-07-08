@@ -372,7 +372,7 @@ def get_motifs(**kwargs):
 
 def fix_motifs():
     fpath = cfg.dataPath('motifs/all_vert_motifs.txt')
-    fopen open(fpath)
+    fopen = open(fpath)
     lines = fopen.readlines()
     ignore = False
     lines_out = []
