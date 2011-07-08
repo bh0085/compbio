@@ -13,41 +13,6 @@ import cb.utils.colors as mycolors
 
 figtemplate = cfg.dataPath('figs/CRE/{0}.pdf')
 
-def getCRE(**kwargs):
-    def setCRE(**kwargs):        
-        cre_des = open(cfg.dataPath('CRE/27k/CRE_Randomization_Design.txt'))
-        cre_rnd = open(cfg.dataPath('CRE/27k/CRE_Randomization.dat'))
-        cre_rnd = cre_rnd.readlines()
-        cre_des = cre_des.readlines()
-
-        cre_rndvals = [[elt.strip() for elt in line.split('\t')] for line in cre_rnd[1:]]
-        cre_seqs = [[elt.strip() for elt in line.split('\t')] for line in cre_des]
-
-        cre_rndvals = dict([(e[0], e[1:]) for e in cre_rndvals])
-        cre_seqs = dict([[e[0],e[1]] for e in cre_seqs])
-
-        keys = list(set(cre_rndvals.keys()).intersection(cre_seqs.keys()))
-        
-        cre = array([list(cre_seqs[k]) for k in keys])
-        cre_rndvals = array([array(cre_rndvals[k], float) for k in keys])
-        return cre, cre_rndvals, keys
-    return mem.getOrSet(setCRE,
-                        **mem.rc(kwargs,
-                                 on_fail = 'compute'))
-
-
-def get_cons(**kwargs):
-    def consensus_seq(seqs):
-        return [ sorted([(k,list(g)) for k, g in it.groupby(sorted(c)) ], key = lambda x: len(x[1]))[-1][0] for c in seqs.T]
-    def set_cons(**kwargs):
-        cre, cre_rndvals, keys = getCRE(**mem.sr(kwargs))
-        cons = consensus_seq(cre[::100])
-        return cons
-    cons = mem.getOrSet(set_cons, **mem.rc(kwargs,
-                          on_fail = 'compute'))
-    return cons
-
-
 def mut_counts(cons, seqs, name = 'CRE'):
     
     l = len(cons)
@@ -140,94 +105,9 @@ def transfac_finder():
     pass
 
 
+
+
 #ENERGY ACTIVITY STUFF.
-def energy_activities(seqs, activities):
-    energies = get_energies()
-    enfun = lambda x : sum([energies[''.join(x[pos:pos+2])][2] for pos in range(len(x) -1)])
-    seq_energies = array([enfun(x) for x in seqs])
-
-    erng = (min(seq_energies), max(seq_energies))
-    xax = linspace(erng[0], erng[1], 20)
-    induction = array([a[1] / a[0] for a in activities])
-    
-    f = myplots.fignum(2, (8,8))
-    f.clear()
-
-    polyval(polyfit(seq_energies, induction,1), xax)
-    lin = linregress(seq_energies,induction)
-    rsquared = lin[2]**2
-    ax = f.add_subplot(111)
-    ax.annotate('$R^2 = {0}$'.format(rsquared),
-                [1,1], xycoords = 'axes fraction', 
-                ha = 'right', va = 'top')
-    ax.scatter(seq_energies, induction)
-    figtitle = 'whole_sequence_energy_vs_induction'
-    f.savefig(figtemplate.format(figtitle))
-
-    ax.clear()
-    means = array( [mean(a) for a in activities])
-    polyval(polyfit(seq_energies,means,1), xax)
-    lin = linregress(seq_energies, means)
-    rsquared = lin[2]**2
-    ax.annotate('$R^2 = {0}$'.format(rsquared),
-                [1,1], xycoords = 'axes fraction', 
-                ha = 'right', va = 'top')
-    ax.scatter(seq_energies,means)
-    figtitle2 = 'whole_sequence_energy_vs_level'
-    f.savefig(figtemplate.format(figtitle2))
-
-
-
-def ea2(seqs, activities):
-    '''
-    Plot the effect of delta delta G for mutations upon induction fraction.
-    '''
-    energies = get_energies()
-
-def get_num_seqs(**kwargs):
-    def set_num_seqs(**kwargs):
-        ntdict = nt_ids()
-        cre, cre_rndvals, keys = getCRE()
-        return array([[ntdict[let] for let in seq] for seq in cre])
-    return mem.getOrSet(set_num_seqs, 
-                        **mem.rc(kwargs,
-                               on_fail = 'compute'))
-                     
-
-def position_triplet(idx):
-    cons = get_cons()
-    l = len(cons)
-    if idx == 0: trip_rng = arange(0,2)
-    elif idx == l-1: trip_rng = arange(l-2,l)
-    else: trip_rng = arange(idx -2, idx+1)    
-    return trip_rng
-
-def get_trip_muts(idx):
-    cre, cre_rndvals, keys = getCRE()
-    seqs = get_num_seqs()
-    cons_let = get_cons()
-    ntdict = nt_ids()
-    cons = array([ntdict[let] for let in cons_let])
-    l = len(cons)
-    trip_rng = position_triplet(idx)
-    
-    muts = nonzero( not_equal(np.sum( seqs[:,trip_rng ] - cons[trip_rng], 1),0))[0]
-    return muts
-    
-
-def site_mut_inds(**kwargs):
-    def set_site_muts(**kwargs):
-        l = len(get_cons())
-        site_muts = [set( get_trip_muts(idx) ) for idx in range(l)]
-        return site_muts
-    return mem.getOrSet(set_site_muts, **mem.rc(kwargs,
-                                                on_fail = 'compute'))
-def get_mean_induction(**kwargs):
-    def set_mind(**kwargs):
-        cre, cre_rndvals, keys = getCRE()
-        return mean(cre_rndvals[:,0])/ mean(cre_rndvals[:,1])
-    return mem.getOrSet(set_mind, **mem.rc(kwargs, on_fail = 'compute'))
-
 def site_energy_deltas(showtype = 'first_part_energies',
                        muts_allowed = None,
                        mkey = None,
@@ -437,6 +317,28 @@ def site_energy_deltas(showtype = 'first_part_energies',
 
     f.savefig(figtemplate.format(figtitle))
 
+
+#UTILS
+def load_motifs():
+    mfile = open(cfg.dataPath('motifs/verts_tfs.txt'))
+    mdicts = {}
+    cur_lets = None
+    for l in mfile.xreadlines():
+        if l[0] == '>':
+            if cur_lets != None:
+                mdicts[motif_key]['lets'] = cur_lets
+                mdicts[motif_key]['pwm'] = array(pwm)
+            motif_key = l.split(' ')[0][1:]
+            mdicts[motif_key] = {}
+            cur_let = []
+            pwm = []
+        else:
+            cur_let, cur_pwm = l[0:1], l[2:].split(' ')
+            cur_lets.append(cur_let)
+            pwm.append(cur_pwm)
+
+    raise Exception()
+            
 def nt_ids():
     return {'A': 0,
             'T': 1,
@@ -554,3 +456,82 @@ def filters(name, num = 3, nums = (1,2)):
         
     
     return out
+def get_num_seqs(**kwargs):
+    def set_num_seqs(**kwargs):
+        ntdict = nt_ids()
+        cre, cre_rndvals, keys = getCRE()
+        return array([[ntdict[let] for let in seq] for seq in cre])
+    return mem.getOrSet(set_num_seqs, 
+                        **mem.rc(kwargs,
+                               on_fail = 'compute'))
+                     
+
+def position_triplet(idx):
+    cons = get_cons()
+    l = len(cons)
+    if idx == 0: trip_rng = arange(0,2)
+    elif idx == l-1: trip_rng = arange(l-2,l)
+    else: trip_rng = arange(idx -2, idx+1)    
+    return trip_rng
+
+def get_trip_muts(idx):
+    cre, cre_rndvals, keys = getCRE()
+    seqs = get_num_seqs()
+    cons_let = get_cons()
+    ntdict = nt_ids()
+    cons = array([ntdict[let] for let in cons_let])
+    l = len(cons)
+    trip_rng = position_triplet(idx)
+    
+    muts = nonzero( not_equal(np.sum( seqs[:,trip_rng ] - cons[trip_rng], 1),0))[0]
+    return muts
+    
+
+def site_mut_inds(**kwargs):
+    def set_site_muts(**kwargs):
+        l = len(get_cons())
+        site_muts = [set( get_trip_muts(idx) ) for idx in range(l)]
+        return site_muts
+    return mem.getOrSet(set_site_muts, **mem.rc(kwargs,
+                                                on_fail = 'compute'))
+def get_mean_induction(**kwargs):
+    def set_mind(**kwargs):
+        cre, cre_rndvals, keys = getCRE()
+        return mean(cre_rndvals[:,0])/ mean(cre_rndvals[:,1])
+    return mem.getOrSet(set_mind, **mem.rc(kwargs, on_fail = 'compute'))
+
+def getCRE(**kwargs):
+    def setCRE(**kwargs):        
+        cre_des = open(cfg.dataPath('CRE/27k/CRE_Randomization_Design.txt'))
+        cre_rnd = open(cfg.dataPath('CRE/27k/CRE_Randomization.dat'))
+        cre_rnd = cre_rnd.readlines()
+        cre_des = cre_des.readlines()
+
+        cre_rndvals = [[elt.strip() for elt in line.split('\t')] for line in cre_rnd[1:]]
+        cre_seqs = [[elt.strip() for elt in line.split('\t')] for line in cre_des]
+
+        cre_rndvals = dict([(e[0], e[1:]) for e in cre_rndvals])
+        cre_seqs = dict([[e[0],e[1]] for e in cre_seqs])
+
+        keys = list(set(cre_rndvals.keys()).intersection(cre_seqs.keys()))
+        
+        cre = array([list(cre_seqs[k]) for k in keys])
+        cre_rndvals = array([array(cre_rndvals[k], float) for k in keys])
+        return cre, cre_rndvals, keys
+    return mem.getOrSet(setCRE,
+                        **mem.rc(kwargs,
+                                 on_fail = 'compute'))
+
+
+def get_cons(**kwargs):
+    def consensus_seq(seqs):
+        return [ sorted([(k,list(g)) for k, g in it.groupby(sorted(c)) ], key = lambda x: len(x[1]))[-1][0] for c in seqs.T]
+    def set_cons(**kwargs):
+        cre, cre_rndvals, keys = getCRE(**mem.sr(kwargs))
+        cons = consensus_seq(cre[::100])
+        return cons
+    cons = mem.getOrSet(set_cons, **mem.rc(kwargs,
+                          on_fail = 'compute'))
+    return cons
+
+
