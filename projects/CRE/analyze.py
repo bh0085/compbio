@@ -379,7 +379,7 @@ def fix_motifs():
     for l in lines:
         if l[0:3] == 'XXX':
             if 'shuffled' in l: ignore = True
-            else ignore = False
+            else: ignore = False
         if not ignore:
             lines_out.append(l)
     
