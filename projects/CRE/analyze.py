@@ -358,9 +358,10 @@ def write_seqs_to_motifs():
 def get_motifs(**kwargs):
     def set_motifs(**kwargs):
         fpath = cfg.dataPath('CRE/{0}_for_motifs.txt'.format(promoter_type))
-        cmd = 'motif-match -n 1 -m {0} -V 1'.format(fpath)
-        out = spc.Popen(cmd, shell = True, stdout = spc.PIPE)
-        comm = out.communicate()
+        cmd = 'motif-match -n 1 -m /fg/compbio-t/pouyak/motifs/verts/conf/tf-Intergenic/optmm/6mer/motifs-toscan.txt  -V 1'.format(fpath)
+        prc = spc.Popen(cmd, shell = True, stdin = spc.PIPE, stdout = spc.PIPE)
+        comm = prc.communicate(input = open(\
+                cfg.dataPath('CRE/{0}_for_motifs.txt'.format(promoter_type))).read())
         return comm
         
     return mem.getOrSet(set_motifs, **mem.rc(kwargs,
