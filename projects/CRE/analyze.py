@@ -358,7 +358,7 @@ def write_seqs_to_motifs():
 def get_motifs(**kwargs):
     def set_motifs(**kwargs):
         mfpath = cfg.dataPath('motifs/all_vert_motifs.txt')
-        fpath = cfg.dataPath('CRE/CRE_SUB.txt'.format(promoter_type))
+        fpath = cfg.dataPath('CRE/CRE_for_motifs.txt'.format(promoter_type))
         cmd = 'motif-match -n 1 -m {0}  -V 1'.format(mfpath)
         cmd2 = 'xargs echo'
         prc = spc.Popen(cmd, shell = True, stdin = spc.PIPE, stdout = spc.PIPE)
