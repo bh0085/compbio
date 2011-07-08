@@ -12,6 +12,7 @@ import cb.utils.sigsmooth as sgs
 import cb.utils.colors as mycolors
 
 figtemplate = cfg.dataPath('figs/CRE/{0}.pdf')
+promoter_type = 'CRE'
 
 def mut_counts(cons, seqs, name = 'CRE'):
     
@@ -116,7 +117,7 @@ def site_energy_deltas(showtype = 'first_part_energies',
                        sub_means = True,
                        en_type = 'double',
                        induction_type = 'ratio'):
-    cre, cre_rndvals, keys = getCRE()
+    cre, cre_rndvals, keys = get_mutants()
     mut_inds = site_mut_inds()
     
     mean_induction = get_mean_induction()
@@ -339,6 +340,26 @@ def load_motifs():
 
     raise Exception()
             
+def write_seqs_to_motifs():
+    cre, rnd, keys = get_mutants()
+    cons = get_cons()
+    
+    contents = ''
+    for i, c in enumerate(cre):
+        k = keys[i]
+        name = k
+        contents +=  '\n'.join(['A {0} 1 {1}'.format(k,len(cons)),
+                           '{0}'.format(promoter_type),
+                           c])
+        raise Exception()
+
+def get_mutants():
+    if promoter_type == 'CRE':
+        return getCRE()
+    else: 
+        raise Exception()
+        
+
 def nt_ids():
     return {'A': 0,
             'T': 1,
@@ -459,7 +480,7 @@ def filters(name, num = 3, nums = (1,2)):
 def get_num_seqs(**kwargs):
     def set_num_seqs(**kwargs):
         ntdict = nt_ids()
-        cre, cre_rndvals, keys = getCRE()
+        cre, cre_rndvals, keys = get_mutants()
         return array([[ntdict[let] for let in seq] for seq in cre])
     return mem.getOrSet(set_num_seqs, 
                         **mem.rc(kwargs,
@@ -475,7 +496,7 @@ def position_triplet(idx):
     return trip_rng
 
 def get_trip_muts(idx):
-    cre, cre_rndvals, keys = getCRE()
+    cre, cre_rndvals, keys = get_mutants()
     seqs = get_num_seqs()
     cons_let = get_cons()
     ntdict = nt_ids()
@@ -496,7 +517,7 @@ def site_mut_inds(**kwargs):
                                                 on_fail = 'compute'))
 def get_mean_induction(**kwargs):
     def set_mind(**kwargs):
-        cre, cre_rndvals, keys = getCRE()
+        cre, cre_rndvals, keys = get_mutants()
         return mean(cre_rndvals[:,0])/ mean(cre_rndvals[:,1])
     return mem.getOrSet(set_mind, **mem.rc(kwargs, on_fail = 'compute'))
 
@@ -527,7 +548,7 @@ def get_cons(**kwargs):
     def consensus_seq(seqs):
         return [ sorted([(k,list(g)) for k, g in it.groupby(sorted(c)) ], key = lambda x: len(x[1]))[-1][0] for c in seqs.T]
     def set_cons(**kwargs):
-        cre, cre_rndvals, keys = getCRE(**mem.sr(kwargs))
+        cre, cre_rndvals, keys = get_mutants(**mem.sr(kwargs))
         cons = consensus_seq(cre[::100])
         return cons
     cons = mem.getOrSet(set_cons, **mem.rc(kwargs,
