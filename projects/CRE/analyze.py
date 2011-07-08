@@ -360,9 +360,11 @@ def get_motifs(**kwargs):
         cmd = 'motif-match -n 1 -m {0} -V 1'.format(fpath)
         out = subprocess.Popen(cmd, shell = True, stdout = spc.PIPE)
         comm = out.communicate()
+        return comm
+        
     return mem.getOrSet(set_motifs, **mem.rc(kwargs,
                                              on_fail = 'compute',
-                                             register = promoter_type)
+                                             register = promoter_type))
 
 def get_mutants(**kwargs):
     if promoter_type == 'CRE':
