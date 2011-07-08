@@ -362,9 +362,20 @@ def get_motifs(**kwargs):
         cmd = 'motif-match -n 1 -m {0}  -V 1'.format(mfpath)
         cmd2 = 'xargs echo'
         prc = spc.Popen(cmd, shell = True, stdin = spc.PIPE, stdout = spc.PIPE)
-        mlines = prc.communicate(input = open(fpath).read())[0]
+        mlines = prc.communicate(input = open(fpath).read())[0].splitlines()
         
-        return mlines
+        seqs = {}
+        for o in out:
+            name = o[1]
+            entry = seqs.get(name, [])
+            entry.append({'motif':o[0],
+                          'start':o[2],
+                          'end':o[3],
+                          'strand':o[4],
+                          'score':o[6]})
+            seqs[name] = entry
+            
+        return seqs
         
     return mem.getOrSet(set_motifs, **mem.rc(kwargs,
                                              on_fail = 'compute',
