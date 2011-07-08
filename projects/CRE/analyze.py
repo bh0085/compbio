@@ -364,7 +364,7 @@ def get_motifs(**kwargs):
         prc = spc.Popen(cmd, shell = True, stdin = spc.PIPE, stdout = spc.PIPE)
         mlines = prc.communicate(input = open(fpath2).read())[0]
         
-        return comm
+        return mlines
         
     return mem.getOrSet(set_motifs, **mem.rc(kwargs,
                                              on_fail = 'compute',
