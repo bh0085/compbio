@@ -367,7 +367,6 @@ def get_motifs(**kwargs):
         seqs = {}
         for o in mlines:
             o = o.split(' ')
-            raise Exception()
             name = o[1]
             entry = seqs.get(name, [])
             entry.append({'motif':o[0],
