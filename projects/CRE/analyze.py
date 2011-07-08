@@ -358,6 +358,7 @@ def write_seqs_to_motifs():
 def get_motifs(**kwargs):
     def set_motifs(**kwargs):
         fpath = cfg.dataPath('CRE/{0}_for_motifs.txt'.format(promoter_type))
+        fpath2 = cfg.dataPath('CRE/CRE_SUB.txt'.format(promoter_type))
         cmd = 'motif-match -n 1 -m /fg/compbio-t/pouyak/motifs/verts/conf/tf-Intergenic/optmm/6mer/motifs-toscan.txt  -V 1'.format(fpath)
         cmd2 = 'echo'
         prc = spc.Popen(cmd2, shell = True, stdin = spc.PIPE, stdout = spc.PIPE)
