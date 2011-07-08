@@ -349,7 +349,7 @@ def write_seqs_to_motifs():
         k = keys[i]
         name = k
         contents +=  '\n'.join(['A {0} 1 {1}'.format(k,len(cons)),
-                           '{0}'.format(promoter_type),
+                           '>{0}'.format(promoter_type),
                            ''.join(c)])
         raise Exception()
 
