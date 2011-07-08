@@ -320,7 +320,7 @@ def site_energy_deltas(showtype = 'first_part_energies',
 
 #UTILS
 def load_motifs():
-    mfile = open(cfg.dataPath('motifs/verts_tfs.txt'))
+    mfile = open(cfg.dataPath('motifs/vert_tfs.txt'))
     mdicts = {}
     cur_lets = None
     for l in mfile.xreadlines():
