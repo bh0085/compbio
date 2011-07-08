@@ -16,7 +16,6 @@ import numpy as np,  itertools as it, os, re
 import bdtnp
 import bdtnp.parser
 
-
 def getNet(**kwargs):
   '''Get the saved network from patrick's files.
 
@@ -27,7 +26,16 @@ def getNet(**kwargs):
           tfs : {tfname:{color:0.}{weights:[0....]}{tgs:['tfname']}
                  ...}'''
   def setNet(**kwargs):
-    fpath = config.dataPath('network/patrick/unsup_patrick.txt')
+    net_name = kwargs.get('net_name', 'unsup')
+    if net_name == 'unsup':
+      netfile = 'unsup_patrick.txt'
+    elif net_name == 'logistic':
+      netfile = 'logistic_0.6.txt'
+    else:
+      raise Exception()
+
+
+    fpath = config.dataPath('network/patrick/{0}'.format(netfile))
     TC = getTC( reset = mod(kwargs.get('reset',0),2))
     CL = getCL( reset = mod(kwargs.get('reset',0),2))
     nwdata = open(fpath).read()
@@ -73,7 +81,185 @@ def getNet(**kwargs):
 		 'weights':map(wtfun,l)}
 
     return  (trg_d, tf_d)
-  return mem.getOrSet(setNet, **kwargs)
+  return mem.getOrSet(setNet,  **mem.rc(kwargs,
+                                        hardcopy = True,
+                                        on_fail = 'compute',
+                                        register = kwargs.get('net_name',
+                                                              'unsup')))
+  pass
+
+def getBNet(**kwargs):
+  '''Get the saved network from the knowledge based network, redFly.
+
+  output: tuple of dicts keyed by gene/tf names
+
+          trgs: {gname: {color:0.}{weights:[0....]}{tfs:['tfname']}
+                 ...}
+          tfs : {tfname:{color:0.}{weights:[0....]}{tgs:['tfname']}
+                 ...}'''
+  def setBNet(**kwargs):
+    fpath = config.dataPath('network/network_predmodel/inputnetworks/bRN.txt')
+    TC = getTC( reset = mod(kwargs.get('reset',0),2))
+    CL = getCL( reset = mod(kwargs.get('reset',0),2))
+    nwdata = open(fpath).read()
+    #A few functions defined here to be used later
+    trgfun = lambda x: x[1]
+    wtfun = lambda x:float( x[2] )
+    tffun = lambda x: x[0]
+    sigmafun = lambda x: 1 / (1 + np.exp(-x /1))
+
+    r = re.compile('^[ ]*(?P<tf>\S+)\s+(?P<target>\S+)'
+                   ,re.M)
+    matches = list(re.finditer(r,nwdata))    
+    #Unsorted lists of tfs and targets
+    targets =map(lambda x:x.group('target'),matches)
+    tfs =    map(lambda x:x.group('tf'),matches)
+    weights =[1.0] * len(tfs)
+    
+    #Concat the data for easier sorting
+    cat = []
+    for i in np.argsort(tfs):
+      if TC.has_key(tfs[i]) and CL.has_key(targets[i]):
+	cat.append([tfs[i],targets[i],weights[i]])
+
+    #Extract a dictionary with information for each target.
+    trg_d = {}
+    count = 0.0
+    for k, g in it.groupby(sorted(cat,key = trgfun),key = trgfun):
+      l = list(g)
+      count += 1.0
+      trg_d[k] = {'color': np.array([count, 0, 0]),
+		  'tfs' : map(tffun,l),
+		  'weights': map(wtfun,l)
+		  }
+
+    #Extract a dictionary with information for each TF
+    tf_d = {}
+    for k, g in it.groupby(cat,key = lambda x: x[0]):
+      l = list(g)
+      tf_targets = map(lambda x: x[1],l)
+        
+      tf_d[k] = {'targets':map(trgfun,l),
+		 'weights':map(wtfun,l)}
+
+    return  (trg_d, tf_d)
+  return mem.getOrSet(setBNet, **mem.rc({},on_fail = 'compute',**kwargs))
+  pass
+
+def getMNet(**kwargs):
+  '''Get the saved network from the knowledge based network, redFly.
+
+  output: tuple of dicts keyed by gene/tf names
+
+          trgs: {gname: {color:0.}{weights:[0....]}{tfs:['tfname']}
+                 ...}
+          tfs : {tfname:{color:0.}{weights:[0....]}{tgs:['tfname']}
+                 ...}'''
+  def setMNet(**kwargs):
+    fpath = config.dataPath('network/network_predmodel/inputnetworks/mRN.txt')
+    TC = getTC( reset = mod(kwargs.get('reset',0),2))
+    CL = getCL( reset = mod(kwargs.get('reset',0),2))
+    nwdata = open(fpath).read()
+    #A few functions defined here to be used later
+    trgfun = lambda x: x[1]
+    wtfun = lambda x:float( x[2] )
+    tffun = lambda x: x[0]
+    sigmafun = lambda x: 1 / (1 + np.exp(-x /1))
+
+    r = re.compile('^[ ]*(?P<tf>\S+)\s+(?P<target>\S+)'
+                   ,re.M)
+    matches = list(re.finditer(r,nwdata))    
+    #Unsorted lists of tfs and targets
+    targets =map(lambda x:x.group('target'),matches)
+    tfs =    map(lambda x:x.group('tf'),matches)
+    weights =[1.0] * len(tfs)
+    
+    #Concat the data for easier sorting
+    cat = []
+    for i in np.argsort(tfs):
+      if TC.has_key(tfs[i]) and CL.has_key(targets[i]):
+	cat.append([tfs[i],targets[i],weights[i]])
+
+    #Extract a dictionary with information for each target.
+    trg_d = {}
+    count = 0.0
+    for k, g in it.groupby(sorted(cat,key = trgfun),key = trgfun):
+      l = list(g)
+      count += 1.0
+      trg_d[k] = {'color': np.array([count, 0, 0]),
+		  'tfs' : map(tffun,l),
+		  'weights': map(wtfun,l)
+		  }
+
+    #Extract a dictionary with information for each TF
+    tf_d = {}
+    for k, g in it.groupby(cat,key = lambda x: x[0]):
+      l = list(g)
+      tf_targets = map(lambda x: x[1],l)
+        
+      tf_d[k] = {'targets':map(trgfun,l),
+		 'weights':map(wtfun,l)}
+
+    return  (trg_d, tf_d)
+  return mem.getOrSet(setMNet, **mem.rc({},on_fail = 'compute',**kwargs))
+  pass
+
+def getKNet(**kwargs):
+  '''Get the saved network from the knowledge based network, redFly.
+
+  output: tuple of dicts keyed by gene/tf names
+
+          trgs: {gname: {color:0.}{weights:[0....]}{tfs:['tfname']}
+                 ...}
+          tfs : {tfname:{color:0.}{weights:[0....]}{tgs:['tfname']}
+                 ...}'''
+  def setKNet(**kwargs):
+    fpath = config.dataPath('network/network_predmodel/inputnetworks/kRN.txt')
+    TC = getTC( reset = mod(kwargs.get('reset',0),2))
+    CL = getCL( reset = mod(kwargs.get('reset',0),2))
+    nwdata = open(fpath).read()
+    #A few functions defined here to be used later
+    trgfun = lambda x: x[1]
+    wtfun = lambda x:float( x[2] )
+    tffun = lambda x: x[0]
+    sigmafun = lambda x: 1 / (1 + np.exp(-x /1))
+
+    r = re.compile('^[ ]*(?P<tf>\S+)\s+(?P<target>\S+)'
+                   ,re.M)
+    matches = list(re.finditer(r,nwdata))    
+    #Unsorted lists of tfs and targets
+    targets =map(lambda x:x.group('target'),matches)
+    tfs =    map(lambda x:x.group('tf'),matches)
+    weights =[1.0] * len(tfs)
+    
+    #Concat the data for easier sorting
+    cat = []
+    for i in np.argsort(tfs):
+      if TC.has_key(tfs[i]) and CL.has_key(targets[i]):
+	cat.append([tfs[i],targets[i],weights[i]])
+
+    #Extract a dictionary with information for each target.
+    trg_d = {}
+    count = 0.0
+    for k, g in it.groupby(sorted(cat,key = trgfun),key = trgfun):
+      l = list(g)
+      count += 1.0
+      trg_d[k] = {'color': np.array([count, 0, 0]),
+		  'tfs' : map(tffun,l),
+		  'weights': map(wtfun,l)
+		  }
+
+    #Extract a dictionary with information for each TF
+    tf_d = {}
+    for k, g in it.groupby(cat,key = lambda x: x[0]):
+      l = list(g)
+      tf_targets = map(lambda x: x[1],l)
+        
+      tf_d[k] = {'targets':map(trgfun,l),
+		 'weights':map(wtfun,l)}
+
+    return  (trg_d, tf_d)
+  return mem.getOrSet(setKNet, **mem.rc({},on_fail = 'compute',**kwargs))
   pass
 
 def getTC(**kwargs):
@@ -141,7 +327,8 @@ def getSush(**kwargs):
 	g['tfs'] = g.get('tfs', []) + [match.group('tfname')]
 	g['weights'] = g.get('weights', []) + [match.group('level')]
     return genes
-  return mem.getOrSet(setSush, **kwargs)
+  return mem.getOrSet(setSush, **mem.rc(kwargs,
+                                        hardcopy = True))
     
 		
 def getBDTNP(protein = False,misc = False, **kwargs):

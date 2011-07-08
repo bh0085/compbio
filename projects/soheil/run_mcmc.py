@@ -38,7 +38,7 @@ data.
                       trunc_value = trunc_value,
                       degree_bound = degree_bound,
                       filename = filename)
-                 for out_iter_num in array([35],double)
+                 for out_iter_num in array([25],double)
                  for in_iter_num in array([100],double)
                  for k in array([6],double)
                  for beta in array([4],double)

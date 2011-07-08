@@ -3,7 +3,17 @@ from matplotlib.patches import Circle as circ
 from numpy import *
 import numpy as np
 import matplotlib.patches as patches
+import cb.config as cfg
 
+class tmpF(object):
+    def __init__(self,num = 10, size = (8,8)):
+        self.f = fignum(num)
+        self.num = num
+
+    def save(self):
+        savepath = cfg.dataPath('figs/tmp/tmp_fig_{0}.pdf').format(self.num)
+        self.f.savefig(savepath)
+        
 
 def fignum(num, size = (8,8)):
     plt.close(num)
@@ -271,13 +281,16 @@ def spacefill(ax,rs, cs):
 
   ax.plot(xs,ys, zorder = -1, alpha = .2, color = 'black')
   ax.scatter(xs,ys,rs,color = cs)
-def padded_limits(ax, xvals, yvals, margin = .2):
+def padded_limits(ax, xvals, yvals, margin = [.2,.2]):
+    
+    if len(shape(margin) )== 0:
+        margin = [margin] * 2
     dx = max(xvals) - min(xvals)
     dy = max(yvals) - min(yvals)
     ax.set_autoscaley_on(False)
     ax.set_autoscalex_on(False)
-    ax.set_xlim([min(xvals) - dx *margin, max(xvals) + dx * margin])
-    ax.set_ylim([min(yvals) - dy *margin, max(yvals) + dy * margin])
+    ax.set_xlim([min(xvals) - dx *margin[0], max(xvals) + dx * margin[0]])
+    ax.set_ylim([min(yvals) - dy *margin[1], max(yvals) + dy * margin[1]])
 
 def rescale(arr, lims):
     dl = lims[1] - lims[0]

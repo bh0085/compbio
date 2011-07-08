@@ -36,6 +36,17 @@ import os, inspect, itertools as it
 import scipy.io as sio
 
 
+'''
+Short documentation:
+
+ll = launchClusters()
+ll.launch()
+ll.fetch_start()
+all_members,ct_data = cluster_exprs()
+cluster_exprs(all_members, ct_data)
+
+'''
+
 if not os.path.isdir(cfg.dataPath('figs/bdtnp')):
   os.mkdir(cfg.dataPath('figs/bdtnp'))
 
@@ -154,7 +165,7 @@ def p_m_correlation():
                        
 
 
-def c2( launcher = None, ncluster =1000, host = 'tin', 
+def c2( launcher = None, ncluster =2000, host = 'tin', 
         reset = 0, step = 10, exemp_time = 'all',
         doplot = False):
   mrnas = nio.getBDTNP()
@@ -215,7 +226,7 @@ def c2( launcher = None, ncluster =1000, host = 'tin',
     output = mem.getOrSet(setLauncher,
                           **mem.rc(dict(sims = sims, metric = metric,
                                         name = name,
-                                        harcopy = True,
+                                        hardcopy = True,
                                         reset = reset,
                                         hard_reset = False,)))  
     return output
@@ -235,6 +246,7 @@ def c2( launcher = None, ncluster =1000, host = 'tin',
                         **mem.rc(dict(harcopy = True,
                                       launcher = launcher,
                                       reset = reset,
+                                      on_fail = 'compute',
                                       hard_reset = False,
                                       name =  'c2'+ name )))
   all_inds = array([  squeeze(o['inds']) for o in output[:] ])
@@ -309,42 +321,46 @@ def cluster_exprs(all_members, ct_data,
     ax2.hist(np.sum(counts,1))
     
   
-  all_exprs = []
+  all_exprs = {}
   for t, v in tissues.iteritems():
-    ct = v['cts']
-    exprs =dict( [(k,elt['vals'][zip(*ct)]) for k, elt in mrnas.iteritems()])
-    ys = misc['y']['vals'][zip(*ct)] #zip(*sim_xy)]
-    zs = misc['z']['vals'][zip(*ct)] #zip(*sim_xy)]
-    xs = misc['x']['vals'][zip(*ct)] #zip(*sim_xy)]
+    ct_all = v['cts']
+    
+    for time in set([c[1] for c in ct_all]):
+      ct = [ct for ct in ct_all if ct[1] == time]
+
+      exprs =dict( [(k,elt['vals'][zip(*ct)]) for k, elt in mrnas.iteritems()])
+      ys = misc['y']['vals'][zip(*ct)] #zip(*sim_xy)]
+      zs = misc['z']['vals'][zip(*ct)] #zip(*sim_xy)]
+      xs = misc['x']['vals'][zip(*ct)] #zip(*sim_xy)]
 
     
-    
-    f = plt.figure(1)
-    f.clear()
-    ax1 = f.add_subplot('121', title = 'X-Z axis view for tissue {0}'.\
-                          format(t))
-    ax2 = f.add_subplot('122',title = 'Y-Z axis view for tissue {0}'.\
-                          format(t))
-    ax1.scatter(xs, zs)
-    ax2.scatter(ys, zs)
-
-    v['exprs'] = exprs
-    all_exprs.append(exprs)
-
-    sio.savemat(open(cfg.dataPath('soheil/expression_c{0}_n{1}_t{2}.mat'.\
-                                    format(cluster_type,cluster_id,t)),'w'),
-                exprs)
-    f.savefig(open(cfg.dataPath('soheil/expression_c{0}_n{1}_t{2}.tiff'.\
-                                    format(cluster_type,cluster_id,t)),'w'))
-  
+      f = plt.figure(1)
+      f.clear()
+      ax1 = f.add_subplot('121', title = 'X-Z axis view for tissue {0}'.\
+                            format(t))
+      ax2 = f.add_subplot('122',title = 'Y-Z axis view for tissue {0}'.\
+                            format(t))
+      ax1.scatter(xs, zs)
+      ax2.scatter(ys, zs)
+      
+      v['exprs'] = exprs
+      all_exprs['tiss_{0}_time_{1}'.format(t,time)]=exprs
+      
+      sio.savemat(open(cfg.dataPath('soheil/expression_c{0}_n{1}_tissue{2}_time{3}.mat'.\
+                                      format(cluster_type,cluster_id,t,time)),'w'),
+                  exprs)
+      f.savefig(open(cfg.dataPath('soheil/expression_c{0}_n{1}_tissue{2}_time{3}.tiff'.\
+                                      format(cluster_type,cluster_id,t,time)),'w'))
     
     
-  exprs_out = dict([( k, [ mean(sub[k]) for sub in all_exprs ]) 
-                    for k in all_exprs[0].keys() ])
+      
+  exprs_out = dict([( k, [ mean(sub[k]) for sub in all_exprs[k].values() ]) 
+                    for k in all_exprs.keys() ])
 
   sio.savemat(open(cfg.dataPath('soheil/expression_c{0}_n{1}_intercluster.mat'.\
                                     format(cluster_type,cluster_id)),'w'),
               exprs_out)
+  
   raise Exception()
 
 

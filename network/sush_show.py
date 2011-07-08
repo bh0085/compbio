@@ -4,16 +4,27 @@ import itertools as it
 import re   
 import matplotlib.pyplot as plt
  
+import compbio.config as cfg
 
-def show_m(net_number = 0, ntf = 100, trgskip = 100, name = 'fRN'):
+def show_m(net_number = 0, ntf = 100, trgskip = 100, name = 'fRN',
+           rtype = 'val', #valid types, abs and val
+           axis =  'rect', # valid types are rect and polar
+           colortype = 'sign', # valid types are sign and identity
+           ):
     #A few functions defined here to be used later
     trgfun = lambda x: x[1]
     wtfun = lambda x:float( x[2] )
     tffun = lambda x: x[0]
     sigmafun = lambda x: 1 / (1 + np.exp(-x /1))
 
-    prefix = 'predmodel/regressionwts/'+name
-    nwdata = open(os.path.join(prefix,'nw_'+str(net_number) + '.sif')).read()
+    prefix = 'network/network_predmodel/regressionwts/'+name
+    try:
+        nwdata = open(cfg.dataPath(\
+                os.path.join(prefix,'nw_'+str(net_number) + '.sif'))).read()
+        print 'success'
+    except Exception, e:
+        print 'sorry... gotta give up'
+        return
     #Parse the list
     r = re.compile('^[ ]*(?P<target>[^\s]+)\t(?P<tf>[^\s]+)\t(?P<weight>[^\s]+)',re.M)
     matches = list(re.finditer(r,nwdata))    
@@ -58,10 +69,6 @@ def show_m(net_number = 0, ntf = 100, trgskip = 100, name = 'fRN'):
     tfsort = np.argsort(tflens)
     
 
-    #Display options:
-    rtype = 'val' #valid types, abs and val
-    axis =  'rect' # valid types are rect and polar
-    colortype = 'sign' # valid types are sign and identity
 
     #Configure the plotter
     fig = plt.figure(net_number,[8,8],facecolor = 'w')
@@ -79,8 +86,9 @@ def show_m(net_number = 0, ntf = 100, trgskip = 100, name = 'fRN'):
 
 
     #Choose subsets of interest for TF and Gene
-    n = len(tfsort)/50
-    trg_subset = trgnames[::50]
+
+    n = len(tfsort)
+    trg_subset = trgnames[::]
     
     #Initialize the loop
     xs , ys, cs, rs,ts,ps = [],[],[],[],[],[]
@@ -94,7 +102,7 @@ def show_m(net_number = 0, ntf = 100, trgskip = 100, name = 'fRN'):
         ys.insert(0,mid[1]*rval)
         ts.insert(0,2 * np.pi * i / n)
         ps.insert(0,rval)
-        rs.insert(0,tflens[j]*3)
+        rs.insert(0,tflens[j]*1)
         cs.insert(0,[0,0,1])
         tfname = tf_d.keys()[j]
         tf =  tf_d[tfname]
@@ -166,6 +174,9 @@ def show_m(net_number = 0, ntf = 100, trgskip = 100, name = 'fRN'):
 
     ax.legend(legs,
               ('Enhancer','Inhibitor','No Effect','TF, High Out','TF Low Out'),
-              numpoints = 1,markerscale = 2)    
+              numpoints = 1,markerscale = 2)   
+
+    fig.savefig(cfg.dataPath('figs/network/tf_signs/{0}_{1}.pdf'.\
+                                 format(name, net_number)))
 
     #raise Exception()

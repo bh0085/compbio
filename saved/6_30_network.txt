@@ -1,0 +1,579 @@
+2  : import cb.p.nfilt.comparator as comp
+3  : import cb.p.nfilt.comparator as comp
+4  : m_pcas = comp.get_graphs()
+5  : reload(nfr)
+6  : reload(comp)
+7  : b_pcas = comp.get_graphs()
+8  : reload(comp)
+9  : cmp_graphs = comp.get_graphs()
+10 : comp.compare(m_pcas, bgraphs = cmp_graphs)
+11 : q
+12 : reload(comp)
+13 : comp.compare(m_pcas, bgraphs = cmp_graphs)
+14 : for m in m_pcas.values: print len(m.edges())
+15 : for m in m_pcas.values(): print len(m.edges())
+16 : reload(comp)
+17 : m_pcas = comp.get_graphs()
+18 : b_pcas = comp.get_graphs()
+19 : 
+20 : comp.compare(m_pcas, bgraphs = cmp_graphs)
+21 : 
+22 : reload(comp)
+23 : m_pcas = comp.get_graphs()
+24 : reload(comp)
+25 : b_pcas = comp.get_graphs()
+26 : comp.compare(b_pcas, bgraphs = cmp_graphs)
+27 : reload(comp)
+28 : reload(comp)
+29 : comp.compare(m_pcas, bgraphs = cmp_graphs)
+30 : import cb.p.network.bdtnp.exp as exp
+31 : exp.cluster_exprs()
+32 :  all_members, ct_data = exp.c2()
+33 : all_members, ct_data = exp.c2()
+34 : ll = exp.c2()
+35 : all_members, ct_data = exp.c2(ll)
+36 : reload(comp)
+37 : comp.compare(m_pcas, bgraphs = cmp_graphs)
+38 : all_members, ct_data = exp.c2(ll)
+39 : reload(ll)
+40 : reload(exp)
+41 : all_members, ct_data = exp.c2(ll)
+42 : _ip.magic("pdb ")
+43 : all_members, ct_data = exp.c2(ll)
+44 : ll
+45 : ll.output()
+46 : ll.launch()
+47 : ll.remote_status()
+48 : ll.remote_status()
+49 : ll.fetch_await()
+50 : ll.fetch_await()
+51 : ll.fetch_start()
+52 : print(ll.bscmd)
+53 : import pickle
+54 : pickle.load(/data/temp/c2_ll_neg_dist_1000_5.memo)
+55 : pickle.load('/data/temp/c2_ll_neg_dist_1000_5.memo')
+56 : pickle.load(open('/data/temp/c2_ll_neg_dist_1000_5.memo'))
+57 : ld = pickle.load(open('/data/temp/c2_ll_neg_dist_1000_5.memo'))
+58 : _ip.system("ls -F ")
+59 : ld
+60 : ld.output()
+61 : ld = pickle.load(open('/data/temp/c2_ll_neg_dist_2000_5.memo'))
+62 : ld.output()
+63 : exp.launchClusters()
+64 : ll = _
+65 : ll.launch()
+66 : ll.remote_status()
+67 : ll.remote_status()
+68 : b_pcas
+69 : b_pcas['bn_nc=1']
+70 : len(b_pcas['bn_nc=1'].edges())
+71 : reload(exp)
+72 : import cb.p.nfilt.comparator2 as cmp2
+73 : cmp2.cmp2()
+74 : reload(exp)
+75 : reload(cmp2)
+76 : cmp2.cmp2()
+77 : reload(cmp2)
+78 : cmp2.cmp2()
+79 : 
+80 : reload(cmp2)
+81 : cmp2.cmp2()
+82 : exp.launchClusters()
+83 : ll.remote_status()
+84 : ll.fetch_await()
+85 : ll.output 
+86 : ll.output()
+87 : import pickle
+88 : import compbio.config as cfg
+89 : pickle.dump(ll.output, open(cfg.dataPath('bdtnp/cluster_results'),'w'))
+90 : pickle.dump(ll.output(), open(cfg.dataPath('bdtnp/cluster_results'),'w'))
+91 : exp.c2(ll)
+92 : exp.c2(ll[0])
+93 : ll
+94 : ll.output()
+95 : reload(cmp2)
+96 : cmp2.cmp2()
+97 : reload(exp)
+98 : exp.c2(ll)
+99 : pickle.dump(ll, open(cfg.dataPath('bdtnp/launcher'),'w'))
+100: ll
+101: pickle.dump(ll, open(cfg.dataPath('bdtnp/launcher'),'w'))
+102: ll
+103: ll.outfile
+104: ll.output 
+105: lloutfile
+106: ll.scriptfile
+107: for ff in ll.get_attributes(): print ff
+108: ll.__dict__
+109: ll.scp_proc = ''
+110: pickle.dump(ll, open(cfg.dataPath('bdtnp/launcher'),'w'))
+111: _ip.system("ls -F ")
+112: outp = exp.c2(ll)
+113: outp
+114: outp[0]
+115: len(outp[0][0])
+116: print(len(set(outp[0][0])))
+117: print(len(set(outp[0][1])))
+118: print(len(set(outp[0][2])))
+119: print(len(set(outp[0][3])))
+120: exp.cluster_exprs(*outp)
+121: reload(exp)
+122: exp.cluster_exprs(*outp)
+123: reload(exp)
+124: exp.cluster_exprs(*outp)
+125: reload(exp)
+126: reload(exp)
+127: exp.cluster_exprs(*outp)
+128: cmp_graphs.keys()
+129: reload(cmp2)
+130: cmp2.cmp2(graphs['bn'])
+131: cmp2.cmp2(cmp_graphs['bn'])
+132: reload(cmp2)
+133: reload(cmp2)
+134: cmp2.cmp2(cmp_graphs['bn'])
+135: reload(cmp2)
+136: cmp2.cmp2(cmp_graphs['bn'])
+137: cmp2.cmp2(cmp_graphs['mn'])
+138: cmp2.cmp2(cmp_graphs['mn'])
+139: _ip.magic("rep ")
+140: <module 'cb.p.nfilt.comparator2' from 'cb/p/nfilt/comparator2.pyq
+141: _ip.magic("rep ")
+142: <module 'cb.p.nfilt.comparator2' from 'cb/p/nfilt/comparator2.py'>q
+143: reload(exp)
+144: reload(cmp2)
+145: cmp2.cmp2(cmp_graphs['mn'])
+146: q
+147: reload(cmp2)
+148: cmp2.cmp2(cmp_graphs['mn'])
+149: q
+150: reload(cmp2)
+151: cmp2.cmp2(cmp_graphs['mn'])
+152: reload(cmp2)
+153: cmp2.cmp2(cmp_graphs['mn'])
+154: reload(cmp2)
+155: cmp2.cmp2(cmp_graphs['mn'])
+156: reload(cmp2)
+157: cmp2.cmp2(cmp_graphs['mn'])
+158: reload(cmp2)
+159: cmp2.cmp2(cmp_graphs['mn'])
+160: reload(cmp2)
+161: cmp2.cmp2(cmp_graphs['mn'])
+162: reload(cmp2)
+163: cmp2.cmp2(cmp_graphs['mn'])
+164: reload(cmp2)
+165: cmp2.cmp2(cmp_graphs['mn'])
+166: reload(cmp2)
+167: cmp2.cmp2(cmp_graphs['mn'])
+168: import scipy as sp
+169: sp.linalg
+170: #?sp.linalg.eig
+171: reload(cmp2)
+172: cmp2.cmp2(cmp_graphs['mn'])
+173: reload(cmp2)
+174: cmp2.cmp2(cmp_graphs['mn'])
+175: reload(cmp2)
+176: cmp2.cmp2(cmp_graphs['mn'])
+177: import cb.p.daniel.heatmaps as hm
+178: hm.srt_heatmap()
+179: hm.srt_heatmap()
+180: reload(cmp2)
+181: cmp2.cmp2(cmp_graphs['mn'])
+182: hm.srt_heatmap()
+183: reload(exp)
+184: exp.cluster_exprs(*outp)
+185: hm.srt_heatmap()
+186: reload(hm)
+187: hm.srt_heatmap()
+188: hm.srt_heatmap(1)
+189: hm.srt_heatmap(2)
+190: hm.srt_heatmap(4)
+191: hm.srt_heatmap(0)
+192: hm.srt_heatmap(1)
+193: reload(hm)
+194: hm.srt_heatmap(1)
+195: reload(hm)
+196: hm.srt_heatmap(3)
+197: hm.srt_heatmap(3)
+198: reload(hm)
+199: hm.srt_heatmap(3)
+200: reload(hm)
+201: hm.srt_heatmap(3)
+202: reload(hm)
+203: hm.srt_heatmap(3)
+204: reload(hm)
+205: hm.srt_heatmap(3)
+206: q
+207: reload(hm)
+208: hm.srt_heatmap(3)
+209: reload(hm)
+210: hm.srt_heatmap(3)
+211: q
+212: reload(hm)
+213: hm.srt_heatmap(3)
+214: ax = axes()
+215: #?ax.set_yticklabels
+216: reload(hm)
+217: hm.srt_heatmap(3)
+218: reload(hm)
+219: hm.srt_heatmap(3)
+220: #?ax.set_xticklabels
+221: reload(hm)
+222: hm.srt_heatmap(3)
+223: reload(hm)
+224: hm.srt_heatmap(3)
+225: reload(hm)
+226: hm.srt_heatmap(3)
+227: q
+228: reload(hm)
+229: hm.srt_heatmap(3)
+230: reload(hm)
+231: hm.srt_heatmap(3)
+232: import cb.colors as mc
+233: import cb.utils.colors as mc
+234: mc.blackbody()
+235: cmap = mc.blackbody(reset = True)
+236: #?mc.blackbody
+237: reload(hm)
+238: hm.srt_heatmap(3)
+239: reload(hm)
+240: reload(hm)
+241: hm.srt_heatmap(3)
+242: reload(hm)
+243: hm.srt_heatmap(3)
+244: reload(hm)
+245: #?ax.imshow
+246: reload(hm)
+247: hm.srt_heatmap(3)
+248: reload(hm)
+249: hm.srt_heatmap(3)
+250: reload(hm)
+251: hm.srt_heatmap(3)
+252: reload(hm)
+253: hm.srt_heatmap(3)
+254: reload(hm)
+255: hm.srt_heatmap(3)
+256: cmap = mycolors.blackbody()
+257: cmap = mc.blackbody()
+258: cmap 
+259: q
+260: reload(hm)
+261: reload(hm)
+262: reload(hm)
+263: hm.srt_heatmap(3)
+264: reload(hm)
+265: hm.srt_heatmap(3)
+266: reload(hm)
+267: hm.srt_heatmap(3)
+268: cmap = mycolors.cmap(reset = True)
+269: cmap = mc.blackbody(reset = True)
+270: cmap = mc.blackbody(reset = True, flip = True)
+271: cmap()
+272: reload(hm)
+273: reload(hm)
+274: hm.srt_heatmap(3)
+275: reload(hm)
+276: hm.srt_heatmap(3)
+277: reload(hm)
+278: hm.srt_heatmap(3)
+279: reload(hm)
+280: hm.srt_heatmap(3)
+281: reload(hm)
+282: hm.srt_heatmap(3)
+283: reload(hm)
+284: hm.srt_heatmap(3)
+285: cmap = mc.blackbody(reset = True, flip = True)
+286: #?mc.blackbody
+287: cmap = mc.blackbody(reset = True, flip = True, contrast = .02e)
+288: reload(hm)
+289: hm.srt_heatmap(3)
+290: reload(hm)
+291: hm.srt_heatmap(3)
+292: reload(hm)
+293: hm.srt_heatmap(3)
+294: reload(hm)
+295: hm.srt_heatmap(3)
+296: reload(hm)
+297: hm.srt_heatmap(3)
+298: reload(hm)
+299: hm.srt_heatmap(3)
+300: hm.srt_heatmap(2)
+301: reload(hm)
+302: hm.srt_heatmap(2)
+303: hm.srt_heatmap(3)
+304: reload(hm)
+305: hm.srt_heatmap(3)
+306: reload(hm)
+307: hm.srt_heatmap(3)
+308: hm.srt_heatmap(3, all_module = True)
+309: reload(hm)
+310: hm.srt_heatmap(3, all_module = True)
+311: hm.srt_heatmap(2, all_module = True)
+312: reload(hm)
+313: hm.srt_heatmap(2, all_module = True)
+314: OrRd
+315: OrRd
+316: Accent
+317: ord 
+318: #?ord
+319: from pylab import *
+320:  maps=[m for m in cm.datad if not m.endswith("_r")]
+321: maps
+322: maps['OrRd']
+323: get_cmap('OrRd')
+324: reload(hm)
+325: hm.srt_heatmap(2, all_module = True)
+326: hm.srt_heatmap(3, all_module = True)
+327: hm.srt_heatmap(3, all_module = False)
+328: 'FBgn0001325' and 'FBgn0001150'
+329: 
+330: 'FBgn0001180' and 'FBgn0000411'
+331: 
+332: 'FBgn0000251' and  'FBgn0001168'
+333: 
+334: 'FBgn0003448'  and 'FBgn0000459'
+335: 
+336: 'FBgn0001180' and   'FBgn0003900'
+337: 
+338: 'FBgn0000251' and   'FBgn0003145'
+339: 
+340: 'FBgn0003145' and   'FBgn0000411'
+341: 
+342: 'FBgn0003900' and   'FBgn0003145'
+343: 
+344: 'FBgn0000251' and  'FBgn0003900'
+345: 
+346: 'FBgn0000251' and  'FBgn0000411'
+347:
+"""'FBgn0001325' and 'FBgn0001150'
+'FBgn0001180' and 'FBgn0000411'
+'FBgn0000251' and  'FBgn0001168'
+'FBgn0003448'  and 'FBgn0000459'
+'FBgn0001180' and   'FBgn0003900'
+'FBgn0000251' and   'FBgn0003145'
+'FBgn0003145' and   'FBgn0000411'
+'FBgn0003900' and   'FBgn0003145'
+'FBgn0000251' and  'FBgn0003900'
+'FBgn0000251' and  'FBgn0000411'
+"""
+348: vals = _
+349: lines = vals.splitlines
+350: lines = vals.splitlines()
+351: l2 = [l.strip() for l in lines if l.strip()]
+352: l2
+353: import re
+354: [re.search(re.compile('\s'), l).group())] for l in l2]
+355: [re.search(re.compile('\s'), l).group()] for l in l2]
+356: [re.search(re.compile('\s'), l).group() for l in l2]
+357: [re.search(re.compile('F\S+'), l).group() for l in l2]
+358: [re.search(re.compile('(F\S+)[^F]*(F\S+)'), l).group() for l in l2]
+359: [re.search(re.compile('(F\S+)[^F]*(F\S+)'), l).group(1) for l in l2]
+360: [re.search(re.compile('(F\S+)[^F]*(F\S+)'), l).group(2) for l in l2]
+361: [re.search(re.compile('(F\S+)[^F]*(F\S+)'), l).groups() for l in l2]
+362: [re.search(re.compile("'(F\S+)'[^F]*'(F\S+)'"), l).groups() for l in l2]
+363: [re.search(re.compile("'(F\S+)'[^F]*'(F\S+)'"), l).groups() for l in l2]
+364: edges = [re.search(re.compile("'(F\S+)'[^F]*'(F\S+)'"), l).groups() for l in l2]
+365: tgs, tfs = nio.getNet()
+366: import cb.p.network.io as nio
+367: tgs, tfs = nio.getNet()
+368: gs
+369: tfs
+370: jaccs = [len(set(tfs[e[0]].['tgs'])) for e in edges]
+371: jaccs = [len(set(tfs[e[0]]['tgs'])) for e in edges]
+372: jaccs = [len(set(tfs[e[0]]['targets'])) for e in edges]
+373: jaccs
+374: l0s = [len(set(tfs[e[0]]['targets'])) for e in edges]
+375: l1s = [len
+376: l0s = [len(set(tfs[e[0]]['targets']).intersection(set(tfs[e[1]]['targets']))) for e in edges]
+377: l0s
+378: l1s = [len(set(tfs[e[0]]['targets']).union(set(tfs[e[1]]['targets']))) for e in edges]
+379: array(l0s, float) / array(l1s,float)
+380: tfm, tgm = nio.getMNet()
+381: l0ms= [len(set(tfm[e[0]]['targets']).intersection(set(tfm[e[1]]['targets']))) for e in edges]
+382: print(tfm.keys())
+383: print(tfm.values()[0].keys())
+384: tgm, tfm = nio.getMNet()
+385: l0ms= [len(set(tfm[e[0]]['targets']).intersection(set(tfm[e[1]]['targets']))) for e in edges]
+386: l0ms= [len(set(tfm.get(e[0], {'targets', []})['targets']).intersection(set(tfm.get(e[1],{'targets':[]})['targets']))) for e in edges]
+387: l0ms= [len(set(tfm.get(e[0], {'targets': []})['targets']).intersection(set(tfm.get(e[1],{'targets':[]})['targets']))) for e in edges]
+388: l0ms
+389: l1ms= [len(set(tfm.get(e[0], {'targets': []})['targets']).union(set(tfm.get(e[1],{'targets':[]})['targets']))) for e in edges]
+390: tgb, tfb = nio.getBNet()
+391: l0bs= [len(set(tfb.get(e[0], {'targets': []})['targets']).intersection(set(tfb.get(e[1],{'targets':[]})['targets']))) for e in edges]
+392: l1bs= [len(set(tfb.get(e[0], {'targets': []})['targets']).union(set(tfb.get(e[1],{'targets':[]})['targets']))) for e in edges]
+393: array(l0bs, float) / array(l1bs,float)
+394: array(l0ms, float) / array(l1ms,float)
+395: l0ms
+396: l0bs
+397: l1ms
+398: l1bs
+399: print(sum([len(f['targets'] for f in tgm.values()]))
+400: print(sum([len(f['targets']) for f in tgm.values()]))
+401: print(sum([len(f['targets']) for f in tfm.values()]))
+402: print(sum([len(f['targets']) for f in tfb.values()]))
+403: edges
+404: len(edges)
+405: tgs, tfs = nio.getNet()
+406: tgs, tfs = nio.getNet()
+407: #?nio.getNet
+408: tgs, tfs = nio.getNet(net_name = 'logistic')
+409: l0s = [len(set(tfs[e[0]]['targets']).intersection(set(tfs[e[1]]['targets']))) for e in edges]
+410: l1s = [len(set(tfs[e[0]]['targets']).union(set(tfs[e[1]]['targets']))) for e in edges]
+411: array(l0s, float) / array(l1s,float)
+412: tgs, tfs = nio.getNet(net_name = 'logistic', reset = True)
+413: len(tgs)
+414: utgs, utfs = nio.getNet(net_name = 'unsup', reset = False)
+415: len(tgs)
+416: len(utgs)
+417: l0s = [len(set(tfs[e[0]]['targets']).intersection(set(tfs[e[1]]['targets']))) for e in edges]
+418: l0us = [len(set(utfs[e[0]]['targets']).intersection(set(utfs[e[1]]['targets']))) for e in edges]
+419: l0s
+420: l0us
+421: l1s = [len(set(tfs[e[0]]['targets']).union(set(tfs[e[1]]['targets']))) for e in edges]
+422: l1us = [len(set(utfs[e[0]]['targets']).union(set(utfs[e[1]]['targets']))) for e in edges]
+423: l1us
+424: l1s
+425: array(l0s) / array(l1s)
+426: array(l0s, float) / array(l1s)
+427: array(l0us, float) / array(l1us)
+428: print(array(l1us,float) / array(l1s))
+429: import scipy.io as sio
+430: sio.loadmat(cfg.dataPath('soheil/repeated_modules/denovo.mat'))
+431: mods = _
+432: mods[0]
+433: mods.keys()
+434: mods['denovo']
+435: tfnames = sio.loadmat(cfg.dataPath('soheil/repeated_modules/tf_names.mat'))
+436: tfnames
+437: tfnames.keys()
+438: tfnames = tfnames['tf_names']
+439: tfnames
+440: tfnames.keys()
+441: mod 
+442: mods
+443: tfnames
+444: mods
+445: len(mods)
+446: denovo = mods['denovo']
+447: denovo
+448: len(denovo)
+449: print(tfnames[3])
+450: m3 = tfnames[2][0]
+451: m5 = tfnames[4][0]
+452: m3
+453: m29 = tfnames[28][0]
+454: utfs[m3]
+455: utfs
+456: m3
+457: m3s = str(m3)
+458: m3s
+459: m3s = m3[0]
+460: m3s
+461: m3 = tfnames[2][0][0]
+462: m5 = tfnames[4][0][0]
+463: m29 = tfnames[28][0][0]
+464: tfs[m3]
+465: print(len(tfs[m3]['targets']))
+466: print(len(tfs[m5]['targets']))
+467: print(len(tfs[m28]['targets']))
+468: print(len(tfs[m29]['targets']))
+469: print(sorted([len(f['targets']) for f in utfs]))
+470: print(sorted([len(f['targets']) for f in utfs.values()]))
+471: bd = nio.getBDTNP()
+472: bk = bd.keys()
+473: print(sorted([len(f['targets']) for k,f in utfs.iteritems() if k in bk]))
+474: bk
+475: m3
+476: print(m3 in bk)
+477: print(m5 in bk)
+478: print(len(utfs[m3]['targets']))
+479: print(len(utfs[m5]['targets']))
+480: print(m29)
+481: print(m3)
+482: edges
+483: edges.append((m3, m29))
+484: edges.append((m3, m5))
+485: mods
+486: edges
+487: len(edges)
+488: l0s = [len(set(tfs[e[0]]['targets']).intersection(set(tfs[e[1]]['targets']))) for e in edges]
+489: l1s = [len(set(tfs[e[0]]['targets']).union(set(tfs[e[1]]['targets']))) for e in edges]
+490: print(array(l0s,float) / array(l1s))
+491: l1us = [len(set(utfs[e[0]]['targets']).union(set(utfs[e[1]]['targets']))) for e in edges]
+492: l0us = [len(set(utfs[e[0]]['targets']).intersection(set(utfs[e[1]]['targets']))) for e in edges]
+493: print(array(l0us,float) / array(l1ius))
+494: print(array(l0us,float) / array(l1us))
+495: l0bs
+496: l0bs= [len(set(tfb.get(e[0], {'targets': []})['targets']).intersection(set(tfb.get(e[1],{'targets':[]})['targets']))) for e in edges]
+497: l1bs= [len(set(tfb.get(e[0], {'targets': []})['targets']).union(set(tfb.get(e[1],{'targets':[]})['targets']))) for e in edges]
+498: array(l0bs, float) / array(l1bs,float)
+499: l0ms= [len(set(tfm.get(e[0], {'targets': []})['targets']).intersection(set(tfm.get(e[1],{'targets':[]})['targets']))) for e in edges]
+500: l1ms= [len(set(tfm.get(e[0], {'targets': []})['targets']).union(set(tfm.get(e[1],{'targets':[]})['targets']))) for e in edges]
+501: array(l0ms, float) / array(l1ms,float)
+502: m3
+503: import cb.p.network.utils as nu
+504: #?nu
+505: nu.gene_biology(m3)
+506: nu.gene_biology(m5)
+507: nu.gene_biology(m29)
+508: nu.gene_biology(m29).split
+509: nu.gene_biology(m29).split
+510: nu.gene_biology(m29).split('process:')
+511: import cb.p.nfilt as nfi
+512: cmp_graphs
+513: tnet = term_network(cmp_graphs['kn'])
+514: ktnet = term_network(cmp_graphs['kn'])
+515: reload(nu)
+516: ktnet nu.term_network(cmp_graphs['kn'])
+517: ktnet  = nu.term_network(cmp_graphs['kn'])
+518: reload(nu)
+519: reload(nu)
+520: nu.gene_biology(m29).split('process:')
+521: ktnet = nu.term_network(cmp_graphs['kn'])
+522: reload(nu)
+523: ktnet = nu.term_network(cmp_graphs['kn'])
+524: reload(nu)
+525: nu.gene_biology(m29).split('process:')
+526: ktnet = nu.term_network(cmp_graphs['kn'])
+527: reload(nu)
+528: ktnet = nu.term_network(cmp_graphs['kn'])
+529: reload(nu)
+530: reload(nu)
+531: nu.gene_biology(m29).split('process:')
+532: 
+533: ktnet = nu.term_network(cmp_graphs['kn'])
+534: ktnet
+535: terms = ktnet[0]
+536: print[ len(v) for v in terms.values()]
+537: pritn terms['FBgn0260642']
+538: print(terms['FBgn0260642'])
+539: pritn terms['FBgn0000099']
+540: print(terms['FBgn0000099'])
+541: all_terms = list(it.chain(*terms.values()))
+542: import itertools as it
+543: all_terms = list(it.chain(*terms.values()))
+544: len(all_terms)
+545: len(set(all_terms))
+546: d = dict([(t,0) for t in set(all_terms)])
+547: for at in all_terms: d[at] += 1
+548: print(d.values())
+549: print(sorted(d.iteritems(), key = lambda x: x[1]) )
+550: print(sorted(d.iteritems(), key = lambda x: x[1]) [::-1][:10])
+551: print(sorted(d.iteritems(), key = lambda x: x[1]) [::-1][:20])
+552: ktnet = nu.term_network(cmp_graphs['unsup'])
+553: reload(nu)
+554: utnet = nu.term_network(cmp_graphs['unsup'])
+555: utnet
+556: terms = utnet[0]
+557: terms
+558: all_terms = list(it.chain(*terms.values()))
+559: d = dict([(t,0) for t in set(all_terms)])
+560: for at in all_terms: d[at] += 1
+561: print(len(d))
+562: print(len(all_terms))
+563: print(d.values()[0])
+564: print(sorted(d.iteritems(), key = lambda x: x[1]) [::-1][:20])
+565: l0s
+566: 90.39 + 47.82 + 29.39
+567: _ip.magic("history ")
+568: _ip.magic("history 500")
+569: _ip.magic("history 568")

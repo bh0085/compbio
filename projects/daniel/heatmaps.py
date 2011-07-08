@@ -3,12 +3,13 @@ from numpy import *
 import numpy as np
 import compbio.config as cfg
 import compbio.utils.plots as myplots
+import cb.utils.colors as mycolors
 
 def load(net = 2, num = 1676,
          min_module_size = 10,
          min_go_size = 5,
          max_go_modules = 2,
-         prb_threshold = [.001,.01]):
+         prb_threshold = [1e-6,.01]):
     fopen = open(cfg.dataPath('daniel/heatplots/net{0}_top{1}_heatplot_matrix.txt'.format(net,num)),'r')
     l0 = fopen.readline()
 
@@ -59,7 +60,8 @@ def load(net = 2, num = 1676,
         array([ col_tits[idx] for idx in acols]), \
         array([ ids[idx] for idx in arows])
 
-def srt_heatmap(net = 3):
+def srt_heatmap(net = 3,
+                all_module = False):
     import compbio.projects.bsort.bsort as bs
 
     arr, cols, rows = load(net = net,
@@ -68,7 +70,7 @@ def srt_heatmap(net = 3):
                               min_module_size = 10)
 
     arr2_510, srts = bs.run0(arr = arr, itr = 1, meth = 'moment')
-    arr2_510 = arr2_510[:,::-1].T
+    arr2_510 = arr2_510[:,::-1]
     csrts = [s for s in srts if len(s) == len(cols)]
     rsrts = [s for s in srts if len(s) == len(rows)]
 
@@ -87,7 +89,51 @@ def srt_heatmap(net = 3):
         fopen.write('\t'.join(['{0}'.format(elt) for elt in row])+'\n')
     fopen.close()
 
-    f = myplots.fignum(3, (10,4))
-    ax = f.add_subplot(111, aspect = 'auto')
-    ax.imshow(arr2_510[:,:,newaxis] * [1,0,0],aspect = 'auto', interpolation = 'nearest')
-    f.savefig(cfg.dataPath('daniel/heatmaps_sorted/hm_net{0}.tiff'.format(net)))
+    f = myplots.fignum(3, (8,40)) if net == 3 else myplots.fignum(3, (8,10))
+    ax = f.add_axes([.4,.05,.55,.9], aspect = 'auto')
+    
+    goterms = [str(elt) for elt in cols]
+
+    if not all_module:
+        idx_omit = goterms.index('all')
+        arr2_510 = vstack((arr2_510[:idx_omit],arr2_510[idx_omit+1:]))
+        goterms = goterms[:idx_omit] + goterms[idx_omit+1:]
+        
+        
+
+    fopen = open(cfg.dataPath('daniel/go_accession_name_map.txt'))
+    gotexts = {}
+    for l in fopen.xreadlines():
+        k,v = l.split('\t')
+        gotexts[k] = v
+    row_labels = []
+    for g in goterms:
+        if g in gotexts.keys(): row_labels.append(gotexts[g].strip())
+        else: row_labels.append(g.strip())
+    
+
+
+    ax.set_yticks(arange(len(goterms))+.25)
+    ax.set_yticklabels(row_labels, size = '4')
+    ax.set_xticks([])
+    ax.set_xlabel('Modules')
+
+    ax.set_xticks(arange(len(rows))+.25)
+    ax.set_xticklabels([str(int(r[0])) for r in rows],
+                       rotation= 90,
+                       size = 'small')
+
+    
+
+    cm = mycolors.blackbody(flip = True)
+    im =ax.imshow(arr2_510[:,:] * 4 + 2,
+              cmap = plt.get_cmap('OrRd'),
+              aspect = 'auto', 
+              interpolation = 'nearest'
+              )
+    plt.colorbar(im)
+    f.savefig(cfg.dataPath('daniel/heatmaps_sorted/hm_net{0}_{1}.pdf'.\
+                               format(net, 'with_all' if all_module else 'no_all')))
+
+    
+    
