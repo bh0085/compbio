@@ -361,7 +361,7 @@ def get_motifs(**kwargs):
         fpath2 = cfg.dataPath('CRE/CRE_SUB.txt'.format(promoter_type))
         cmd = 'motif-match -n 1 -m /fg/compbio-t/pouyak/motifs/verts/conf/tf-Intergenic/optmm/6mer/motifs-toscan.txt  -V 1'.format(fpath)
         cmd2 = 'xargs echo'
-        prc = spc.Popen(cmd2, shell = True, stdin = spc.PIPE, stdout = spc.PIPE)
+        prc = spc.Popen(cmd, shell = True, stdin = spc.PIPE, stdout = spc.PIPE)
         comm = prc.communicate(input = open(fpath2).read())
         return comm
         
