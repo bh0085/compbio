@@ -353,9 +353,9 @@ def write_seqs_to_motifs():
                            c])
         raise Exception()
 
-def get_mutants():
+def get_mutants(**kwargs):
     if promoter_type == 'CRE':
-        return getCRE()
+        return getCRE(**kwargs)
     else: 
         raise Exception()
         
