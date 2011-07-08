@@ -354,6 +354,16 @@ def write_seqs_to_motifs():
     outfile = open(cfg.dataPath('CRE/{0}_for_motifs.txt'.format(promoter_type)),'w')
     outfile.write(contents)
 
+def get_motifs(**kwargs):
+    def set_motifs(**kwargs):
+        fpath = cfg.dataPath('CRE/{0}_for_motifs.txt'.format(promoter_type))
+        cmd = 'motif-match -n 1 -m {0} -V 1'.format(fpath)
+        out = subprocess.Popen(cmd, shell = True, stdout = spc.PIPE)
+        comm = out.communicate()
+    return mem.getOrSet(set_motifs, **mem.rc(kwargs,
+                                             on_fail = 'compute',
+                                             register = promoter_type)
+
 def get_mutants(**kwargs):
     if promoter_type == 'CRE':
         return getCRE(**kwargs)
@@ -423,7 +433,7 @@ def get_motif_dicts(pad = 2, **kwargs):
     return mem.getOrSet(set_motif_dicts,
                         **mem.rc(kwargs,
                                  pad = pad,
-                                 register = '{0}'.format(pad),
+                                 register = '{0}_{1}'.format(promoter_type, pad),
                                  on_fail = 'compute'))
 
 def filters(name, num = 3, nums = (1,2)):
@@ -485,7 +495,8 @@ def get_num_seqs(**kwargs):
         return array([[ntdict[let] for let in seq] for seq in cre])
     return mem.getOrSet(set_num_seqs, 
                         **mem.rc(kwargs,
-                               on_fail = 'compute'))
+                                 register = promoter_type,
+                                 on_fail = 'compute'))
                      
 
 def position_triplet(idx):
@@ -515,12 +526,15 @@ def site_mut_inds(**kwargs):
         site_muts = [set( get_trip_muts(idx) ) for idx in range(l)]
         return site_muts
     return mem.getOrSet(set_site_muts, **mem.rc(kwargs,
+                                                register = promoter_type,
                                                 on_fail = 'compute'))
 def get_mean_induction(**kwargs):
     def set_mind(**kwargs):
         cre, cre_rndvals, keys = get_mutants()
         return mean(cre_rndvals[:,0])/ mean(cre_rndvals[:,1])
-    return mem.getOrSet(set_mind, **mem.rc(kwargs, on_fail = 'compute'))
+    return mem.getOrSet(set_mind, **mem.rc(kwargs, 
+                                           register = promoter_type,
+                                           on_fail = 'compute'))
 
 def getCRE(**kwargs):
     def setCRE(**kwargs):        
@@ -542,6 +556,7 @@ def getCRE(**kwargs):
         return cre, cre_rndvals, keys
     return mem.getOrSet(setCRE,
                         **mem.rc(kwargs,
+                                 register = promoter_type,
                                  on_fail = 'compute'))
 
 
@@ -553,7 +568,8 @@ def get_cons(**kwargs):
         cons = consensus_seq(cre[::100])
         return cons
     cons = mem.getOrSet(set_cons, **mem.rc(kwargs,
-                          on_fail = 'compute'))
+                                           register = promoter_type,
+                                           on_fail = 'compute'))
     return cons
 
 
