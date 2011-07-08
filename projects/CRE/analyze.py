@@ -330,7 +330,7 @@ def load_motifs():
                 mdicts[motif_key]['pwm'] = array(pwm)
             motif_key = l.split(' ')[0][1:]
             mdicts[motif_key] = {}
-            cur_let = []
+            cur_lets = []
             pwm = []
         else:
             cur_let, cur_pwm = l[0:1], l[2:].split(' ')
