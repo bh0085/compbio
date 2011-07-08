@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 from scipy.stats import linregress
 import scipy.signal as ss
 import cb.utils.sigsmooth as sgs
+import subprocess as spc
 import cb.utils.colors as mycolors
 
 figtemplate = cfg.dataPath('figs/CRE/{0}.pdf')
@@ -358,7 +359,7 @@ def get_motifs(**kwargs):
     def set_motifs(**kwargs):
         fpath = cfg.dataPath('CRE/{0}_for_motifs.txt'.format(promoter_type))
         cmd = 'motif-match -n 1 -m {0} -V 1'.format(fpath)
-        out = subprocess.Popen(cmd, shell = True, stdout = spc.PIPE)
+        out = spc.Popen(cmd, shell = True, stdout = spc.PIPE)
         comm = out.communicate()
         return comm
         
