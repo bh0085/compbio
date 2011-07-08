@@ -351,7 +351,8 @@ def write_seqs_to_motifs():
         contents +=  '\n'.join(['A {0} 1 {1}'.format(k,len(cons)),
                            '>{0}'.format(promoter_type),
                            ''.join(c),''])
-        raise Exception()
+    outfile = open(cfg.dataPath('CRE/{0}_for_motifs.txt'),'w')
+    outfile.write(contents)
 
 def get_mutants(**kwargs):
     if promoter_type == 'CRE':
