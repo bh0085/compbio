@@ -351,7 +351,7 @@ def write_seqs_to_motifs():
         name = k
         contents +=  '\n'.join(['A {0} 1 {1}'.format(k,len(cons)),
                            '>{0}'.format(promoter_type),
-                           ''.join(c.lower()),'\n'])
+                           ''.join(c).lower(),'\n'])
     outfile = open(cfg.dataPath('CRE/{0}_for_motifs.txt'.format(promoter_type)),'w')
     outfile.write(contents)
 
