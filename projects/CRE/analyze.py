@@ -370,10 +370,10 @@ def get_motifs(**kwargs):
             name = o[1]
             entry = seqs.get(name, [])
             entry.append({'motif':o[0],
-                          'start':o[2],
-                          'end':o[3],
+                          'start':int(o[2]),
+                          'end':int(o[3]),
                           'strand':o[4],
-                          'score':o[6]})
+                          'score':float(o[6])})
             seqs[name] = entry
             
         return seqs
