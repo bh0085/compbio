@@ -12,10 +12,11 @@ import cb.utils.sigsmooth as sgs
 import subprocess as spc
 import cb.utils.colors as mycolors
 
-figtemplate = cfg.dataPath('figs/CRE/{0}.pdf')
-promoter_type = 'CRE'
+promoter_type = 'IFNB'
+figtemplate = cfg.dataPath('figs/{0}/{{0}}.pdf'.format(promoter_type))
 
-def mut_counts(cons, seqs, name = 'CRE'):
+
+def mut_counts(cons, seqs, name = promoter_type):
     
     l = len(cons)
     figtitle = '{0}_mut_counts'.format(name)
@@ -118,7 +119,7 @@ def site_energy_deltas(showtype = 'first_part_energies',
                        sub_means = True,
                        en_type = 'double',
                        induction_type = 'ratio'):
-    cre, cre_rndvals, keys = get_mutants()
+    seqs, seqs_rndvals, keys = get_mutants()
     mut_inds = site_mut_inds()
     
     mean_induction = get_mean_induction()
@@ -154,16 +155,16 @@ def site_energy_deltas(showtype = 'first_part_energies',
 
     for site, muts in enumerate(mut_inds):
         if muts_allowed != None: muts = list(muts_allowed.intersection(muts))
-        mut_avg = mean( cre_rndvals[muts,0] / cre_rndvals[muts,1])
+        mut_avg = mean( seqs_rndvals[muts,0] / seqs_rndvals[muts,1])
         
         trip_rng = position_triplet(site)
         wt_seq = array([cons[s] for s in trip_rng])
 
-        mut_seqs = cre[muts][:,trip_rng]
+        mut_seqs = seqs[muts][:,trip_rng]
         
-        if induction_type == 'ratio':  mut_inductions =(cre_rndvals[muts,0] / cre_rndvals[muts,1])
-        elif induction_type == 'on': mut_inductions =  cre_rndvals[muts,0]
-        elif induction_type == 'off': mut_inductions = cre_rndvals[muts,1]
+        if induction_type == 'ratio':  mut_inductions =(seqs_rndvals[muts,0] / seqs_rndvals[muts,1])
+        elif induction_type == 'on': mut_inductions =  seqs_rndvals[muts,0]
+        elif induction_type == 'off': mut_inductions = seqs_rndvals[muts,1]
 
         wt_e = enfun(wt_seq)
         mut_es = [enfun(seq) for seq in mut_seqs]
@@ -304,7 +305,7 @@ def site_energy_deltas(showtype = 'first_part_energies',
     if showtype in ['show_avgs', 'show_all', 'smoothed_avg']:
         l0 = [ax.get_ylim(), ax.get_xlim()]
         
-        for rng in cre_rngs():
+        for rng in motif_rngs():
             ax.plot(rng,[0]*2, linewidth = 6, color = 'black') 
             ax.fill_betweenx(ax.get_ylim(), [rng[0]] * 2, [rng[1]] * 2, alpha = .2, color = 'black')
             for r in rng:
@@ -342,11 +343,11 @@ def load_motifs():
     raise Exception()
             
 def write_seqs_to_motifs():
-    cre, rnd, keys = get_mutants()
+    seqs, rnd, keys = get_mutants()
     cons = get_cons()
     
     contents = ''
-    for i, c in enumerate(cre):
+    for i, c in enumerate(seqs):
         k = keys[i]
         name = k
         contents +=  '\n'.join(['A {0} 1 {1}'.format(k,len(cons)),
@@ -358,7 +359,7 @@ def write_seqs_to_motifs():
 def get_motifs(**kwargs):
     def set_motifs(**kwargs):
         mfpath = cfg.dataPath('motifs/all_vert_motifs.txt')
-        fpath = cfg.dataPath('CRE/CRE_for_motifs.txt'.format(promoter_type))
+        fpath = cfg.dataPath('CRE/{0}_for_motifs.txt'.format(promoter_type))
         cmd = 'motif-match -n 1 -m {0}  -V 1'.format(mfpath)
         cmd2 = 'xargs echo'
         prc = spc.Popen(cmd, shell = True, stdin = spc.PIPE, stdout = spc.PIPE)
@@ -402,9 +403,10 @@ def fix_motifs():
 def get_mutants(**kwargs):
     if promoter_type == 'CRE':
         return getCRE(**kwargs)
-    else: 
+    elif promoter_type == 'IFNB': 
+        return getIFNB(**kwargs)
+    else:
         raise Exception()
-        
 
 def nt_ids():
     return {'A': 0,
@@ -440,11 +442,43 @@ def get_sing_energies():
     
 
 
-def cre_rngs():
-    return [(11,19),
-            (37,42),
-            (47,52),
-            (69,77)]
+def motif_rngs():
+    if promoter_type == 'CRE':
+        return [(11,19),
+                (37,42),
+                (47,52),
+                (69,77)]
+    else:
+        return [(21, 25),
+                (25,29),
+                (30,34),
+                (42,46),
+                (49,53),
+                (55,60),
+                (61,65)]
+def motif_grps(grpname, hit = True):
+    if promoter_type == 'CRE':
+        n_mots = 4
+        if grpname == 'distal': mset = set([0])
+        elif grpname == 'proximal': mset = set([3])
+        elif grpname == 'middle': mset = set([1,2])
+        else: raise Exception()
+    elif promoter_type == 'IFNB':
+        n_mots = 8
+        if grpname == 'IRF-3': mset = set([1,2,3,4])
+        elif grpname == 'IRF-7': mset = set([2,3,4,5])
+        elif grpname == 'ATF-2':mset = set([0])
+        elif grpname == 'c-Jun': mset = set([1])
+        elif grpname == 'p50':mset = set([6])
+        elif grpname == 'RelA':mset = set([7])
+        else: raise Exception()
+    
+    if hit:
+        return tuple(sorted(list(mset)))
+    else:
+        return tuple([i for i in range(n_mots) if not i in mset])
+    
+
 def cre_masks(pad = 2):
     cons = get_cons()
     l = len(cons)
@@ -572,6 +606,8 @@ def get_mean_induction(**kwargs):
                                            on_fail = 'compute'))
 
 def getCRE(**kwargs):
+
+
     def setCRE(**kwargs):        
         cre_des = open(cfg.dataPath('CRE/27k/CRE_Randomization_Design.txt'))
         cre_rnd = open(cfg.dataPath('CRE/27k/CRE_Randomization.dat'))
@@ -593,14 +629,38 @@ def getCRE(**kwargs):
                         **mem.rc(kwargs,
                                  register = promoter_type,
                                  on_fail = 'compute'))
+def getIFNB(**kwargs):
+
+
+    def setIFNB(**kwargs):        
+        IFNB_des = open(cfg.dataPath('CRE/27k/IFNB_Randomization_Design.txt'))
+        IFNB_rnd = open(cfg.dataPath('CRE/27k/IFNB_Randomization.dat'))
+        IFNB_rnd = IFNB_rnd.readlines()
+        IFNB_des = IFNB_des.readlines()
+
+        IFNB_rndvals = [[elt.strip() for elt in line.split('\t')] for line in IFNB_rnd[1:]]
+        IFNB_seqs = [[elt.strip() for elt in line.split('\t')] for line in IFNB_des]
+
+        IFNB_rndvals = dict([(e[0], e[1:]) for e in IFNB_rndvals])
+        IFNB_seqs = dict([[e[0],e[1]] for e in IFNB_seqs])
+
+        keys = list(set(IFNB_rndvals.keys()).intersection(IFNB_seqs.keys()))
+        
+        IFNB = array([list(IFNB_seqs[k]) for k in keys])
+        IFNB_rndvals = array([array(IFNB_rndvals[k], float) for k in keys])
+        return IFNB, IFNB_rndvals, keys
+    return mem.getOrSet(setIFNB,
+                        **mem.rc(kwargs,
+                                 register = promoter_type,
+                                 on_fail = 'compute'))
 
 
 def get_cons(**kwargs):
     def consensus_seq(seqs):
         return [ sorted([(k,list(g)) for k, g in it.groupby(sorted(c)) ], key = lambda x: len(x[1]))[-1][0] for c in seqs.T]
     def set_cons(**kwargs):
-        cre, cre_rndvals, keys = get_mutants(**mem.sr(kwargs))
-        cons = consensus_seq(cre[::100])
+        seqs, seqs_rndvals, keys = get_mutants(**mem.sr(kwargs))
+        cons = consensus_seq(seqs[::100])
         return cons
     cons = mem.getOrSet(set_cons, **mem.rc(kwargs,
                                            register = promoter_type,
