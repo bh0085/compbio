@@ -3,6 +3,7 @@ import cb.config as cfg
 import os
 import cb.utils.bsub_utils as bsu
 import cb.utils.bsub as bsub
+import subprocess
 
 sdp = cfg.dataPath('soheil')
 matfiles = [os.path.join(sdp,f) for f in os.listdir(sdp) if '.mat' in f]
