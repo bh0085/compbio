@@ -23,5 +23,6 @@ for f in matfiles:
     bscmd = bsub.cmd(cstr, run_id = 'CLUSTER_'+os.path.split(f)[-1][:-4], mem = 4)
 
     subprocess.Popen(bscmd, shell = True)
+    print bscmd
 
 exit
