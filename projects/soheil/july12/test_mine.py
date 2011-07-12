@@ -16,7 +16,7 @@ for f in matfiles:
     script = 'test_mine'
     mat_cmd = '''"{2}('{0}', '{1}' ); exit"'''.format(*(args + (script,)))
     cstr = '''echo {0} | matlab -nojvm -nodisplay -nosplash '''.format(mat_cmd)
-    bscmd = bsub.cmd(cstr, run_id = os.path.split('CLUSTER_'+os.path.split(f)[-1][:-4]))
+    bscmd = bsub.cmd(cstr, run_id = 'CLUSTER_'+os.path.split(f)[-1][:-4])
     print bscmd
                      
     
