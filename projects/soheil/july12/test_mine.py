@@ -20,8 +20,8 @@ for f in matfiles:
     mat_cmd ='''\\"{3}('{0}', '{1}', '{2}' ); exit\\"'''.format(*(args + (script,)))
     cstr = '''echo {0} | matlab -nojvm -nodisplay -nosplash '''.\
                            format(mat_cmd)
-    bscmd = bsub.cmd(cstr, run_id = 'CLUSTER_'+os.path.split(f)[-1][:-4])
+    bscmd = bsub.cmd(cstr, run_id = 'CLUSTER_'+os.path.split(f)[-1][:-4], mem = 4)
 
-    subprocess.Popen(bscmd, shell = True,mem = 4)
+    subprocess.Popen(bscmd, shell = True)
 
 exit
