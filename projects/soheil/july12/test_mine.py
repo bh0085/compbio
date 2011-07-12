@@ -17,9 +17,9 @@ for f in matfiles:
         os.path.join(*( os.path.split(f)[:-1]+('mat_all_out',)+os.path.split(f)[-1:]))
 
     script = 'test_mine'
-    mat_cmd = '''"{2}('{0}', '{1}' ); exit"'''.format(*(args + (script,)))
-    cstr = pipes.quote('''echo {0} | matlab -nojvm -nodisplay -nosplash '''.\
-                           format(mat_cmd))
+    mat_cmd = pipes.quote( '''"{2}('{0}', '{1}' ); exit"'''.format(*(args + (script,))))
+    cstr = '''echo {0} | matlab -nojvm -nodisplay -nosplash '''.\
+                           format(mat_cmd)
     bscmd = bsub.cmd(cstr, run_id = 'CLUSTER_'+os.path.split(f)[-1][:-4])
     subprocess.Popen(bscmd, shell = True)
     
