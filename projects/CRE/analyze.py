@@ -11,8 +11,9 @@ import scipy.signal as ss
 import cb.utils.sigsmooth as sgs
 import subprocess as spc
 import cb.utils.colors as mycolors
+import os
 
-promoter_type = 'IFNB'
+promoter_type = 'CRE'
 figtemplate = cfg.dataPath('figs/{0}/{{0}}.pdf'.format(promoter_type))
 
 
@@ -321,7 +322,289 @@ def site_energy_deltas(showtype = 'first_part_energies',
     f.savefig(figtemplate.format(figtitle))
 
 
+
+
+
+
+
+
+
+
+def motif_num_occurrence_vs_induction(mgroup = None,
+                                      mtuple = None,
+                                      hit = True, 
+                                      induction_type = 'ratio'):
+    if mgroup != None:
+        mtuples = motif_grps(mgroup, hit = hit)
+        mdict = get_motif_dicts()
+        muts_allowed = set(list(it.chain(*[mdict[k] for k in mtuples])))
+    else:
+        muts_allowed = set(get_motif_dicts()[mtuple])
+
+    inductions = get_mean_induction()
+    motifs = get_motifs()
+    seqs, rndvals, keys = get_mutants()
+    
+    if induction_type == 'ratio':  mut_inductions =(rndvals[:,0] / rndvals[:,1])
+    elif induction_type == 'on': mut_inductions =  rndvals[:,0]
+    elif induction_type == 'off': mut_inductions = rndvals[:,1]
+    
+    inductions = dict([(keys[i], mut_inductions[i] )
+                       for i in range(len(rndvals)) ] )
+
+    if mgroup == None:
+        figtitle = 'motifs/ind_type={1}/occurence_v_induction_tuple={0}'.\
+            format(mtuple, induction_type)
+    else:
+        figtitle = 'motifs/ind_type={1}/occurence_v_induction_group={0}'.\
+            format(mgroup, induction_type)
+        
+    
+
+    f = myplots.fignum(3, (8,8))
+    ax = f.add_subplot(111)
+    ax.scatter(*zip(*[(log(inductions[keys[i]]), len(motifs[keys[i]])) 
+                     for i in muts_allowed]))
+
+    ax.set_ylabel('number of motifs found')
+    ax.set_xlabel('log induction')
+
+    ax.annotate(figtitle, [1,1], 
+                va = 'bottom', ha = 'right',
+                xycoords = 'figure fraction')
+
+    fpath = figtemplate.format(figtitle)
+    if not os.path.isdir(os.path.dirname(fpath)): os.makedirs(os.path.dirname(fpath))
+    f.savefig(figtemplate.format(figtitle))
+    
+
+
+def motif_dist_v_cooperativity(mgroup = None,
+                               mtuple = None,
+                               hit = True,
+                               induction_type = 'ratio',
+                               midpoint = None):
+
+    if mgroup != None:
+        mtuples = motif_grps(mgroup, hit = hit)
+        mdict = get_motif_dicts()
+        muts_allowed = set(list(it.chain(*[mdict[k] for k in mtuples])))
+    else:
+        muts_allowed = set(get_motif_dicts()[mtuple])
+    
+    assert midpoint != None
+
+    
+    motifs = get_motifs()
+    seqs, rndvals, keys = get_mutants()
+    #USE ONLY FILTERED SEQS!
+    seqs, rndvals, keys = \
+        [seqs[i] for i in muts_allowed],\
+        array([rndvals[i] for i in muts_allowed]),\
+        [keys[i] for i in muts_allowed]
+    
+    keys_allowed = set(keys)
+    
+    if induction_type == 'ratio':  mut_inductions =(rndvals[:,0] / rndvals[:,1])
+    elif induction_type == 'on': mut_inductions =  rndvals[:,0]
+    elif induction_type == 'off': mut_inductions = rndvals[:,1]
+    
+    inductions = dict([(keys[i], mut_inductions[i] )
+                       for i in range(len(rndvals)) ] )    
+
+    if mgroup == None:
+        figtitle = 'motifs/ind_type={1}/motif_dist_v_cooperativity_tuple={0}'.\
+            format(mtuple, induction_type)
+    else:
+        figtitle = 'motifs/ind_type={1}/motif_dist_v_cooperativity_group={0}{2}'.\
+            format(mgroup, induction_type, 
+                   '_hit' if  hit else '')
+        
+    
+    thr = .25
+    m_occurences = list(it.chain(*[[elt['motif'] for elt in seq_motifs if elt['score'] > thr] 
+                                   for k, seq_motifs in motifs.iteritems()
+                                   if k in keys_allowed]))
+    
+    #unq_keys = sorted(list(set(m_occurences)))
+    
+    kcounts = dict([(k, len(list(g))) for k, g  in it.groupby(sorted(m_occurences))])
+    unq_keys = kcounts.keys()
+    kcount =[ kcounts[m] for m in unq_keys ]
+    msort = nonzero(greater(kcount, 5) * less(kcount, 500))[0]
+    msort = sorted(msort, key = lambda x: kcount[x])[::-1]
+    #TAKING ONLY THE 10 MOST COMMON MOTIFS
+    unq_keys = [unq_keys[i] for i in msort[0:]]
+
+
+
+    f = myplots.fignum(3, (8,8))
+    ax = f.add_subplot(111)
+    colors = mycolors.getct(len(unq_keys))
+    ct = 0
+    all_vals = []
+    for mkey in unq_keys:
+        mscores =[{'seq':skey, 
+                   'score': [ elt['score'] 
+                              for elt in motifs[skey] 
+                              if elt['motif'] == mkey and elt['score'] > thr ],
+                   'starts':[elt['start'] 
+                             for elt in motifs[skey] 
+                             if elt['motif'] == mkey and elt['score'] > thr],
+                   'stops':[elt['end']
+                            for elt in motifs[skey]
+                            if elt['motif'] == mkey and elt['score'] > thr]}
+                  for skey in keys_allowed]
+        
+
+        vals = list(it.chain(*[[ (midpoint - \
+                                 mean([mseq['starts'][i], mseq['stops'][i]]),\
+                                 log(inductions[mseq['seq']]) )  
+                            for i in range(len(mseq['starts'])) ] 
+                          for mseq in mscores ] ))
+        
+        if vals: 
+            #ax.scatter(*zip(*vals) ,
+            #                 s = 10, alpha = .25,
+            #                 c = colors[ct])
+            all_vals.extend(vals)
+
+
+        ct += 1
+        if ct > 1000:
+            break
+
+    vsrt = sorted(all_vals, key = lambda x: x[0])
+    xv = [a[0] for  a in all_vals]
+    means = zeros(max(xv)+1)
+    #counts = zeros(max(xv)+1)
+    for k, g in it.groupby(all_vals, key = lambda x: x[0]):
+        means[k]  = percentile([elt[1] for elt in g], 90)
+    
+    elts = nonzero(means)[0]
+    ax.plot(elts, [means[e] for e in elts])
+    
+    ax.set_xlabel('distance from strongest promoters')
+    ax.set_ylabel('induction')
+
+
+    ax.annotate(figtitle, [0,0],
+                xycoords ='figure fraction',
+                va = 'bottom', ha = 'left')
+    fpath = figtemplate.format(figtitle)
+    if not os.path.isdir(os.path.dirname(fpath)): os.makedirs(os.path.dirname(fpath))
+    f.savefig(figtemplate.format(figtitle))
+
+                 
+
+def motif_name_vs_induction(mgroup = None,
+                            mtuple = None,
+                            hit = True,
+                            induction_type = 'ratio'):
+
+    if mgroup != None:
+        mtuples = motif_grps(mgroup, hit = hit)
+        mdict = get_motif_dicts()
+        muts_allowed = set(list(it.chain(*[mdict[k] for k in mtuples])))
+    else:
+        muts_allowed = set(get_motif_dicts()[mtuple])
+
+    motifs = get_motifs()
+    seqs, rndvals, keys = get_mutants()
+    #USE ONLY FILTERED SEQS!
+    seqs, rndvals, keys = \
+        [seqs[i] for i in muts_allowed],\
+        array([rndvals[i] for i in muts_allowed]),\
+        [keys[i] for i in muts_allowed]
+    
+    keys_allowed = set(keys)
+    
+    if induction_type == 'ratio':  mut_inductions =(rndvals[:,0] / rndvals[:,1])
+    elif induction_type == 'on': mut_inductions =  rndvals[:,0]
+    elif induction_type == 'off': mut_inductions = rndvals[:,1]
+    
+    inductions = dict([(keys[i], mut_inductions[i] )
+                       for i in range(len(rndvals)) ] )    
+
+    if mgroup == None:
+        figtitle = 'motifs/ind_type={1}/mname_v_induction_tuple={0}'.\
+            format(mtuple, induction_type)
+    else:
+        figtitle = 'motifs/ind_type={1}/mname_v_induction_group={0}'.\
+            format(mgroup, induction_type)
+        
+    
+    
+    f = myplots.fignum(3, (8,8))
+    
+    m_occurences = list(it.chain(*[[elt['motif'] for elt in seq_motifs] 
+                                   for k, seq_motifs in motifs.iteritems()
+                                   if k in keys_allowed]))
+    
+    unq_keys = list(set(m_occurences))
+    kcount =[ m_occurences.count(m ) for m in unq_keys ]
+    msort = nonzero(greater(kcount, 200))[0]
+    #TAKING ONLY THE 10 MOST COMMON MOTIFS
+    unq_keys = [unq_keys[i] for i in msort[0:]]
+
+    m_total_scores = dict([(mkey,
+                            [{'seq':skey, 
+                              'score':sum([ elt['score'] 
+                                        for elt in seq_motifs 
+                                        if elt['motif'] == mkey ]),
+                              'starts':[elt['start'] 
+                                        for elt in seq_motifs 
+                                        if elt['motif'] == mkey],
+                              'stops':[elt['end']
+                                       for elt in seq_motifs
+                                       if elt['motif'] == mkey]}
+                             for skey, seq_motifs in motifs.iteritems() 
+                             if skey in keys_allowed])
+                        for mkey in unq_keys])
+    
+
+    ax = f.add_subplot(211)
+    ax2 = f.add_subplot(212)
+    count = -1
+    colors = mycolors.getct(len(unq_keys))
+    
+    for mname, scores in m_total_scores.iteritems():
+        count += 1
+        thr = .15
+        inds = [log(inductions[elt['seq']]) for elt in scores if elt['score'] > thr]
+        if len(inds)< 3: continue
+        these_scores =  [ v['score'] for v in scores if v['score'] > thr]
+        
+
+        xax = linspace(min(these_scores), max(these_scores),5)
+        pfit = polyfit(these_scores, inds, 1)
+        ax.plot(xax, polyval(pfit,xax), 
+                color = colors[count], linewidth = 3)
+
+        ofs = 0
+        xseq = arange(len(seqs[0]))
+        for seqelt in scores[:100]:
+            for start,stop in zip(*[seqelt['starts'], seqelt['stops']]):
+                ofs += .25
+
+                ax2.plot([start,stop], [ofs, ofs+.2], 
+                         alpha = .5,color = 'red' if pfit[0] < 0 else 'blue')
+                         
+
+    fpath = figtemplate.format(figtitle)
+    if not os.path.isdir(os.path.dirname(fpath)): os.makedirs(os.path.dirname(fpath))
+    f.savefig(figtemplate.format(figtitle))
+
+    
+
+    pass
+
 #UTILS
+def set_ptype(ptype):
+    global promoter_type, figtemplate
+    promoter_type = ptype
+    figtemplate = cfg.dataPath('figs/{0}/{{0}}.pdf'.format(promoter_type))
+
 def load_motifs():
     mfile = open(cfg.dataPath('motifs/vert_tfs.txt'))
     mdicts = {}
@@ -380,7 +663,7 @@ def get_motifs(**kwargs):
         return seqs
         
     return mem.getOrSet(set_motifs, **mem.rc(kwargs,
-                                             on_fail = 'compute',
+                                             on_fail = 'fail',
                                              register = promoter_type))
 
 def fix_motifs():
@@ -457,10 +740,16 @@ def motif_rngs():
                 (55,60),
                 (61,65)]
 def motif_grps(grpname, hit = True):
+    '''
+    Return a list of tuples whose union include all datasets matching the criterion
+    specified.
+    '''
     if promoter_type == 'CRE':
         n_mots = 4
         if grpname == 'distal': mset = set([0])
         elif grpname == 'proximal': mset = set([3])
+        elif grpname == 'prox3': mset = set([1,2,3])
+        elif grpname == 'prox2': mset = set([2,3])
         elif grpname == 'middle': mset = set([1,2])
         else: raise Exception()
     elif promoter_type == 'IFNB':
@@ -473,17 +762,24 @@ def motif_grps(grpname, hit = True):
         elif grpname == 'RelA':mset = set([7])
         else: raise Exception()
     
+
+    all_tuples = get_motif_dicts()
     if hit:
-        return tuple(sorted(list(mset)))
+        return [k for  k in all_tuples.keys() if not mset.difference(k)]
     else:
-        return tuple([i for i in range(n_mots) if not i in mset])
+        return [k for k in all_tuples.keys() if not mset.intersection(k)]
     
 
+def motif_count():
+    if promoter_type == 'CRE': return 4
+    elif promoter_type == 'IFNB': return 8
+    else: raise Exception()
 def cre_masks(pad = 2):
     cons = get_cons()
     l = len(cons)
-    masks = zeros((4,l))
-    for i,c in enumerate( cre_rngs()):
+    
+    masks = zeros((motif_count(),l))
+    for i,c in enumerate( motif_rngs()):
         c=array(c) + [-pad , pad]
         masks[i][arange(*c) ] = 1
     return masks
@@ -600,7 +896,7 @@ def site_mut_inds(**kwargs):
 def get_mean_induction(**kwargs):
     def set_mind(**kwargs):
         cre, cre_rndvals, keys = get_mutants()
-        return mean(cre_rndvals[:,0])/ mean(cre_rndvals[:,1])
+        return  mean(cre_rndvals[:,0])/ mean(cre_rndvals[:,1])
     return mem.getOrSet(set_mind, **mem.rc(kwargs, 
                                            register = promoter_type,
                                            on_fail = 'compute'))
