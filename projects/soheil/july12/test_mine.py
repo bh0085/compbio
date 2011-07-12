@@ -2,7 +2,7 @@
 import cb.config as cfg
 import os
 sdp = cfg.dataPath('soheil')
-matfiles = [f for f in os.listdir(sdp) if '.mat' in f]
+matfiles = [os.path.join(sdp,f) for f in os.listdir(sdp) if '.mat' in f]
 
 for f in matfiles: 
     infile, resfile, totfile = \
