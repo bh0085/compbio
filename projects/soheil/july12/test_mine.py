@@ -17,7 +17,8 @@ for f in matfiles:
     mat_cmd = '''"{2}('{0}', '{1}' ); exit"'''.format(*(args + (script,)))
     cstr = '''echo {0} | matlab -nojvm -nodisplay -nosplash '''.format(mat_cmd)
     bscmd = bsub.cmd(cstr, run_id = 'CLUSTER_'+os.path.split(f)[-1][:-4])
-    print bscmd
+    subprocess.Popen(bscmd, shell = True)
+    
                      
     
     break
