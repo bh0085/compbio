@@ -16,6 +16,12 @@ for f in matfiles:
         os.path.join(*( os.path.split(f)[:-1]+('mat_out_4',)+os.path.split(f)[-1:])),\
         os.path.join(*( os.path.split(f)[:-1]+('mat_all_out_4',)+os.path.split(f)[-1:]))
 
+    for a in args: 
+        if not os.path.isdir(os.path.dirname(a)):
+            os.makedirs(os.path.dirname(a))
+            print 'made directory: {0}'.format(os.path.dirname(a))
+
+    
     script = 'test_mine'
     mat_cmd ='''\\"{3}('{0}', '{1}', '{2}' ); exit\\"'''.format(*(args + (script,)))
     cstr = '''echo {0} | matlab -nojvm -nodisplay -nosplash '''.\
