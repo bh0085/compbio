@@ -13,8 +13,8 @@ matfiles = [os.path.join(sdp,f) for f in os.listdir(sdp) if '.mat' in f]
 for f in matfiles: 
     args = \
         f, \
-        os.path.join(*( os.path.split(f)[:-1]+('mat_out',)+os.path.split(f)[-1:])),\
-        os.path.join(*( os.path.split(f)[:-1]+('mat_all_out',)+os.path.split(f)[-1:]))
+        os.path.join(*( os.path.split(f)[:-1]+('mat_out_4',)+os.path.split(f)[-1:])),\
+        os.path.join(*( os.path.split(f)[:-1]+('mat_all_out_4',)+os.path.split(f)[-1:]))
 
     script = 'test_mine'
     mat_cmd ='''\\"{3}('{0}', '{1}', '{2}' ); exit\\"'''.format(*(args + (script,)))
@@ -24,5 +24,6 @@ for f in matfiles:
 
     subprocess.Popen(bscmd, shell = True)
     print bscmd
+    
 
 exit
