@@ -57,8 +57,9 @@ inputs:
         format(mat_cmd)
     bsc = 'bsub -o {0} -q compbio-week -P {1} {2}'.format(\
         'logfile_{0}'.format(run_id), script, mat_cmd)
-
-    print bsc
+    subprocess.Popen(bsc, shell = True)
+    print 'opening ' + bsc
+    
 
 
 
