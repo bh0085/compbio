@@ -52,7 +52,7 @@ inputs:
 
     sio.savemat(input_file,params)
 
-    mat_cmd = '''\\"{2}('{0}', '{1}' ); exit\\"'''.\
+    mat_cmd = '''"{2}('{0}', '{1}' ); exit"'''.\
         format(input_file,output_file,  script)
     cstr = '''echo {0} | matlab -nojvm -nodisplay -nosplash '''.\
         format(mat_cmd)
