@@ -26,7 +26,7 @@ infiles,outfiles,params,run_ids = get_stuff_for_run()
     #and eventually fed to your matlab script.
 
     if run_type == 'TEST':
-        nruns = 100
+        nruns = 2
         infiles = ['inp_test_{0}'.format(i) for i in range(nruns)]
         outfiles = ['out_test_{0}'.format(i) for i in range(nruns)]
         params = [{'number': i,
