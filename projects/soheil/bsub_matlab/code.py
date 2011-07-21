@@ -35,6 +35,8 @@ infiles,outfiles,params,run_ids = get_stuff_for_run()
                   for i in range(nruns)]
         run_ids = ['TEST{0}'.format(i) for i in range(nruns)]
         
+
+    
     return infiles, outfiles, params, run_ids
 
 
@@ -57,9 +59,10 @@ inputs:
     cstr = '''echo {0} | matlab -nojvm -nodisplay -nosplash '''.\
         format(mat_cmd)
     bsc = 'bsub -o {0} -q compbio-week -P {1} "{2}"'.format(\
-        'logfile_{0}'.format(run_id), script, mat_cmd)
+        'logfile_{0}'.format(run_id), script, cstr)
     subprocess.Popen(bsc, shell = True)
     print 'opening ' + bsc
+
     
 
 
