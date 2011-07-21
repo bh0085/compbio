@@ -56,7 +56,7 @@ inputs:
     cstr = '''echo {0} | matlab -nojvm -nodisplay -nosplash '''.\
         format(mat_cmd)
     bsc = 'bsub -o {0} -q compbio-week -P {1} {2}'.format(\
-        'logfile_{0}'.format(run_id), script)
+        'logfile_{0}'.format(run_id), script, mat_cmd)
 
     print bsc
 
