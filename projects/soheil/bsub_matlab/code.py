@@ -52,11 +52,11 @@ inputs:
 
     sio.savemat(input_file,params)
 
-    mat_cmd = '''"{2}('{0}', '{1}' ); exit"'''.\
+    mat_cmd = '''\\"{2}('{0}', '{1}' ); exit\\"'''.\
         format(input_file,output_file,  script)
     cstr = '''echo {0} | matlab -nojvm -nodisplay -nosplash '''.\
         format(mat_cmd)
-    bsc = 'bsub -o {0} -q compbio-week -P {1} {2}'.format(\
+    bsc = 'bsub -o {0} -q compbio-week -P {1} "{2}"'.format(\
         'logfile_{0}'.format(run_id), script, mat_cmd)
     subprocess.Popen(bsc, shell = True)
     print 'opening ' + bsc
