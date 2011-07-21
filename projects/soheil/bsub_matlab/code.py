@@ -7,6 +7,7 @@ on the cluster using parameters generated
 #IMPORTS
 import scipy.io as sio
 import sys
+import subprocess 
 
 #GLOBALS
 run_type = 'TEST'
