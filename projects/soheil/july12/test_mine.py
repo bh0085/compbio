@@ -23,7 +23,7 @@ for f in matfiles:
 
     
     script = 'test_mine'
-    mat_cmd ='''\\"{3}('{0}', '{1}', '{2}' ); exit\\"'''.format(*(args + (script,)))
+    mat_cmd ='''"{3}('{0}', '{1}', '{2}' ); exit"'''.format(*(args + (script,)))
     cstr = '''echo {0} | matlab -nojvm -nodisplay -nosplash '''.\
                            format(mat_cmd)
     bscmd = bsub.cmd(cstr, run_id = 'CLUSTER_'+os.path.split(f)[-1][:-4], mem = 4)
