@@ -32,12 +32,14 @@ ecount = 200000
 run_name = 'bn_edges'
 figtemplate = cfg.dataPath('figs/filtering/comparator-{0}-{{0}}.pdf'.\
                                format(run_name))
-single_net_type = 'bn'
+net_types = 'all'
+pctype = 'bn'
 
 
-def get_graphs(selector = 'pcs_fix_ecount',
-               net_choice = single_net_type,
-               pctype = single_net_type,
+
+def get_graphs(selector = 'just_nets',
+               net_choice = net_types,
+               pctype = pctype,
                fixed_ecount = ecount):
 
     '''Get a list of graphs.
