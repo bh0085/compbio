@@ -11,6 +11,10 @@ Draw a graph with scatterpoint keyword given in skw
 and connectionpoint keyworks given by ckw.
 
 ckw:
+  ckw takes the form of a dictionary; edges lacking a key in ckw
+  will not be plotted. For every edges that is plotted, the following
+  keywords are allowed:
+
   'alpha'
   'fc'
   'ec'
@@ -39,20 +43,23 @@ wedge	tail_width=0.3,shrink_factor=0.5
         scatter_nodes = graph.nodes()
 
     ax = plt.gca()
+
     for i, e in enumerate(edges):
         if e in ckw:
-            ax.annotate('', xy=pos[e[0]],  xycoords='data',
-                        xytext=pos[e[1]], textcoords='data',
-                        #size=20,
-                        #bbox=dict(boxstyle="round", fc="0.8"),
-                        arrowprops=dict( zorder = 1, #connectionstyle=cstr,
+
+            
+            print 'plotting edges'
+            ax.annotate('', xy=pos[e[1]],  xycoords='data',
+                        xytext=pos[e[0]], textcoords='data',
+                        arrowprops=dict( 
+                                         #connectionstyle=cstr,
                                          #shrinkA=10,shrinkB = 10,
                                          **ckw.get(e,{})  ),
-                        zorder = 1
                         )
 
     
-    
+    #return
+    print scatter_nodes
     xys  = [pos[n] for n in scatter_nodes]
     if xys:
         ax.scatter(*zip(*xys), **skw)

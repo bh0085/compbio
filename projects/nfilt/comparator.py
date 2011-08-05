@@ -60,7 +60,7 @@ selectors:
 
 
     if net_choice == 'all':
-        nets  = {'unsup':nio.getNet(net_name = 'unsup', reset = True)[0],
+        nets  = {'unsup':nio.getNet(net_name = 'unsup')[0],
                  'logistic':nio.getNet(net_name = 'logistic')[0],
                  'kn':nio.getKNet()[0],
                  'bn':nio.getBNet()[0],

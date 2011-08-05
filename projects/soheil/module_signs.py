@@ -3,7 +3,7 @@ from numpy import *
 import numpy as np
 import cb.p.network.io as nio
 import cb.utils.plots as myplots
-import cb.utils.gdraw as gd
+import cb.utils.graphs.draw as gd
 import cb.config as cfg
 
 import itertools as it

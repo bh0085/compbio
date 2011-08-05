@@ -1,0 +1,1511 @@
+Last login: Sun Jan 30 13:31:30 on ttys000
+~ >ping 192.168.1.25
+PING 192.168.1.25 (192.168.1.25): 56 data bytes
+Request timeout for icmp_seq 0
+Request timeout for icmp_seq 1
+Request timeout for icmp_seq 2
+Request timeout for icmp_seq 3
+Request timeout for icmp_seq 4
+^C
+--- 192.168.1.25 ping statistics ---
+6 packets transmitted, 0 packets received, 100.0% packet loss
+~ >ping 192.168.1.25
+PING 192.168.1.25 (192.168.1.25): 56 data bytes
+Request timeout for icmp_seq 0
+Request timeout for icmp_seq 1
+Request timeout for icmp_seq 2
+Request timeout for icmp_seq 3
+Request timeout for icmp_seq 4
+Request timeout for icmp_seq 5
+^C
+--- 192.168.1.25 ping statistics ---
+7 packets transmitted, 0 packets received, 100.0% packet loss
+~ >ifconfig
+lo0: flags=8049<UP,LOOPBACK,RUNNING,MULTICAST> mtu 16384
+	inet 127.0.0.1 netmask 0xff000000 
+	inet6 ::1 prefixlen 128 
+	inet6 fe80::1%lo0 prefixlen 64 scopeid 0x1 
+gif0: flags=8010<POINTOPOINT,MULTICAST> mtu 1280
+stf0: flags=0<> mtu 1280
+en1: flags=8863<UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+	ether 78:ca:39:bc:86:22 
+	inet6 fe80::7aca:39ff:febc:8622%en1 prefixlen 64 scopeid 0x4 
+	inet 10.0.1.2 netmask 0xffffff00 broadcast 10.0.1.255
+	media: autoselect
+	status: active
+en0: flags=8863<UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+	ether c8:bc:c8:92:b0:68 
+	media: autoselect
+	status: inactive
+en2: flags=8863<UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+	ether 0b:0b:0b:0b:0b:0b 
+	inet6 fe80::7aca:39ff:febc:8622%en2 prefixlen 64 scopeid 0x6 
+	inet 169.254.104.110 netmask 0xffff0000 broadcast 169.254.255.255
+	media: autoselect (10baseT/UTP <full-duplex>)
+	status: active
+fw0: flags=8863<UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST> mtu 4078
+	lladdr 78:ca:39:ff:fe:1a:83:0e 
+	media: autoselect <full-duplex>
+	status: inactive
+~ >ssh 10.0.1.2
+The authenticity of host '10.0.1.2 (10.0.1.2)' can't be established.
+RSA key fingerprint is f1:83:dd:9e:15:10:a1:f6:22:fd:79:f7:97:7d:23:17.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added '10.0.1.2' (RSA) to the list of known hosts.
+Password:
+Last login: Sun Jan 30 13:31:30 2011
+~ >q
+-bash: q: command not found
+~ >exit
+logout
+Connection to 10.0.1.2 closed.
+~ >ifocnfig
+-bash: ifocnfig: command not found
+~ >ifconfig
+lo0: flags=8049<UP,LOOPBACK,RUNNING,MULTICAST> mtu 16384
+	inet 127.0.0.1 netmask 0xff000000 
+	inet6 ::1 prefixlen 128 
+	inet6 fe80::1%lo0 prefixlen 64 scopeid 0x1 
+gif0: flags=8010<POINTOPOINT,MULTICAST> mtu 1280
+stf0: flags=0<> mtu 1280
+en1: flags=8863<UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+	ether 78:ca:39:bc:86:22 
+	inet6 fe80::7aca:39ff:febc:8622%en1 prefixlen 64 scopeid 0x4 
+	inet 10.0.1.2 netmask 0xffffff00 broadcast 10.0.1.255
+	media: autoselect
+	status: active
+en0: flags=8863<UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+	ether c8:bc:c8:92:b0:68 
+	media: autoselect
+	status: inactive
+en2: flags=8863<UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+	ether 0b:0b:0b:0b:0b:0b 
+	inet6 fe80::7aca:39ff:febc:8622%en2 prefixlen 64 scopeid 0x6 
+	media: autoselect (10baseT/UTP <full-duplex>)
+	status: active
+fw0: flags=8863<UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST> mtu 4078
+	lladdr 78:ca:39:ff:fe:1a:83:0e 
+	media: autoselect <full-duplex>
+	status: inactive
+~ >sudo port install gtk
+Password:
+Warning: port definitions are more than two weeks old, consider using selfupdate
+Error: Port gtk not found
+To report a bug, see <http://guide.macports.org/#project.tickets>
+~ >which ipython
+/opt/local/bin/ipython
+~ >ipython 
+Total number of aliases: 15
+Python 2.6.6 (r266:84292, Sep 28 2010, 18:58:44) 
+Type "copyright", "credits" or "license" for more information.
+
+IPython 0.10 -- An enhanced Interactive Python.
+?         -> Introduction and overview of IPython's features.
+%quickref -> Quick reference.
+help      -> Python's own help system.
+object?   -> Details about 'object'. ?object also works, ?? prints more.
+
+[~]
+|1>exit()
+Do you really want to exit ([y]/n)? y
+~ >port search gtk
+Warning: port definitions are more than two weeks old, consider using selfupdate
+anjuta @2.30.2.1 (gnome, devel)
+    A GNOME/GTK IDE
+
+bakery @2.6.3 (gnome)
+    Bakery is a C++ Framework for creating GNOME applications using gtkmm.
+
+bzr-gtk @0.98.0 (devel, python)
+    Various GTK+ frontends for bzr
+
+claws-mail @3.7.6 (mail, news)
+    A lightweight and very featureful GTK+ based e-mail and news client
+
+clutter-gtk @0.10.8 (graphics)
+    Clutter GTK integration library.
+
+devhelp @2.30.1 (gnome)
+    Devhelp is an API documentation browser for GTK+ and GNOME.
+
+dlume @0.2.4 (x11, databases)
+    A gtk2-based addressbook.
+
+gauche-gtk @0.4.1 (lang, scheme)
+    Gauche extension module to use GTK
+
+gazpacho @0.7.2 (devel, python, gnome)
+    A GUI builder for the GTK+ toolkit.
+
+gbuffy @0.2.6 (mail)
+    A multiple mailbox biff program written in GTK
+
+gdk-pixbuf @0.22.0 (graphics)
+    generic image handling library for Gtk+ programs
+
+geany @0.18.1 (devel)
+    A fast and lightweight GTK+ IDE
+
+gecko-sharp2 @0.13 (devel)
+    GeckoSharp is a wrapper for the GtkEmbedMoz widget.
+
+gftp @2.0.18 (net)
+    GTK+ FTP client
+
+giggle @0.4 (devel)
+    Git gtk frontend
+
+gkrellm @2.3.2 (sysutils)
+    A GTK based system monitor
+
+glade @2.12.2 (devel, gnome)
+    Glade is a free user interface builder for GTK+ and GNOME.
+
+glade3 @3.6.7 (devel, gnome)
+    Glade is a free user interface builder for GTK+ and GNOME.
+
+glade3-devel @3.5.7 (devel, gnome)
+    Glade is a free user interface builder for GTK+ and GNOME.
+
+gmpc @0.20.0 (audio)
+    GMPC is a GTK2 client for MPD
+
+gnat-gtkada @2.14.2 (devel)
+    GtkAda: a complete Ada graphical toolkit
+
+gnome-sharp2 @2.20.0 (gnome, devel)
+    Gtk bindings for the Mono .NET Development Framework
+
+gob1 @1.0.12 (devel)
+    preprocessor for making GTK+ 1 objects with inline C
+
+goocanvas @0.15 (gnome)
+    a Cairo Canvas Widget for GTK+
+
+gq @1.2.1 (net)
+    GQ is a GTK-based LDAP client.
+
+gtimelog @0.2.0 (x11)
+    A Gtk+ time tracking application.
+
+gtk-canvas @0.1.1 (x11)
+    Straight backport of the GNOME canvas
+
+gtk-chtheme @0.3.1 (x11)
+    gtk-2 theme switcher
+
+gtk-doc @1.15 (gnome, devel)
+    GTK+/GNOME API documentation generator
+
+gtk-engines @0.12 (x11)
+    Theme engine for GTK+
+
+gtk-engines2 @2.20.2 (x11)
+    Theme engine for gtk2
+
+gtk-extra @0.99.17 (x11, devel)
+    Extra GTK+1 Widgets
+
+gtk-gnutella @0.96.6 (net)
+    GTK-based Gnutella client
+
+gtk-nodoka-engine @0.7.5 (x11, gnome)
+    Nodoka GTK2 Theme Engine
+
+gtk-osx-application @0.9.6 (devel)
+    Mac OS X menu bar integration library for GTK2 quartz
+
+gtk-sharp @1.0.10 (x11, devel)
+    Gtk bindings for the Mono .NET Development Framework
+
+gtk-sharp2 @2.12.9 (x11, devel)
+    Gtk bindings for the Mono .NET Development Framework
+
+gtk-smooth-engine @0.6.0.1 (x11, gnome)
+    Smooth GTK2 Theme Engine
+
+gtk-theme-switch @2.0.4 (x11)
+    command-line theme switcher for gtk2
+
+gtk-thinice-engine @2.0.2 (x11, gnome)
+    A simple, clean theme engine
+
+gtk-xfce-engine @2.6.0 (xfce)
+    Port of xfce engine to GTK+-2.0
+
+gtk1 @1.2.10 (x11)
+    Gimp ToolKit version 1
+
+gtk2 @2.22.0 (x11)
+    Gimp ToolKit version 2
+
+gtk2-aurora @1.5.1 (x11, gtk)
+    Aurora Gtk Engine
+
+gtk2-extra @2.1.1 (x11, devel)
+    Extra GTK+2 Widgets
+
+gtk2-industrial @1.0 (x11)
+    Industrial GTK 1 & 2 theme engine from the Ximian Artwork package.
+
+gtk2-murrine @0.90.3 (x11, gtk)
+    Murrine is a GTK2 engine
+
+gtk2-murrine-configurator @1.4 (x11, gtk)
+    The definitive tool for the Murrine lovers
+
+gtk2hs @0.10.1 (devel, graphics)
+    Portable and native GUI library for Haskell
+
+gtkevemon @99 (games)
+    GTK Eve-Online monitor
+
+gtkglarea @1.2.3 (x11, devel)
+    OpenGL widget to GTK+
+
+gtkglarea2 @1.99.0 (x11, devel)
+    OpenGL widget to GTK+
+
+gtkglext @1.2.0 (devel)
+    OpenGL Extension to GTK
+
+gtkglextmm @1.2.0 (devel)
+    OpenGL Extension to GTK, C++ bindings
+
+gtkimageview @1.6.4 (devel)
+    GtkImageView is a simple image viewer widget for GTK.
+
+gtkmm @2.20.3 (x11, devel)
+    C++ interface to GTK+.
+
+gtkpod @1.0.0 (multimedia, gnome)
+    gtkpod is a platform independent Graphical User Interface for Apple's iPod using GTK2.gpod is a library to access the contents of an iPod.
+
+gtksee @0.6.0b-1 (graphics, x11)
+    A simple image viewer based on GTK+ 1.2.x and running on X Window System.
+
+gtksourceview @1.8.5 (gnome)
+    GtkSourceView is a text widget
+
+gtksourceview-sharp2 @0.12 (gnome, devel)
+    C# Bindings for GtkSourceView.
+
+gtksourceview2 @2.10.5 (gnome)
+    GtkSourceView is a text widget
+
+gtkspell2 @2.0.16 (x11, gnome, textproc)
+    Library for highlighting and replacement of misspelled words
+
+gtkwave @3.3.13 (cad)
+    A viewer for common electronic CAD waveform files.
+
+GTorrentViewer @0.2b (net, x11)
+    GTK2 based viewer for .torrent files.
+
+gxmessage @2.12.4 (x11)
+    a GTK-based xmessage clone.
+
+ige-mac-integration @0.8.2 (devel)
+    Mac OS X menu bar integration library for GTK2 quartz
+
+kedpm @0.4.1-cvs (security, python, x11)
+    Python GTK2 Password Manager
+
+lablgtk @1.2.7 (x11)
+    Objective Caml interface to gtk+
+
+lablgtk2 @2.14.2 (x11, ml)
+    Objective Caml interface to gtk+ 2.x
+
+leafpad @0.8.17 (editors, gnome)
+    A simple GTK texteditor.
+
+libgtkhtml @2.11.1 (gnome, www)
+    Lightweight HTML rendering/printing/editing engine
+
+libgtkhtml3 @3.30.3 (gnome)
+    GTK HTML rendering engine.
+
+libgtksourceviewmm @0.3.0 (gnome)
+    gtksourceviewmm provides C++ wrappers for gtksourceview.
+
+libsexy @0.1.11 (x11, devel)
+    Doing naughty things to good Gtk+ widgets
+
+libxfcegui4 @4.6.1 (xfce)
+    various gtk widgets for xfce
+
+liferea @1.6.4 (gnome, net)
+    A feed aggregator for GTK+/GNOME.
+
+logjam @4.2.4 (net)
+    GTK2 client for livejournal.com
+
+lopster @1.2.2 (net)
+    GTK+ Open Napster client
+
+lostirc @0.4.6 (irc)
+    simple GTK+ IRC client
+
+mldonkey @3.0.5 (net)
+    OCaml/GTK client for the eDonkey p2p network
+
+mp3splt-gtk @0.5.7a (audio)
+    Utility for mp3 and ogg splitting without decoding
+
+mtn-browse @0.71 (devel)
+    A GTK+ based browser for version control system monotone
+
+p5-gnome2 @1.042 (perl)
+    Bindings to Gtk+ library
+
+p5-gnome2-canvas @1.002 (perl)
+    Bindings to Gtk+ library
+
+p5-gnome2-gconf @1.044 (perl)
+    Bindings to Gtk+ library
+
+p5-gnome2-vfs @1.081 (perl)
+    Bindings to Gtk+ library
+
+p5-gtk2 @1.222 (perl)
+    Bindings to Gtk+ library
+
+p5-gtk2-gladexml @1.007 (perl)
+    Bindings to Gtk+ library
+
+p5-gtk2-sourceview @1.000 (perl)
+    Perl wrappers for the GtkSourceView widget
+
+pan2 @0.133 (news)
+    News reader for gtk2
+
+php5-gtk @2.0.1 (php, x11)
+    PHP-GTK: Gtk+ bindings for PHP 5.
+
+policykit-gnome @0.96 (gnome, security)
+    Provides convenience functions for using PolicyKit from GTK+ and GNOME applications.
+
+pure-gtk @0.7 (x11)
+    a collection of bindings to use the GTK+ GUI toolkit version 2.x with Pure
+
+py-gtk2 @2.12.1 (python, x11)
+    PyGTK is the Python binding to GTK+ 2.x
+
+py-gtkmvc @0.9.2 (python, x11)
+    Model-View-Controller for PyGTK2
+
+py25-gtk @2.22.0 (python, x11)
+    PyGTK is the Python binding to GTK+ 2.x
+
+py25-gtkglext @1.1.0 (python, gnome)
+    Python bindings for GtkGLExt
+
+py25-pygtksourceview @2.6.0 (python, x11)
+    Python bindings for GtkSourceView2
+
+py25-webkitgtk @1.1.8 (python, www)
+    Python bindings for thw WebKit GTK+ port
+
+py26-gtk @2.22.0 (python, x11)
+    PyGTK is the Python binding to GTK+ 2.x
+
+py26-ige-mac-integration @0.8.6 (devel)
+    ige-mac-integration has been replaced by gtk-osx-application
+
+py26-pygtksourceview @2.10.1 (python, x11)
+    Python bindings for GtkSourceView2
+
+py26-webkitgtk @1.1.7 (python, www)
+    Python bindings for the WebKit GTK+ port
+
+py27-gtk @2.22.0 (python, x11)
+    PyGTK is the Python binding to GTK+ 2.x
+
+py27-webkitgtk @1.1.7 (python, www)
+    Python bindings for the WebKit GTK+ port
+
+qalculate-gtk @0.9.7 (math)
+    Qalculate! is a multi-purpose desktop calculator for GNU/Linux.
+
+quodlibet @2.2.1 (python, audio, gnome)
+    audio library manager and player for GTK+
+
+rb-gtk2 @0.90.2 (ruby)
+    Ruby/GTK2 is a Ruby binding of GTK+-2.0.x. Ruby/GdkPixbuf2 is a Ruby binding of GdkPixbuf-2.x.
+
+rb-gtkglext @0.90.2 (ruby, gnome)
+    Ruby/GtkGLExt is a Ruby binding of GtkGLExt.
+
+rb-gtkhtml @0.90.2 (ruby, gnome)
+    Ruby/GtkHtml2 is a Ruby binding of GtkHtml2
+
+rb-gtksourceview2 @0.90.2 (ruby, gnome)
+    Ruby/GtkSourceView2 is a Ruby binding of gtksourceview-2.x. (a part of Ruby-Gnome2)
+
+rep-gtk @0.18 (x11)
+    GTK bindings for the librep LISP implementation
+
+stardict @2.4.5 (textproc)
+    A full featured gtk2 dictionary
+
+sylpheed @2.2.3 (mail)
+    Fast, lightweight GTK+ mail client
+
+sylpheed-devel @2.2.0beta7 (mail)
+    Fast, lightweight GTK+ mail client
+
+tsclient @0.150 (net, gnome)
+    A GNOME/GTK+ frontend for rdesktop and other remote desktop tools.
+
+viking @0.9.93 (science)
+    GTK2 GPS Program
+
+webkit-gtk @1.2.5 (www, gnome)
+    Apple's WebKit HTML rendering library for GTK+
+
+wxgtk @2.8.11 (x11)
+    The wxWidgets GUI toolkit with GTK+ bindings
+
+xarchiver @0.4.6 (x11)
+    Xarchiver is a desktop-agnostic GTK+2 frontend to various command line archiving tools
+
+xchat @1.8.11 (irc)
+    GTK+ IRC client
+
+xchat2 @2.8.8 (irc)
+    GTK+2 IRC client
+
+xfce4-axiom-theme @4.4.3 (xfce)
+    Additional theme for xfwm4/gtk2
+
+xpn @1.2.6 (news)
+    Graphical newsreader written in PyGtk.
+
+xqf @1.0.5 (games)
+    GTK+ Front-end to Qstat
+
+Found 125 ports.
+~ >sudo port install py26-gtk
+Warning: port definitions are more than two weeks old, consider using selfupdate
+--->  Computing dependencies for py26-gtk
+--->  Cleaning py26-gtk
+~ >emacs ~/.matplotlib/matplotlibrc
+~ >sudo port search xlib
+Password:
+Sorry, try again.
+Password:
+Warning: port definitions are more than two weeks old, consider using selfupdate
+py-xlib @0.12 (python, x11)
+    python module for the X protocol
+
+xforms @1.0.93sp1 (x11)
+    A graphical user interface toolkit for X based on the X11 Xlib library
+
+Found 2 ports.
+~ >sudo port install py-lib
+Warning: port definitions are more than two weeks old, consider using selfupdate
+Error: Port py-lib not found
+To report a bug, see <http://guide.macports.org/#project.tickets>
+~ >sudo port install py-xlib
+Warning: port definitions are more than two weeks old, consider using selfupdate
+--->  Computing dependencies for py-xlib
+--->  Dependencies to be installed: python24
+--->  Fetching python24
+--->  Attempting to fetch Python-2.4.6.tar.bz2 from ftp://ftp.python.org/pub/python/2.4.6/
+--->  Attempting to fetch Python-2.4.6.tar.bz2 from http://www.python.org//ftp/python/2.4.6/
+--->  Verifying checksum(s) for python24
+--->  Extracting python24
+--->  Applying patches to python24
+--->  Configuring python24
+--->  Building python24
+--->  Staging python24 into destroot
+--->  Installing python24 @2.4.6_7
+--->  Activating python24 @2.4.6_7
+
+To fully complete your installation and make python 2.4 the default, please run:
+	sudo port install python_select
+	sudo python_select python24
+
+--->  Cleaning python24
+--->  Fetching py-xlib
+--->  Attempting to fetch python-xlib-0.12.tar.gz from http://voxel.dl.sourceforge.net/python-xlib
+--->  Verifying checksum(s) for py-xlib
+--->  Extracting py-xlib
+--->  Configuring py-xlib
+--->  Building py-xlib
+--->  Staging py-xlib into destroot
+--->  Installing py-xlib @0.12_1
+--->  Activating py-xlib @0.12_1
+--->  Cleaning py-xlib
+~ >port installed
+Warning: port definitions are more than two weeks old, consider using selfupdate
+The following ports are currently installed:
+  aquaterm @1.0.1_5 (active)
+  atk @1.30.0_0 (active)
+  atlas @3.8.3_4+gcc44 (active)
+  auctex @11.86_0 (active)
+  autoconf @2.68_0 (active)
+  automake @1.11.1_0 (active)
+  bison @2.4.3_0 (active)
+  bzip2 @1.0.6_0 (active)
+  cairo @1.10.0_0
+  cairo @1.10.0_1 (active)
+  ccrypt @1.9_0 (active)
+  cmake @2.8.2_4 (active)
+  curl @7.21.1_0+ssl
+  curl @7.21.2_1+ssl (active)
+  curl-ca-bundle @7.21.1_1
+  curl-ca-bundle @7.21.2_0 (active)
+  db46 @4.6.21_6 (active)
+  dbus @1.2.24_1 (active)
+  dbus-glib @0.86_1 (active)
+  desktop-file-utils @0.15_1 (active)
+  docbook-xml @5.0_0 (active)
+  docbook-xml-4.1.2 @4.1.2_1 (active)
+  docbook-xml-4.2 @4.2_0 (active)
+  docbook-xml-4.3 @4.3_0 (active)
+  docbook-xml-4.4 @4.4_0 (active)
+  docbook-xml-4.5 @4.5_0 (active)
+  docbook-xml-5.0 @5.0_0 (active)
+  docbook-xsl @1.75.2_0 (active)
+  DSDP @5.8_0 (active)
+  eggdbus @0.6_0 (active)
+  emacs @23.2_2 (active)
+  emacs-app @23.2_0 (active)
+  evince @2.30.3_1 (active)
+  exempi @2.1.1_0 (active)
+  expat @2.0.1_1 (active)
+  fftw-3 @3.2.2_0+gcc44 (active)
+  fontconfig @2.8.0_0 (active)
+  freetype @2.4.2_0
+  freetype @2.4.3_0 (active)
+  g95 @0.92_1+gcc42 (active)
+  gcc44 @4.4.4_2
+  gcc44 @4.4.5_0 (active)
+  gconf @2.28.1_0 (active)
+  gd2 @2.0.35_8 (active)
+  gdbm @1.8.3_2 (active)
+  gdk-pixbuf2 @2.22.0_0 (active)
+  getopt @1.1.4_1 (active)
+  gettext @0.18.1.1_2 (active)
+  ghostscript @9.00_4 (active)
+  giflib @4.1.6_1 (active)
+  git-core @1.7.3_0+doc (active)
+  glib2 @2.24.2_0
+  glib2 @2.26.0_1 (active)
+  glpk @4.41_0 (active)
+  gmp @5.0.1_0 (active)
+  gnome-common @2.28.0_0 (active)
+  gnome-desktop @2.30.2_1 (active)
+  gnome-doc-utils @0.20.2_0 (active)
+  gnome-icon-theme @2.30.3_0 (active)
+  gnome-keyring @2.30.3_1 (active)
+  gnome-themes @2.30.2_1 (active)
+  gnuplot @4.4.1_0 (active)
+  gperf @3.0.4_0 (active)
+  grep @2.6.3_0 (active)
+  gsed @4.2.1_0 (active)
+  gsl @1.14_0 (active)
+  gtk-doc @1.15_0 (active)
+  gtk-engines2 @2.20.2_0 (active)
+  gtk2 @2.20.1_0+x11
+  gtk2 @2.22.0_0+x11 (active)
+  gzip @1.4_0 (active)
+  hdf5-18 @1.8.5_0 (active)
+  help2man @1.38.2_0 (active)
+  hicolor-icon-theme @0.12_0 (active)
+  icon-naming-utils @0.8.90_0 (active)
+  icu @4.3.4_0 (active)
+  ImageMagick @6.6.5-0_0+q16 (active)
+  intltool @0.40.6_0 (active)
+  iso-codes @3.20_0
+  iso-codes @3.21_0 (active)
+  jasper @1.900.1_7 (active)
+  jpeg @8b_0 (active)
+  latexmk @4.18_0 (active)
+  lcms @1.19_2 (active)
+  libexif @0.6.19_0 (active)
+  libffi @3.0.9_0 (active)
+  libgcrypt @1.4.6_0 (active)
+  libglade2 @2.6.4_1 (active)
+  libgnome-keyring @2.30.1_1 (active)
+  libgpg-error @1.9_0 (active)
+  libiconv @1.13.1_0 (active)
+  libidl @0.8.14_0 (active)
+  libidn @1.19_0 (active)
+  libmng @1.0.10_2 (active)
+  libpaper @1.1.23-nmu2_0
+  libpaper @1.1.24_0 (active)
+  libpixman @0.18.4_0 (active)
+  libpng @1.2.44_0 (active)
+  libspectre @0.2.6_1 (active)
+  libtasn1 @2.2_0 (active)
+  libtool @2.4_0 (active)
+  libunique @1.1.6_1 (active)
+  libxml2 @2.7.7_0 (active)
+  libxslt @1.1.26_0 (active)
+  lzmautils @4.32.7_1 (active)
+  m4 @1.4.15_0 (active)
+  mercurial @1.6.4_0 (active)
+  metis @4.0.1_0 (active)
+  mpfr @3.0.0-p4_0
+  mpfr @3.0.0-p7_0 (active)
+  nautilus @2.30.1_2 (active)
+  ncbi_tools @20080302_0 (active)
+  ncurses @5.7_0
+  ncurses @5.7_1 (active)
+  ncursesw @5.7_0
+  ncursesw @5.7_1 (active)
+  netcdf @4.1.1_4+dap+netcdf4 (active)
+  ocaml @3.12.0_0 (active)
+  openjpeg @1.3_3 (active)
+  openmotif @2.3.2_2 (active)
+  openssl @1.0.0a_0 (active)
+  orbit2 @2.14.19_0 (active)
+  p5-error @0.17016_0 (active)
+  p5-getopt-long @2.38_0 (active)
+  p5-locale-gettext @1.05_3 (active)
+  p5-pathtools @3.33_0 (active)
+  p5-scalar-list-utils @1.23_0 (active)
+  p5-xml-namespacesupport @1.11_1 (active)
+  p5-xml-parser @2.40_0 (active)
+  p5-xml-sax @0.96_1 (active)
+  p5-xml-sax-expat @0.40_1 (active)
+  p5-xml-simple @2.18_0 (active)
+  p7zip @9.13_1 (active)
+  pango @1.24.5_0
+  pango @1.28.3_0 (active)
+  pcre @8.10_0 (active)
+  pdflib @7.0.5_0 (active)
+  perl5 @5.8.9_0 (active)
+  perl5.8 @5.8.9_3 (active)
+  pkgconfig @0.25_1 (active)
+  policykit @0.96_0 (active)
+  poppler @0.14.3_0
+  poppler @0.14.4_1 (active)
+  poppler-data @0.4.3_0 (active)
+  popt @1.16_0 (active)
+  proctools @0.4pre1_2 (active)
+  ps2eps @1.64_0 (active)
+  py-xlib @0.12_1 (active)
+  py25-biopython @1.55_0 (active)
+  py25-distribute @0.6.14_0 (active)
+  py25-nose @0.11.3_0 (active)
+  py25-numeric @24.2_1 (active)
+  py25-numpy @1.5.0_1+atlas+gcc44 (active)
+  py25-pil @1.1.6_2 (active)
+  py25-reportlab @2.3_1 (active)
+  py26-altgraph @0.7.0_0 (active)
+  py26-bdist_mpkg @0.4.4_0 (active)
+  py26-biopython @1.55_0 (active)
+  py26-cairo @1.8.10_0 (active)
+  py26-configobj @4.6.0_0 (active)
+  py26-cvxopt @1.1.2_0+dsdp+fftw+glpk+gsl (active)
+  py26-dateutil @1.5_0 (active)
+  py26-distribute @0.6.14_0 (active)
+  py26-gobject @2.26.0_0 (active)
+  py26-gtk @2.22.0_0 (active)
+  py26-ipython @0.10_0+scientific (active)
+  py26-libxml2 @2.6.21_0 (active)
+  py26-macholib @1.3_0 (active)
+  py26-matplotlib @1.0.0_0+tkinter (active)
+  py26-modulegraph @0.8_0 (active)
+  py26-nose @0.11.3_0 (active)
+  py26-numeric @24.2_0 (active)
+  py26-numpy @1.5.0_0+gcc44
+  py26-numpy @1.5.0_1+atlas+gcc44 (active)
+  py26-pil @1.1.7_2 (active)
+  py26-pip @0.7.2_0 (active)
+  py26-py2app @0.5.2_0 (active)
+  py26-pyflakes @0.4.0_0 (active)
+  py26-pymacs @0.23_0 (active)
+  py26-pyobjc @2.3_0 (active)
+  py26-pyobjc-cocoa @2.3_0 (active)
+  py26-pyqt4 @4.7.6_0 (active)
+  py26-reportlab @2.4_0 (active)
+  py26-scientific @2.8_2 (active)
+  py26-scipy @0.8.0_0+gcc44 (active)
+  py26-sip @4.11.1_0 (active)
+  py26-tz @2010l_0 (active)
+  python24 @2.4.6_7 (active)
+  python25 @2.5.5_1 (active)
+  python26 @2.6.6_0+no_tkinter (active)
+  python_select @0.3_0 (active)
+  qt4-mac @4.6.3_6 (active)
+  qt4_select @0.3_3 (active)
+  R @2.11.1_2+gcc44+recommended (active)
+  rarian @0.8.1_0 (active)
+  readline @6.1.002_0 (active)
+  rsync @3.0.7_0 (active)
+  shared-mime-info @0.71_0
+  shared-mime-info @0.80_0 (active)
+  sqlite3 @3.7.2_0
+  sqlite3 @3.7.3_0 (active)
+  startup-notification @0.10_0 (active)
+  SuiteSparse @3.4.0_0 (active)
+  swig @2.0.0_0 (active)
+  swig-python @2.0.0_0 (active)
+  szip @2.1_1 (active)
+  t1lib @5.1.2_1 (active)
+  tcl @8.5.8_0
+  tcl @8.5.9_0 (active)
+  texinfo @4.13_2 (active)
+  texlive @2009_3+doc+medium (active)
+  texlive-basic @15576_1+doc (active)
+  texlive-bin @2009_6+motif (active)
+  texlive-bin-extra @15618_3+doc (active)
+  texlive-common @2009_1 (active)
+  texlive-context @14390_1+doc (active)
+  texlive-documentation-base @13822_1+doc (active)
+  texlive-documentation-english @15727_1+doc (active)
+  texlive-fonts-recommended @13822_1+doc (active)
+  texlive-fontutils @15606_3+doc (active)
+  texlive-generic-recommended @13822_1+doc (active)
+  texlive-lang-czechslovak @14727_1+doc (active)
+  texlive-lang-dutch @14727_1+doc (active)
+  texlive-lang-french @14727_1+doc (active)
+  texlive-lang-german @14751_1+doc (active)
+  texlive-lang-italian @13822_1+doc (active)
+  texlive-lang-polish @14727_1+doc (active)
+  texlive-lang-portuguese @13822_1+doc (active)
+  texlive-lang-spanish @13822_1+doc (active)
+  texlive-lang-ukenglish @14727_1+doc (active)
+  texlive-latex @15495_1+doc (active)
+  texlive-latex-recommended @15271_1+doc (active)
+  texlive-luatex @13992_1+doc (active)
+  texlive-math-extra @15560_1+doc (active)
+  texlive-metapost @15388_1+doc (active)
+  texlive-xetex @14329_1+doc (active)
+  tiff @3.9.4_0 (active)
+  tk @8.5.8_0
+  tk @8.5.9_0 (active)
+  wget @1.12_3+ssl (active)
+  xbitmaps @1.1.0_1 (active)
+  Xft2 @2.1.14_0 (active)
+  xmlcatmgr @2.2_1 (active)
+  xorg-bigreqsproto @1.1.0_0 (active)
+  xorg-compositeproto @0.4.1_0 (active)
+  xorg-damageproto @1.2.0_0 (active)
+  xorg-fixesproto @4.1.1_0 (active)
+  xorg-inputproto @2.0_0 (active)
+  xorg-kbproto @1.0.5_0 (active)
+  xorg-libice @1.0.6_0
+  xorg-libice @1.0.7_0 (active)
+  xorg-libpthread-stubs @0.3_0 (active)
+  xorg-libsm @1.1.1_0 (active)
+  xorg-libX11 @1.3.6_1 (active)
+  xorg-libXau @1.0.6_0 (active)
+  xorg-libxcb @1.7_0+python26 (active)
+  xorg-libXcomposite @0.4.2_0 (active)
+  xorg-libXcursor @1.1.10_0 (active)
+  xorg-libXdamage @1.1.3_0 (active)
+  xorg-libXdmcp @1.0.3_0 (active)
+  xorg-libXext @1.1.2_0 (active)
+  xorg-libXfixes @4.0.5_0 (active)
+  xorg-libXi @1.3.2_0 (active)
+  xorg-libXinerama @1.1_0 (active)
+  xorg-libXmu @1.0.5_0 (active)
+  xorg-libXp @1.0.0_3 (active)
+  xorg-libXrandr @1.3.0_1 (active)
+  xorg-libXScrnSaver @1.2.0_0 (active)
+  xorg-libXt @1.0.8_0 (active)
+  xorg-printproto @1.0.4_0 (active)
+  xorg-randrproto @1.3.1_0 (active)
+  xorg-renderproto @0.11.1_0 (active)
+  xorg-scrnsaverproto @1.2.0_0 (active)
+  xorg-util-macros @1.10.1_0 (active)
+  xorg-xcb-proto @1.6_0+python26 (active)
+  xorg-xcb-util @0.3.6_0 (active)
+  xorg-xcmiscproto @1.2.0_0 (active)
+  xorg-xextproto @7.1.2_0 (active)
+  xorg-xf86bigfontproto @1.2.0_0 (active)
+  xorg-xineramaproto @1.2_0 (active)
+  xorg-xproto @7.0.18_0 (active)
+  xorg-xtrans @1.2.5_0 (active)
+  xpm @3.5.8_0 (active)
+  xrender @0.9.6_0 (active)
+  zlib @1.2.5_0 (active)
+~ >port installed gtk
+Warning: port definitions are more than two weeks old, consider using selfupdate
+None of the specified ports are installed.
+~ >port info
+Warning: port definitions are more than two weeks old, consider using selfupdate
+Can't map the URL 'file://.' to a port description file ("Could not find Portfile in /Users/bh0085").
+Please verify that the directory and portfile syntax are correct.
+To use the current port, you must be in a port's directory.
+~ >port info matplotlib
+Warning: port definitions are more than two weeks old, consider using selfupdate
+Error: Port matplotlib not found
+~ >port info py26-matplotlib
+Warning: port definitions are more than two weeks old, consider using selfupdate
+py26-matplotlib @1.0.0 (python, graphics, math)
+Variants:             cairo, ghostscript, gtk2, latex, qt4, [+]tkinter, universal, wxpython
+
+Description:          Matplotlib is a pure python plotting library with the goal of making publication quality plots using a syntax familiar to matlab users. The library uses
+                      numpy for handling large data sets and supports a variety of output backends. This port provides variants for the different GUIs (gtk2, tkinter, wxpython).
+Homepage:             http://matplotlib.sourceforge.net
+
+Library Dependencies: python26, freetype, libpng, py26-dateutil, py26-tz, py26-numpy, py26-configobj, py26-pyobjc-cocoa
+Platforms:            darwin
+License:              unknown
+Maintainers:          ram@macports.org, openmaintainer@macports.org
+~ >port variants py26-matplotlib
+Warning: port definitions are more than two weeks old, consider using selfupdate
+py26-matplotlib has the variants:
+   cairo: Enable Cairo backends
+   ghostscript: Enable GhostScript support
+   gtk2: Enable GTKAgg backend
+   latex: Enable LaTeX support
+   qt4: Enable QT4Agg backend
+[+]tkinter: Enable tkAgg backend
+   universal: Build for multiple architectures
+   wxpython: Enable wxAgg backend
+~ >port installed | grep py26
+Warning: port definitions are more than two weeks old, consider using selfupdate
+  py26-altgraph @0.7.0_0 (active)
+  py26-bdist_mpkg @0.4.4_0 (active)
+  py26-biopython @1.55_0 (active)
+  py26-cairo @1.8.10_0 (active)
+  py26-configobj @4.6.0_0 (active)
+  py26-cvxopt @1.1.2_0+dsdp+fftw+glpk+gsl (active)
+  py26-dateutil @1.5_0 (active)
+  py26-distribute @0.6.14_0 (active)
+  py26-gobject @2.26.0_0 (active)
+  py26-gtk @2.22.0_0 (active)
+  py26-ipython @0.10_0+scientific (active)
+  py26-libxml2 @2.6.21_0 (active)
+  py26-macholib @1.3_0 (active)
+  py26-matplotlib @1.0.0_0+tkinter (active)
+  py26-modulegraph @0.8_0 (active)
+  py26-nose @0.11.3_0 (active)
+  py26-numeric @24.2_0 (active)
+  py26-numpy @1.5.0_0+gcc44
+  py26-numpy @1.5.0_1+atlas+gcc44 (active)
+  py26-pil @1.1.7_2 (active)
+  py26-pip @0.7.2_0 (active)
+  py26-py2app @0.5.2_0 (active)
+  py26-pyflakes @0.4.0_0 (active)
+  py26-pymacs @0.23_0 (active)
+  py26-pyobjc @2.3_0 (active)
+  py26-pyobjc-cocoa @2.3_0 (active)
+  py26-pyqt4 @4.7.6_0 (active)
+  py26-reportlab @2.4_0 (active)
+  py26-scientific @2.8_2 (active)
+  py26-scipy @0.8.0_0+gcc44 (active)
+  py26-sip @4.11.1_0 (active)
+  py26-tz @2010l_0 (active)
+~ >sudo port install py26-macports
+Password:
+Warning: port definitions are more than two weeks old, consider using selfupdate
+Error: Port py26-macports not found
+To report a bug, see <http://guide.macports.org/#project.tickets>
+~ >sudo port install py26-matplotlib
+Warning: port definitions are more than two weeks old, consider using selfupdate
+--->  Computing dependencies for py26-matplotlib
+--->  Cleaning py26-matplotlib
+~ >port reinstall
+Warning: port definitions are more than two weeks old, consider using selfupdate
+Unrecognized action "reinstall"
+~ >sudo port remove py26-matplotlib
+Warning: port definitions are more than two weeks old, consider using selfupdate
+Unrecognized action "remove"
+~ >sudo port uninstall py26-matplotlib
+Warning: port definitions are more than two weeks old, consider using selfupdate
+--->  Deactivating py26-matplotlib @1.0.0_0+tkinter
+--->  Cleaning py26-matplotlib
+--->  Uninstalling py26-matplotlib @1.0.0_0+tkinter
+--->  Cleaning py26-matplotlib
+~ >port variants py26-matplotlib
+Warning: port definitions are more than two weeks old, consider using selfupdate
+py26-matplotlib has the variants:
+   cairo: Enable Cairo backends
+   ghostscript: Enable GhostScript support
+   gtk2: Enable GTKAgg backend
+   latex: Enable LaTeX support
+   qt4: Enable QT4Agg backend
+[+]tkinter: Enable tkAgg backend
+   universal: Build for multiple architectures
+   wxpython: Enable wxAgg backend
+~ >port variansudo port install py26-matplotlib +gtk2 +qt4 +cairo +wxpython +latex
+Warning: port definitions are more than two weeks old, consider using selfupdate
+--->  Computing dependencies for qt4-mac
+--->  Fetching qt4-mac
+--->  Attempting to fetch qt-everywhere-opensource-src-4.7.0.tar.gz from http://ftp.heanet.ie/mirrors/ftp.trolltech.com/pub/qt/source/
+^C
+~ >port clean py26-matplotlib
+Warning: port definitions are more than two weeks old, consider using selfupdate
+--->  Cleaning py26-matplotlib
+Warning: Only cleaning in ~/.macports; insufficient privileges for standard locations
+Error: error deleting "/opt/local/var/macports/logs/_opt_local_var_macports_sources_rsync.macports.org_release_ports_python_py26-matplotlib/main.log": permission denied
+~ >sudo port clean py26-matplotlib
+Warning: port definitions are more than two weeks old, consider using selfupdate
+--->  Cleaning py26-matplotlib
+~ >sudo port csudo port install py26-matplotlib +gtk2 +cairo +wxpython +latex
+Warning: port definitions are more than two weeks old, consider using selfupdate
+--->  Computing dependencies for py26-matplotlib
+--->  Dependencies to be installed: py26-wxpython wxWidgets-python mesa glut makedepend xorg-dri2proto xorg-glproto
+--->  Fetching glut
+--->  Verifying checksum(s) for glut
+--->  Extracting glut
+--->  Configuring glut
+--->  Building glut
+--->  Staging glut into destroot
+--->  Installing glut @3.7_3
+--->  Activating glut @3.7_3
+--->  Cleaning glut
+--->  Fetching makedepend
+--->  Attempting to fetch makedepend-1.0.2.tar.bz2 from http://lil.fr.distfiles.macports.org/makedepend
+--->  Verifying checksum(s) for makedepend
+--->  Extracting makedepend
+--->  Configuring makedepend
+--->  Building makedepend
+--->  Staging makedepend into destroot
+--->  Installing makedepend @1.0.2_0
+--->  Activating makedepend @1.0.2_0
+--->  Cleaning makedepend
+--->  Fetching xorg-dri2proto
+--->  Attempting to fetch dri2proto-2.3.tar.bz2 from http://lil.fr.distfiles.macports.org/xorg-dri2proto
+--->  Verifying checksum(s) for xorg-dri2proto
+--->  Extracting xorg-dri2proto
+--->  Configuring xorg-dri2proto
+--->  Building xorg-dri2proto
+--->  Staging xorg-dri2proto into destroot
+--->  Installing xorg-dri2proto @2.3_0
+--->  Activating xorg-dri2proto @2.3_0
+--->  Cleaning xorg-dri2proto
+--->  Fetching xorg-glproto
+--->  Attempting to fetch glproto-1.4.12.tar.bz2 from http://distfiles.macports.org/xorg-glproto
+--->  Verifying checksum(s) for xorg-glproto
+--->  Extracting xorg-glproto
+--->  Configuring xorg-glproto
+--->  Building xorg-glproto
+--->  Staging xorg-glproto into destroot
+--->  Installing xorg-glproto @1.4.12_0
+--->  Activating xorg-glproto @1.4.12_0
+--->  Cleaning xorg-glproto
+--->  Fetching mesa
+--->  Attempting to fetch MesaLib-7.8.2.tar.bz2 from http://distfiles.macports.org/mesa
+--->  Attempting to fetch MesaGLUT-7.8.2.tar.bz2 from http://distfiles.macports.org/mesa
+--->  Attempting to fetch MesaApple-7.8.2-r1.tar.bz2 from http://distfiles.macports.org/mesa
+--->  Verifying checksum(s) for mesa
+--->  Extracting mesa
+--->  Applying patches to mesa
+--->  Configuring mesa
+--->  Building mesa
+--->  Staging mesa into destroot
+--->  Installing mesa @7.8.2_2
+--->  Activating mesa @7.8.2_2
+--->  Cleaning mesa
+--->  Fetching wxWidgets-python
+--->  Attempting to fetch wxPython-src-2.8.10.1.tar.bz2 from http://voxel.dl.sourceforge.net/wxpython
+^C
+~ >sudo port install py26-matplotlib +gtk2 +cairo +latex
+Password:
+Warning: port definitions are more than two weeks old, consider using selfupdate
+Error: Requested variants "+cairo+gtk2+latex" do not match original selection "+cairo+gtk2+latex+wxpython".
+Please use the same variants again, perform 'port clean py26-matplotlib' or specify the force option (-f).
+Error: Status 1 encountered during processing.
+To report a bug, see <http://guide.macports.org/#project.tickets>
+~ >sudo port clean py26-matplotlib
+Warning: port definitions are more than two weeks old, consider using selfupdate
+--->  Cleaning py26-matplotlib
+~ >sudo port install py26-matplotlib +gtk2 +cairo +latex
+Warning: port definitions are more than two weeks old, consider using selfupdate
+--->  Computing dependencies for py26-matplotlib
+--->  Fetching py26-matplotlib
+--->  Verifying checksum(s) for py26-matplotlib
+--->  Extracting py26-matplotlib
+--->  Applying patches to py26-matplotlib
+--->  Configuring py26-matplotlib
+--->  Building py26-matplotlib
+--->  Staging py26-matplotlib into destroot
+--->  Installing py26-matplotlib @1.0.0_0+cairo+gtk2+latex
+--->  Activating py26-matplotlib @1.0.0_0+cairo+gtk2+latex
+
+The default backend is now the non-interactive Agg backend, different
+backends can be specified using the ~/.matplotlib/matplotlibrc file.
+More details, regarding backends, can be found in the matplotlib FAQ:
+
+http://matplotlib.sourceforge.net/faq/installing_faq.html#what-is-a-backend
+
+--->  Cleaning py26-matplotlib
+~ >emacs ~/.matplotlib/matplotlibrc
+~ >emacs ~/.matplotlib/matplotlibrc
+~ >cd ~/Programming/Python/compbio/
+compbio >cd temp
+temp >cd ..
+compbio >lsc
+5s/            __init__.py    bin/           class/         data/          mpl/           phylo/         rna.ps         src/           trees/
+NOTES          __init__.pyc   biopython/     config/        genomes@       ncbi/          projects/      sequences@     temp/          utils/
+README         a.txt          bsort/         covary/        learning/      network/       rna/           site-packages/ temp.mat       utils.io
+compbio >cd tests
+-bash: cd: tests: No such file or directory
+compbio >mkdir tests
+compbio >cd tests/
+tests >emacs drag_rect.py
+tests >touch tests/__init__.py
+touch: tests/__init__.py: No such file or directory
+tests >lsc test
+ls: test: No such file or directory
+tests >cd ..
+compbio >touch tests/__init__.py
+compbio >emacs ~/Programming/avida/run_avida.py
+compbio >emacs ~/Programming/avida/run_avida.py
+compbio >port installed | grep matplot
+Warning: port definitions are more than two weeks old, consider using selfupdate
+  py26-matplotlib @1.0.0_0+cairo+gtk2+latex (active)
+compbio >mkdir ~/Downloads/fly
+compbio >ssh tin
+Warning: untrusted X11 forwarding setup failed: xauth key data not generated
+Warning: No xauth data; using fake authentication data for X11 forwarding.
+Last login: Fri Jan 28 10:29:03 2011 from 31-34-199.wireless.csail.mit.edu
+                        Welcome to TIN.BROADINSTITUTE.ORG (Sn)  (login host)
+   _____            
+ (50)_ _|               Ordinary tin is a  silvery-white metal, is
+ | (___  _ __           malleable, somewhat ductile and has highly 
+  \___ \| '_ \          crystalline structure. Due to the breaking
+  ____) | | | |         of these  crystals, a  "tin cry"  is heard
+ |_____/|_| |_|         when a bar is bent. 
+                                                -- WebElements.com
+
+               Authorized use only.  For problems or questions,
+               contact <help@broadinstitute.org>
+
+IMPORTANT:  This is a LOGIN host and in order to ensure people can log
+in from outside Broad, memory limits have been put in place.  This may
+stop certain  applications with high memory requirements from running.
+Please send  such applications  to  the LSF farm,  or use your group's
+application server. Processes that likely won't be able to run on this
+machine include:  Java  requiring a heap size larger than 12M,  R jobs
+manipulating large data sets, and any memory intensive applications. 
+
+Please use -o with bsub to avoid output files being emailed or lost in /tmp.
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+REMINDER:  CentOS login hosts do not have the LSF application suite
+available by default.  Run "use LSF" to load the tools.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Prepending: LSF (ok)
+Prepending: Python-2.5 (ok)
+~ >~pouyak/bin/GetOrgVars.sh fly
+NUMSP=12
+BLFILEWP='-bp /seq/compbio/pouyak/data/flies/ucsc_dm3.ptree'
+EXTRACTMFAS=0
+ALIGNFILE=/seq/compbio/pouyak/data/flies/alignment-files-ucsc_dm3.txt
+GETSEQORG=fly
+~ >ls ~rasmus/sw
+ls: /home/radon00/rasmus/sw: Permission denied
+~ >echo A chr1 10 40 | ~pouyak/bin/extract-mfa 12 /seq/compbio/pouyak/data/flies/alignment-files-ucsc_dm3.txt 
+~ >echo A chr1 10 4000 | ~pouyak/bin/extract-mfa 12 /seq/compbio/pouyak/data/flies/alignment-files-ucsc_dm3.txt 
+~ >echo A chr2L 10 40 | ~pouyak/bin/extract-mfa 12 /seq/compbio/pouyak/data/flies/alignment-files-ucsc_dm3.txt 
+A chr2L 10 40
+>dmel
+ACGACAGAGGAAGCAGAACAGATATTTAGAT
+>dsim
+acgacaaggagagcaagagagatagtcagat
+>dsec
+tcgacagcgagagcaatagatatatttaaag
+>dyak
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+>dere
+------------GAAAAACAGATATTTACCT
+>dana
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+>dpse
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+>dper
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+>dwil
+acgacagaggaagcagaacagatatttagat
+>dvir
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+>dmoj
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+>dgri
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+
+~ >echo A chr2L 10 40 | ~pouyak/bin/extract-mfa 12 /seq/compbio/pouyak/data/flies/alignment-files-ucsc_dm3.txt 
+~ >echo A chr2L 10 40 | ~pouyak/bin/extract-mfa -k 3  /seq/compbio/pouyak/data/flies/alignment-files-ucsc_dm3.txt 
+A chr2L 10 40
+>dmel
+ACGACAGAGGAAGCAGAACAGATATTTAGAT
+>dsim
+acgacaaggagagcaagagagatagtcagat
+
+~ >echo A chr2L 10 40 | ~pouyak/bin/extract-mfa 12 /seq/compbio/pouyak/data/flies/alignment-files-ucsc_dm3.txt 
+A chr2L 10 40
+>dmel
+ACGACAGAGGAAGCAGAACAGATATTTAGAT
+>dsim
+acgacaaggagagcaagagagatagtcagat
+>dsec
+tcgacagcgagagcaatagatatatttaaag
+>dyak
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+>dere
+------------GAAAAACAGATATTTACCT
+>dana
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+>dpse
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+>dper
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+>dwil
+acgacagaggaagcagaacagatatttagat
+>dvir
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+>dmoj
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+>dgri
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+
+~ >head ~pouyak/work/motifs/flies/data/regions/genome-annot
+genome-annot-compare.txt  genome-annot.txt          
+~ >head ~pouyak/work/motifs/flies/data/regions/genome-annot.txt 
+Intergenic	chr2L	1	23011544	.	
+TSSMAll	chr2L	1	7528	+	FBtr0300689
+TSSMAll	chr2L	1	7528	+	FBtr0300690
+TSSM2000	chr2L	5529	7528	+	FBtr0300689
+TSSM2000	chr2L	5529	7528	+	FBtr0300690
+TSSM500	chr2L	7029	7528	+	FBtr0300689
+TSSM500	chr2L	7029	7528	+	FBtr0300690
+5UTR	chr2L	7529	7679	+	FBtr0300689
+5UTR	chr2L	7529	7679	+	FBtr0300690
+TSSP2000	chr2L	7529	9528	+	FBtr0300689
+~ >~pouyak/bin/prec-overlap CDS Intron ~pouyak/work/motifs/flies/data/regions/genome-annot.txt  | head
+
+~ >~pouyak/bin/prec-overlap CDS Intron < ~pouyak/work/motifs/flies/data/regions/genome-annot.txt  | head
+CDS	chr2L	7680	8116
+Intron	chr2L	8117	8192
+CDS	chr2L	8193	8610
+Intron	chr2L	8611	8667
+CDS	chr2L	8668	9276
+CDS	chr2L	11215	11344
+Intron	chr2L	11345	11409
+CDS	chr2L	11410	11518
+Intron	chr2L	11519	11778
+CDS	chr2L	11779	12221
+~ >~pouyak/bin/prec-overlap CDS Intron < ~pouyak/work/motifs/flies/data/regions/genome-annot.txt  | grep Intron | head
+Intron	chr2L	8117	8192
+Intron	chr2L	8611	8667
+Intron	chr2L	11345	11409
+Intron	chr2L	11519	11778
+Intron	chr2L	12222	12285
+Intron	chr2L	12929	13519
+Intron	chr2L	13626	13682
+Intron	chr2L	14875	14932
+Intron	chr2L	15712	17052
+Intron	chr2L	17137	19884
+~ >~pouyak/bin/prec-overlap-s.sh CDS Intron < ~pouyak/work/motifs/flies/data/regions/genome-annot.txt  | head              
+/home/radon01/pouyak/bin/prec-overlap-s.sh: line 17: prec-overlap: command not found
+/home/radon01/pouyak/bin/prec-overlap-s.sh: line 20: prec-overlap: command not found
+/home/radon01/pouyak/bin/prec-overlap-s.sh: line 18: prec-overlap: command not found
+~ >export PATH=$PATH:~pouyak/bin
+~ >~pouyak/bin/prec-overlap-s.sh CDS Intron < ~pouyak/work/motifs/flies/data/regions/genome-annot.txt  | head
+CDS	chr2L	7680	8116	+
+Intron	chr2L	8117	8192	+
+CDS	chr2L	8193	8610	+
+Intron	chr2L	8611	8667	+
+CDS	chr2L	8668	9276	+
+CDS	chr2L	11215	11344	-
+Intron	chr2L	11345	11409	-
+CDS	chr2L	11410	11518	-
+Intron	chr2L	11519	11778	-
+CDS	chr2L	11779	12221	-
+~ >~pouyak/bin/prec-overlap-s.sh CDS Intron < ~pouyak/work/motifs/flies/data/regions/genome-annot.txt  | awk '$1=="Intron" && $5 != ".'" | head
+> ~pouyak/bin/prec-overlap-s.sh CDS Intron < ~pouyak/work/motifs/flies/data/regions/genome-annot.txt  | awk '$1=="Intron" && $5 != "."' | head
+> ~pouyak/bin/prec-overlap-s.sh CDS Intron < ~pouyak/work/motifs/flies/data/regions/genome-annot.txt  | awk '$1=="Intron" && $5 != ".'" | head
+~pouyak/bin/prec-overlap-s.sh CDS Intron < ~pouyak/work/motifs/flies/data/regions/genome-annot.txt  | awk '$1=="Intron" && $5 != "."' | head
+~ >~pouyak/bin/prec-overlap-s.sh CDS Intron < ~pouyak/work/motifs/flies/data/regions/genome-annot.txt  | head'$1=="Ihead
+~ >
+~ >~pouyak/bin/prec-overlap-s.sh CDS Intron < ~pouyak/work/motifs/flies/data/regions/genome-annot.txt  | awk '$1=="Intron" && $5 != ".'" | head
+~pouyak/bin/prec-overlap-s.sh CDS Intron < ~pouyak/work/motifs/flies/data/regions/genome-annot.txt  | awk '$1=="Intron" && $5 != "."' | he  
+~ >
+~ >~pouyak/bin/prec-overlap-s.sh CDS Intron < ~pouyak/work/motifs/flies/data/regions/genome-annot.txt  | awk '$1=="Intron" && $5 != "."' | head
+Intron	chr2L	8117	8192	+
+Intron	chr2L	8611	8667	+
+Intron	chr2L	11345	11409	-
+Intron	chr2L	11519	11778	-
+Intron	chr2L	12222	12285	-
+Intron	chr2L	12929	13519	-
+Intron	chr2L	13626	13682	-
+Intron	chr2L	14875	14932	-
+Intron	chr2L	15712	17052	-
+Intron	chr2L	17137	19884	-
+~ >prec-overlap-s.sh CDS Intron < ~pouyak/work/motifs/flies/data/regions/genome-annot.txt  | awk '$1=="Intron" && $5 != "."' | head | extract
+-bash: extract: command not found
+
+~ >echo A chr2L 10 40 | ~pouyak/bin/extract-mfa 12 /seq/compbio/pouyak/data/flies/alignment-files-ucsc_dm3.txt 
+~ >prec-overlap-s.sh CDS Intron < ~pouyak/work/motifs/flies/data/regions/genome-annot.txt  | awk '$1=="Intron" && $5 != "."' | head  |       
+~ >prec-overlap-s.sh CDS Intron < ~pouyak/work/motifs/flies/data/regions/genome-annot.txt  | awk '$1=="Intron" && $5 != "."' | head | extract-mfa 12 /seq/compbio/pouyak/data/flies/alignment-files-ucsc_dm3.txt 
+Intron chr2L 8117 8192 +
+>dmel
+GTAAATAAATTTTTTATATCCATCCATATCCGAATCAGTGGCAATAATGCAAAATGCTGATTTTAT-CACCAATTAG
+>dsim
+GTAAATTAATGTTTTATATCCAAACGT----GATTCATTTGCAATAATGCAAAATCCTGATTTTAT-CACCCAATAG
+>dsec
+GTAAATTAATGCTTTATATCCAAACGT----GAGTCATTAGCAATAATGCAAAATTCTGATTTTAT-CACCCAATAG
+>dyak
+GTA----AGTGCTTGACATCCAAACGA----AACACCCTTGCAATAATGAAACATCCTGATTTTAT-CATCCATTAG
+>dere
+GTA----AATGCTTTATACCCAAACTT----AAATTCCTTGCAGTAATGCAAAATCCTGATTTTAT-CATCCGTTAG
+>dana
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+>dpse
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+>dper
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+>dwil
+GTA----AGCAATATATTTTCAATGATTGACGATTCAATTG-----ATCCAATAACATGCTCTTACACATCCTCTAG
+>dvir
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+>dmoj
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+>dgri
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+
+Intron chr2L 8611 8667 +
+>dmel
+T---GTCT------TTCGTACCCATTGAAAACGTTGTGGTGCTTGCGCTTTAAAATC-TTATATTAG
+>dsim
+T---GTGT-----CCTCGTACCCATTTAA----------TGCTTGCGCTTTAAAATCTTTATTTCAG
+>dsec
+T---GTGT-----CCTCGTACCCATTTAA----------TGCTTGCGCTTTAAAATC-TTATTTCAG
+>dyak
+T---GTGTG-GTTCCTCGTAC---TTTACAAT-------TATTCACACATTACAATT-TTATTTCAG
+>dere
+T---ATGTGTGTTCGTCGTACCCATTTAAAGCGATCTGGTATTCGCACTTTAAAATC-TTATTTCAG
+>dana
+-------------CTTCAGACACAAAGATGTC-------TAATCTCCCTT-----CC-TCGATCCAG
+>dpse
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN------------
+>dper
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN------------
+>dwil
+T------------CTTTCTAAACATTTAA----------TCGTATCGTATT-------GTGCATCAA
+>dvir
+----GTAT-----TCTATTATGTACAAAT----------TACTT-----------TT-TATCTCTAG
+>dmoj
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNtc-tATTACTAG
+>dgri
+TGGCATAT-----GCATATATGTACATAT----------TAACT-----------CT-CTTCGCTAG
+
+Intron chr2L 11345 11409 -
+>dmel
+GTGTGC----TTCTACAAGA----AACATT-----------------GACATAA--G----C------TTTAACCT---ACTAATTTTTTTTTTT--TACC-----TA-----ACAG
+>dsim
+GTAAGC----TTCTACAAAA----AACATT-----------------GAAATAA--A----C------TTTAACGT---ACTAATATTTTTTTT----ACT-----TA-----ACAG
+>dsec
+GTGAGC----TTCTACAAAA----AACATT-----------------GACATAA--A----C------TTTAACGT---ACTAATATTTTTTT-----ACT-----TA-----ACAG
+>dyak
+GTGCGG----TACTAAAATA----AACATT-----------------TACATAA--G----C------TGTATCCT---ACTAATTATTGAAAT----ACT-----TA-----ACAG
+>dere
+GTACGC----TTCAACAAAA----AACATT-----------------GAAAATA--C----A------CGTAACCT---ACTAATTATGTTATT----ACT-----CA-----ACAG
+>dana
+GTTCGTA---TCCTGCCGTATCCAGAAATT-----------------GAAGAAATCC----C------TCTAACCTCAAGCTGACCCTCCCATTC--AATT-----TACTGAAACAG
+>dpse
+GTGCGTGCTCTCATAAAACA----AACACA--AGCAGTCataataaataaataa--a----t------taaaaaat---aataattttCT--------TCA-----AA-----ACAG
+>dper
+GTGCGTGCTCTCATAAAACA----AACACATAAGCAGTCataataaatcaataa--a----t------aaaaaaat---aataattttCT--------TCA-----AA-----ACAG
+>dwil
+GTAA------CTAAATTGCA----AGACTT-----------------AAAGCAA--G----CCAATAATATATATT---AATTACTCTTCGTTTCGATCCA-----TT-----TCAG
+>dvir
+GTATGTA----AATGATCGC----ACTACC-----------------GTTGCAA--T-----------TTCATCTT---ATTATTATA----------TTC-----TT-----TCAG
+>dmoj
+GTACGTA---TAACACCTTT----AATTTT-----------------GTTTCAA--T--------------ATCTT---ACTGTTTTT----------ATT-----TT-----TTAG
+>dgri
+GTGTGTA------TATTTAT----AAGGTT-----------------GCTACAA--AAGTTC------CTAATTTA---ATTAATTAA----------ATTCTCATTT-----TTAG
+
+Intron chr2L 11519 11778 -
+>dmel
+GTGAGTAATC------ATTT---------A-------TTTACT--------------AACATTATTCCAC--C--------------TATTTTAATTTGCTGTT-------------TTGTA--------CGTA-------TCTACATT-------TAA-----AT--GT---TTT---------------------CGTTTCGACATTAG--TTAC----------------TT-----TCGGCA-----------------------------------------------ACATAATTCTTA------------------------------------------TAAAA---------ATT---TACTT----------TTTA-AAAA-----------CTTGATTTTAAGTATACGCAC----------CAAACAACTTTAAATAT--A---------------------------------------TACTTT------TATCTTATTTTAAAAGC---ACGG--------GCCC-A----------CATTATATC-----TGTACAT--------AACTTTTTTTTT-CTGTCATCTCT--------------ATGAAAATGTAG
+>dsim
+GTGAGTAATC------ATTT---------A-------TTCACT--------------AACATTATTCGAG--C--------------TATTTCGATTTGTTATT-------------GTGTA--------CGTA-------TCTACATT-------TAA-----AT--GT---TTT---------------------CGTTCCGTTATTTT--TTAC----------------TT-----TTGGCA-----------------------------------------------ATTTAGTTCtaa-----------------------------------------ataaaa---------att---taaat----------ttta-aaa------------ttaGATTTTAGGTATACCCCC----------AAAACAACTATAAATGCTGA---------------------------------------TACTTT------AATTATATCCAAATTAT---ATAT--------ACC--A----------CATTATATC-----TGTACCT--------AACATTTTTTTTTCGGTCATCCCC--------------ATGAAAATGTAG
+>dsec
+GTGAGTAATC------ATTT---------A-------TTCACT--------------AACATTATTCGAG--C--------------TATTTCGATTTGTTATT-------------GTGTA--------CGTA-------TCTACATT-------TAA-----AT--GT---TTT---------------------CATTCCGTTATTTT--TTAC----------------TT-----TCGGCA-----------------------------------------------ATTTAGTTCtaa-----------------------------------------ataaaa---------att---taaat----------ttta-aaa------------ttaGATTTTAGGTATACCCCC----------AAAACAACTCTAAATGCTGA---------------------------------------TACTTT------AATTATATCCAAATTAT---ATAT--------ACC--A----------CATTATATC-----TGTACCT--------AACATTTTTTTT-CGGTCATCCCC--------------ATGAAAATGTAG
+>dyak
+GTGAGTAATC------AACT---------G-------TTCACT--------------AACGTCATCCCAC--T--------------TATTTTGTTTTGTTAT--------------GTATA--------CGTA-------TCTTCATT-------TAAGAATTATATGT---TTT---------------------CGATTCTTTGTTTTGTTTAG----------------TTATGTATGCTTATCTTCATTTAAAAATTTTATGTGTTCGTTGCTTTTTTTTTTAAGTTCATTTAGTACTTA------------------------------------------TAAAA---------ACT---TAATT----------TTTGCAAACT----------TTTGATTTTAGGTATGCCCAC----------CAAACAACTCTAAATGC--AG---------------------------------ATA--CATTTT------TCTTTTCTTTAAAAGAC----CGT--------ACC--GTACCATACGTTTTTATGAC-----AGTACTT--------AACTTTTTTTTT-ATGTCATCCCT--------------ATAAAAATGTAG
+>dere
+GTGAGTAATC------AGTT---------A-------TTCACT--------------AGCATAATCGCAC--T--------------TTTTTCGGTTTGTAAT--------------GTGTA--------CGTA-------TCTACATT-------TAAAAATTAT--GT---TCT---------------------CGGTGCGTCATTTT--TTAG----------------TT-----TACTTA-----------------------------------------------ATTTAGTACTTA------------------------------------------TAAAA---------ATT---AAAGT----------TGTA-AAACT----------TTTGATTTTAGGTATGCGC---------------------CTGAGCCC--A---------------------------------------CATTTT------ACTTTACGTT--------------------------------------TTTTATAAC-----TGTACTT--------GACAATTTTTGT-CTATCATCCCT--------------ATAAAAATATAG
+>dana
+GTGAGTGG-------------------------------------------------AGCGCCTCTTTGA--T--------------TGTTCAGATAGCTTA-----------------------------GTG-------TCT-TGCT-------CGA-----GT--GT---CTT-----------------------GTCCTGCATCTT--ATAC----------------ATCT---CATGCA-----------------------------------------------ACTCTTATCTTA------------------------------------------TACGC--------CATT---AGACT----------TCTA-GAAGTCTG-------TTCTTTTTTGAGTAATTGCTT----------CAAAGAATATCTGATTT--G---------------------------------------TGTTTA------TTTATTGTTNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNTGTAG
+>dpse
+GTGAGTGAAC------CACT---------C-------CCTAGT--------------AGTTTAATATAAC--C--------------CGCTTTTGTCTGTTCTC-------------TTGTAAAAATACCCATACAA----TTTACATTAATTCTGCAA-----AT--GT---TCTGTACTGGGAATATCACTGGTCAAATCACTTATCTA--TTGT----------------CA-----ACATCA-----------------------------------------------ATGTGGCTTTTATT--------------------------------------CGTTATT---------ATT---TAAATAAGCCGAATGCTTA-CCATTTTATCTACCCTTTGATTTTAGATCTGCAACAGTAATTGT-ACAACCGACACATAATCC--AGT--CCAATTTGTAATATTAAAGCTGCCCACT--ATT--TATTTC------TACAATCTTTAAGTGGTTTTGCAT--------GCCCTA----------TGTAATATT-----TTTAAAC--------GACTTATGTCCT-ATGTAATCTATTCT--TCACTGTACataaataCGTAG
+>dper
+GTGAGTGAAC------CACT---------C-------CCTAGT--------------AGTTTAATATAAC--C--------------CGCTTTTGTCTGTTCTC-------------TTGTAAAAATACCCATACAA----TTTACATTAATTGTGCAA-----AT--GT---TCTGTACTGGGAATATCACTGGTCAAATCACTTATCTA--TTGT----------------CA-----ACATCA-----------------------------------------------ATGTGGCTTTTATT--------------------------------------CGTTATT---------ATT---TAAATCAGCCGAATGCTTA-CCATTTTATCTACCCTTTGATTTTAGATCTGCAACAGTAATTGT-ACAACCGACACATAATCC--AGT--CCAATTTGTAATATTAAAGCTGCCCACT--ATT--TATTTC------TACAATCTTTAAGTGGTTTTGCAT--------GCCCTA----------TGTAATATT-----TTTAAAC--------GACTTATGTCCT-ATGTAATCTATTCT--TCACTGTACataaataCGTAG
+>dwil
+GTAAGCTAAA------ATTTTATGTTGCCG-------GTAATT--------------TGTGGAATTTGGCTTC--------------TGTTTTGTCTTCTCGTTGTCCCTTGTCCAGCTGCA--------CGTACAATTTCTGTTCACT-------CGA-----TT--GCCGATTT---------------------CCTTTAGTTCACTT--TTCG----------------TT-----TCGCCT-----------------------------------------------GTTTTATTTTAGGTGCACGTTTGCGGC-------------------------AGTAAAA---------ATTAATCAAAT----------TTTA----------------TTAGTTTTAAGGCTGAGAA------------TAAGCAACCACCTACCT--ACCTACCACTACCCACTACTAGCCCTCCACAGTTGATCAGAGTTTT------GCATGTCTTCAGTCGATCCAACAT--------TTT--C----------CCACACACC-----TACAC-t--------aataaattttta-aaataattCTACTT--AAATTCTATACCATAATGCAG
+>dvir
+GTAAGTAGATCCCCTTGTAT---------GAACCATTTACAATCCACATATACTCTTAGCATTAATTAAT--CTCCATATTTTTCAATGT-TTCGTGCAACACC-------------CCGTG--------GCTT------------ACT-------CAT-----AT--AC---TCT-----------------------TTTTATCATTGT--ACAA-------AAACAATCAAT-----TTATAA-----------------------------------------------CGTTCATTTTAACTGCATATGCTACTTACTTATTTACCTTTGTTTCTAGGTTAACGACACTACAATACGCT---AAAAT----------AGTA-AAC------------ATTATCTTTAA--CGATTTTAGTTTTAATGACACA-------GAAAAT--A---------------------------------------AACTTCCTTTCGAATGACCTTATAT--------CATCCAAATC-ACATAT----------TTTTGCAT------TGTAATT--------AACACATTGGAT-T---AACATTTTCT------------------AATAG
+>dmoj
+GTAAGTAAAAC-----ATAC---------G-------TAAAAT-------TAGTTTGAGCATTAACT--T--CACAAATAATTCCACTGTCTTGGTGCTCCATG-------------TTGTT--------AGTG------------ACT-------CAT-----TT--AC---CGT-----------------------GTTCATCCTTTT--CTAA----------TATTCTAT-----TTGTTA-----------------------------------------------TTGTAAATTTAA----------------------------------------AATGAAA---------ACT---TACTT----------ATTT-ACC------------TCTGTTTTTAGGTTAATGGCAGTAAAAATCGCACACATAGTAGACAAT--A---------------------------------------AATT--------AGCGATATTTTAAGGGC---ACATGATAGTT-ACCCGT----------TTTTGCATG-ACTATGtaa----------aatttattatat-tttaaatattttctctaagtatttgattaataGATAG
+>dgri
+GTAAGCAAAA------ATGG---------C-------TTTGGTCTAATTTTTTTGTGTACATCAAGTCAT--CGGATAAACCTCCA-TAT-----TACACCACA-------------ATATG--------GGTG------------ATT-------CAT-----AC--AA---TGT-----------------------ATTTGTCACTGT--AAAAGTCACTTAAATACGCTAT-----TTTTGT-----------------------------------------------ACTTAATTTTTG----------------------------------------CACAAAA---AAATTGATC---TTTTT----------ATTT-ACC------------TTTGTTTTTAGGTTTACGGCAGTAAAATT--CAAAACCATTATAACAT--A---------------------------------------AATTT-------AATAAACATTTAGGGGC---ACACCACACTTGACCACC----------TCTTGCATGCATAATGGAATT-TGATTGaaatttaattttt-tttacattttaattttaCACATTCTAATAACAGATAG
+
+Intron chr2L 12222 12285 -
+>dmel
+GTAAGTCACG--------CATAGTGCT------ATTATT-TTAATTTTTTGGAC-CTAATA----CT--GTATTTTA---ACTTTTCAG
+>dsim
+GTAAGTCATTGTCATTGTCATACTGCT------ATTATT-TTTATTTTTTGCAC-CTAATA----CT--GTATTTTA---ATATTTCAG
+>dsec
+GTAAGTCATTGTCATTGTCATACTGCT------ATTATT-TTTATTTTTTGCAC-CTAATA----CT--GTATTTTA---ATATTTCAG
+>dyak
+GTAAGTCCCA--------CATACTCCT------AATATTGTTGGGTTAC------CTTATT----ATACTTATTTTT---ATTTTGCAG
+>dere
+GTAAGACCCA--------CATACTGCT------AACATT-TTAAATTACTGGGAACTAATA----AT--TAATTTTA---ATTTTGTAG
+>dana
+GTAAGTCCATGAGGAGG-GAGGGTGTT------ACTGTT-CTAG-----------CCACTT----AC---CATCTCG---ATCTTGCAG
+>dpse
+GTAGGTG-----------GAAATTGAC------ATCATT-TTAGTTCATAACAGTCTTATATACTAT--CTATTATC---ATTCTACAG
+>dper
+GTAGGTG-----------GAAATTTAC------ATCATT-ATAGTTCATAACAGTCTTATATACTAT--CTATTATC---ATTCTACAG
+>dwil
+GTATGTCTCC--------CAGAGAAAC------GT--TT-ATAATTAACCATAT-CTAATT----AC--CTGTTCTC---CAACT--AG
+>dvir
+GTTCGTAT----------GATATATAT------GTGAGC-CTTAGTATTACCACTTTAACATAT-TTAATCATTCGT---CTCTTGTAG
+>dmoj
+GTTAGTTG----------AGAATCTATTATACTGTACAT-ATTGATTTTATTCCTTTACTAAAT-TT-------------TCTTTACAG
+>dgri
+GTTAGTGT----------CAAATATGT------TTTAAA-CTAGGTTTTTGTGCTCATATATGA-CTTATAATTTTTTTCTTCTTTAAG
+
+Intron chr2L 12929 13519 -
+>dmel
+GTAATCAACATTTTGTACTGTTATTAGTTTTGATGTAACGATAAAAAA-----AAAAAAAGGT----AACGGAAATAGTCTCTGAACCACGGCCTCGCGAGAATT----GAACCCAAAAGCTAAA-AACATACAGTGCTTTTCATTTTGGGACGCCCAGAGCTTTAATTATATTTTTGTG------------------------CAACAA-------ATTTTTATGCATTGG--------ATATATTGATCAAAGTTTTAAAGGTATATGTATTTATGATCA-------------------------GTTTAAA-----CAGCCGACTACATTTG----ACTATGTCCGTC-----CTTAGAAAG-AAATTCAGTCATTACAATATTC-CTTGCTAGTCTATCGATATGCTATAAGTGTTAAAAGTGCTT---------------TTGCATTTACTCTGGTTTGACAATATATTTTATTGAT-------------ATTGATTTCGTTTCATTT------ACTA-----------------------------------------------GTTGGAAAACAGTTCTTAAACTAATTAAATCATAGT---------CTTTTTGTTTTCGCGATTTCGAT---CTATATGG----CAAAT-TTTGTTTTTAAAA---------------------------------TTTCAC-CTATCCTCCTACTATTTCTG-----TAATGGGTAACTCGACTGTAGCGTCTATT---CTT--------------------------------TTGGTGTTCTGTATATGTACAT---CTAATTTGTTGTATAA----------TTTTTACATTTTCAG
+>dsim
+GTAATCAACATGTTATATTGTTATTTGTTTTGGAGTAACGATAAAAAACGGTCACGAAAACATACtaaacatacagattctaaaaacattgacgcagcgcaagtttgttggcccatgttgtcacg-ctcacaaactgccc--aaatctgccaagcccacacttttaataaattttttg---------------------------------------attttt--gtattagtcttgaaaatttgtttatcaattttcccaaaaact------ttttgacac-------------------------gcctaca------aaccgcccacacttt--aaattatttctatcaatatcccagaaaa-a-------taataaaaatgtcctctagctgagtaatagtaatg--atagtcgggaacttgacta---------------tagcattctctcttgttt----------------------------------TGGTTTCATTTCATAT------ACTA-----------------------------------------------GTTGGaaaaaaattattaaattaattaaatCATAGT---------TTTTTTGTTTTCGCGATTTCTAT---CGATTTGG----CAAAT-TTTGTTTT-AAAA---------------------------------TTTCAC-CTAGCCTCCTACTAGTTCTG-----TAATGAGTAACTCGACTGTAGCGTCTATT----TT--------------------------------TTGTTGTTGTGTATA----CAT---CTAATTTGTTGTATAA----------TTTTTACATTTTCAG
+>dsec
+GTAATCAACATGTTATATTGCTATTTGTTTTGGAGTAACGATAAAAAACGGTCACGAAAACATTCtaaacatacagattctaaaaacattgacgcagcgcaagtttgttggcccatgttgtcacg-ctcacaaactgccc--aaatctgccaagcccacacttttaataaattttttg---------------------------------------attttt--gtattagtcttgtaaatttgtttatcaattttcccaaaaact------ttttgacac-------------------------gcctaca------aaccgcccacactttttaaattatttctatcgatatcccagaaaa-a-------taataaaaatgtcctctagctgagtaatagtaatg--atagtcgggaacttgacta---------------tagcattctctcttgttt----------------------------------TGGT------------------ACTA-----------------------------------------------GTGGGAAAACAATTATTAAATTAATTAAATCATAGT---------TTTTTTGTTTTCGCGATTTCTAT---CGATTTGG----CAAAT-TTTGTTTT-AAAA---------------------------------TTTCAC-CTAGCCTCCTACTAGTTCTG-----TAATGAGTAACTCGACTGTGGCGTCTATT----TT--------------------------------TTGTTGGCTTGTATA----CAT---CTAATTTGTTGTATAA----------TTTTTACATTTTCAG
+>dyak
+GTAAGACAAATTTTGCACTGTGATTTGTTTTGGTGTAAGGAGAAAA------------AAGTTACCGAAC-CAAGGATTC---------------------AGTA----GGACCCAATAGCTAAGGAACACAGTGTTTTT--AATTTTGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNCAAAT-TTTGTTTTTATAA---------------------------------TTTTTCGTTTGCCCCCCACAAGTG-AG-----TAATGGGTAACTCGCCTATAGGGTTCTCT----TTTGTTTCATTTATAATCTTTGTATACTTACAGTTTGTTACAGCATTTA----AAT---CTTATTTGTCGTATAT----------CTTGTAAATTTTCAG
+>dere
+GTAAGTTAAA------------------------------------------------AAGGTACCGAAC-CAAGGACTCGAAAA----------------ACTA----GGACCCAAATGCTAAA-ATTACACT---------------GGATGCCAATAGCTTTAATTATTTTTTTGTGATCAGACTCACAAGTTGTGTATCGTAATAAGTCAACTTCTTTT--GTATAGG--------GTATATAGAT-AAGGTTTTAAAAGTATATGTATTTATAAAAATTATTTGCATTTTATTTGTCTTGCTGTCTAATATTAATATGCAAACACATTTT---AACCACTTCCACAAAC--CGCAAAAAACA-------TAATTTTTGTAAATTTTATATATTTAGTGTCTAAG--ATTTTTGTTGAAAGTTTTCGACGGTCGAGCGTACTAGCGTTCTCTCTTGTTTGACAATATATATTTTCGGTTTAAGGAACAGTCGTTCATTTTGATTAAAATCGGGCGACTATTGACAGCAATAGTAAAATTTAAAATTTTTCCCTGCCTCTTCATAGTGTAGTAATGGGTTTATTAAAAAATGTACATCTAAGTAGTAGCGTTCTCTCTTGTTTGACAATATATATTTTCGGTTTAAGGAACAGTCGTTCATTTTGATAAAAACCGGGCGACCATTGACAGCAAATATTAACATTTTTC-CCTGCCTCCCAATACTGTAG-----TTATGGGT-----------------------------------------------------------TTATTAAAAAATGTA----CAT---CTAATTTGTTATAAAA----------CTTGTACATTTTCAG
+>dana
+GTGA-------------------------NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN--------------------------------------------------TTTTCAG
+>dpse
+GTAA-------------------------NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN-----------------TAATTAATTGAATAT----------TTA-----TTTTCAG
+>dper
+GTAA-------------------------NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN-----------------TAATTAATTGAATAT----------TTA-----TTTTCAG
+>dwil
+GTAATCATTGGATTTCCCTCTTTTTTGTTNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN----------------CTACTACATTATTCAA----------TTGT----CTTTCAG
+>dvir
+GTG--------------------------NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNTGTATAATAATATTTTTGAATGTTTTGAACGAGTCTTATCATTTCCT---TTTACAG
+>dmoj
+GTA--------------------------NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN---------------------------------------tttttttt---ttttCAG
+>dgri
+GT---------------------------NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN------------------------------------------TTTGC---ATTGCAG
+
+Intron chr2L 13626 13682 -
+>dmel
+GTTAGTAAGA--TAATATATACTCAACTA----GTCTTTT--ATATTAAA----TTCAC-A-------ATCCTACAG
+>dsim
+GTTAGTAAGA--TAGTATATACTCAACTA----TTCTTTT--ATATTAAA----TTTAC-A-------ACTCAACAG
+>dsec
+GTTAGTAAGA--TAATATATACTCAACTA----TTCCTTT--ATATTAAA----TTTAC-A-------ACTCAACAG
+>dyak
+GTGAGTAACA--TTCTATACCATTAACTA----GTCGTTT--ATAAAAAA----TTTAC-A-------TCTCTACAG
+>dere
+GTTAGTAACA--TATTATACAATCAAATA----GTCCCTT--ATAATAAA----TTTAC-A-------TCTCTACAG
+>dana
+GTGGGTTCAA----GTGGCGGCCTAACTA----GTTCCTCCGATAATTAT----GTGTA-T-------TTTTTACAG
+>dpse
+GCAAGTC-------TTACATAAATAATTA-----CAATTA--AGAACAAAACAATTTAC-TGAATAATTCCTTGCAG
+>dper
+GCAAGTC-------TTACATAAATAATTA-----CAATTA--AGAACAAAACAATTTAC-TGAATAATTCCTTGCAG
+>dwil
+GTAAGTCCT-----CTATAGAGACAAATGTTTTGCAGCTT--GTGCTAAT----CCTCC-T-----TTTTTTCCCAG
+>dvir
+GTAAGTCCCAATGTTTAAATTGTTACCAA----TAATTAC--ACAATATT----GTTTT-A-----------TATAG
+>dmoj
+GTAAGTACTTACGATTACATTGTTATAAA----GAGATAA--ACAATAAC----ATTAT-------------TATAG
+>dgri
+GTAAGTCCCAAGATGAACATTTTTATAAA----AATCTTA--TTCAAAGT----GTAATTA-----------TATAG
+
+Intron chr2L 14875 14932 -
+>dmel
+GTTAATA-----------------------------TAACTTAAACACAAAGTTTT-----------TTAGATGTGTACTAATTTCTCGTTCT--TTTAG
+>dsim
+GTTAATA-----------------------------TAAACTAAACTAAAAGTTTT-----------TTAGGTGTGTACTAATTTTTCGTTCT--TTTAG
+>dsec
+GTTAATA-----------------------------TAAACTAAACTAAAAGTTTT-----------TTAGGTGTGTACTAATTTTTCGTTCT--TTTAG
+>dyak
+GTTAATA-----------------------------TAAATTAAGATGTTAACTTT-----------TTCGATGTGTACTAATTTCGCATTAT--TCTAG
+>dere
+GTTAATA-----------------------------TTAATTAAAGAGAACGCTTT-----------TTGGATATGTACTAATTTTCCATTAT--TCTAG
+>dana
+GTAAGTG-----------------------------GTTGCTACTCTC----CCTT-----------CCTGATGTCCTCTAATGTGTGG--GA--TTTAG
+>dpse
+GTAAGTA-----------------------AATTTGTAATTTTAAAAAAAGACATT-----------C----TGTGCTATAGTATTTTATATT--TCTAG
+>dper
+GTAAGTA-----------------------AATTTGTAATTTTAAAAAAAGACATT-----------C----TGTGCTATAGTATTTTATATT--TCTAG
+>dwil
+----------------------------------------------------------------------------------------------------
+>dvir
+GTAAGCT-----------------------CTTGGTTTTTTCAAAGTCGACTGTTT--------------------CAACAAACTTTTTTTGT--TTTAG
+>dmoj
+GTAGGTTGAAGAGTTTGTTTGCTTTTTTTTTTAACTTTTTTTACAGTTTGATTTTTATATTACCTATTTAAA---ACAATACTTTTTCTTTGTAATTTAG
+>dgri
+GTAATGT-----------------------ATTTGTTTATTTGAAGCCAACAGCTG----------------------GTAACCTTTTTTCAT--TTCAG
+
+Intron chr2L 15712 17052 -
+>dmel
+GTACAACAAACAATT-------TTCTCTTT------CCATTCTATTTTA-TTTTTTTTTTTTCGTAT------ATGT---AG-----------------CCGATTGGTATATTTTGTGGGGT----GTCATTT---------ATTTTGATCCTGGGT---GGTAAATACATTT---TTATGGAAGTTAG-------AAGAAAGCT---TAT-------AATTTATTAAGAAT-AAATAAATAC----CTCCTTTTCAATCTTTTGTTATGTCTTCT-CCTATGTGCATA--CTTTTGGGCATTAACATTTAGGTAAATTTTTTCCACCGCAACTACAAG------------TAAACCGCATACACA----------------------------------CACAGTATT-----TTG--------TAGACTCGCGC-----CACAAAGCA-----CCGCAT--AAAAAAGGTTACGGTGCTTTTTT---GCTCGTTTCTTTTGTGCACTCCTTC--------TATGCGGTGCCAAATATGAGGAGGTACCTGAAG-----CTTTGTTG----------------------ATTTT----------G----TGAGTGTCT----TTTTCCACC-GCCTGTTTTTGGCTACTT--T--AAA---------------AATT-----CTATT----------ATATC--GTTG---------TGCTC-GTA-ATGTTGTCCATTCCTTTTAAATATTTTCGAATTAAAT----ATACCATAGATGTTTCCCT------ATTACCATAATAGTTT---------------AATA------------------AATATA-------CGTATAT-----------------GAAATTTTA----------TAAG-AATTTTTTTTATCCCATGTTAGT--ATAAACATGTTA----TTAAACAAA---TAAAAGTAG---GTCAGAGGTAATCG---CCATCCAGCTCCAGAAAGAGGG-GGGAGCTGA---------TAAGAT----------TGCTTTTATGTGCTTAAT--------------------GGGTTGGGT----AAATGGCTTGGTTTC----ACAAAC-ACCCTTATTTCAGGCACAA---AATAA--GTATGTCAT-----------------------AGACGGCGTAAAATTGATAAGATTTTAAA---GTCAAAAGAAAAAGAATTTATT----CGCCTGTAACTGCGTTAGA--AATCCA----AATACACCTGCAATATGAATCA-AACAAAATCA-ACTCATAACGAGAT-----------------CTGATAGC------AA---CTTC--TTAA-----------AACTTTTTTT--GTA------TAAAAATA--CAATTT--------------ATACAATTA-GATAAGATTTACCAAACCTTTTTTC-GATCA--------------------------------ATGTAA-----------------ATATAGTATGATAGTAGGGAC--------------TGCTGTCTACAGTGATGTT----TATAAGAGACATACTT-------AAGAGC------------AGCATTTAAAG----CTTTGGGCGCTTTTT------------GAACTT-----AATT-TAA---------------------ATTCAAA-CCTCAATATTTATT---------------GAGGTTTTTATTCCCGTTAA----T---TGT-------AAA-----GA--AAAATGCTGTATTA--------GATTCGGTAAAAGTA-TGT------AAATGG-----------TTTAAGAAAGCGTTCCCGACTC--------TATAAAGTGGCAA---------GTAATCTGA---------------------------------------------------------------------------------------------CGATTTACCAGATCTTGGGAACTGA--AAAAACTAGAATGTTTTG-------------------------GAAAACCCTTTTACAATTAAGAAA-TGAACCAAA-CAATT--TTGAATTATTAA------------GAATCTGTAATTGCTTTTTGAAACTTTTTAATATTTTTTT-CTTTTAG
+>dsim
+GTACAACAGACAATT-------TTCTCTTT------CCATTCta------tttttttttttttatat------ttat---aG-----------------TCGATTAGTATATTTTGTGGGGT----GTCATTT---------ATTTTGATCCTAGGT---GATATAAAAATTT---TTATGGAAGTTAG-------GAGAAGGCT---TAT-------AATTTATTAAGAAT-TAATAAATACATATCTCTTTTTCAATGTAGTGTTATGTCTTTTTCCTATGTGCATA--CTTTTGGGCATTTACATTTAGGTAAATTTTGTCCACCGCAACTACAAG------------TACGCCGCAT-CA-A----------------------------------CACAGTATT-----TTT--------TAGACTCGCGC-----CACACAGCA-----CCGCATC-AAGAAATGATACGGTGCTTTTTT---GCTCGTTTCTTTTGTGCACTCCTTC--------TATGCTGTGCCAAATATGCGCAGGTACGCACAGA----CATTGCGGTGGTAAAACACCGCAACCGCATATTAT-----GCGGTG----TGAGTAACTCTGCTTTCTAAGC-GAGTATACTTGTAGTCCT--C--AAATTAGGCACCGGTGCCGATT-----TTAGTTGTAAAATATGTATA--TTTGGAAAATACATACTT-GTA-ATGTTGTCCATTTCTTTTTAATATTTTCGAATATAAC----ATACCATATATGTTTCCCT------ATTACCataataatgt---------------aata------------------aatata-----------tat-----------------acaatttta----------taaGGAATATTTTCTATCCTATGTTAGT--ATAAACGTGTCA----TTAAGCAAA---TAAAAGTAG---GTCAGAGGTAATCG---CCACCCAGCTCCAGAAAGAGGG-TGGATCTGA---------TAAGAT----------TGCCTTTATGTGTTTAAT--------------------GGGTTGGGT----AAATGGTTTGGTTTC----ACAAAT-ACCCTTATTTCAGGCACAA---AAAAAAAGTATGTCATTGTTTAAGTA----CA--TAGATAGACGGCGAAAAAATGATAAGATTTTAAA---GTCATAAGAAA------------------------CTGCGTTATA--AATCCA----AATACACCTGCAATATGAATCA-AACAAAACCA-CCTTATAACGATAT-----------------CTGATATC------AACTTTTTT--TTAA---CGAAAAGTGATTGAATTT--ATA-------AAAAATA--CAATTT--------------ATACAATTG-GCGAAAATGTAGCAAAAATTTTTTA-GATCAGGAAACCGCAGTAGATGTTTAGTTCTTCGAAAATGtaa-----------------atatagtatttta-------------------------ttttttatattatata----tataaGAGACATACAT-------AAGAGC------------AGCATTTACAG----CTTCGGGTGCTTTAT------------GAATTT-----AATT-TAATTA---ATTAGTTGTT-----ATCCAAT-GGGCACCATGCAAT--A------------GAGGTTTttattcccgttaa----t---tgt-------aaa-----gt--aatatcctatatta--------gattcggtaaaaagagtgt------aaatgg-----------tttaagaaagcgttcccgactc--------tataaagtGGCAA---------ACAATCTCA---------------------------------------------------------------------------------------------CGATTTTTCAGATCTTGGGATCTGA--TAGAACTACAATGTTTTG---------A---------------GTTCTTCCTTTTACAATTAA------------------------------------------------ATATATCAT-------------------ATATTTTCTT-CTTTTAG
+>dsec
+GTACAAAAGACAATT-------TTCTCTTT------CCATTCTAAAT---TTTTTTTTTTTGAATAT------TTAT---AG-----------------TCGATTAGTATATTTTGTGGG-T----GTCATTT---------ATTTT-------------------------------ATGGAAGTTAG-------GAGAAGGCT---TAT-------AATTTATTAAGAAT-AAATAAATACATATCTCGTTTTCAATCTAGTGTTATGTTTTTTTCCTATGTGCATA--CTTTTGGGCATTTACATTTAGGTAAATTTTGTCCACCGCAACTACAAG------------TACGCCGCAT-CA-A----------------------------------CACAGTATT-----TTT--------TAGACTCGCGC-----CACAAAGCA-----CCGCATC-AAGAAATGATACGGTGCTTTTTT---GCTCGTT-ATTTTGTGCTCTCCTTC--------TATGCTGTGCCAAATATGGGCAGGTACGCACAGA----CATTGCGGTTGTAAAACACCGCAACCGCATATTATATTATGCGGTG----TGAGTAACTCTGCTTTCTTAGCCAAGTATACTTGTAGTCCT--C--AAATTAGGCACCGGTGCCGATT-----TCAGTTGTAAAATATGTATA--TTTGGAAATTACATACTT-GTA-ATGTTGTCCATTTCTTTTCAATATTTTCGAATATAAC----ATACCATATATGTTTCCCA------ATTACCataataatgt---------------aata------------------aatata-----------tat-----------------aaaat------------------------------------GTTAGT--ATAAACGTGTCA----TTAAACAAA---TAAAAGTAG---GTCAGAGGTAA-------------------GAAAGAGGG-TGGATCTGA---------TAAGAT----------TGCCTTTATGTGTTTAAT--------------------GGGTTGGGT----AAATGGTTTGGTTTC----ACAAATTACCCTTATTTCAGGCACAA---AAAAA--GTATGTCATTGTTTAAGTA----CA--TAGATAGACTGCGAAAAAATGATAAGATTTTAAA---GTCATAAGAAA------------------------CTGCGTTATA--AATCTA----A-------------------NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN------------------TTTT--TTAA---CGAAAAGTGATTGAATTT--ATA-------AAAAATA--CAATTT--------------ATACAATTG-GCGAAGATGTACCAAACATTTTTTA-GATCAGGAAACCGCAGTAGATGTATATTTCTTCGAAAATGtaa-----------------atatagtattaaa-------------------------tattttatattatata----tataaGAGACATACAT-------TAGAGC------------AGCATTTACAG----CTTTAGGTGCTTTAT------------GAATTT-----AATT-TAATTA---ATTAGTTGTT-----ATCCAAT-GGGCACCATGTAAT--A------------GAGGTTTttattcccgttaa----t---tgt-------aaa-----gt--ataatcctatatta--------gattcggtaaaaagagtgt------aaatgg-----------tttaagaaagcgttcccgactc--------tataaagtGGCAA---------ACAATCTCA---------------------------------------------------------------------------------------------CGATTTCTCAGATCTTGGGAACTGA--TAGAACTACAATGTTTTG---------A---------------GTTCTTCCTTTTACAATTAA------------------------------------------------ATATATCAT-------------------ATATTTTCTT-CTTTTAG
+>dyak
+GTATTACCAAAAAAA-------GT-----T------CCATTCTA------TTTTCTAGTTTGAAGAA------TCGTTGAAG-----------------TCGATTTGTATATTTTGTGTGGT----GTCATTA---------AGCTGGAGCCTGGAG---GACAAATACATTTGGTTAAAGGCAATTAT-------GAGAAGGCT---TG---------ATTTTATAAAAATTACCTACATAC--------TTTTCAATCTTTTGTTTTGTCGTCT-CCTATCTGCATA--CTTTTGGGCATGAACATGTGGGTG---TTTAGGAGCCTAA--TGCTAT------------TGTGCC-CGT----AAATTACGACCTGAAATGTATTACGAAATAATTTACATATTTCC-----TTTATAAATGACCGATTTGGTT-----C-CGCTTTA-----CTTCATT-AAAAA---TTACGATGCTTTTTT---ACTCGTTTCTTTTGTGCAGTCCTTC--------TGTGCGGTGCCAAATACGAGTAGATACCTACTG------ACTGGTT--------------GACTTTTTATT------CGTGGAAGCAGCGACCGCATGTA------------------tCCGCAATGTT-----AAA---------------AATT--------------------ATATA--TTTG---------TATTTTGTA-GTGTC---CATTCCTTTTGCATATTTTTGAATCAAAT----ACACCATAGGACCTTCTCT------ATTACCaaaatattat---------------tatatatatgaaatatatataGACTATA-------------T-----------------GGTATTTTA----------AAATGCATTTCTTTTAACCTCTGTTAAT--ATAAATGTGTCA----TTTAACAAAAA-TGAAACCAG---GCCAAAGGTAATCG---CCATCCAGTTCCACCAAGAGGG-TGTAGCTGA---------TAAGAT----------TGCCTTTGTGTGTTTAGT--------------------GGGTTGGGT----AAATGGTTTGGTTTC----ACAGAC-ACCCTTTTTTCAGCCACAA---ATGAA--GTATGCCATTGCCTAAGTA----CA--TAGATAGACGTCATAAAAATGATAAGATTTCGAA---GTAAAGCGAAAGAGAATTTATT----TGCTTGTTACTGTGTTAGA--AATGCA----AAGAAACTTGCAATATGAATCG-tactagactt-gttgaaaagtatgta---------------acaggtaga------aataattgt--tt---------------tcgacctt--ata-------aagtata--tatattc----ttgatcaggatcaaagcg-gagtcgatctggccatgttcatcga-gatctcaggatc-tattaaaactagaaagttgagGAGTTGTCACGCCCACAAGCCGCCCAAAGTTATGaaaaa-------------------------tattttaaaatttgtaattttattatttGTCTTCTT-------AATTTT------------AATATTCTCAAAAAATGTTGGCAACGCCTATTTTAACGCAAACAACCC-----CCCA-TAACCC---CCACGC---------CCACAAT-AGGCAATTTGTATT--A------TTGGTTTAGGTTTttatttccattaa----t---ggt-------aaa-----ga--aaaaaacgttattg--------gattcggaaaaaagtaatt------aaaagg-----------taaagggaagcgtttccgactt--------taaaaagtaGGAA---------TTCATTTGAAA-------------------------------------------------------------------------GTATGTATTATAAATTTTCAATAGCTCAAGTGGT------------------AGTGTGGTTTTTAGCTAATCA---CTCGAACATACCGTTCTCCTTTTCAAAATTATAGAA-TAGACCAAAACAATT--ATTAATTGATAA------------GAATCTATCATTCCTTTTTACAACTTTTTT-TATATTTTT-CTTTTAG
+>dere
+GTATTACCAAAAAAT-------TT-----T------CTATTCTA------TTAT--------------------------AG-----------------TCGATTTGTATATTTTGTGTGGT----GTCATTA---------AGCTGGAGCCTGGAT---GATAAAAACATTTTGTTAAAGGAAGTTAT-------GAAAAGGCT---TG---------ATTTAAAAAAAAT-ACCTTAACAC-------------AAT--TTTGTTTTGTCGTCT-CCTATCTGCATCTCCTTTTGGGCATGAACATTTCGGTG---TTTAGGCGCCTAA--TGCTAT------------TGTGCC-TGT----A----------------------------------TATATTTTT-----TTT--------TCTCCTTGG---------CGCTGCA-----CTGCAAA-TAAA-------------TTTATTGAAACTCGTCACAGTT-TGCATTCATCA--------GCT----TACTGAATTC----AGACTCTGACTT------ATTGGTTTA------------GACTGTCTCCTAT----CTCGGAA----TGGATGCCTATA------------------TATGCaataat--tataaa---------------aatt--cttttaattttcata---atatt--tttG---------TATTTTCTA-ACGTT-----GTCCTTTTGCATATTTTCGAATCATATGTATATATCATAGAAATCTTCCT------ATTCCCataataatat---------------aata------------------aatata-------------t-----------------GGAATTCTA----------AAATGAATTTTGTTTAACCTATGCTAGT--ATAAATGTGTCA----TATAACAAC---TTAAACCAG---GCCAAAGGTAATCG---CCATCCAGTTCCATGAAGAGAG-TGTAGCTGA---------TAAGAT----------AGCCTTTATGTGTTTAAT--------------------GGGTTGGGT----AAATGGTTCGGTTCT----ACAAAT-ACCCTTATTTCCGACATAA---ATAAA--GTATGTCATTGCTTAAGTATGTACA--TAGATAGAAGCCGTAGAAATGATAAGATTTCGAA---GTAAAGCGAAAGAGAATTTATG----TGCTTGTAACTGCGTTAGA--AATTCA----AAGACACCTGCAATATGAATNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN------------AACATTTACAA----CTTTGGGGAGGTTTG------------CGACCT----------------------------------------------------TATT--A-------------AGGTTTCTAATCCTATTAA----T---TTT-------AAA-----GT--AAAAAGCTGTATAA--------GCTTCGGTAATAACTCTTT------AAAATG-----------TAGGAGAAACCATTTCCCACTT--------TATAA-GTAGGAA---------TTATTCTAAAAATTTCTTTGATCCTGGCGGGAACTGAAAAAAACTAGAAAGTTTGGGCAAAAACATTTTTTAAAAGGTGTAATTGTATGTATCTTAATTTTTCGATAGCTCAAGTTTTGTACGTTAA--TAGTGCGATTGTGTTTTTTAGCTAAGCAACACTCGAACTTACCGTTCTCTCtttaaaaattaaaaaaatggattaaaacaatt--attaattgataa------------aaatctataatttCTTGTTAAAACTTATTAATATGTTTTT-CTTTCAG
+>dana
+GT--AATAAACAAAT-------TACCTTTT------CCATTCTACTTTATTTTTTTTTGTTAAATGC------CGGC---AGCGCTGAGCAAAAATCTATCGATGGTTTCATTA---GAGGT----GACACTTTTCAAAGGTAATTTAGTTTTAGAT---AAAATAGTTTATTTTTTTAAACAGATAAGCTCAGCAAACAAGGTT---TATTCTTTTTAGGTTTATATAATT-GCATTAATAC--------TTCTAATTTGTTTATTTTAGCTTAC-TTTATTTCATTA--TTTTTTGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNCCGAAGGGAGTGCTGTAGTCGA---------TAAGAT----------TAACTTTGTTTGCGTTAT--------------------GGGCTGGGTTGGTAAATGGTTGGGTCGCCGGAGGAAGC-ACCACC--TACCCGCCCAT---CGGAA-----------TGTTTGGGGA----GA--TAGGTACAGTGCTTCCAG-CGATAAGATTTTAAACAGGCCGCCAAGAATCGAA------------CTAGAAACTGGGTCAGA--GCAGCA----AGTGCCGCCGCA--------NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN----TCTCTTTAT-CCTCCAG
+>dpse
+GTACNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNATAATAAAATTG----TACACATAG---TACAATCAT---AGCACAGATAGTCA---CCAGTCAGTACCACGAAGGCAG-T--AGTTGA---------TAAGAT----------TAATTTTGTTTGTTTTAT--------------------GTGCTGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNAATGCGGAGA--TAAGCAAAACAATA--TAATATGCATAA--------------ATATTTAATTATGTTTAT-----------CATTTCTCTATTTTCAG
+>dper
+GTACNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNATAATAAAATTG----TACACATAG---TACAATCAT---AGCACAGATAGTCA---CCAGTCAGTACCACGAAGGCAG-T--AGTTGA---------TAAGAT----------TAATTTTGTTTGTTTTAT--------------------GTGCTGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN--------------------CTGAGGCTATACT----TCTAGGAACAATTCCG-------AAGTTC--------------AGTTAAAAA----CTTCTTTCGTGCTTT------------TATTTTT----AGTT-TAATCAGAACTACGCTGTTGGTAAGGTAAAA-AGACAGCTTTCGTT---------------TAGGACGTAGTCATAAGTAAACCAT---TGT-------TGC-----GT--A-----TTTTGTTA--------ACTATGTACACAAAAGCGTCAACAAAAATTG-----------TATTAAACAACATTGCCAAAGC---------ATATCGGGGCAACGTCATTGAACAAGTTAATG-------------------------------------------------------------------------------------------CGATTTTCCAACTGACTACTTTTAAGGTAAACTGAACGTAAACTG---------AAAATATGAACA------------------AATGCGGAGA--TAAGCAAAACAATA--TAATATGCATAA--------------ATATTTAATTATGTTTAT-----------CATTTCTCTATTTTCAG
+>dwil
+GTA-NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNCGTTTAAAATTTCGCTGGC--GAAAGC----AATGAAGAAACGATATTTTCTA-AGCAACGCTA-GCAAATATCGACCTA---------------TACAATATCCTGGCTAA---TATT--TAAA---GGTGTTATTACTCACTTT--TTCG--GTGTAAAAATA--GAAAGC--------------AAATATTCA-AATGTAAACTACTAAACTACTGTTATGATTG--------CAATGTAAATTAAAATTGGCTTCGAAATAA-----------------TAGTAATCGGTTC----------------------------CTAAAACGTTATA----T-TAAGTCACAGTCCTCACT--AAAAAGC-------------------------------------------------------AAACC-----ATTT-TAATGA---TAAAATTGA------AATTAAA-CCAAAATAAATAGTTGA------------AAGATTTACATTTTGCTTAAGACTT---TGT-------AAC-----GA--AATTAAGTTTATC---------GATATGGCTAAGTTATCTT--------ATGA-----------TAAAAAAAAAC------TAATT--------GATACAGGTACAA---------ACATTTC--------------------------------------------------------------------------------------------------TTTACCAACCCTCAGATTTTAA--TAAAGCNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN-----------------------ATT--TTGAATACTTTA--------------ATTATTGACACGATTTTCGTTATTTT----GTTTTTTT-TTTGCAG
+>dvir
+GTATTACAAATAAAT-------ATC-----NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN------------TAAAATGCTG---------CACCT-GTA-ATGGGGTCGAAACCTTATTAAATTCTTTAAGTCTATT----ATACCATGTAAA----------------ATTAGAATG-------------------AGTA------------------AGAAAG-------GCGGTAT-----------------AATGTTTTG------TGCACAGAAAGAATGGAGCACCTTCCATTCGA--GTATATTT--------TTGATCAGG---CAGACGCGATGAGTCGA--GTAACCATGTCTATCTGTT--------------------AGAGCTAGAGTTCAAGACTTAAAAACCCATATGACAGCTGTTTCATTTTTATA-------------GGGTC----------------------------------attaattttttttttttaa----aaaa--attt--------ttaaata----CATTTGGG------------AATCTCTAAGAGTTGTAG---ACACAAGTGCAGTAAAAATGTT--------T--TGTTACATTTTA--AATCCACCCTAAAGCCCTGTCCATTTAATTTGATTCAAGAATAAACACAGAAGTAAATC-----------------CAAAACT------TA---TTTTGGCCAA---GTTAATTTTCCTAGTCGATTGTAA--GTTACAATCTTATCAAGCT--------------GAATAATTAAGCCTTGTACAACAATA----------------------------------------------------------------------------------------------------------------TAAAATGACCTA----AATTTGTGAATTAGAAC------------------------GGGAGTGTAAG----TTGTCAAGG-TCTTT------------TAAGTT-----GTTTGTAAAAA------------------AATTAA------------------A------------AAATCCTTCAACGTTGTTAA----TCGTTGT-------CAACCTAAGTTTAACTAATCAAATGA--------AACCCTGTTGAAATTAAGC------AGCTACGGACAGAAAGTCACAAGAATATTGA-TATCTTC--------GGTAA----GCAA---------ATAAATTAA--------------------------------------------------------------------------TATATATATGATCG-----CAAAATTTGAAAATAT-----------------CAAAATATTCCCCTTCAA---------------------------------TATTAAGCTG--TGACCATATAAAAT--ATATATTTTAGA------------GAATATTTGTCAATGTTTATTCA--------CGTTATTCA-TTTGCAG
+>dmoj
+GTATTACATACATTT-------TTCCCATG------GGAC--TACATA--ATTTTAAATGTGTATAA------AAAA---AA-----------------ACCAAATAAAAATTTACTAGAGTCACAGTAAGCA---------AATTGAGTATTAGAGCGAAACTTGTACATAT---TAATGTAA-TTAG-------TAGTGTACtttaaat-------aatttattaNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNtatttatttattattattat----------tttttCA-ATTACAG
+>dgri
+CTAC-ACAATTAATTCAATGACATCACCTA------TCACCTTGCGTC--GTTTCTGTTTTGTAACACTATTTAAGC---AG-----------------TACAAACATACGTGTTATGTATTATGTGTAAATA---------AAT---ATGTAAAATTTATATCAATACATAT---TTATA------AG-------TTACAGACT---AAC-------GGTTTTTTAAATAC-CGATAAGAAA-------------AATATTTTGCTAAGCTCCAT---CATGAGCGTG--GCTTAAA-----AAAGTCGCAGT----TTT----ACCTCA--CGACAG------------TATACTAGAT----A----------------------------------TATATTTATAACAATAT--------GAGTCTCGC---------TTAAGCA-----CTG-----AAGAAAGTCTCAAGAGCACGTCA---ACATAATTATTGTGTATATTTATCAAAGATAAACATAAAATGCTAAATTCATATTTATATGTAAATGTGTGAATCATCTTGAAAAAATGTT--------------------------------------------------------------TACGTCCCC--C--TAA---------------AATT--CGCCTAG------------TATA--GCTG---------CTTAC-GCATATTGTTTTAAAA--TAATTAAGTTCTTTAAG--------------AATGGAAA----------------ATCGTAATCGTATCATCGCGCTCTGACCAGTA------------------ATAACATTTAGCAACAATATTCATAACTTTTCA--TAAATATTTTACTACAATGCATGAAAAATAGTCATCAACCTAAAATAAT--GTATACATAGCGCAGCCTGGGCAAAAAATAGACGCAA---GTCGAC-ACAACCG---CTACAAGGT--------------------AGA---------TAAGAT----------AAGTTGGGTTTGTTTTATGTACAAA---ATGAGCAAACGGGTTG----------------GGCGAA----ACAAAT-ATGAATGTTTTGTACATAACCGGGAAA--ATGCGTCGG-GCTTAGTTA----CTGATAGGCGTAGTATATCGAATTGATAAGATTTCAGA---ATACAGTCATCGTAATTGTGTA--------AAATGGTGCACTTGT--AATGGGGTCGAAACCACACATAGTTTTATCTT-TATAAAACTATGTACATATATTGCTC-------------------ATTTT------CA---TTTT--TCAT---CTTTATATTCTTAATTTA--ATTA--ACCAAAAGGTC--CACGCT--------------G--CAATTA-GTGTTGGTTTTTAATA----------------------------------------------------------------------------------------------------------------TAAAGT---CAA----AAATCGGCATCTACGTC------------------------TGATTTGATAG----TCTTCACC--TCTGC------------GAAACT-----GTCT-TAAAA----------------------CAA------------------A------------AGAGTCGCTATTTTTGATTA----T-GTTGT-------AAA-----GTTTATCTAATCGTATAGTAACTTACAATCTTATCAACATTAGTC------ACCAAC-----------CACTATGATATGGCCTAAATTT--------TATAA----ACAA---------ATAACACAA---------------------------------------------------------------------------------------------CGAAATTTAAACTTGT-----------------TAAGTGGTTTAC--TCAA---------------------------------AACAAAATCA--AAAATATAAGAAATCGATTTATTTACAT------------GAATATTTTATAACAGTTAATAT----------TTGTCCA-CTTTCAG
+
+Intron chr2L 17137 19884 -
+>dmel
+G--TAAGGTAAA-----ACAAACAATTT------------TCTCTTTCCGTTCTATTTT---TTTTTTTTTA-AG--TATTTGTAGCCGA-----TTGGTATAT--TTTGTGGGGTCATTTATTTTGATCT------------------TGGGTGGTAAATA--------CATTT---TTATGGAAGTTAGAAGAA---------------------AGCTTAT-----A-------ATTTATGAGGAAT-AAATAAATACCTCCTTTTGAATCTTTTGTTATGTCTTC-----------T-CCTAT-----GTGCATACTTTTG----GGCATTAACATTTA--GGT-AAATTTT-----TTCCACCGCAACTACAAGTAAACCGCATACACACACAG-TATTTTGTAGACTCGCGCCACAAAGCACCGCAT-AAAAAAGGTTACGGTGCTTT-TTTGCTCGTTTC------------TTTTGTGCACTCCTTCTATGCGGTGCCAA--ATATGAGGAGGTACCT-----------------------GAA--GCTTGGTTGATTTTGTGAGTGTCTTT--TTCCACAGCATATTTTTGTGTATTGGCTACTT---TAAAAATTCTAT-----------------TATATCGTTG---------TGCTCG--------------------TAATGTTGTCCATTC------------CTTTTAAATATTTTCGAATT------AAATATAC----CATAGATGTT--TCCCTATTACCATAATAGTT----TAATAAATATACGTATATGAAATTT---------------TTTTTATCCTATGTTAGTATAAACATGTTATTCAACAAA----------TAAAAGTAGGTCAGAGGTAATCGCCATCCAGCTCCAGAAAGAGGGGGGAGCTGATAAGATTGCGTTTATGTACCTAATGGGTTGGGTAAGT-----GGCTTGGTTTCACAAA-CACCCTTATTTCAGGTACAAAATAAGTATGTC--ATAGACGGCGTAAAATTGAT------AAG-ATTTTAAAGTCAAAAGAAAATGAGTTTATTCGCCTGTAACTGCGTTAGAAATCCAAATACACCCGCAATATTATATGTATAGAAAGAAAAAGTTTG-------ATGCAA------CAACAAA-----TTTAAA--GTTGTTTGGTATTTTGT-AATGGAAAGTTTGTGTCACTAAATATGGTTTTACTTGAACGCAGATTGGACATGGTCA-----CACTGCCCACAAAATCACGACATTGCGTTATAAATGAAGCAC--ATCTAGTTTT-----------------GTGTTGA------------AAATGTGGTT-----CACAATTTATATAGCAGGTTATGGTAAAACATCGATCGTTCCGAAAAATTCCGCTCGTT---------GGCACATTTCCTAAATTTTTCGTGCGACAGC-----------------------------------GGTGattaatta-------caa---------------------------------------------------aaattattattataattatataaaaGTTGGCGACCATATCAAAA-AGGTTGCTATAA------AAACAAATGACAATTTATAGCGGAGTTTC--ACTCCCAAAGCGA--------TGTTCTCCACCCA--------TTCCAGTCAGTCATGGAAAATATACCTTCTAAAAA-------------------------------------------------ATATATGATTTTTTCGATAGA-GATACACGGGCACACTAGACCCACCGATCGCGACTTTGTGTGTGTTAAAA-TGACGCGCATATCGTTTTGGGCTAATAATATTGTTCACGTTTTATAAAACAGATAC--ACGGTTAAGCTCTGACCGGTCGTATTATTATCTGTGTGTTCTTGGTTGACACGTTTAT--------TTCATTTATTCTCATTTAAAGCAACGATGT--GAAGAACAGTGCGG-----GCGTTTCTCAAC---------ATAAGAATACATACAAACTTATGCGTGTTGGTGA----GCA----------AATAAAATAGTTCA-AAAAATT--ACTCGGCCACCGCCTTAACCGTACAAACGGAAATACATAAAGGTAAAG----GGCT---CAACAACAGTATTACTGATT--AGGCAATT-----GATTTATA--------TTTCAA------ACTTCTTAAATAAAGTG-----TCCACAAATATGTATGTT------CTTAGCA----TAGAGGCGTAGTC---GGTGAGTCAGCCACGCCAACAG------------------TTAACAGTCGTCATTTTGC-TGTCTGTCTAA------------CACGCAA-TTT-----------GTGTGTGT------------------ATATGTGAATAAACAGATACCGGTATGCAATCGCAAA----GCTGGTCAACTGTAAAGATCGGTATGTACTCAAAA-------TTAGGT-CATCACCTTGTTATGC-----------------------AGATACATTTGGGAAACAGTTGACT--TACTTG--------GTATTGGTTATCAGCCGAAAAGC----AAATGG---------TGATACGG--------TTTTGCACCTCAGCT-TACTCACGGATAC-------ATACCTACGTACATAAATGTATGTATACGGTATA-----------CAGTCTTCGAAAAAATATTAGTACCGACCAGCTAG---------CGTTTGCCTAAAACGCTTTTACAAAAATAAACGTATATGTTTTAAGTT-----------GTTTT----------------TTGTCa--------------------taattaatacatttattattat--------ttatttatGAA--TTTCA---GAGCTTTAAT----AGT--------AACTAAA--TTGTTT--------------------AA----------ACAAACTT-----------------AAAAAAAG-ATTTACAAATAA--------AA--------AAATA--TTTCGTGTGCGTGACG--------GAATTGCTAGTTCATTAAAGGGAG--------------GTACATATGTACATACATACACA--------TTGCA-----AAGAGTACAG-ATCGCTCAT-CTTGCATC--------------------------TCATTTTTC---CTA----ATGTACATATACATATGTACAA----------------------ACATG-----TTTA----------------TTAAACTGCCTACATGCAAAT------CTTT------G--------------------------AAGTTT------TAAGAAAAT------AAGCACAACTAG---TTTGGAA------AAT---CTTGGGAGCCAAGATCTATCTGTCCACTG----AATTT----------------------------CCTATGACC--AAGAATGTAAAACCC-----------TTTTTGTTAAACAA---A-----TTTTGATTAAAGTATACCAGAATAATATT--------AAACGTATCGTCCGTA---------------TCTATAAAAGGTATTAATAGTATTA--------------CCTAAATT--TAATTTCTCGGTTTTATTCATAAGAGTGAAAAA--A-TATACAAGTTCCtttttaattttttacttattgaaaatgtgattaatttt-ta--tttattatttt-----CAGTTTAGAATAAA--TACGGCCACAATTAG-------TATAC--ATATT--TATTCATCGAAACC----AACCCACCAC--AAGAGCATAACCAATT
+>dsim
+G--TAAGGTACA-----ACAGACAATTT------------TCTCTTTCCATTCtatttt---ttttttttta-----tatttataGTCGA-----TTAGTATAT--TTTGTGGGGTCATTTATTTTGATCC------------------TAGGTGATATAAA--------AATTT---TTATGGAAGTTAGGAGAA---------------------GGCTTAT-----A-------ATTTATTAAGAAT-TAATAAATACCTCTTTTTCAATGTAGTGTTATGTCTTT-----------TTCCTAT-----GTGCATACTTTTG----GGCATTTACATTTA--GGT-AAATTTT-----GTCCACCGCAACTACAAGTACGCCGCAT-CA-ACACAG-TATTTTTTAGACTCGCGCCACACAGCACCGCATCAAGAAATGATACGGTGCTTT-TTTGCTCGTTTC------------TTTTGTGCACTCCTTCTATGCTGTGCCAA--ATATGCGCAGGTACCAGACATTGCGGTGGTAAAACACCGCAACCGCATATTATGCGGTGTGAGTAACTCTGCTTTCTAAGCGAGTATACTTGTAGT----------------------------------------TGTATATTTGGAAAATACATACTTG--------------------TAATGTTGTCCATTT------------CTTTTTAATATTTTCGAATA------TAACATAC----CATATATGTT--TCCCTATTACCataataatg----taataaatatatatataaGGAATAT---------------TTTCTATCCTATGTTAGTATAAACGTGTCATTAAGCAAA----------TAAAAGTAGGTCAGAGGTAATCGCCACCCAGCTCCAGAAAGAGGGTGGATCTGATAAGATTGCCTTTATGTGTTTAATGGGTTGGGTAAAT-----GGTTTGGTTTCACAAA-NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN-----------------------TTTAAA--GTTTTTTGGTATTTTGT-AATGGAAAGTATGCGGCACTAAAAATGGTTTTTCTTTAACATGGATTAGACATGGTCA-----CACTTTCCTACAAATCACAACATTGCGTTATAAATAAAGCAC--ATCTAGTTTT-----------------GTGTTGA------------AAAAGTGGTT-----CACAATTTATAAAGCAGGTCATAGTAAAACACCGCTGGTTCCAAAAAATTCCGCGCATT---------------------------TTCAAGCGACAGC---------AAA------------GGAATTGATGCGGTGAATAATTA-------CAA---------------------------------------------------AAATTATTATTATGATTATATGAAACTTGCCGACCATAGCAAAA-AGATTGTTATAA------AAACAAATCTCATTTTATAGCGGAGTTTC--ACTCCCAAAGCGA--------TGTTATCCACCCA--------TTCCAGTCAGTCATGAAAAATATACGCTCTAAAAA-------------------------------------------------ATATATGATTTTTTCTATAGA-GATACACGGGCACACTAGACCCACCGATCGCGGCTTTGTGTGTGTTAAAAATGACGCTCATATCGTTTTGGGCTGATAATATTGTTCACGTTTTATAAAACAGATAC--ACGGTTAAGCTCTGACCGGTCGTATTATTATCTGTGTGTTCTTGGTTGATACGTTTGT--------CACGTTT--------TTAAAGCAACGACGG--GAAGAACAGTGCGT-----GCGTTTCTTCAC---------ATACAAATACATACAAACATATGCATTGAGGTGA----GTA----------AATAAAATAATTCA-AGAAATT--ACTCGGCCACCGCCCTAACTGTACAAACGGAAATACATAAAGGTAAAT----GGCT---CAACG---GTATTACTGATT--AGGCAATA-----TATTTATA--------TATCAA------ACTACTTTAATAAAGTG-----TCCACAA----GTATGTT------CTTTGCA----TAAAGGCGTAGTC---GGTGAGTCAGCCACGCCAACAG------------------TAAGCAGTCGTCATTTTGC-TGTCTGTCTAA------------CAGGCAA-TTT-----------GTGTGTGT------------------ATATGTGAATAAACAGATACCGGTATGCAATTGCAAA----GCTGTTCAACTGTAAAGATCGGAATGTACTCAAAA-------TTAGGT-CATCACCTTGTTATGG-----------------------AGATACATTTGGGAAACAGTTGACT--TACTTG--------GTATTGGTTATCAGCCAAAAAGC----AAATGC---------TGATACGG--------TTTGGCGCCTCAGCT-TACTCACGGATAC-------ATACCTATGTACAGAAATGTATGTATACGGTACA-----------CAGTCTTAGATAAAATATTAGTACCGATCAGATAG---------CGTTTGCCTAAAACGCTTTTACA--------------TGTGTAAAGTT-----------GTTTT----------------TTGTCTATGTTTGAGAACCCCTTTATTACCTAATTCATTAATTAT-----------ATATTTATGAA--TTTT----TAGCTTTAAT----AGT--------AACTAAA--TTGCTT--------------------AA----------ACAAACTTC---T------TTGTTAAAAAAAAG-ATTTACAAATAC--------AA--------A--TA--TTTGGTGTGCGACACA--------GCATTACTAGTTCATTAATGGGAG--------------GTACATGTGTACATACATACACACATACACATTGCG-----GAGAGTACAG-ATAGGTA---TTTGCATC--------------------------CCATTTTTC---CTA----ATGTAT--------------------------------------------------------------------------TGCCTACATGCAGCT------CTCT------G--------------------------AAGTTC------TATGAAAAT------AGGCACAACTAG---TTTGGCA------AGT---CTTAGAAGCCAAGATCA----GTCCACTG----GCTTT---------------------------------------AAGAATGCAGAACAC-----------TTATTGTTAAACAA---A-----TTTGGATTAAATTATACCAGaataaaatt--------atatat-------------------------tatataaaataaataaataGTATTA--------------CCTACATT--TAAATTCTCGGGTTTATTTATAAGATTGAACAA--A-TTTCCAAGTACCttttttattttttacttattgaaaatgtgattaatttt-ta--tttattatttt-----CAGTTTAGAATAAA--TACGGCCACAAGTAA-------TATAC--ATATT--TATTCATCGAAACC----AACCCACCAC--AAGAGCATAACCAATC
+>dsec
+G--TAAGGTACA-----AAAGACAATTT------------TCTCTTTCCATTCTAAATT---TTTTTTTTTTGAA--TATTTATAGTCGA-----TTAGTATAT--TTTGTGGGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNCTCGTTTTCAATCTAGTGTTATGTTTTT-----------TTCCTAT-----GTGCATACTTTTG----GGCATTTACATTTA--GGT-AAATTTT-----GTCCACCGCAACTACAAGTACGCCGCAT-CA-ACACAG-TATTTTTTAGACTCGCGCCACAAAGCACCGCATCAAGAAATGATACGGTGCTTT-TTTGCTCGTT-A------------TTTTGTGCTCTCCTTCTATGCTGTGCCAA--ATATGGGCAGGTAC-------------------------CAA--ACATTTTTGGTTTTGTTGGCGTTTTAAATTAATAAGAAAACATATATACA--GTTTATAT---TTAAAttttttttt--------------tttttttttt----------tactt------------------------tgctttttattt------------attg--aatcttcttgtata------agaacta----------------------------acaataagt----ttaaaaatcttaatataacaagtat---------------tttttgaacagttgtattatAAACGTGTCATTAAACAAA----------TAAAAGTAGGTCAGAGGTA----------------AGAAAGAGGGTGGATCTGATAAGATTGCCTTTATGTGTTTAATGGGTTGGGTAAAT-----GGTTTGGTTTCACAAA-TACCCTTATTTCAGGCACAAAAAAAGTATGTC--ATAGACTGCGAAAAAATGAT------AAG------------------------------NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN-----------------------TTTAAA--GTTTTTTGGTATTTTGT-AATGGAAAGTATGCGGCACTAAAAATGGTTTTTCTTTAACATGGATTTAACATGGTCA-----CACTTTCCTACAAATCACAACATTGCGTTATAAATAAAGCAC--ATCTAGTTTT-----------------GTGTTGA------------AAAAGTGGTT-----CACAATTTATAAAGCAGGTCATAGTAAAACACCACTCGTTCCAAAAAATTCCGCGCATT---------------------------TTCAAGCGACAGC---------AAA------------GGAATTGATGCGGTGaataatta-------caa---------------------------------------------------aaattattattataattatatGAAACTTGGCGACCATAGCAAAA-AGATTGTTATAA------AAACAAATCTCATTTTATAGCGGAGTTTC--ACTCCCAAAGCGA--------TGTTATCCACCCA--------TTCCAGTCAGTCATGAAAAATATACGTTCTAAAAA-------------------------------------------------ATATATGATTTTTTCTATAGA-GATACACGGGCACACTAGAACCACCGATCGCGACTTTGTGTGTGTTAAAAATGACGCTCATATCGTTTTGGGCTGATAATATTGTTCACGTTTTATAAAACAGATAC--ACGGTTAAGCTCTGACCGGTCGTATTATTATCTGTGTGTTCTTGGTTGATACGTTTGT--------CACGTTT--------TTAAAGCAACGACGT--GAAGAACAGTGCGT-----GCGTTTCTTCAC---------GTACAAATACATACAAACATATGCATTGAGGTGA----GTA----------AATAAAATAATTCA-AGAAATT--ACTCGGCCACCGCCCTAACTGTACAAACGGAAATACATAAAGGTAAAT----GGCT---CAACG---GTATTACTGATT--AGGCAATA-----TATTTATG--------TATGAA------ACTACTTTAATAAAGTG-----TCCACAA----GTATGTT------CTTTGCA----TAAAGGCGTAGTC---GGTGAGTCAGCCACGCCAACAG------------------TAAGCAGTCGTCATTTTGC-TGTCTGTCTAA------------CACGCAA-TTT-----------GTGTGTGT------------------ATATGTGAATAAACAGATACCGGTATGCAATTGCAAA----GCTGTTCAACTGTAAAGATCGGAATGTACTCAAAA-------TTAGGT-CATCACCTTGTTATGG-----------------------AGATACATTTGGGAAACAGTTGACT--TACTTG--------GTATTGGTTATCAGCCAAAAAGC----AAATGG---------TGATACGG--------TTTGGCGCCTCAGCT-TACTCACGGATAC-------ATACCTATGTACATAAATGTATGTATACGGTACA-----------CAGTCTTAGATAAAATATTAGTACCGATCAGATAG---------CGTTTGCCTAAAACGCTTTTACA--------------TGTGTAAAGTT-----------GTTTT----------------TTGTCTATGTTTGAGAACCCCtttattatctaattcattaattattattaatt-atatatttatgaa--tttt----taGCTTTAAT----AGT--------AACTAAA--TTGCTT--------------------AA----------ACAAACTTC---T------TTGTTAAAAAAAAG-ATTTACAAATAC--------AA--------A--TA--TTTGGTGTGCGACACA--------GCATTACTAGTTCATTAAAGGGAG--------------GTAAATGTGGACATACATACACACATACACATTGCG-----GAGAGTACAG-ATAGGTA---TTTGCATC--------------------------CCATTTTTC---CTA----ATGTAT--------------------------------------------------------------------------TGCCTACATGCAGCT------CTCT------G--------------------------AAGTTC------TATGAAAAT------AGGCACAACTAG---TTTGGCA------AGT---CTTAGAAGCCAAGATCT----GTCCACTG----GCTTT---------------------------------------AAGAATGTAGAAAAC-----------TTATTGTTAAACAA---A-----TTTGGATTAAATCACACCAGaataaaaat--------atatat-------------------------tatataaaataaataaataGTATTA--------------CCTACATT--TAAATTCTCGGGCT-------AAGATTGAAAAA--A-TTTCCAAGTACCttttttattttttacttattgaaaatgtgattaatttt-ta--tttattatttt-----CAGTTTAGAATAAA--TACGGCCACAATTAA-------TATAC--ATATT--TATTCATCGAAACC----AACCCACCAC--AAGAGCATAACCAATC
+>dyak
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNGTCATTAAGCTGGAGCC------------------TGGAGGACAAATA--------CATTTGGTTAAAGGCAATTATGAGAA---------------------GGCTTG--------------ATTTTATAAAAATTACCTACATA----CTTTTCAATCTTTTGTTTTGTCGTC-----------T-CCTAT-----CTGCATACTTTTG----GGCATGAACATGTG--GGT-----------------ACCGCAACTACAAGTACACCGCATACACACACAG-TATTA-GTAGAGTCGCGTCACAAAGAACCGCATCAAAACAAAATGCGATGCTTT-TTTACTCGTTTC------------TTTTGTGCAGTCCTTCTGTGCGGTGCCAA--ATACGAGTAGATACCTGA--------------------------------CTGGTT------GACTTTTTATT--CGTGGAAGCAGCGACCGCATGAAAAACAA---CACGAACATTTTTGGAGCC---------ATGTAATTTCA---------CAATGAA-------------------TAATATTTTGAGTTCATTA--------TTTTTGTTGGTGTTTAAATTGAATAAGAAAACATAAA-CACAGA-------TTACATTTAAATAACGAAAG-GTTTATTAATATTCA-----TGGATTA---------------GGT---AATtaaaataaaat-----------------------------TGAAACCAGGCCAAAGGTAATCGCCATCCAGTTCCACCAAGAGGGTGTAGCTGATAAGATTGCCTTTGTGTGTTTAGTGGGTTGGGTAAAT-----GGTTTGGTTTCACAGA-CACCCTTTTTTCAGCCACAAATGAAGTATGCC--ATAGACGTCATAAAAATGAT------AAG-ATTTCGAAGTAAAGCGAAAGAGAATTTATTTGCTTGTTACTGTGTTAGAAATGCAAAGAAACTTGCAATATGATTTTCATACCCGtactagacttg-------ttgaaaagtatgtaacagg-----tagaaataattgttttcgaccttat--ATGGAAAATGCGCGGCACTAAAAATGGTTTTATTTTCTCGCGGGCGGGCCACGGTCA-----CACCTGCCCATAGCAAACGCCATTGCGCTATAAATGAAGCGC--ATCTGGATTT-----------------GTGCTGA------------ATAAATGGTT-----CACGATTTATA-------------------ACTGCTCGGTAGAAAAATTATC-CGCTTTTTGTCGGTTGTC---------------TCTTTTTGGAAAATTTTTTTAACAA------------CTGCAAAGTGCGGTGAATTATTA-------CAACATTTTTTTTAATTTACATATTAACAAAATTTTGATTCTGGTGTACCTGGAATATAATTATTAAATTTATCTAAAAGTTTGATCTAA-AACAAGA---------------------------TATAAATTATAGCAAAGTTTT--ACTCCCAAC-CGA--------AGTTTTCCACCCA--------TTCCGGTCAGTGATGGAAAATGTCTGATCTAAGAA---------------------------------------------------ATATGATTTTTTTGTCCAG-GGGACACGGCCACACTTG-CCCACCGATCGCGATTTTGTTTGTGTTAAAAATGACGCGCATCTCGTTTTGTTCTTGTATTATTGCTCACGGTTTATAAAATAGTCAC--ACGAAAAAACTCTACCCGGTCGAATTATTATACGCGTGTTCTTGGTTAGCACATTTGT--------TTAATTT--------TTGAAA--------------GAACAGTGCGG-----TCGTTACTCCAC---------ATACAAATACAAACAAACTTGTGAGTGTAGGTGT----GTA----------CAAAAAATAACTCA-AGCATTT--ACTCGGGCACCGCCTTAACTGTACAAACGGAAATAAATAAAGGTAAATAAATGGCT---TACCG---GTATTACTGATT--AAGAAATATATG-TATACATA--------TATCAA------ACTACTTTAATAAAGTG-----TACAGAA----GCATGTT------CTTTGCA----TAAAGGCGTAGTC---GGTGAGTCAGCCACGCCAACAG------------------TCAGCAGTCGTCATTTTGC-TGGTTGCCTAA-----------ACACGCAAATTt-----------gtatgtgtatgtctgtgtgtgtgtatgtgcgtgAATAAACAG-TACCGGTATGCAATTGCAAA----GCTGGTCAACTATAAAGATCGGAATTTACTCAAAA-------TTAGGT-CATCACCTCTTTATGC-----------------------TGATATATATTGGAACCAGTTTACT--TACTTACTTACTTAGTATTGGTTATCAGTTAAAAAGC----TGGCGG---------TGATACGG--------TATTGTGCCTCTGCT-TACTCACGGATAC-------ATACTTA------------TATGTATACATTCTT-----------CAGTATAGAAAAAA-TAGTAAAACTGATCAGCTAC---------CGTT---------AGATTTTACA--------------AAAGTAAACGT-----------ATATT----------------TTGAAAGGATATAACAAAATC-----TAAATAAATGTTAAATTTGTA---ATTGAAATGGTTACCAA--A------------TTATT----AAA--------ACAAAAA--AAAATT--------------------GAGAGGTGTCTAACACTTTTT---TGTATATTTTTCCAATGCTCT-ATTTACAAATAC--------TA--------A--TA--TTTCGTGTGTGACGCA--------GAATTGTAAGTTCATTAAAAAAAAAA------------GTACATACATACATACACA------------TTGCA-----GAGAGTACGG-ATCGGTTAG-CTTGCATC--------------------------TCATTTTTC---CGA----atatacatatacatacataca----------tgcatatgtatctacatG-----TTCA----------------TTAAACCACCTACATGCGACT------CTTT------G--------------------------AAATGC------TATGAAAATGAAAATAAGCACAACTAG---TTTGGCA------AGT---CTTACAAGCCAATATTT----GTCCCCTT----ACTTT----------------------------TCTATGGCTTTAAGAATGTAAAACAG-----------TTTTTTTT---TAA---T-----TTTCGATTATCGTATACCAAAAAAAAATT--------AGATGTATCACttataaaatacttataatatcctataaaatatataaataatataa--------------CCAAAATA--CCATACACCGGGTAATATTTTAAGTATGAAAAA--G-TAGACAAGTACATTCATTATGTATTATTAA--GAAAATTTAAATAATGTT-TA--TCTATTATTTT-----CAGTTTTGATTAAA--TACGGCCGCAATAAA------ACATAA--ATATC--TATTCAGCAATACC----AACCCACCAT--AAAATTGTAATCAATC
+>dere
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNGTCATTAAGCTGGAGCC------------------TGGATGATAAAAA--------CATTTTGTTAAAGGAAGTTATGAAAA---------------------GGCTTG--------------ATTTAAAAAAAAT-ACCTTAACACNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN----TTGGTTT----AGACTGTCTCCTATCTCGGAATGGATGCCTATATTaataatta---taaaaattctttta------------------attttca---------taatat-------------------------ttttGTATTTTCTAACGTTGTCCTTTTGCATATTTTCGAATC--ATATGTATATAT----CATAGAAATC--TTCCTATTCCCataataata----taataaatatatGTAAAATGAATTT---------------TGTTTAACCTATGCTAGTATAAATGTGTCATATAACAAC----------TTAAACCAGGCCAAAGGTAATCGCCATCCAGTTCCATGAAGAGAGTGTAGCTGATAAGATAGCCTTTATGTGTTTAATGGGTTGGGTAAAT-----GGTTCGGTTCTACAAA-TACCCTTATTTCCGACATAAATAAAGTATGTC--ATAGAAGCCGTAGAAATGAT------AAG-ATTTCGAAGTAAAGCGAAAGAGAATTTATGTGCTTGTAACTGCGTTAGAAATTCAAAGACACCTGCAATATGANNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN-----------------CACCAAAAATGTTTTT-TTTTATCGCGGCCGGGACACGGTCA-----CACTTGCCCACAAATCACAATATTGCGATACAATTGAAGCGC--ATATGGTTTT-----------------GTGCTGA------------AAAAATGGTT-----CACGACTTATA-------------------ACGTGT--------AAGTTATCACGCTTA---------GGC---------------TCCGCTCGGTAAA---------AAA------------GTGATAAGTGCGCTGATTAATTA-------CAAT----------------------------------------------TGGAATAAAATTATTAAAAGTATCTAAAAGTTTGATCTCATAACaaaaaaatttattttaa------aatataGTTACAAATCATAGCGGAGTTTC--ACTCCCAAA-CGA--------TGTTATCCGACCA--------TTCCTATCAGTGATAGAAAATGTCCGTTTTAAAAACCATGTACTCCACCCAATCCGTTCAGTGATGGAAAATGCAGGGCTAAAAAAATATGTTTTTTTTCACTAGCGGGACACGGTCACACTTG-CCCACCGATCGCGACATTGTTTTTGTTGAAAATGACGCGGATCTCGTTTTGTTCTGATAATATTGTTCACGGTTTGTAAAATAGGTAA--ACGGTAAAACTCTGGTCGTTTGAATTATTATCCGCGT---TTTGGTTGACACGTTTGT--------TTAGTTT--------TTGAAACAACGGTGA--AGAGAACAGAGCGG-----GCGTTCCTCCGC---------ATACAAATACATACAAACTTGTGCATGTAGGTGT----GAA----------CAAAAAATAATTCA-AGCATTA--ACTTGGCCACCGCCTTAACTGTACAAACAGAAATAAATAAAGGTAATT----GGCT---TAACG---GC-TTACTGGCT---------------TATTTATA--------TATAAA------ACTACTTTAATAAAGTG-----TACACAA----GCATGTT------CTTTGCA----TAGAGGCGTAGTC---GGTGAGTCAGCCACGCCAACAG------------------TCAGCAGTCGTCATTTTGC-TGCCAGTCTAA-----------ACAAGCAAATTt-----------gtgtgtgt--------gtgtgtgtgtgtgtgtgAATAAACAG-TACCGGTATGCAATTCCAAG----GCTGGTCAACTATAAAGTCCGGAATGTACTCAAAA-------TTAGGT-CATCACTTCTTTATGA-----------------------AG-TAAATGTTGGAACCAGTTAATT--AAATTA--------GTATTAGTTATCAGCCGAAA--------GACGG---------TGATACGG--------TGTTGCGCCTCTGCT-TGCTCACGGATAC-------ATACATACTTACATATATGTATGTATACGGTATA-----------CAGTTTTAGAAAAA--AATAGAACCGATCAGTTAG---------CGTT---------AGTCTGCCTT--------------TAAGCCAA-----------------------------------TTAAGGCCATAAAAAAAATTG-----GAAATAAGTGTTCATTTAATATTAGTTAACATAATTGTAAA--AAC-----AAACTTTGTT----AAA--------AAAAAAA--AAGGTT--------------------AA-AGCTACTTAAGAAATTCC---TATTTATTTTTCCAATGCTGT-ACTTACAAATAC--------AT--------C--TA--TTTCGTATGCGACGCA--------GCATTGTAATTTCATTAAAAAGAA--------------GTACATTTGTACATACACA------------TTGCA-----GAGAGTACGG-ATCGGTCAT-CTTGCATC--------------------------TCATTTTTC---CGA----ATGTACATATACACGAATACACATATACGTATGCATATGTAT--GCATG-----TTCA----------------TTAAACCGCCTACATGGCAGT------CTTT------G--------------------------AAGTTC------TATGAAAAT------AAGCACAACTAG---TTTGGCA------ACT---CTTACAAGCCAATATTT----GTCTACTG----ACTTT----------------------------TCTATGGCTTTAAGAATGTAGAACAG-----------TCTTTGTTAAATAA---C-----TTTCGATTATCGTTTACAACAATAATAT---------AAATGGAGCATCTATA-----TCTATTACattttata-------ttaataatataa--------------tttaaata--CCATATTCCGGGTTTATTCTTAAGTATGAAAAA--AATATACAACTACTTTTATTATGTATTTTTTATTGAAAATTGTTATACAGTTGTA--TTTATTATTTT-----CAGTATTAATTAAA--TACGGCCGCAATTAA------ATATAA--ATATC--TATTCAGCGAAACC----AACCCACCAT--ATAAGTGTAACCAATC
+>dana
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN------------TTTAA------TTAAGCTAACTAAAATCGGGAACCAATGTGATAAGAACGCGTCCCAAGCGAGGTG--AAAAAAATGTATATCTGTGTGTGAGCGGAGCCGAAACCGAA----------CGCAGAAAGAAGCA-ACAAATTCCACCGAGCCACCGCC-TAACTGCGCAACGGCGAGTAAATTAGTGTAAGT----G---------CA---GGAAGAGTGAGCGAAAGGAACATTTGTTATTTGTAGGCGCCATCTTCGG------ACGA----ACAAAAGCGCAAACTACATAT----GTATATTAGTTATTTTTGCA-----ATATGCGTGCGCCGGGGTGACTCACCCACGC--ACAGCGCACACCGCCCACGCCATTCGCTTTCGTCATTTTTC-GGTGTCTCTTGTCCCTTGTTTTCTATGCTAATTCCGTTCCCTGGCGCTTGTGT---ACTGTACTTGTGTGTGTGCGTGAGTGAATGAATGGCGGAGTAAGATGGCAAATTCTGCTGGCCAAGTG----AACCGTTACGATCGCAGAA-------TTAGGT-CATCACCTCGCT------------------------------TACACAT--AAAACAGTTAGTTNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN-------------
+>dpse
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNATTTATTATTTATTCTCAACGTAA-TGTATTC-AA--TGTATTATTTTGATATCATTTCAGTGTTTT--TAAATCCCCAAAAAGT----GAAATCC--GTATTGTTATTGTGTTACGTC----AA---ATTAA--ATTCGTGCAACA----
+>dper
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN-attta-aaatat--------ta--------a--taaatttattGTAC-ATGCA---------TATTTCCAGACGTTT----------------------ATACATATGCACATAC---------------ATGTA-----CATAGAAAGA-ATTATTAAA-TTTAACTT--------------------------TCAATCGCC---CTCTATCATGTTCATAAAAAACGTCATA-----------------------ACTTG-----ATTGA----------CACTGTAAATTTTTCCAAATTAAATT------TTCTCTTTCCA--------------------------AAGTATATTCATTTTTATAAT------GGGCACAACAAAACACTCGAAA------CAT---TTTTAGACACANNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN----------------------------------------ATTTGTA--------------TCTATTTTGGCAACACTCCCGTTTTT--------------AAA--A-TGGCCATAGAGTTTC---ATTTATTATTTATTCTCAACGTAA-TGTATTC-AA--TGTATTATTTTGATATCATTTCAGTGTTTT--TAAATCCCCAAAAAGT----GAAATCC--GTATTGTTATTGTGTTACGTC----AA---ATTAA--ATTCGTGCAACA----
+>dwil
+G--GAAGCGGCC-----AAACGCGTTTTA--------AAACTCATCTCCGTACTTTTTT---TTTTTTTTTG-TA--TTTTTGTTGTAAA-----TTGTGACAC--ACTCTGCGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNTTAAATGTCTTCGTATA------AATTATTTGTT-TGTAACTAATGGCTCATATTCT---------------------------TTTATTCAACTG---------------TTTTTATCGAATGTTATGAAAAACGAACAGTTTAATAAAAGAGTTGTTCTTAAAATAGGT-----NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNATATTCGATGAATTCGATACGGATGGTTCCGGTTC--CTGGTCGGATCGAGAGGTGCGTA--CTTGTTTGACACGTTTAT-----------------------ATCCGCCGCCCTTGG--ATTGGGCAGC-TAT-----GCGTTACTTTGAGGAGGTGGTACAGAATTGCTCACGCTCTTAT------CAGCAA----GCT----------GATAACATAGTTCA-----------------------------CATGCAGAAGCTAACCCAGGAGATACGAG----AGCTGGACAACA---GGATTGTTGAGT--GCACAATG-----AATCAGTA--------TGGCAACTGGGAATTTCTTCGCGAGCGCA-----CAGACAA----AAAGCTA------CCCAATAGCTATAATACGGCAGTT---GGTGAGTACATATCAAAATCAT------------------CTAATAGTTTTGATGTTCCATATTCATTTTG-----------------------------------tatatac------------------atacatgtatttgtacatacatatatgtatatgtatt----gctatttatttatatacttatttatgtacatacatatatCATTTAGAT-TTTAGCATTTATATAGCCTAGCTGCCACCTGATATGCCTGAATAAATATGGAAAATTGTTGATT--TATTTG--------GTTTTGGGCATCAAGCAAAAGGCGTGCACACCA---------AAATGCAA--------T-TAGTA-------T-TGTACACGAATAC-------AAATCTATATATATATATATATGTATCTGTCATGT----------CAGAATGGGAGGTA-------AATTGATATGATTA---------TGTG--------AATTTTTCAAA--------------TTTGTCGGCGT-----------TTTCT----------------CTTTTTTCGT----------------GACATATTCTATTCAT--------------ATTTTTATGAA--AGATTATTGAAGTATAAT----AGAGCAAGCGAACTTAAA--CTATTT--------------------GG----------ATAAGCTTA---G-----TTTTTCCAAGG-----ATTCCGAAGTGT--------AGTAGACCTGA--AA--TAAGTTACGTTATACT--------TAAATGCAAAACAAATAAAGTAAGTC------------GT-CTTAACGACTTCAGTATACC--------ATGCA-----CAAAGTG-GA-ACAAATATT-TTTAACTT--------------------------CCAATTGTA---CAT----ATATGTATGTATAT------------------------------ATATG-----TTTA-------------------------CCAAAATTGGGT------TTTC------G--------------------------CCGTCT------TGAGGA------------------TAA---TTCTGAA------TAG---CTTAGAAACGTAAATGT----ATTTTTTT----GCA-----------------------------------------AATGATATACAGCAAAAATGACTTAATTAGTTTTAATC-----------TTTTGATCAGATCCCGCAAAAAACCATTT--------CCATATCC--------------------TTCCATGTTCACGGGACACTCTATATTA--------------CCTAAGT---CATTATATATTCTTTTTTCGTGC-------AAA--A-TATATACCTTACTTTATGATTTATAATT--TTGGTGACCCCGACGTTTGT-TA--ATAACCATTTT-----CTCTCTC---TCTT--TCTGTCCCTTACAGATCGTTAAAGTAA--CCATT--TAAGAAGTGACATA--------------------------------
+>dvir
+G--TAAGGTATGTATTTACAAATAAATA------------TCTGTCTNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNTTTAAGC-----------------------------------TTGGAGAACTCTACATTTGTAATTTTCAATTCTGCGTCTT----ATTTGCTTTAAAGCTTTTCCAAC-------------TTTTTCGTTG---------TACTCC-----------------------T-TTTCTCCTTCA--------------NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN-------------------TTTGTGAACATTTTTAAAGC----AATTAATGCTAATTTATGTTCGGGCGTCGCCTAACGAATGGCAAC-AAAAACAAGAGTGCTTTGTTAGTGTATTCGTATGCGAG-ATGGCTTCTTGTCACG-----------CATGCTATACAAACTGGCTAGTAGTAAACTAATAC-----------TTTCATAAATATACCTATGTA--------------TAAGTTTATGTTATACAAAAAAGTTTT----------------GTTTAATTCGT----------------------CTATTGTGCTGAGTAGGG------AGTTCATTAA--C-------ATTATTTATTG---AAT--------CGTTGTA--AGAGTC--------------------TA----------TTAATACAC---T---------------------CTTGCCAAAGAC------------------A--CA--TTCATGACTCTGTAAA-------AATAAT---------------------------------CTCATCATAGAATTTCT------------------------AATTTTGTGATATTCTTC---TATGCAG-----------------ACGATTGT--ACATTTTTTCTATGT----ACCCAAATAGCTAC------------------------------AAACAGCTCCTTTA----------------------CGCCTACATAAAAT-------ATCA------GGCTT----------------------ACGTTT------TTA-A-ACT------GAGCACAACTTG---TTTAACG------AGT-------TAGGTAAAGGTCA----TGCTGCG------ATTT-------------------------------------------CTTTAAGATAT-----------GTACTTTTTAAA-----------TATTTAC-----------ATAGTCTTTTC-------------TTTC---------------TTCCCAGGCTATGCAAAATTTAAAAAATTG----------------TCAGTGT------------------------------GACTAATCa-tta---------------ataatttaaaaaaaaaacttttcattaactct-taacataattatata-----tattataaattatt--GCAGTTTGCAGAC----------------TCGTA--AATTGACAAACCTT----AATCCAACAA-AAAAAATACAATT----
+>dmoj
+G--TAAGGTATGTATTTACATACA----------------TTTTTCCCTACATAATTTTAAATGTGTATAAA-AA------AAAACCAAA-----TAAAAAT----TTACTAGA--------------------------------------GTCACAGTAA------GCAAATT-------GAGTATTAGAGCGA---------------------AACTTGT-----A-------------------------------NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNcatatacatatatatgtatatGCTTAAA--------TTAGCTGCATCTCCATTCT---------------------------GAATCAATTCGCAAGAGAGCCGACGCAGACCGAC-------------------CTCCTTATTGC----ATCACA---------ATGTGCGG-----------CGGGCATGAAC-ACAAATATACATGC-------ATACATGCGTACAT-AG-ACATATGTATGTTCCC-----------CCTGCAGAATATATT--TTAATATTTAGAGTAGAA-----------TTTAAGGTAGAAATATGCAGA--------------TGAGTGAATGTTC------ATAGTTTC----------------TTTTAGCTTTTAG-------------TAAATTTTAATTTTGTTGATACAAATGTTTCAGTCCACGGC--T-------CTGTTTTGTTGCTAAAA--------TGTTCAACTAGAGTT--------------------GT----------AGAAAATTC---C---------------------ATCGAAAAAAAC------------------G--TG--CTGTTTATTCAGCAGA-----CAAGCAATAGCAATTGATAAGTGTGA-----CCAGCTC---TTTGTTATAGAGTTACACCAAAC--------AAGCA-----AATTTTACTA-ATGCTTCAAATCTACAGC-GTTGGG---------ATGCTCAC--ACATCTATC---TGT----ATGTATGTATATTC------------------------------AGACA-----TATA----------------------TGCATAAATATATTCATTATTATCT------GTCTTGCTGTATATATTTG--------------------------NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNATGCCA----TTC----------ATTC-------------------------------------------CAATAAAATAT-----------CTATTTTATAAAAC---ACGAAATATGTATGaaaa---aaaataaatat----------------------------------------aaataataaaaaatataaataataata--------------TCGGTTTC--TTACATT----------------GCTTGAGCAA--A-TTC---------------GTATATAAATAGCATAATTATTAATTAG---------GAAAATATATA-----TATTATATGTATCT------TTTACAGGC----------------TTGCG--AATTGACAAAAATA----AGTTCAAAAACAAAAAATAAAATT----
+>dgri
+-----------------------------------------------ATATATACTTTT---TGGGAATTAA-AA--TATCACGACAAAA-----TTATAATACCCTTTTTAAT--------------------------------------GGTATATAAA--------AAATT-------CAATATTTCGCCCATGTGTTCTTTATATTTTGGTTAAACTAT-----ACGTTCTAATTTGTAAATTAT-TAGT----------TTCCGAACATTAT-TGATTTCTTT-----------TGCAGGTAACTAGTATATATTATTACATCGGCCGTTGCATTTATTGGT-ATATTCTC--AATTCCTTTTTAATCTCATGTA----ACAA-CGCCCACAA--ATTTTATGTGCACGTGTCACGCTTGAGTGCCT------ATGTTGTCTGTTTTT-CATATTCGCTTCACAGCCTAATAATTCCGTGCACTTTTTTCACACATTGAAAACAAAATTAAGAAAT--ATGAAGT-----------------------------------TTGAAAAATTGTATATTACCAATGTAAAATT-------TT----ATTT---TCAAAATATAAATAAG-------------ATTAATGTTG---------TGCTTT-----------------------AATTGTTACTGCATTTTTCTG------NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN--TACTTTTATGTAC-------ATACACACAAATGTGAGTGTGTGTGTGCGTTCTCTCACGCACTGACATTCTGAAAATTTTCTTGAATATT----GTATACGTCCTCTGTTTTTTAATAAAACGACTT---TA--------------ACAGCAAATATTGTGTAATATAATTT------------------TCTAAATGTTTG-------------TGTGCTTAAATTTT-------CAAGTGTTTGAAGTTATGTATTC-------ATGATCAATT----AAA--------AATTCAG--AGAGCG--------------------AA----------ATAATATTCGGGC---------------------GTCGCCTAACAA------------------A--TG--GCATCATAACAACAAAGCTTCTAGGTAGTGTGTGTTCATATGCGTGATGCCTCCATTTCACGCAGACTAAATAATCTCT--------------ATGCATATTTAATATTAAGA-AGTTTTCGTTCATTCATCCGCTGAGCTGCATAGCGAGTTCATTAACATTTTTT----------ATTGAATGATTTTA------------------------------AAAAG-----TAAA--------------------GCCTCATAAATATACTC------ATCA------ACCGC-CTACATATTTTTGCATTCATAATGTAT------TTATA-ATT------AAACAAATCTCA---TTTCGTTTCTTGTAGT--------------ATATCA----TTTTCTT------ATTTAGATTTTCGACGAAATTAAAATGACTTAGTTACAA--------GTTTGTTATAT-----------ACACTTGGTACTTC---A-----TATTTAGCAGACTGTACTCTAGTTTTGTA--------AGACATTTT---------------GTATATGCTTATAAAAAGTATAGAAA--------------------TCAATTTT--CTAAA----------------------GCATGATTA-TTT---------------CTTTTTAAATGGTTCAACCTTACAGAAATTTT-TA--TTTACTATATT-----TTTCCTTAATTATTTAACAGTTGGTAACC--------------NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN-------------
+
+~ >prec-overlap-s.sh CDS Intron < ~pouyak/work/motifs/flies/data/regions/genome-annot.txt  | awk '$1=="Intron" && $5 != "."' | head | extract-mfa 12 /seq/compbio/pouyak/data/flies/alignment-files-ucsc_dm3.txt 
+~ >extract-mfa
+USAGE: extract-mfa [OPTIONS] <NumOrg> <AlignFile> < <Locs>
+    -s         Whether to add or remove chr from chromosome names in AlignFile (-1 to add chr, 1 to strip) [default: 0]
+    -k         Species mask to use. NOTE: this /includes/ the target species (-1 for all) [default: -1]. 
+    NumOrg:    Number of organisms in each alignment file (optional when -k is not -1)
+    AlignFile: File containing list of all the alignment files.
+    Locs:      File containing locations (name chr start end [strand])
+~ >export PATH=$PATH:~pouyak/bin
+~ >

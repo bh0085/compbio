@@ -4,6 +4,8 @@ from numpy import *
 import numpy as np
 import matplotlib.patches as patches
 import cb.config as cfg
+import inspect, os
+
 
 class tmpF(object):
     def __init__(self,num = 10, size = (8,8)):
@@ -19,6 +21,17 @@ def fignum(num, size = (8,8)):
     plt.close(num)
     return plt.figure(num, size)
 
+
+def figpath(filename = 'plot.pdf', delete = False):
+    called_name = inspect.stack()[1][3]
+    stack = inspect.stack()[1]
+    call_path = os.path.abspath(stack[1])
+    path = cfg.relPath(call_path)
+    figpath = cfg.dataPath(os.path.join('figs',path,called_name,filename))
+    if delete:
+        if os.path.isfile(figpath):
+            os.remove(figpath)
+    return figpath
     
 
 def color_legend(fig,colors, labels,

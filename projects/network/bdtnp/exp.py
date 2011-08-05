@@ -21,6 +21,7 @@ cluster_tissues
   using the max-sum algorithm from gifford's class.
 
   Uses the online interface for now.
+
 '''
 
 from compbio.projects.network import io as nio, utils as nu
@@ -165,9 +166,22 @@ def p_m_correlation():
                        
 
 
+def recall_c2(**kwargs):
+  '''
+A kludgy wrapper to store the clustering results for later
+without modifying the original mess of a program, c2...
+'''
+  def setC2(**kwargs):
+    ll = c2(**mem.sr(kwargs))
+    result =  c2(ll, **mem.sr(kwargs))
+    return result
+  return mem.getOrSet(setC2, 
+                      **mem.rc(kwargs,
+                               name = 'default_c2_settings',
+                               on_fail = 'compute'))
 def c2( launcher = None, ncluster =2000, host = 'tin', 
         reset = 0, step = 10, exemp_time = 'all',
-        doplot = False):
+        doplot = False ,**kwargs):
   mrnas = nio.getBDTNP()
   misc = nio.getBDTNP(misc = True)
   

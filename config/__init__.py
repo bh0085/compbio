@@ -1,6 +1,45 @@
-import os, pipes, socket, subprocess as spc
-root = os.environ['COMPBIO_PATH']
+'''
+Basically, this module contains a substandard bunch of hacks to 
+manage paths etc in accordance with the percieved layout of the users
+filename.
+
+It seems to mostly just require the users environment variable:
+
+$COMPBIO_PATH
+
+to be set and from this point, it can look up things like the path
+for generic data:
+[$COMPBIO_PATH/data/...] and for example, script outputs:
+[$COMPBIO_PATH/data/outputs/...], sqlite databases etc!
+
+Of note is the ability to look up paths on a remote server
+(it just sshs to the server, launches python and then runs 
+a script same as it would locally. 
+
+Functions:
+  remotePath:  Find a datapath on a remote host
+  compPath:    Find the path of a file in the compbio dir.
+  getTempPath: Find the temporary data file directory.
+  
+  dataPath:    Return the datapath of a relative path or URL.
+  dataURL:     Return the URL of a relative data path on a host/volume.
+  
+  scriptInputPath:    Default inputs for a script.
+  scriptOutputPath:   Default outputs for a script.
+
+  sqlite/postgres... Read the function docs...
+
+'''
+
 import compbio.utils.remote_utils 
+import os, pipes, socket, subprocess as spc
+
+#TALK TO ENVIRON AND GET PATH SETTINGS
+root = os.environ['COMPBIO_PATH']
+compbio_paths = [root,
+                 os.path.join(*(list(os.path.split(root)[:-1]) + ['cb']))]
+roots = compbio_paths +\
+    [os.environ['PROGRAMMING_PATH']]
 
 def remotePath(abspath, host = 'tin', root = 'comp'):
   '''Get the location of the a file on the remote file system
@@ -38,6 +77,14 @@ def absPath(localPath):
   global root
   return os.path.join(root, localPath)
 
+
+def relPath(path):
+  '''
+Get a short version of the given path relative to any one of the root paths.
+'''
+  return min([ os.path.relpath(path, r) for r in roots], 
+             key = lambda x: len(x))
+
 def compPath(path, absolute = False):
   if absolute:
     return os.path.join(os.environ['COMPBIO_PATH'], path)
@@ -54,7 +101,6 @@ def progPath(path, absolute = False):
   
 def getTempPath():
   return dataPath('temp')
-
 def dataPath(url, make = True):
   if url.count(':') == 0:
     host_name = 'localhost'
