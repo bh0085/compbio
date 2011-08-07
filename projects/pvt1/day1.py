@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env python
 
 '''
 Take the ideas from day1 and run them in a grid
@@ -13,6 +13,11 @@ run0(method = '1d')
 
 import day0
 from numpy import *
+import os
+import cb.utils.bsub_utils as butils
+import cb.utils.bsub as bsub
+
+import inspect
 
 def run0(method = '1d', win_len = 150, win_ofs = 25):
     '''
@@ -37,7 +42,7 @@ PVT1 region.
                       run_id = 'run1d_single_{0}_{1}'))
 
     runid = 'run1d_{0}_{1}'.format(win_len,win_ofs)
-    ll = run1_launcher(p, runid)
+    ll = run1d_launcher(p, runid)
     ll.launch()
 
     return ll
@@ -79,7 +84,13 @@ output:
   the datapath (same for local and remote) of data output each thread
 '''
 
+    #GENERIC SETUP FOR A BSUBBED TASKMGR.
+    #Takes an input in the form of a list of param-dicts.
+    #
     inp_dicts = butils.load_data(run_id, 'input')    
+    #DO EVERYTHING TWIXT --------------------------------[HERE]
+
+
     eyeball = bsub.eyeball(run_id,
                            os.path.abspath(inspect.stack()[0][1]), inp_dicts,
                            func = 'remote_run_1d',
@@ -90,6 +101,11 @@ output:
     eyeball.await()
     eyeball.package()
     eyeball.complete()
+    out = {'result':eyeball.statii()}
+
+    #AND ------------------------------------------------[HERE]
+    butils.save_data(out,
+                     run_id,'output')
 
 #Remote launchpoint for bsub.
 def remote_run_1d(run_id):
@@ -97,18 +113,30 @@ def remote_run_1d(run_id):
     
 
 '''
+
+    #GENERIC SETUP FOR A SINGLE BSUBBED PROCESS.
+    #Takes an input saved as a single dictionary.
+    #
+    p = butils.load_data(run_id, 'input')    
+    #DO EVERYTHING TWIXT --------------------------------[HERE]
+    
+
     baserng = p['baserng']
     win_len = p['win_len']
     win_ofs = p['win_ofs']
     
     ali_nums = day0.fetch_num_ali()
     l = shape(ali_nums[0])
-    
+    out = p
 
-    
+    #AND ------------------------------------------------[HERE]
+    butils.save_data(out, 
+                     run_id,'output')
 
 
         
+
+
 def usage():
   print '''
 usage: 
@@ -121,8 +149,5 @@ Call function with run_id.
 if __name__ == '__main__':
     run_id = sys.argv[2]
     run_func = globals()[sys.argv[1]]
-    output_dict = run_func(run_id)
-    if output_dict == None:
-        output_dict = {'blank':'Nothing output in call to {0}'.\
-                           format(sys.argv[1])}
-    butils.save_data( output_dict, run_id, 'output')
+    run_func(run_id)
+    exit(0)
