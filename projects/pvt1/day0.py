@@ -131,7 +131,7 @@ def run_windows(ali,ref, n_specs = 3,
 
 
     #CHOOSE A LIST OF WINDOW OFFSETS TO INVESTIGATE.
-    if window_selection = 'exhaustive':
+    if window_selection == 'exhaustive':
         while win_len + p0 < baserng[-1]:
             ofs.append(p0)
             p0 += win_ofs
