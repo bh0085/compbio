@@ -13,11 +13,10 @@ run0(method = '1d')
 
 import day0
 from numpy import *
-import os
+import os, sys, inspect
 import cb.utils.bsub_utils as butils
 import cb.utils.bsub as bsub
 
-import inspect
 
 def run0(method = '1d', win_len = 150, win_ofs = 25):
     '''

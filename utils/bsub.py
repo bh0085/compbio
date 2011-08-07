@@ -71,22 +71,45 @@ remote_make_tests which runs a batch of clustering algorithms in matlab.
     comm = rutils.scp_data(input_path,input_path,dest_host = host).communicate()[0]
     print 'Done!'
     print
+
+    log_file =  os.path.join(remote_logpath,'{0}.log'.format(self.run_id) )
+    self.remote_logpath = log_file
     print 'Creating bsub commands'
     self.bscmd = cmd(remote_script, 
                      func = func, 
                      run_id = self.run_id,
-                     log_dir =remote_logpath,
+                     log_file = log_file,
                      do_clear = True)
+    
     print 'Done!'
     print
     print 'Launcher is ready to launch in the background or await with "quickRun"'
 
+    
   def launch(self):
     print 'Launching job for {0}.{1}'.format(self.scriptfile, self.func)
     comm = rutils.ssh_exec(self.bscmd, host = self.host)
     self.run_jobid = re.compile('Job <([\d]+)>').\
         search(comm).group(1)
     print '  submitted with jobID: {0}'.format(self.run_jobid)
+
+    
+  def fetch_logfile(self):
+    import subprocess as spc
+    logpath = self.remote_logpath
+    prc = spc.Popen('ssh tin "cat {0}"'.format(logpath), stdout = spc.PIPE, shell = True); 
+    log =  prc.stdout.read();
+    runs =[item for item in list(re.compile('^Sender: LSF.{10}', re.M).split(log)) if item.strip() ]
+            
+    results = [re.compile('Subject:(?P<subject>[^\n]*).*'+
+                          'Started at (?P<start>[^\n]*).*'+
+                          'Results reported at (?P<end>[^\n]*).*'+
+                          'The output \(if any\) follows:(?P<output>.*)', re.M + re.DOTALL)
+               .search(r).groupdict()
+               for r in runs]
+    return results
+    
+    
 
   def remote_status(self):
     scrpath= '${COMPBIO_PATH}/utils/bsruns.py'
@@ -368,12 +391,13 @@ keywords:
   
 
 '''
-  func, name, run_id,project , Rmem, log_dir, do_clear=\
+  func, name, run_id,project , Rmem, log_dir, log_file, do_clear=\
       [kwargs.get('func', None),
        kwargs.get('name', ''),
        kwargs.get('run_id',''),
        kwargs.get('project','default'),
        kwargs.get('mem', '1'), 
+       kwargs.get('log_file', None),
        kwargs.get('log_dir',cfg.dataPath('batch/logs')),
        kwargs.get('do_clear',True)]
 
@@ -385,6 +409,10 @@ keywords:
     else: prefix = blnk
     run_id = get_run_id(num, prefix = prefix)
 
+
+  if log_file == None:
+     log_file = os.path.join(log_dir,'{0}.log'.format(run_id) )
+
   if func != None:
     run_str = scr_path+' '+' '.join([func, run_id]+list(args)) 
   else:
@@ -392,7 +420,7 @@ keywords:
   sub_cmd = 'bsub -q compbio-week -J {3} -o {2} -P {0} -R \'rusage[mem={4}]\'  "{1}" '\
       .format(project, 
               run_str,
-              os.path.join(log_dir,'{0}.log'.format(run_id) ),
+              log_file,
               run_id,
               Rmem)
   if do_clear:
