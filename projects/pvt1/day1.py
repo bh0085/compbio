@@ -38,6 +38,9 @@ PVT1 region.
 
     runid = 'run1d_{0}_{1}'.format(win_len,win_ofs)
     ll = run1_launcher(p, runid)
+    ll.launch()
+
+    return ll
          
                  
 
