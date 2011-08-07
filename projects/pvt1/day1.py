@@ -18,7 +18,7 @@ import cb.utils.bsub_utils as butils
 import cb.utils.bsub as bsub
 
 
-def run0(method = '1d', win_len = 150, win_ofs = 25):
+def run0(method = '1d', win_len = 150, win_ofs = 25, spec_count =3):
     '''
 Build a list of jobs on the Broad within which 
 to compute zscores for every single locus in the
@@ -26,26 +26,28 @@ PVT1 region.
 
 '''
     ali_nums = day0.fetch_num_ali()
-    runs_per_rng = 1e5 / 25 
+    runs_per_rng = 50
     
     p0 = 0; p = []
     while p0 + win_len < shape(ali_nums)[1]:
         b0 = p0
         p0 += win_ofs * runs_per_rng
-        b1 = p0
-            
-        
+        b1 = p0        
         p.append(dict(win_len = win_len,
                       win_ofs = win_ofs,
                       baserng = (b0, b1),
-                      run_id = 'run1d_single_{0}_{1}'))
+                      run_id = 'run1d_single_{0}_{1}',
+                      spec_count = spec_count))
+        #for testing purposes, only run a small number!
+        if len(p) > 10:
+            break
 
-    runid = 'run1d_{0}_{1}'.format(win_len,win_ofs)
+    runid = 'run1d_{0}_{1}_{2}specs'.format(win_len,win_ofs,spec_count)
     ll = run1d_launcher(p, runid)
     ll.launch()
 
     return ll
-         
+
                  
 
 #Local launchpoint for bsubs
@@ -123,10 +125,28 @@ def remote_run_1d(run_id):
     baserng = p['baserng']
     win_len = p['win_len']
     win_ofs = p['win_ofs']
+    spec_count = p['spec_count']
     
-    ali_nums = day0.fetch_num_ali()
-    l = shape(ali_nums[0])
-    out = p
+
+    bases = (128693265,129266680)
+    a0 = day0.fetch_num_ali()
+    names = day0.fetch_alinames()
+    
+    ref = a0[0]
+    ali_counts = sum(less(a0,4) * equal(a0, a0[0,:]) ,1)
+    names_all = [names[i]  for i in argsort(ali_counts)[::-1]]
+    names = names_all[:spec_ct]
+    a0 = a0[argsort(ali_counts)[::-1]][:spec_ct]
+    ali_counts = sorted(ali_counts)[::-1][:spec_ct]
+    
+    locii, results = day0.run_windows(a0,ref, n_specs = n_specs,
+                                      n_runs = n_runs,
+                                      win_len = win_len, win_ofs = win_ofs,
+                                      spec_names = names,
+                                      baserng = baserng)
+
+    out = {'locii':locii,
+           'results':results}
 
     #AND ------------------------------------------------[HERE]
     butils.save_data(out, 

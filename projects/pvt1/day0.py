@@ -80,9 +80,9 @@ def run0(spec_ct = 8, **kwargs):
         results = {}
         for n_specs in [3, 8]:
              locii[n_specs], results[n_specs] = run_windows(a0,ref, n_specs = n_specs,
-                                      n_runs = n_runs,
-                                      win_len = wl, win_ofs = wl/2,
-                                      spec_names = names)
+                                                            n_runs = n_runs,
+                                                            win_len = wl, win_ofs = wl/2,
+                                                            spec_names = names)
 
         return locii, results
     
@@ -117,25 +117,39 @@ def check_results(locii, results, n_runs = 400):
     
 
 
-def run_windows(ali,ref, n_specs = 3, n_runs = 2,  
+def run_windows(ali,ref, n_specs = 3,  
                 win_len = 150, win_ofs = 75,
-                spec_names = None):
+                baserng = None,
+                spec_names = None,
+                window_selection = 'exhaustive',
+                n_runs = 2):
     la = shape(ali)[1]
-    p0 = 0
+    if baserng == None: baserng = (0,la)
     wvals = []
     ofs = []
+    p0 = baserng[0]
 
-    sum_arr = less(ali,4) * equal(ali,ref)
-    ug_ct = less(ali, 4)
-    while win_len + p0< la:
-        wvals.append( sum( sum_arr[:,p0:p0+win_ofs], 1)/( sum(ug_ct[:,p0:p0+win_ofs],1) + .00001))
-        p0 = p0 + win_ofs
-        ofs.append(p0)
+
+    #CHOOSE A LIST OF WINDOW OFFSETS TO INVESTIGATE.
+    if window_selection = 'exhaustive':
+        while win_len + p0 < baserng[-1]:
+            ofs.append(p0)
+            p0 += win_ofs
+        ofs_choice = ofs
+    elif window_selection == 'conserved':
+        sum_arr = less(ali,4) * equal(ali,ref)
+        ug_ct = less(ali, 4)
+        while win_len + p0<baserng:
+            wvals.append( sum( sum_arr[:,p0:p0+win_ofs], 1)/( sum(ug_ct[:,p0:p0+win_ofs],1) + .00001))
+            p0 = p0 + win_ofs
+            ofs.append(p0)
+        wvals = array(wvals).T
+        tots = sum(wvals[:n_specs],0)
+        ofs_choice = argsort(tots)[::-1][:n_runs]
+    else:
+        raise Exception('window selection type {0} unknown', window_selection)
     
-    wvals = array(wvals).T
-    tots = sum(wvals[:n_specs],0)
-    ofs_choice = argsort(tots)[::-1][:n_runs]
-    
+    #INVESTIGATE THE CHOSEN WINDOW SUBSET
     hits = []
     all_vals = []
     for oc in ofs_choice:

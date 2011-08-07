@@ -81,6 +81,7 @@ remote_make_tests which runs a batch of clustering algorithms in matlab.
                      log_file = log_file,
                      do_clear = True)
     
+    print
     print 'Done!'
     print
     print 'Launcher is ready to launch in the background or await with "quickRun"'
@@ -391,7 +392,10 @@ keywords:
   
 
 '''
-  func, name, run_id,project , Rmem, log_dir, log_file, do_clear=\
+  
+  print
+  print
+  func, name, run_id,project , Rmem, log_file, log_dir, do_clear=\
       [kwargs.get('func', None),
        kwargs.get('name', ''),
        kwargs.get('run_id',''),
@@ -411,18 +415,25 @@ keywords:
 
 
   if log_file == None:
-     log_file = os.path.join(log_dir,'{0}.log'.format(run_id) )
+    print 'WARNING:     Writing a log file path for some reason.'
+    log_file = os.path.join(log_dir,'{0}.log'.format(run_id) )
+  print '{1:40}{0}'.format(log_file, 'logfile:')
 
   if func != None:
     run_str = scr_path+' '+' '.join([func, run_id]+list(args)) 
   else:
-    run_str = scr_path+ ' '  + ' '.join(args) 
+    print 'WARNING:    No function specified. Using alternate form of bscmd where run_str = path + join(args)'
+    run_str = scr_path+ ' '  + ' '.join(args)     
+  print '{1:40}{0}'.format(run_str,'run_path:')
+
   sub_cmd = 'bsub -q compbio-week -J {3} -o {2} -P {0} -R \'rusage[mem={4}]\'  "{1}" '\
       .format(project, 
               run_str,
               log_file,
               run_id,
               Rmem)
+
+  print '{1:40}{0}'.format(do_clear,'clear_prev:')
   if do_clear:
     clr_cmd = '''${COMPBIO_PATH}'''+'''/utils/bsruns.py bclear {0}'''.\
         format(run_id)
@@ -430,6 +441,7 @@ keywords:
   else:
     cmd = sub_cmd
 
+  print '{1:40}{0}'.format(cmd,'command: ')
   
   return cmd
 
