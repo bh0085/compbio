@@ -39,7 +39,7 @@ PVT1 region.
                       run_id = 'run1d_single_{0}_{1}_{2}specs={3}'.format(win_len,win_ofs,spec_count,b0),
                       spec_count = spec_count))
         #for testing purposes, only run a small number!
-        if len(p) > 40:
+        if len(p) > 20:
             break
 
     runid = 'run1d_{0}_{1}_{2}specs'.format(win_len,win_ofs,spec_count)
