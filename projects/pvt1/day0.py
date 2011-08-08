@@ -135,7 +135,7 @@ def run_windows(ali,ref, n_specs = 3,
         while win_len + p0 < baserng[-1]:
             ofs.append(p0)
             p0 += win_ofs
-        ofs_choice = ofs
+        ofs_choice = range(len(ofs))
     elif window_selection == 'conserved':
         sum_arr = less(ali,4) * equal(ali,ref)
         ug_ct = less(ali, 4)
