@@ -367,7 +367,7 @@ exit'
     return
 
   def try_restart_failed(self):
-    failed_jobs = [ k for k, v in statii().iteritems() if v == 'EXIT' ]
+    failed_jobs = [ k for k, v in statii().iteritems() if v['bsub'] == 'EXIT' ]
     failed_children = [c for c in self.children if c['jobid'] in failed_jobs]
     for f in failed_children:
       run_id = f['run_id']
