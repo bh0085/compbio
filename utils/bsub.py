@@ -282,13 +282,13 @@ kwds:
 this eye. Uses bjobs.
 '''
 
-    jobid_names =dict( [( v['jobid'], k) for k,v in children.iteritems()])
+    jobid_names =dict( [( v['jobid'], k) for k,v in self.children.iteritems()])
     job_stats = compbio.utils.bsjobs.bjobs(jobid_names.keys())
  
     statii = dict([( jobid_names[k], 
                      {'bsub':j['STAT'].strip(),
                       'jobid':k,
-                      'resubs':children[jobid_names[k]]['resubs']}) 
+                      'resubs':self.children[jobid_names[k]]['resubs']}) 
                      for k, j in job_stats.iteritems()])
     return statii
 
