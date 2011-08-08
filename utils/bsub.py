@@ -237,7 +237,7 @@ kwds:
     prcs = []
     for idx, c in enumerate(self.cmds):
       prcs.append(spc.Popen(c, stdout = spc.PIPE, shell = True))
-      out = prcs[idx].communicate()[0]
+      out = prcs[idx].stdout.read()
       print  'RunCMD output: '
       print out
       print
