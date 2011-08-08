@@ -97,10 +97,21 @@ remote_make_tests which runs a batch of clustering algorithms in matlab.
     print '  submitted with jobID: {0}'.format(self.run_jobid)
 
     
-  def fetch_logfile(self):
+  def fetch_logfile(self, child = None):
     import subprocess as spc
-    logpath = self.remote_logpath
-    prc = spc.Popen('ssh tin "cat {0}"'.format(logpath), stdout = spc.PIPE, shell = True); 
+
+    import cb.utils.bsruns as bsruns
+    if child != None:
+      prc = spc.Popen('ssh {1} "bjobs -l {0}"'.format(child, self.host), stdout = spc.PIPE, shell = True); 
+      log =  prc.stdout.read();
+      logfile = ''.join([l.strip() 
+                         for l in re.compile('Output File[^<]*<([^>]*)',re.M + re.DOTALL)\
+                           .search(stat).group(1).splitlines()])
+                         
+    else:
+      logpath = self.remote_logpath
+ 
+    prc = spc.Popen('ssh {1} "cat {0}"'.format(logpath, self.host), stdout = spc.PIPE, shell = True); 
     log =  prc.stdout.read();
     runs =[item for item in list(re.compile('^Sender: LSF.{10}', re.M).split(log)) if item.strip() ]
             
