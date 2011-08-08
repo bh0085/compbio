@@ -26,7 +26,7 @@ PVT1 region.
 
 '''
     ali_nums = day0.fetch_num_ali()
-    runs_per_rng = 1000
+    runs_per_rng = 250
     
     p0 = 0; p = []
     while p0 + win_len < shape(ali_nums)[1]:
@@ -39,7 +39,7 @@ PVT1 region.
                       run_id = 'run1d_single_{0}_{1}_{2}specs={3}'.format(win_len,win_ofs,spec_count,b0),
                       spec_count = spec_count))
         #for testing purposes, only run a small number!
-        if len(p) > 1000:
+        if len(p) > 40:
             break
 
     runid = 'run1d_{0}_{1}_{2}specs'.format(win_len,win_ofs,spec_count)

@@ -219,6 +219,7 @@ kwds:
     self.run_id = run_id
     self.datapath = datapath + self.run_id + '.out'
     self.update_status('RUN', {'state':'beginning config'})
+    self.children ={}
 
     #Use 'name' or 'scr' to set a prefix for runid generation
     if name == None:
@@ -244,6 +245,9 @@ kwds:
                       run_id = run_id,
                       do_clear = True, 
                       mem = mem))
+      self.children[run_id] = {'cmd': cmds[-1],
+                               'resubs':0,
+                               'idx':len(cmds) -1}
     resets = zeros(len(self.run_names))
     self.cmds = cmds
     self.update_status('RUN',{'state':'finished config; unlaunched'})
@@ -252,13 +256,16 @@ kwds:
     self.update_status('RUN',{'state':'no jobs launched'})
     prc_q = []
     #SUBMIT THE JOBS IN BATCHES OF SIZE sub_parallell_count
-    sub_parallell_count = 1    
-    for c in self.cmds:      
-      prc_q.append(spc.Popen(c, stdout = spc.PIPE, shell = True))
+    sub_parallell_count = 5
+    for k,child in self.children.iteritems():
+      c= child['cmd']
+      prc_q.append((child,spc.Popen(c, stdout = spc.PIPE, shell = True)))
       if len(prc_q) >= sub_parallell_count:
-        self.run_jobids.extend([re.compile('Job <([\d]+)>').\
-                                  search(p.stdout.read())\
-                                  .group(1) for p in prc_q])
+        for child, p in prc_q:
+          self.run_jobids.append(re.compile('Job <([\d]+)>').\
+                                   search(p.stdout.read())\
+                                   .group(1) )
+          child['jobid']= self.run_jobids[-1]
         prc_q = []
         self.update_status('RUN',{'state':'launching jobs, {0} launched'.format(len(self.run_jobids))})
         
@@ -272,7 +279,9 @@ kwds:
 this eye. Uses bjobs.
 '''
     jobs = compbio.utils.bsjobs.bjobs(self.run_jobids) 
-    statii = dict([( k, j['STAT'].strip()) for k, j in jobs.iteritems()])
+    statii = dict([( k, {'bsub':j['STAT'].strip()}) for k, j in jobs.iteritems()])
+    for k, v in statii.iteritems():
+      statii[k]['resubs'] = filter(lambda x: x['jobid']==k, self.children)[0]['resubs']
     return statii
 
 
@@ -351,9 +360,26 @@ exit'
                                shell = True,
                                stdout = spc.PIPE).communicate()
     return
+
+  def try_restart_failed():
+    failed_jobs = [ k for k, v in statii().iteritems() if v == 'EXIT' ]
+    failed_children = [c for c in self.children if c['jobid'] in failed_jobs]
+    for f in failed_children:
+      run_id = f['run_id']
+      bsruns.bclear(run_id,clear_input = false)
+      cmd = f['cmd']
+      prc = spc.Popen(c, stdout = spc.PIPE, shell = True)
+      f['jobid'] = re.compile('Job <([\d]+)>').\
+          search(p.stdout.read()).group(1)
+      self.run_jobids[f['idx']]  = f['jobid']
+      f['resubs'] = f['resubs']+1
+      
+
+
   def await(self):
     count = 0
     while 1:
+      self.try_restart_failed()
       count += 1
       stat_str =  '''Status: waiting\nLooping. [iter = {0}]\n'''.format(count)
       stat_str += 'statii:\n'
@@ -366,7 +392,7 @@ exit'
       for k in svals.keys():
         stat_str +=  '   {1}:{0:02d}\n'.format(statii.count(k),k)
       vals = array([svals[k] for k in statii])
-      if len(nonzero(less(vals,1))) == 0:
+      if len(nonzero(less(abs(vals),1))) == 0:
         self.update_status('RUN',{'awaiting':'finished'})
         break
       self.update_status('RUN', {'awaiting':'pending:{0}, running:{1}, done:{2}, failed:{3}'.\
