@@ -377,13 +377,13 @@ exit'
       run_id = f['run_id']
       bsruns.bclear(run_id,clear_input = False)
       cmd = f['cmd']
-      prc = spc.Popen(c, stdout = spc.PIPE, shell = True)
+      prc = spc.Popen(cmd, stdout = spc.PIPE, shell = True)
 
       read = prc.stdout.read()
-      print f
-      print read
-      print cmd
-      print 'READVALS!'
+      #print f
+      #print read
+      #print cmd
+      #print 'READVALS!'
       f['jobid'] = int(re.compile('Job <([\d]+)>').\
           search(read).group(1))
       self.run_jobids[f['idx']]  = f['jobid']
