@@ -218,7 +218,7 @@ kwds:
     self.run_jobids = []
     self.run_id = run_id
     self.datapath = datapath + self.run_id + '.out'
-
+    self.update_status('RUN', {'state':'beginning config'})
 
     #Use 'name' or 'scr' to set a prefix for runid generation
     if name == None:
@@ -246,7 +246,10 @@ kwds:
                       mem = mem))
     resets = zeros(len(self.run_names))
     self.cmds = cmds
+    self.update_status('RUN',{'state':'finished config; unlaunched'})
+
   def launch(self):
+    self.update_status('RUN',{'state':'no jobs launched'})
     prcs = []
     for idx, c in enumerate(self.cmds):
       prcs.append(spc.Popen(c, stdout = spc.PIPE, shell = True))
@@ -348,7 +351,6 @@ exit'
     stdout = spc.Popen( cmdstr, 
                                shell = True,
                                stdout = spc.PIPE).communicate()
-    print stdout
     return
   def await(self):
     count = 0
@@ -356,10 +358,8 @@ exit'
       count += 1
       stat_str =  '''Status: waiting\nLooping. [iter = {0}]\n'''.format(count)
       stat_str += 'statii:\n'
-
       jobs = compbio.utils.bsjobs.bjobs(self.run_jobids) 
       statii = [j['STAT'].strip() for j in jobs.values()]
-
       svals = dict(DONE= 1,
                    EXIT= -1,
                    RUN= 0,
@@ -367,14 +367,13 @@ exit'
       for k in svals.keys():
         stat_str +=  '   {1}:{0:02d}\n'.format(statii.count(k),k)
       vals = array([svals[k] for k in statii])
-      self.update_status('RUN')
-      
-      if len(nonzero(equal(vals,-1))[0]) > 0:
-        self.update_status('EXIT')
-        print('Sorry but one of your scripts failed: {0}'.format(array(self.run_names)[equal(vals,-1)]))
-
+      if len(nonzero(less(vals,1))) == 0:
+        self.update_status('RUN',{'awaiting':'finished'})
+      self.update_status('RUN', {'awaiting':'pending:{0}, running:{1}, done:{2}, failed:{3}'.\
+                                   format(statii.count('PEND'),statii.count('RUN'), 
+                                          statii.count('DONE'),statii.count('EXIT'))})
       time.sleep(20)
-    self.update_status('RUN')
+
                 
   def complete(self):
     self.update_status('DONE', {'outfile': self.datapath})
