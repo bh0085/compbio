@@ -381,8 +381,10 @@ exit'
 
       read = prc.stdout.read()
       print read
-      f['jobid'] = re.compile('Job <([\d]+)>').\
-          search(read).group(1)
+      print cmd
+      print 'READVALS!'
+      f['jobid'] = int(re.compile('Job <([\d]+)>').\
+          search(read).group(1))
       self.run_jobids[f['idx']]  = f['jobid']
       f['resubs'] = f['resubs']+1
       
