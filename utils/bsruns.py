@@ -24,6 +24,8 @@ commandline bsruns.py bout run_id
 '''
     return load_data(run_id, 'output') 
 
+    
+
 def bstatus(run_id):
     '''
 Get the status of a currently running job.
