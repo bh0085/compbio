@@ -366,7 +366,7 @@ exit'
                                stdout = spc.PIPE).communicate()
     return
 
-  def try_restart_failed():
+  def try_restart_failed(self):
     failed_jobs = [ k for k, v in statii().iteritems() if v == 'EXIT' ]
     failed_children = [c for c in self.children if c['jobid'] in failed_jobs]
     for f in failed_children:
