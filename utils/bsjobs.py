@@ -14,7 +14,7 @@ def bjobs(jobids):
 Return the run statuses of programs having given jobids. Uses bjobs.
 '''
     #Get active jobs.
-    jobs = subprocess.Popen('bjobs '+ ' '.join(jobids), 
+    jobs = subprocess.Popen('bjobs '+ ' '.join('{0}'.format([j for j in jobids])), 
                             shell = True, 
                             stdout = subprocess.PIPE).\
                             communicate()[0]

@@ -247,7 +247,8 @@ kwds:
                       mem = mem))
       self.children[run_id] = {'cmd': cmds[-1],
                                'resubs':0,
-                               'idx':len(cmds) -1}
+                               'idx':len(cmds) -1,
+                               'jobid':-1}
     resets = zeros(len(self.run_names))
     self.cmds = cmds
     self.update_status('RUN',{'state':'finished config; unlaunched'})
@@ -262,9 +263,9 @@ kwds:
       prc_q.append((child,spc.Popen(c, stdout = spc.PIPE, shell = True)))
       if len(prc_q) >= sub_parallell_count:
         for child, p in prc_q:
-          self.run_jobids.append(re.compile('Job <([\d]+)>').\
+          self.run_jobids.append(int(re.compile('Job <([\d]+)>').\
                                    search(p.stdout.read())\
-                                   .group(1) )
+                                   .group(1)) )
           child['jobid']= self.run_jobids[-1]
         prc_q = []
         self.update_status('RUN',{'state':'launching jobs, {0} launched'.format(len(self.run_jobids))})
