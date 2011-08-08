@@ -237,7 +237,10 @@ kwds:
     prcs = []
     for idx, c in enumerate(self.cmds):
       prcs.append(spc.Popen(c, stdout = spc.PIPE, shell = True))
-      out = prcs[idx].communicate()[0]     
+      out = prcs[idx].communicate()[0]
+      print  'RunCMD output: '
+      print out
+      print
       self.run_jobids.append(re.compile('Job <([\d]+)>').\
                                search(out).group(1))
 
