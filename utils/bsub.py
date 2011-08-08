@@ -378,8 +378,11 @@ exit'
       bsruns.bclear(run_id,clear_input = False)
       cmd = f['cmd']
       prc = spc.Popen(c, stdout = spc.PIPE, shell = True)
+
+      read = prc.stdout.read()
+      print read
       f['jobid'] = re.compile('Job <([\d]+)>').\
-          search(prc.stdout.read()).group(1)
+          search(read).group(1)
       self.run_jobids[f['idx']]  = f['jobid']
       f['resubs'] = f['resubs']+1
       
