@@ -248,7 +248,8 @@ kwds:
       self.children[run_id] = {'cmd': cmds[-1],
                                'resubs':0,
                                'idx':len(cmds) -1,
-                               'jobid':-1}
+                               'jobid':-1,
+                               'run_id':run_id}
     resets = zeros(len(self.run_names))
     self.cmds = cmds
     self.update_status('RUN',{'state':'finished config; unlaunched'})
@@ -368,7 +369,7 @@ exit'
 
   def try_restart_failed(self):
     failed_jobs = [ k for k, v in self.statii().iteritems() if v['bsub'] == 'EXIT' ]
-    failed_children = [c for c in self.children if c['jobid'] in failed_jobs]
+    failed_children = [c for c in self.children.values() if c['jobid'] in failed_jobs]
     for f in failed_children:
       run_id = f['run_id']
       bsruns.bclear(run_id,clear_input = false)
