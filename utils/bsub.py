@@ -379,7 +379,7 @@ exit'
       cmd = f['cmd']
       prc = spc.Popen(c, stdout = spc.PIPE, shell = True)
       f['jobid'] = re.compile('Job <([\d]+)>').\
-          search(p.stdout.read()).group(1)
+          search(prc.stdout.read()).group(1)
       self.run_jobids[f['idx']]  = f['jobid']
       f['resubs'] = f['resubs']+1
       
