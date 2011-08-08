@@ -255,7 +255,7 @@ kwds:
     sub_parallell_count = 10
     for c in self.cmds:      
       prc_q.append(spc.Popen(c, stdout = spc.PIPE, shell = True))
-      if len(prc_q) >= sub_parallel_count:
+      if len(prc_q) >= sub_parallell_count:
         self.run_jobids.extend([re.compile('Job <([\d]+)>').\
                                   search(p.stdout.read())\
                                   .group(1) for p in prc_q])
