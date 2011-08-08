@@ -260,7 +260,8 @@ kwds:
                                   search(p.stdout.read())\
                                   .group(1) for p in prc_q])
         prc_q = []
-
+        self.update_status('RUN',{'state':'launching jobs, {0} launched'.format(len(self.run_jobids))})
+        
     for idx in range(len(self.cmds)): 
       print 'job{0}:'.format(idx)
       print self.cmds[idx]
