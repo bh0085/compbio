@@ -216,10 +216,10 @@ kwds:
 
     #Set up internally useful vars.
     self.run_jobids = []
+    self.children ={}
     self.run_id = run_id
     self.datapath = datapath + self.run_id + '.out'
     self.update_status('RUN', {'state':'beginning config'})
-    self.children ={}
 
     #Use 'name' or 'scr' to set a prefix for runid generation
     if name == None:
