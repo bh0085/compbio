@@ -252,7 +252,7 @@ kwds:
     self.update_status('RUN',{'state':'no jobs launched'})
     prc_q = []
     #SUBMIT THE JOBS IN BATCHES OF SIZE sub_parallell_count
-    sub_parallell_count = 10
+    sub_parallell_count = 1    
     for c in self.cmds:      
       prc_q.append(spc.Popen(c, stdout = spc.PIPE, shell = True))
       if len(prc_q) >= sub_parallell_count:
