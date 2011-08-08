@@ -104,7 +104,7 @@ remote_make_tests which runs a batch of clustering algorithms in matlab.
     if child != None:
       prc = spc.Popen('ssh {1} "bjobs -l {0}"'.format(child, self.host), stdout = spc.PIPE, shell = True); 
       stat =  prc.stdout.read();
-      logfile = ''.join([l.strip() 
+      logpath = ''.join([l.strip() 
                          for l in re.compile('Output File[^<]*<([^>]*)',re.M + re.DOTALL)\
                            .search(stat).group(1).splitlines()])
                          

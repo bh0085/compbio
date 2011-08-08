@@ -139,7 +139,7 @@ def remote_run_1d(run_id):
     a0 = a0[argsort(ali_counts)[::-1]][:spec_count]
     ali_counts = sorted(ali_counts)[::-1][:spec_count]
     
-    locii, results = day0.run_windows(a0,ref, n_specs = n_specs,
+    locii, results = day0.run_windows(a0,ref, n_specs = spec_count,
                                       n_runs = n_runs,
                                       win_len = win_len, win_ofs = win_ofs,
                                       spec_names = names,
