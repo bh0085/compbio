@@ -371,10 +371,11 @@ exit'
     failed_jobs = [ k for k, v in self.statii().iteritems() if v['bsub'] == 'EXIT' ]
     failed_children = [c for c in self.children.values() if c['jobid'] in failed_jobs]
     if len(failed_jobs) != len(failed_children):
-      raise Exception('oops... somehow failure is not being handled')
+      raise Exception('oops... somehow failure is not being handled \n{0}\n{1}'.\
+                        format(failed_jobs,[c['jobid'] for c in self.children.values()]))
     for f in failed_children:
       run_id = f['run_id']
-      bsruns.bclear(run_id,clear_input = false)
+      bsruns.bclear(run_id,clear_input = False)
       cmd = f['cmd']
       prc = spc.Popen(c, stdout = spc.PIPE, shell = True)
       f['jobid'] = re.compile('Job <([\d]+)>').\
