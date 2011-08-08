@@ -6,6 +6,7 @@ from compbio.utils.bsub_utils import *
 import compbio.utils.bsjobs
 from numpy import *
 import simplejson as sjson
+import cb.utils.bsruns as bsruns
 
 
 
@@ -100,7 +101,6 @@ remote_make_tests which runs a batch of clustering algorithms in matlab.
   def fetch_logfile(self, child = None):
     import subprocess as spc
 
-    import cb.utils.bsruns as bsruns
     if child != None:
       prc = spc.Popen('ssh {1} "bjobs -l {0}"'.format(child, self.host), stdout = spc.PIPE, shell = True); 
       stat =  prc.stdout.read();
