@@ -274,7 +274,7 @@ bsub status type) whereas the eyeball's status is arbitrary.
 
 '''
     status = {'status':stat_str}
-    status['children'] = statii()
+    status['children'] = self.statii()
     status.update(other)
     save_data(status, self.run_id, 'status')
 
