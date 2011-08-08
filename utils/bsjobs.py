@@ -35,7 +35,7 @@ Return the run statuses of programs having given jobids. Uses bjobs.
       if l.strip() == '': continue
       d0 = dict([(k, l[col_ranges[k][0]:col_ranges[k][1]]) 
                  for k in terms])
-      run_id = d0['JOBID']
+      run_id = int(d0['JOBID'])
       job_dicts[run_id] = d0
     return(job_dicts)
 
