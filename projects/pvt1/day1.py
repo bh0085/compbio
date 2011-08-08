@@ -41,7 +41,7 @@ PVT1 region.
         #for testing purposes, only run a small number!
         if len(p) > 1000:
             break
-.
+
     runid = 'run1d_{0}_{1}_{2}specs'.format(win_len,win_ofs,spec_count)
     ll = run1d_launcher(p, runid)
     ll.launch()
