@@ -263,7 +263,7 @@ this eye. Uses bjobs.
     return statii
 
 
-  def update_status(stat_str, other = {}):
+  def update_status(self,stat_str, other = {}):
     '''Note that during the course of execution, the status of the
 task manager in bjobs will necessarily be 'RUN'. Meanwhile,
 the children can have various statii.
