@@ -250,20 +250,18 @@ kwds:
 
   def launch(self):
     self.update_status('RUN',{'state':'no jobs launched'})
-    prcs = []
-    for idx, c in enumerate(self.cmds):
-      prcs.append(spc.Popen(c, stdout = spc.PIPE, shell = True))
-      out = prcs[idx].stdout.read()
-      print  'RunCMD output: '
-      print out
-      print
-      self.run_jobids.append(re.compile('Job <([\d]+)>').\
-                               search(out).group(1))
+    prc_q = []
+    #SUBMIT THE JOBS IN BATCHES OF SIZE sub_parallell_count
+    sub_parallell_count = 10
+    for c in self.cmds:      
+      prc_q.append(spc.Popen(c, stdout = spc.PIPE, shell = True))
+      if len(prc_q) >= sub_parallel_count:
+        self.run_jobids.extend([re.compile('Job <([\d]+)>').\
+                                  search(p.stdout.read())\
+                                  .group(1) for p in prc_q])
+        prc_q = []
 
-
-      if mod(idx, 5) == 0 :
-        self.update_status('RUN', {'Jobs launched':idx})
-    for idx, p in enumerate(prcs): 
+    for idx in range(len(self.cmds)): 
       print 'job{0}:'.format(idx)
       print self.cmds[idx]
 
@@ -369,6 +367,7 @@ exit'
       vals = array([svals[k] for k in statii])
       if len(nonzero(less(vals,1))) == 0:
         self.update_status('RUN',{'awaiting':'finished'})
+        break
       self.update_status('RUN', {'awaiting':'pending:{0}, running:{1}, done:{2}, failed:{3}'.\
                                    format(statii.count('PEND'),statii.count('RUN'), 
                                           statii.count('DONE'),statii.count('EXIT'))})
