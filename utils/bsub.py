@@ -86,6 +86,8 @@ remote_make_tests which runs a batch of clustering algorithms in matlab.
     print
     print 'Launcher is ready to launch in the background or await with "quickRun"'
 
+
+      
     
   def launch(self):
     print 'Launching job for {0}.{1}'.format(self.scriptfile, self.func)
@@ -246,7 +248,7 @@ kwds:
 
 
       if mod(idx, 5) == 0 :
-        save_data({'status':'RUN', 'str':'Jobs launched: {0}'.format(idx)}, self.run_id, 'status')
+        self.update_status('RUN', {'Jobs launched':idx})
     for idx, p in enumerate(prcs): 
       print 'job{0}:'.format(idx)
       print self.cmds[idx]
@@ -257,8 +259,25 @@ kwds:
 this eye. Uses bjobs.
 '''
     jobs = compbio.utils.bsjobs.bjobs(self.run_jobids) 
-    statii = [j['STAT'].strip() for j in jobs.values()]
+    statii = dict([( k, j['STAT'].strip()) for j in jobs.iteritems()])
     return statii
+
+
+  def update_status(stat_str, other = {}):
+    '''Note that during the course of execution, the status of the
+task manager in bjobs will necessarily be 'RUN'. Meanwhile,
+the children can have various statii.
+
+Thus, the bsub statii of the children are used because they
+are informative (and child statii will necessarily be of a valid
+bsub status type) whereas the eyeball's status is arbitrary.
+
+'''
+    status = {'status':stat_str}
+    status['children'] = statii()
+    status.update(other)
+    save_data(status, self.run_id, 'status')
+
   def outputs(self):
     '''
     Get the outputs of programs run by this eye.
@@ -269,18 +288,15 @@ returns a dictionary with the run id and the cause of failure.
 '''
     outputs = []
     statii = self.statii()
-    print statii
-
-    for idx, run_id in enumerate(self.run_names):
+    for  run_id in self.run_names:
       try:
-        #data = load_data(run_id,output) 
-        if statii[idx] == 'DONE':
+        if statii[run_id] == 'DONE':
           data = load_data(run_id, 'output')
         else:
-          data = dict(failure = 'job_stat({1}): {0}'.format(statii[idx], run_id),
+          data = dict(failure = 'job_stat({1}): {0}'.format(statii[run_id], run_id),
                       job = run_id)
       except Exception(), e:
-        data = dict(failure = e,text = 'Exception in eyeball collection\n probably, outfile does not exit) step', job =run_id)
+        data = dict(failure = e,text = 'Exception in eyeball collection\n probably, outfile does not exist) step', job =run_id)
       outputs.append(data)
     return outputs
 
@@ -340,21 +356,17 @@ exit'
       for k in svals.keys():
         stat_str +=  '   {1}:{0:02d}\n'.format(statii.count(k),k)
       vals = array([svals[k] for k in statii])
-      save_data({'status': 'RUN','jobs':jobs}, self.run_id, 'status')
+      self.update_status('RUN')
       
-      #CURRENTLY ALLOWS ERRORS
-      if len(nonzero(equal(vals,0))[0]) == 0:
-        break
-      
-      #if len(nonzero(equal(vals,-1))[0]) > 0:
-      #  save_data({'status':'EXIT','jobs':jobs}, self.run_id, 'status')
-      #  print('Sorry but one of your scripts failed: {0}'.format(array(self.run_names)[equal(vals,-1)]))
+      if len(nonzero(equal(vals,-1))[0]) > 0:
+        self.update_status('EXIT')
+        print('Sorry but one of your scripts failed: {0}'.format(array(self.run_names)[equal(vals,-1)]))
 
       time.sleep(20)
-    save_data({'status':'RUN','jobs':jobs}, self.run_id, 'status')
+    self.update_status('RUN')
                 
   def complete(self):
-    save_data({'status':'DONE', 'outfile': self.datapath},self.run_id, 'status')
+    self.update_status('DONE', {'outfile': self.datapath})
 
 
 

@@ -135,9 +135,9 @@ def remote_run_1d(run_id):
     ref = a0[0]
     ali_counts = sum(less(a0,4) * equal(a0, a0[0,:]) ,1)
     names_all = [names[i]  for i in argsort(ali_counts)[::-1]]
-    names = names_all[:spec_ct]
-    a0 = a0[argsort(ali_counts)[::-1]][:spec_ct]
-    ali_counts = sorted(ali_counts)[::-1][:spec_ct]
+    names = names_all[:spec_count]
+    a0 = a0[argsort(ali_counts)[::-1]][:spec_count]
+    ali_counts = sorted(ali_counts)[::-1][:spec_count]
     
     locii, results = day0.run_windows(a0,ref, n_specs = n_specs,
                                       n_runs = n_runs,
