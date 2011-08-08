@@ -281,7 +281,10 @@ this eye. Uses bjobs.
     jobs = compbio.utils.bsjobs.bjobs(self.run_jobids) 
     statii = dict([( k, {'bsub':j['STAT'].strip()}) for k, j in jobs.iteritems()])
     for k, v in statii.iteritems():
-      statii[k]['resubs'] = filter(lambda x: x['jobid']==k, self.children)[0]['resubs'] + 1
+      matches = filter(lambda x: x['jobid']==k, self.children)
+      if len(matches) < 1: resubs = -1
+      else: resubs = matches[0]['resubs']
+      statii[k]['resubs'] = resubs
     return statii
 
 
