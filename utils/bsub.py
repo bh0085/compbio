@@ -380,6 +380,7 @@ exit'
       prc = spc.Popen(c, stdout = spc.PIPE, shell = True)
 
       read = prc.stdout.read()
+      print f
       print read
       print cmd
       print 'READVALS!'
