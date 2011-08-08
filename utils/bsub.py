@@ -259,7 +259,7 @@ kwds:
 this eye. Uses bjobs.
 '''
     jobs = compbio.utils.bsjobs.bjobs(self.run_jobids) 
-    statii = dict([( k, j['STAT'].strip()) for j in jobs.iteritems()])
+    statii = dict([( k, j['STAT'].strip()) for k, j in jobs.iteritems()])
     return statii
 
 
