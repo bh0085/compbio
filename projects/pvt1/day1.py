@@ -18,7 +18,7 @@ import cb.utils.bsub_utils as butils
 import cb.utils.bsub as bsub
 
 
-def run0(method = '1d', win_len = 150, win_ofs = 25, spec_count =3):
+def run0(method = '1d', win_len = 150, win_ofs = 10, spec_count =3):
     '''
 Build a list of jobs on the Broad within which 
 to compute zscores for every single locus in the
@@ -26,7 +26,7 @@ PVT1 region.
 
 '''
     ali_nums = day0.fetch_num_ali()
-    runs_per_rng = 40
+    runs_per_rng = 400
     
     p0 = 0; p = []
     while p0 + win_len < shape(ali_nums)[1]:
