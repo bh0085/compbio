@@ -13,6 +13,8 @@ def bjobs(jobids):
     '''
 Return the run statuses of programs having given jobids. Uses bjobs.
 '''
+    if len(jobids) == 0:
+        return {}
     #Get active jobs.
     jobs = subprocess.Popen('bjobs '+ ' '.join(['{0}'.format(j) for j in jobids]), 
                             shell = True, 
