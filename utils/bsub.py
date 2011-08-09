@@ -288,7 +288,7 @@ this eye. Uses bjobs.
     statii = dict([( k, 
                      {'bsub':j['STAT'].strip(),
                       'jobid':k,
-                      'resubs':self.children[jobid_names[k]]['resubs']}) 
+                      'resubs':self.children[k]['resubs']}) 
                      for k, j in job_stats.iteritems()])
     
     return statii
