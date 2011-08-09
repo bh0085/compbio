@@ -285,7 +285,6 @@ this eye. Uses bjobs.
     job_stats =  compbio.utils.bsjobs.bjobs(\
       dict([(k,v['jobid']) for k,v in self.children.iteritems()]))
     
-    if len(job_stats) != 0: raise Exception()
     statii = dict([( jobid_names[k], 
                      {'bsub':j['STAT'].strip(),
                       'jobid':k,
