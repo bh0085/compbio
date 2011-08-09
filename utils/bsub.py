@@ -268,8 +268,6 @@ kwds:
                                  .group(1))
           print child['jobid'] 
           launch_ct += 1
-          raise Exception()
-        raise Exception()
         prc_q = []
         self.update_status('RUN',{'state':'launching jobs, {0} launched'.format(launch_ct)})
         
