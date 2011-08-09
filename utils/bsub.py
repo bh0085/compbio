@@ -271,7 +271,7 @@ kwds:
         prc_q = []
         self.update_status('RUN',{'state':'launching jobs, {0} launched'.format(launch_ct)})
         
-
+    raise Exception()
 
   def statii(self):
     '''
