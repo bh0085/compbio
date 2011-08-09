@@ -247,7 +247,6 @@ kwds:
                                'idx':len(cmds) -1,
                                'jobid':-1,
                                'run_id':run_id}
-    raise Exception()
     resets = zeros(len(self.run_names))
     self.cmds = cmds
     self.update_status('RUN',{'state':'finished config; unlaunched'})
