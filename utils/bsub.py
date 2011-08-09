@@ -265,7 +265,7 @@ kwds:
           child['jobid'] = int(re.compile('Job <([\d]+)>').\
                                  search(p.stdout.read())\
                                  .group(1))
-          print child['jobid']
+          print child['jobid'] 
           launch_ct += 1
           raise Exception()
         prc_q = []
