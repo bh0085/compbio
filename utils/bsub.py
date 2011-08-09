@@ -143,8 +143,6 @@ remote_make_tests which runs a batch of clustering algorithms in matlab.
     while 1:
       status = self.remote_status()
       stat_str = status['status']
-      print stat_str
-
 
       if stat_str in ['PEND' , 'RUN', 'UNK']:
         pass
@@ -271,10 +269,7 @@ kwds:
         prc_q = []
         self.update_status('RUN',{'state':'launching jobs, {0} launched'.format(launch_ct)})
         
-        
-    for idx in range(len(self.cmds)): 
-      print 'job{0}:'.format(idx)
-      print self.cmds[idx]
+
 
   def statii(self):
     '''
@@ -284,10 +279,7 @@ this eye. Uses bjobs.
 
     jobid_names =dict( [( v['jobid'], k) for k,v in self.children.iteritems()])
     job_stats = compbio.utils.bsjobs.bjobs(jobid_names.keys())
- 
-    print self.children
-    print jobid_names
-    print job_stats
+    print self.children()
     statii = dict([( jobid_names[k], 
                      {'bsub':j['STAT'].strip(),
                       'jobid':k,
@@ -366,7 +358,6 @@ exit'
            cfg.dataPath(self.datapath), 
            self.datapath)
 
-    print cmdstr    
     stdout = spc.Popen( cmdstr, 
                                shell = True,
                                stdout = spc.PIPE).communicate()
