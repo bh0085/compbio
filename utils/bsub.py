@@ -247,12 +247,14 @@ kwds:
                                'idx':len(cmds) -1,
                                'jobid':-1,
                                'run_id':run_id}
+    raise Exception()
     resets = zeros(len(self.run_names))
     self.cmds = cmds
     self.update_status('RUN',{'state':'finished config; unlaunched'})
 
   def launch(self):
     self.update_status('RUN',{'state':'no jobs launched'})
+  
     prc_q = []
     #SUBMIT THE JOBS IN BATCHES OF SIZE sub_parallell_count
     sub_parallell_count = 5
