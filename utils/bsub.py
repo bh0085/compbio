@@ -401,7 +401,7 @@ exit'
       for k in svals.keys():
         stat_str +=  '   {1}:{0:02d}\n'.format(statii.count(k),k)
       vals = array([svals[k] for k in statii])
-      if len(nonzero(less(vals,1))) == 0:
+      if len(nonzero(less(vals,1))[0]) == 0:
         self.update_status('RUN',{'awaiting':'finished'})
         break
       self.update_status('RUN', {'awaiting':'pending:{0}, running:{1}, done:{2}, failed:{3}'.\
