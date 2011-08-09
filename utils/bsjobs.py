@@ -19,12 +19,12 @@ Return the run statuses of programs having given jobids. Uses bjobs.
     job_stats = {}
 
 
+    raise Exception()
     if len(jobids) == 0:
         return {}
     #Get active jobs.
     
-    raise Exception()
-    
+
     jobs = subprocess.Popen('bjobs '+ ' '.join(['{0}'.format(j) for j in jobids
                                                 if not j == -1]), 
                             shell = True, 
