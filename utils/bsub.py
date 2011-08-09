@@ -285,7 +285,7 @@ this eye. Uses bjobs.
     job_stats =  compbio.utils.bsjobs.bjobs(\
       dict([(k,v['jobid']) for k,v in self.children.iteritems()]))
     
-    statii = dict([( jobid_names[k], 
+    statii = dict([( k, 
                      {'bsub':j['STAT'].strip(),
                       'jobid':k,
                       'resubs':self.children[jobid_names[k]]['resubs']}) 
