@@ -18,6 +18,8 @@ Return the run statuses of programs having given jobids. Uses bjobs.
     job_idnames=dict([(v,k) for k,v in job_dict.iteritems()]) 
     job_stats = {}
 
+    raise Exception()
+
     if len(jobids) == 0:
         return {}
     #Get active jobs.
