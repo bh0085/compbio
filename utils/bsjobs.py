@@ -9,14 +9,21 @@ With jobids as input.
 
 from compbio.utils.bsub_utils import *
 
-def bjobs(jobids):
+def bjobs(job_dict):
     '''
 Return the run statuses of programs having given jobids. Uses bjobs.
 '''
+    jobids  =job_dict.values()
+    jobnames=job_dict.keys()
+    job_idnames=dict([(v,k) for k,v in job_dict.iteritems()]) 
+    job_stats = {}
+
     if len(jobids) == 0:
         return {}
     #Get active jobs.
-    jobs = subprocess.Popen('bjobs '+ ' '.join(['{0}'.format(j) for j in jobids]), 
+    
+    jobs = subprocess.Popen('bjobs '+ ' '.join(['{0}'.format(j) for j in jobids
+                                                if not j == -1]), 
                             shell = True, 
                             stdout = subprocess.PIPE).\
                             communicate()[0]
@@ -38,8 +45,14 @@ Return the run statuses of programs having given jobids. Uses bjobs.
       d0 = dict([(k, l[col_ranges[k][0]:col_ranges[k][1]]) 
                  for k in terms])
       run_id = int(d0['JOBID'])
-      job_dicts[run_id] = d0
-    return(job_dicts)
+      job_stats[job_idnames[run_id]] = d0
+    for k in jobnames:
+        if not k in job_stats.keys():
+            job_stats[k] = dict([(k, 'UNK') if not k=='JOBID' else (k,jobdict[k])
+                                 for k in terms])
+
+
+    return(job_stats)
 
 
 if __name__ == '__main__':
