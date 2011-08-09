@@ -256,7 +256,7 @@ kwds:
   
     prc_q = []
     #SUBMIT THE JOBS IN BATCHES OF SIZE sub_parallell_count
-    sub_parallell_count = 5
+    sub_parallell_count = 1
     launch_ct = 0
     for k,child in self.children.iteritems():
       c= child['cmd']
@@ -266,12 +266,17 @@ kwds:
           child['jobid'] = int(re.compile('Job <([\d]+)>').\
                                  search(p.stdout.read())\
                                  .group(1))
-          print child['jobid'] 
           launch_ct += 1
         prc_q = []
-        self.update_status('RUN',{'state':'launching jobs, {0} launched'.format(launch_ct)})
-        
-    raise Exception()
+    
+    for child, p in prc_q:
+      child['jobid'] = int(re.compile('Job <([\d]+)>').\
+                             search(p.stdout.read())\
+                             .group(1))
+      launch_ct += 1
+      self.update_status('RUN',{'state':'launching jobs, {0} launched'.format(launch_ct)})
+
+
 
   def statii(self):
     '''
