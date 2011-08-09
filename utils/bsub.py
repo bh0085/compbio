@@ -373,7 +373,7 @@ exit'
     return
 
   def try_restart_failed(self):
-    failed_children = [ chidren[k] for k, v in self.statii().iteritems() if v['bsub'] == 'EXIT' ]
+    failed_children = [ self.chidren[k] for k, v in self.statii().iteritems() if v['bsub'] == 'EXIT' ]
     for f in failed_children:
       run_id = f['run_id']
       bsruns.bclear(run_id,clear_input = False)
