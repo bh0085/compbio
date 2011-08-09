@@ -26,7 +26,7 @@ PVT1 region.
 
 '''
     ali_nums = day0.fetch_num_ali()
-    runs_per_rng = 250
+    runs_per_rng = 10;
     
     p0 = 0; p = []
     while p0 + win_len < shape(ali_nums)[1]:
