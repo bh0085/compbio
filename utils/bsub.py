@@ -394,7 +394,8 @@ exit'
       svals = dict(DONE= 1,
                    EXIT= -1,
                    RUN= 0,
-                   PEND= 0)
+                   PEND= 0,
+                   UNSUBMITTED=0)
       for k in svals.keys():
         stat_str +=  '   {1}:{0:02d}\n'.format(statii.count(k),k)
       vals = array([svals[k] for k in statii])
