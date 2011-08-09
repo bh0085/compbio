@@ -24,38 +24,38 @@ Return the run statuses of programs having given jobids. Uses bjobs.
 
 
 
-    raise Exception()
     #Get active jobs.
-    
-
-    jobs = subprocess.Popen('bjobs '+ ' '.join(['{0}'.format(j) for j in jobids
-                                                if not j == -1]), 
-                            shell = True, 
-                            stdout = subprocess.PIPE).\
-                            communicate()[0]
-    lines = jobs.split('\n')
-    cols, lines = lines[0],lines[1:]
-    col_starts = {}
+    if jobs.count(-1) != len(jobs):
+        jobs = subprocess.Popen('bjobs '+ ' '.join(['{0}'.format(j) for j in jobids
+                                                    if not j == -1]), 
+                                shell = True, 
+                                stdout = subprocess.PIPE).\
+                                communicate()[0]
+        lines = jobs.split('\n')
+        cols, lines = lines[0],lines[1:]
+        col_starts = {}
 
     #Parse job list into columns
-    terms =  re.compile('\s+').split(cols)
-    starts = [cols.index(t) for t in terms]
-    ends =   [cols.index(t) for t in roll(terms, -1)]
-    ends[-1] = len(cols)
-    col_ranges = dict([(t, (starts[i], ends[i])) 
+        terms =  re.compile('\s+').split(cols)
+        starts = [cols.index(t) for t in terms]
+        ends =   [cols.index(t) for t in roll(terms, -1)]
+        ends[-1] = len(cols)
+        col_ranges = dict([(t, (starts[i], ends[i])) 
                        for i, t in enumerate(terms)])
+    
+        job_dicts = {}
+        for l in lines:
+            if l.strip() == '': continue
+            d0 = dict([(k, l[col_ranges[k][0]:col_ranges[k][1]]) 
+                       for k in terms])
+            run_id = int(d0['JOBID'])
+            job_stats[job_idnames[run_id]] = d0
 
-    job_dicts = {}
-    for l in lines:
-      if l.strip() == '': continue
-      d0 = dict([(k, l[col_ranges[k][0]:col_ranges[k][1]]) 
-                 for k in terms])
-      run_id = int(d0['JOBID'])
-      job_stats[job_idnames[run_id]] = d0
+      
     for k in jobnames:
         if not k in job_stats.keys():
-            job_stats[k] = dict([(k, 'UNK') if not k=='JOBID' else (k,jobdict[k])
-                                 for k in terms])
+            job_stats[k] = dict('STAT':'UNSUBMITTED',
+                                'JOBID':job_dict[k])
 
 
     return(job_stats)
