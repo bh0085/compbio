@@ -54,8 +54,8 @@ Return the run statuses of programs having given jobids. Uses bjobs.
       
     for k in jobnames:
         if not k in job_stats.keys():
-            job_stats[k] = dict('STAT':'UNSUBMITTED',
-                                'JOBID':job_dict[k])
+            job_stats[k] = {'STAT':'UNSUBMITTED',
+                            'JOBID':job_dict[k]}
 
 
     return(job_stats)
