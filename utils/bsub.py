@@ -214,6 +214,8 @@ kwds:
 
     #Set up internally useful vars.
     self.children ={}
+    self.failed_children = {}
+    self.max_resubs = 10
     self.run_id = run_id
     self.datapath = datapath + self.run_id + '.out'
     self.update_status('RUN', {'state':'beginning config'})
@@ -247,6 +249,7 @@ kwds:
                                'idx':len(cmds) -1,
                                'jobid':-1,
                                'run_id':run_id}
+  
     resets = zeros(len(self.run_names))
     self.cmds = cmds
     self.update_status('RUN',{'state':'finished config; unlaunched'})
@@ -373,8 +376,14 @@ exit'
     return
 
   def try_restart_failed(self):
-    failed_children = [ self.children[k] for k, v in self.statii().iteritems() if v['bsub'] == 'EXIT' ]
-    for f in failed_children:
+    failed_children =dict( [ (k, self.children[k]) 
+                             for k, v in self.statii().iteritems() 
+                             if v['bsub'] == 'EXIT' ])
+
+    for k,f in failed_children.iteritems():
+      if f['resubs'] > self.max_resubs:
+        self.failed_children[k] = self.children.pop(k);
+        continue;
       run_id = f['run_id']
       bsruns.bclear(run_id,clear_input = False)
       cmd = f['cmd']
