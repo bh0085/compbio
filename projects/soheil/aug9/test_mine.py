@@ -33,6 +33,5 @@ for control in [0,2,3]:
       prc = subprocess.Popen(bscmd, shell = True)
       prc.communicate()
       print bscmd
-      
 
 exit
