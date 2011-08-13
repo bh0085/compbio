@@ -10,7 +10,7 @@ import pipes
 sdp = cfg.dataPath('soheil')
 matfiles = [os.path.join(sdp,f) for f in os.listdir(sdp) if '.mat' in f]
 
-for control in [0]:
+for control in [0,2,3]:
   for f in matfiles: 
       args = \
           f, \
@@ -30,7 +30,8 @@ for control in [0]:
                              format(mat_cmd)
       bscmd = bsub.cmd(cstr, run_id = 'CLUSTER_'+os.path.split(f)[-1][:-4], mem = 4)
   
-      subprocess.Popen(bscmd, shell = True)
+      prc = subprocess.Popen(bscmd, shell = True)
+      prc.communicate()
       print bscmd
       
 
