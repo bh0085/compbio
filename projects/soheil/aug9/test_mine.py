@@ -26,12 +26,14 @@ for control in [0,2,3]:
       script = 'test_mine'
       mat_cmd ='''\\"{3}('{0}', '{1}', '{2}', '{3}' ); exit\\"'''.format(\
           *(args + (script,)+(control,)))
+
+      print mat_cmd
       cstr = '''echo {0} | matlab -nojvm -nodisplay -nosplash '''.\
                              format(mat_cmd)
       bscmd = bsub.cmd(cstr, run_id = 'CLUSTER_'+os.path.split(f)[-1][:-4], mem = 4)
   
       prc = subprocess.Popen(bscmd, shell = True)
       prc.communicate()
-      print bscmd
+      #print bscmd
 
 exit
