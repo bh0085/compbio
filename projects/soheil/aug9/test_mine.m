@@ -15,4 +15,4 @@ input_binary=struct('filename',a,'control',control,'results_filename',b,'iter_nu
 % c is a filename to save all variables
 % iter_num shows the circuit complexity
 
-binary_regression4(input_binary)
+binary_regression5(input_binary)
