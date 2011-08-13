@@ -10,7 +10,7 @@ import pipes
 sdp = cfg.dataPath('soheil')
 matfiles = [os.path.join(sdp,f) for f in os.listdir(sdp) if '.mat' in f]
 
-for control in [0,1,2,3,4]:
+for control in [0]:
   for f in matfiles: 
       args = \
           f, \
