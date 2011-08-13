@@ -2,13 +2,13 @@ function input = test_mine(mat_inp, mat_out, mat_out_total,control)
 % test new
 
 warning off
-control=1;
 
 a=[mat_inp];
 b=[mat_out];
 c=[mat_out_total];
 
-input_binary=struct('filename',a,'control',control,'results_filename',b,'iter_num',2,'f',1.1,'max_num3',5,'th_last',0.4,'output_name',c);
+input_binary=struct('filename',a,'control',control,'results_filename',b,'iter_num',2,'f',1.1,'max_num3',10,'th_last',0.2,'output_name',c,'prior',0.75);
+
 
 % a is the cluster name
 % b is the results file name (not all the variables)
