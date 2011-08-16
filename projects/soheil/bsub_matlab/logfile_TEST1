@@ -1,0 +1,187 @@
+Sender: LSF System <lsf@node1506>
+Subject: Job 2012088: <echo "testfunction('inp_test_1', 'out_test_1' ); exit" | matlab -nojvm -nodisplay -nosplash > Done
+
+Job <echo "testfunction('inp_test_1', 'out_test_1' ); exit" | matlab -nojvm -nodisplay -nosplash > was submitted from host <node1389> by user <benh> in cluster <cromwell>.
+Job was executed on host(s) <node1506>, in queue <compbio-week>, as user <benh> in cluster <cromwell>.
+</home/unix/benh> was used as the home directory.
+</home/unix/benh/compbio/projects/soheil/bsub_matlab> was used as the working directory.
+Started at Thu Jul 21 17:30:35 2011
+Results reported at Thu Jul 21 17:30:40 2011
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+echo "testfunction('inp_test_1', 'out_test_1' ); exit" | matlab -nojvm -nodisplay -nosplash 
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time   :      2.91 sec.
+    Max Memory :        10 MB
+    Max Swap   :        38 MB
+
+    Max Processes  :         1
+    Max Threads    :         1
+
+The output (if any) follows:
+
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2010 The MathWorks, Inc.
+                Version 7.11.0.584 (R2010b) 64-bit (glnxa64)
+                              August 16, 2010
+
+{Warning: Duplicate directory name:
+/home/unix/benh/programming/projects/cs874/matlab.} 
+{Warning: Duplicate directory name: /home/unix/benh/compbio/projects/soheil.} 
+{Warning: Duplicate directory name:
+/home/unix/benh/compbio/projects/soheil/matlab.} 
+{Warning: Duplicate directory name:
+/home/unix/benh/programming/projects/cs874/matlab.} 
+{Warning: Duplicate directory name: /home/unix/benh/compbio/projects/soheil.} 
+{Warning: Duplicate directory name:
+/home/unix/benh/compbio/projects/soheil/matlab.} 
+{Warning: Duplicate directory name:
+/home/unix/benh/programming/projects/cs874/matlab.} 
+{Warning: Duplicate directory name: /home/unix/benh/compbio/projects/soheil.} 
+{Warning: Duplicate directory name:
+/home/unix/benh/compbio/projects/soheil/matlab.} 
+{Warning: Duplicate directory name:
+/home/unix/benh/programming/projects/cs874/matlab.} 
+{Warning: Duplicate directory name: /home/unix/benh/compbio/projects/soheil.} 
+{Warning: Duplicate directory name:
+/home/unix/benh/compbio/projects/soheil/matlab.} 
+ 
+  To get started, type one of these: helpwin, helpdesk, or demo.
+  For product information, visit www.mathworks.com.
+ 
+>> 
+hi =
+
+hi
+
+Sender: LSF System <lsf@node1518>
+Subject: Job 2012464: <echo "testfunction('inp_test_1', 'out_test_1' ); exit" | matlab -nojvm -nodisplay -nosplash > Done
+
+Job <echo "testfunction('inp_test_1', 'out_test_1' ); exit" | matlab -nojvm -nodisplay -nosplash > was submitted from host <node1389> by user <benh> in cluster <cromwell>.
+Job was executed on host(s) <node1518>, in queue <compbio-week>, as user <benh> in cluster <cromwell>.
+</home/unix/benh> was used as the home directory.
+</home/unix/benh/compbio/projects/soheil/bsub_matlab> was used as the working directory.
+Started at Thu Jul 21 17:31:56 2011
+Results reported at Thu Jul 21 17:32:02 2011
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+echo "testfunction('inp_test_1', 'out_test_1' ); exit" | matlab -nojvm -nodisplay -nosplash 
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time   :      2.97 sec.
+    Max Memory :        10 MB
+    Max Swap   :        38 MB
+
+    Max Processes  :         1
+    Max Threads    :         1
+
+The output (if any) follows:
+
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2010 The MathWorks, Inc.
+                Version 7.11.0.584 (R2010b) 64-bit (glnxa64)
+                              August 16, 2010
+
+{Warning: Duplicate directory name:
+/home/unix/benh/programming/projects/cs874/matlab.} 
+{Warning: Duplicate directory name: /home/unix/benh/compbio/projects/soheil.} 
+{Warning: Duplicate directory name:
+/home/unix/benh/compbio/projects/soheil/matlab.} 
+{Warning: Duplicate directory name:
+/home/unix/benh/programming/projects/cs874/matlab.} 
+{Warning: Duplicate directory name: /home/unix/benh/compbio/projects/soheil.} 
+{Warning: Duplicate directory name:
+/home/unix/benh/compbio/projects/soheil/matlab.} 
+{Warning: Duplicate directory name:
+/home/unix/benh/programming/projects/cs874/matlab.} 
+{Warning: Duplicate directory name: /home/unix/benh/compbio/projects/soheil.} 
+{Warning: Duplicate directory name:
+/home/unix/benh/compbio/projects/soheil/matlab.} 
+{Warning: Duplicate directory name:
+/home/unix/benh/programming/projects/cs874/matlab.} 
+{Warning: Duplicate directory name: /home/unix/benh/compbio/projects/soheil.} 
+{Warning: Duplicate directory name:
+/home/unix/benh/compbio/projects/soheil/matlab.} 
+ 
+  To get started, type one of these: helpwin, helpdesk, or demo.
+  For product information, visit www.mathworks.com.
+ 
+>> 
+input_vars = 
+
+    motif_file: 'some_motif_file.txt'
+        number: 1
+
+
+hi =
+
+hi
+
+Sender: LSF System <lsf@node1520>
+Subject: Job 3659803: <echo "testfunction('inp_test_1', 'out_test_1' ); exit" | matlab -nojvm -nodisplay -nosplash > Done
+
+Job <echo "testfunction('inp_test_1', 'out_test_1' ); exit" | matlab -nojvm -nodisplay -nosplash > was submitted from host <tin> by user <benh> in cluster <cromwell>.
+Job was executed on host(s) <node1520>, in queue <compbio-week>, as user <benh> in cluster <cromwell>.
+</home/unix/benh> was used as the home directory.
+</home/unix/benh/compbio/projects/soheil/bsub_matlab> was used as the working directory.
+Started at Wed Aug  3 15:46:24 2011
+Results reported at Wed Aug  3 15:46:37 2011
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+echo "testfunction('inp_test_1', 'out_test_1' ); exit" | matlab -nojvm -nodisplay -nosplash 
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time   :      3.42 sec.
+    Max Memory :        10 MB
+    Max Swap   :        38 MB
+
+    Max Processes  :         1
+    Max Threads    :         1
+
+The output (if any) follows:
+
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2010 The MathWorks, Inc.
+                Version 7.11.0.584 (R2010b) 64-bit (glnxa64)
+                              August 16, 2010
+
+ 
+  To get started, type one of these: helpwin, helpdesk, or demo.
+  For product information, visit www.mathworks.com.
+ 
+>> 
+input_vars = 
+
+    motif_file: 'some_motif_file.txt'
+        number: 1
+
+
+hi =
+
+hi
+
