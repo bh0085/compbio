@@ -22,7 +22,9 @@ for control in [0,1,2,3]:
               os.makedirs(os.path.dirname(a))
               print 'made directory: {0}'.format(os.path.dirname(a))
   
-      
+      if os.path.isfile(args[1]): 
+        print continuing
+        continue
       script = 'test_mine'
       mat_cmd ='''\\"{3}('{0}', '{1}', '{2}', '{4}' ); exit\\"'''.format(\
           *(args + (script,)+(control,)))
