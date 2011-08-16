@@ -24,7 +24,7 @@ for control in [0,1,2,3]:
   
       
       script = 'test_mine'
-      mat_cmd ='''\\"{3}('{0}', '{1}', '{2}', '{4}' ); exit\\"'''.format(\
+      mat_cmd ='''\\"{3}('{0}', '{1}', '{2}', {4} ); exit\\"'''.format(\
           *(args + (script,)+(control,)))
 
       #print mat_cmd
