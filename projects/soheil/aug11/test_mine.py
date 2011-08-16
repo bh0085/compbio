@@ -10,7 +10,7 @@ import pipes
 sdp = cfg.dataPath('soheil')
 matfiles = [os.path.join(sdp,f) for f in os.listdir(sdp) if '.mat' in f]
 
-for control in [0,1,2,3]:
+for control in [0,1,2,3,4]:
   for f in matfiles: 
       args = \
           f, \
@@ -23,7 +23,7 @@ for control in [0,1,2,3]:
               print 'made directory: {0}'.format(os.path.dirname(a))
   
       if os.path.isfile(args[1]): 
-        print continuing
+        print 'continuing'
         continue
       script = 'test_mine'
       mat_cmd ='''\\"{3}('{0}', '{1}', '{2}', {4} ); exit\\"'''.format(\
