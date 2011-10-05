@@ -39,7 +39,8 @@ root = os.environ['COMPBIO_PATH']
 compbio_paths = [root,
                  os.path.join(*(list(os.path.split(root)[:-1]) + ['cb']))]
 roots = compbio_paths +\
-    [os.environ['PROGRAMMING_PATH']]
+    [os.environ['PROGRAMMING_PATH'],
+     os.environ['ZHANG_PATH']]
 
 def remotePath(abspath, host = 'tin', root = 'comp'):
   '''Get the location of the a file on the remote file system
@@ -82,6 +83,8 @@ def relPath(path):
   '''
 Get a short version of the given path relative to any one of the root paths.
 '''
+  print roots
+  print(path)
   return min([ os.path.relpath(path, r) for r in roots], 
              key = lambda x: len(x))
 

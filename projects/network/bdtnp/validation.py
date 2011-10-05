@@ -27,13 +27,19 @@ def fetch_cluster_results(keys):
             cells.append((k, [  dict(gene = int(squeeze(r[0][0])),
                                      sign = r[1][0],
                                      module = tuple(sorted(r[2][0])),
-                                     circuit = r[3][0],
                                      score = r[4][0])
                                 for r in res['network_cell']]))
         except Exception, e:
             cells.append((k,[]))
             
     return cells
+
+def fetch_cluster_mapping():
+    res = sio.loadmat(cfg.dataPath('soheil/ben_results/cluster_results/all/'+\
+                                       'expression_c4d_n4_t{0}.mat'.format('t_4')))
+    tfnames = [e[0][0] for e in res['tf_names']]
+    tgnames = [e[0][0] for e in res['gene_names']]
+    return tfnames, tgnames
 
 def cluster_elps(coords, tis, switch_axes = False):
         
@@ -97,7 +103,7 @@ def get_coords( axes = 'gene',
         import scipy.sparse.lil as ll
         adj = ssp.csr_matrix(gene_matrix.T)
         n_c = 3
-        U,s, Vh = svd = las.svd(adj, n_c)
+        U,s, Vh = svd = las.svds(adj, n_c)
         filtered_genes = ll.lil_matrix(U)*ll.lil_matrix(diag(s)) *ll.lil_matrix(Vh)        
         xs_gene  = U[ids,0]
         ys_gene  = U[ids,1]
@@ -147,8 +153,7 @@ def get_results(**kwargs):
                         **mem.rc(kwargs,
                                  on_fail = 'compute'))
 
-def get_clusters(cluster_id = 4, 
-                 switch_axes = False):
+def get_clusters(cluster_id = 4, ):
     all_members, ct_data = exp.recall_c2()
     all_members = array(all_members)
     c = all_members[cluster_id]
@@ -162,7 +167,7 @@ def get_clusters(cluster_id = 4,
                      misc_cols['y']['idxs'],
                      misc_cols['z']['idxs']])
 
-    #CHOOSE A TIME 
+    #CHOOSE A TIME m
     time_val = cluster_id
     
     #ORGANIZE A BUNCH OF DATA.
@@ -170,6 +175,11 @@ def get_clusters(cluster_id = 4,
                   key = lambda x: len(x[1]['cts']))[::-1]
     mods, genes, tfs = get_results(tsrt = tsrt, 
                                    name = 'cluster_{0}'.format(cluster_id))
+    return mods, genes,tfs
+
+def show_clusters(mods, genes, tfs,
+                  switch_axes = False,
+                  axes = 'space'):
     mod_srt = sorted(mods.iteritems(), key =lambda x: len(x[1]))[::-1]
     mod_ofinterest = mod_srt[0]
 
@@ -184,12 +194,15 @@ def get_clusters(cluster_id = 4,
         cs.extend([ct[i] for j in range( len(nucs))])
         
     #GET COORDS
-    axes = 'gene'
     coords = array(list(get_coords(axes = axes,
                                    time_val = time_val,
                                    spatial_idxs = spatial_idxs,
                                    rows = rows,
                                    ids = ids)))
+
+    print shape(coords)
+    print np.min(coords), np.max(coords)
+
     #GET ELPSES
     all_elps = cluster_elps(coords, tis)
     module_scores = {}
@@ -206,10 +219,13 @@ def get_clusters(cluster_id = 4,
         module_scores[m[0]] = mvals
 
         
+
+        
     #PLOT EM
-    ax0 = f.add_subplot(121)
-    ax1 = f.add_subplot(122)
-    all_axes = [f.add_subplot(ax_str(ax0,ax1,ax2,ax3]
+    all_axes = [f.add_subplot(ax_str) for ax_str in ['221', '222', '223', '224']]
+
+    ax0 = all_axes[0]
+    ax1 = all_axes[1]
 
     cnv = mpl.colors.ColorConverter()
     for j, ax in enumerate([ ax0, ax1]):
@@ -226,18 +242,26 @@ def get_clusters(cluster_id = 4,
             hsv = yellow * (1 - mscore) + red * mscore
     
             e.set_alpha(.75)
+            e.width = e.width/3
+            e.height = e.width/3
             e.set_zorder(mscore)
-            color = squeeze(mpl.colors.hsv_to_rgb(hsv[na,na,:]))
+            color = squeeze([1,0,0])
+            alpha = mscore
             e.set_facecolor(color)
-            e.set_edgecolor('black')
+            e.set_alpha(alpha)
+            e.set_edgecolor('none')
+            
             ax.add_patch(e)
+
+            
+            
             
 
     for annote_axis , plane in zip(*[[ax0, ax1],['XY','XZ']]):
         annote_axis.set_title('\n'.join(tw.wrap('''PCA projection in gene space of'''+\
-                                        ' blastoderm nuclei for time = {0}.'.format(time_val)+\
-                                        'Colors represent clusters used in'+\
-                                        'model building\n{1} Axes, {2} Plane'.\
+                                                    ' blastoderm nuclei for time = {0}.'.format(time_val)+\
+                                                    'Colors represent clusters used in'+\
+                                                    'model building\n{1} Axes, {2} Plane'.\
                               format(time_val,axes, plane),50)))
         annote_axis.set_xticks([])
         annote_axis.set_yticks([])    
@@ -256,8 +280,10 @@ def mod_list():
         m = [tuple(list(elt[0])) for elt in m]
         gm = gene_mods.get(m[1], [])
         tm = tf_mods.get(m[0], [])
+
         gm.append(m[0])
         tm.append(m[1])
+
         gene_mods[m[1]] = gm
         tf_mods[m[0]] = tm
 

@@ -1,6 +1,10 @@
 import matplotlib.pyplot as plt
 from numpy import *
 import networkx as nx
+
+def getpos(g):
+    return nx.graphviz_layout(g)
+
 def draw(graph, pos,edges,
          labels = None,
          scatter_nodes = None,
@@ -19,7 +23,7 @@ ckw:
   'fc'
   'ec'
 
-skw:
+  skw:
   see pyplot.scatter?
 
 '''
@@ -67,7 +71,7 @@ wedge	tail_width=0.3,shrink_factor=0.5
 def overlay(graph, pos, edges, 
             colors = {},alphas = {}, tripoints = {}, 
             tristretch = .5, #TRIPOINTS KW
-            circlepoints = None, circleradii = {}    #CIRCPOINTS KW
+            circlepoints = {}, circleradii = {}    #CIRCPOINTS KW
             ):
     '''
 Overlay data on a subset of graph edges.

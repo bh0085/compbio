@@ -62,7 +62,7 @@ def seismic(yvecs_in,
     plt.axis(axison)
 
     #Just color everything blue if color is unspecified
-    if not colors:
+    if colors == None:
         colors = ['black' for i in range(n)]
 
     if not continuous:

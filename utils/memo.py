@@ -61,7 +61,7 @@ def getOrSet(function, **kwargs):
   hardcopy = kwargs.get('hardcopy', True)
   np = kwargs.get('np', False)
   update = kwargs.get('update', None)
-  on_fail = kwargs.get('on_fail', 'error')
+  on_fail = kwargs.get('on_fail', 'compute')
   hard_reset = kwargs.get('hard_reset', False)
 
   caller_name = inspect.stack()[1][3]
