@@ -1,1 +1,1 @@
-/Users/bh0085/compbio/projects
+/home/ben/cb/projects/

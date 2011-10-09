@@ -40,7 +40,8 @@ pctype = 'bn'
 def get_graphs(selector = 'just_nets',
                net_choice = net_types,
                pctype = pctype,
-               fixed_ecount = ecount):
+               fixed_ecount = ecount,
+               restriction = 'none'):
 
     '''Get a list of graphs.
 
@@ -54,6 +55,10 @@ selectors:
   'pcs_fix_ecount': return filtered graphs with the same
                    number of edges as the original input.
                    [kwds]: pctype - which graph to compute the pc of
+
+restriction:
+  'none': return all of the available nodes.
+  'bdtnp':restrict to nodes that are available in the bdtnp dataset.
 
 '''
 
@@ -75,7 +80,9 @@ selectors:
         raise Exception()
 
     if selector == 'just_nets':
-        graphs = dict([(k, nfu.nx_from_network(v, name = k))
+        graphs = dict([(k, nfu.nx_from_network(v, 
+                                               name = k,
+                                               restriction = restriction))
                        for k, v in nets.iteritems()])
 
     elif selector == 'pcs_fix_ecount':
