@@ -18,6 +18,8 @@ def easy_draw(graph,
                              linewidth = 1,
                              arrowstyle = '->'))
                      for k in graph.edges()]))
+    gca().set_xticks([])
+    gca().set_yticks([])
 
 def draw(graph, pos,edges,
          labels = None,
