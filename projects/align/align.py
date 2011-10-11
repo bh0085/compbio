@@ -16,7 +16,24 @@ import subprocess as spc
 
 import networkx as nx
 
-def fly_graphs(params):
+def reinitz_tfs():
+    return ['FBgn0001150',
+            'FBgn0000606',
+            'FBgn0000251',
+            'FBgn0001325',
+            'FBgn0001168',
+            'FBgn0003145',
+            'FBgn0002985',
+            'FBgn0003430',
+            'FBgn0003720',
+            'FBgn0003300',
+            'FBgn0001180',
+            'FBgn0001320',
+            'FBgn0001077',
+            'FBgn0000166']
+def fly_graphs(params,nodeset = 'all',
+               control = 'none',
+               node_restiction = 'none'):
     '''
 params:
 
@@ -26,16 +43,34 @@ edge_frac:      ...
 node_frac:      ...
 max_nodes:      200
 '''
-    all_graphs = comp.get_graphs(restriction = 'none')   
-    gkeys = params.get('nets',['bn','mn'])
-    bnet = all_graphs[gkeys[0]]
-    mnet = all_graphs[gkeys[1]]
-    g0s = [bnet,mnet]
+
+    if control == 'filtered':
+        g0 = comp.get_graphs(restriction = 'none',
+                             selector = 'pcs_fix_ecount',
+                             pctype = 'bn',
+                             )   
+        g1 = comp.get_graphs(restriction = 'none',
+                             selector = 'pcs_fix_ecount',
+                             pctype = 'mn',
+                             )   
+        g0s = [g0,g1]
+        raise Exception()
+    else:
+        all_graphs = comp.get_graphs()
+        gkeys = params.get('nets',['bn','mn'])
+        bnet = all_graphs[gkeys[0]]
+        mnet = all_graphs[gkeys[1]]
+        g0s = [bnet,mnet]
 
     max_nodes = params.get('max_nodes', 50)
     sort_criterion = params.get('sort', 'out_degree')
     
-    nodes = set(mnet.nodes()).intersection(bnet.nodes())
+    if node_restriction == 'reinitz':
+        nodes = set(mnet.nodes()).intersection(bnet.nodes())\
+            .intersection(reinitz_tfs)
+    else:
+        nodes = set(mnet.nodes()).intersection(bnet.nodes())
+
     g0s = [gu.restricted_graph(g,list(nodes)) for g in g0s]
 
     outs = [ dict([(n,len(g[n])) for n in nodes])
@@ -133,11 +168,14 @@ def get_params(name, p):
 
 def align_graphm(name = 'brain',
                  do_plot_initial = True,
-                 p = 0):
+                 p = 0,
+                 control = 'reinitz'):
     params = get_params(name, p)
 
     if name == 'fly':
-        graphs = fly_graphs(params)
+        if control = 'reinitz':
+            graphs = fly_graphs(params, control = 'reinitz')
+            
     elif name == 'brain':
         graphs = brain_graphs(params)
 
@@ -176,8 +214,11 @@ def align_graphm(name = 'brain',
               
     sim_file = os.path.join(root, 'sims_01')
     simtype = 'null'
+    if control == 'reinitz':
+        simtype = 'reinitz'
+
     if simtype != 'null':
-        sims = compute_sims(graphs, 'null')
+        sims = compute_sims(graphs, simptype)
         sf = open(sim_file, 'w')
         sf.write( '\n'.join([' '.join(['{0}'.format(e) 
                                        for e in row]) 
@@ -291,6 +332,8 @@ verbose_file=cout s
 def compute_sims(graphs, sim_type):
     if sim_type == 'null':
         return ones((len(graphs[0]), len(graphs[1])))
+    elif sim_type == 'reinitz':
+        
     else:
         raise Exception('sim_type {0} not yet implemented'.\
                             format(sim_type))

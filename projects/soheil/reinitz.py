@@ -111,7 +111,8 @@ def get_reinitz_data(**kwargs):
     nums = dict([(k,v[:,0]) for k, v in df.iteritems()])
     nuc_count = len(set(nums.values()[2]))
    
-    values = dict([(k,v[nuc_count *ofs: nuc_count *(ofs + 1),-1]) for k, v in df.iteritems()])
+    values = dict([(k,v[nuc_count *ofs: nuc_count *(ofs + 1),-1]) 
+                   for k, v in df.iteritems()])
     coords = dict([(k,v[nuc_count *ofs :nuc_count *(ofs + 1),1:3]) for k, v in df.iteritems()])
 
     #to check the basic consistency of the data, enable the plot routines.
@@ -188,8 +189,10 @@ def get_soheil_network(max_edges = -1,
 def check_network(net_name = 'binding', 
                   dataset_name = 'reinitz',
                   data_ofs = 4,
-                  max_edges = -1):
+                  max_edges = -1,
+                  node_restriction = 'reinitz'):
 
+    reinitz_keys =set( get_reinitz_data()[1].keys())
     if dataset_name == 'reinitz':
         coords, values = get_reinitz_data(ofs = data_ofs)
     elif dataset_name == 'bdtnp':
@@ -197,13 +200,23 @@ def check_network(net_name = 'binding',
         meta = nio.getBDTNP(misc = True)
         values =  dict([( k, v['vals'][:,data_ofs] ) for k,v in data.iteritems()]) 
         coords  = array([meta['x']['vals'][:,data_ofs],meta['y']['vals'][:,data_ofs]])
-    
+    elif dataset_name == 'tc':
+        data = nio.getTC()
+        if node_restriction == 'reinitz':
+            data = dict([(k,v) for k,v in data.iteritems() if k in reinitz_keys]) 
+        #values =  dict([( k, v['vals'][:,data_ofs] ) for k,v in data.iteritems()]) 
+        #coords  = array([meta['x']['vals'][:,data_ofs],meta['y']['vals'][:,data_ofs]])
+        values = data
     else:
         raise Exception('data set {0} not yet implemented'.format(dataset_name))
 
     nets = comp.get_graphs()
     if net_name == 'binding':
         network = nets['bn']
+    elif net_name == 'unsup':
+        network = nets['unsup']
+    elif net_name == 'logistic':
+        network = nets['logistic']
     elif net_name =='clusters':
         network = get_soheil_network(max_edges = max_edges,
                                      node_restriction = values.keys())

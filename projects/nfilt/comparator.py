@@ -94,11 +94,11 @@ restriction:
                         fixed_ecount))
                        for k, v in nets.iteritems()])
         
-        for n_c in range(1, 13,3):
+        for n_c in range(0,3):
             graphs['{0}_nc={1}'.format(pctype,n_c)]=\
                 gutils.filter_sparse(graphs[pctype],n_c=n_c, 
-                                  max_edges = len(graphs[pctype].edges()),
-                                  last_component = False)
+                                     max_edges = len(graphs[pctype].edges()/2),
+                                     last_component = False)
             nets['{0}_nc={1}'.format(pctype,n_c)] = nets[pctype]
     else: 
         raise Exception()
