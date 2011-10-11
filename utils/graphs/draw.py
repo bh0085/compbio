@@ -5,6 +5,20 @@ import networkx as nx
 def getpos(g):
     return nx.graphviz_layout(g)
 
+def easy_draw(graph,
+              pos,
+              alpha = .25):
+    draw(graph, pos, graph.edges(),
+         skw = {'s':10,
+                'edgecolor':'black',
+                'facecolor':'white'},
+         
+         ckw = dict([(k,dict(color = 'black',
+                             alpha = alpha,
+                             linewidth = 1,
+                             arrowstyle = '->'))
+                     for k in graph.edges()]))
+
 def draw(graph, pos,edges,
          labels = None,
          scatter_nodes = None,
@@ -52,7 +66,6 @@ wedge	tail_width=0.3,shrink_factor=0.5
         if e in ckw:
 
             
-            print 'plotting edges'
             ax.annotate('', xy=pos[e[1]],  xycoords='data',
                         xytext=pos[e[0]], textcoords='data',
                         arrowprops=dict( 
@@ -63,7 +76,6 @@ wedge	tail_width=0.3,shrink_factor=0.5
 
     
     #return
-    print scatter_nodes
     xys  = [pos[n] for n in scatter_nodes]
     if xys:
         ax.scatter(*zip(*xys), **skw)

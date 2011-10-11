@@ -44,16 +44,7 @@ def load(plots = defplots,
     if plots.get('basic_structure', False):
         f = myplots.fignum(1)
         ax = f.add_subplot(111)
-        gd.draw(g, pos, g.edges(),
-                skw = {'s':10,
-                       'edgecolor':'black',
-                       'facecolor':'white'},
-
-                ckw = dict([(k,dict(color = 'black',
-                                    alpha = .25,
-                                    linewidth = 1,
-                                    arrowstyle = '->'))
-                            for k in g.edges()]))
+        gd.easy_draw(g, pos)
         
         f.savefig(myplots.figpath('basic_structure_edges={0}'.format(edge_set))) 
 

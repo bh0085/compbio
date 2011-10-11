@@ -22,7 +22,7 @@ from numpy import *
 import cb.utils.plots as myplots
 import cb.config as cfg
 import cb.utils.colors as mycolors
-import cb.p.nfilt.utils as nfu
+import cb.utils.graphs.utils as gutils
 import networkx as nx
 import matplotlib.pyplot as plt
 
@@ -80,7 +80,7 @@ restriction:
         raise Exception()
 
     if selector == 'just_nets':
-        graphs = dict([(k, nfu.nx_from_network(v, 
+        graphs = dict([(k, gutils.nx_from_network(v, 
                                                name = k,
                                                restriction = restriction))
                        for k, v in nets.iteritems()])
@@ -89,16 +89,16 @@ restriction:
         '''Compute the PC projection with an edge count fixed at the size of
         the input network.'''
         
-        graphs = dict([(k, nfu.top_edges(\
-                        nfu.nx_from_network(v, name = k, reset = True),
+        graphs = dict([(k, gutils.top_edges(\
+                        gutils.nx_from_network(v, name = k, reset = True),
                         fixed_ecount))
                        for k, v in nets.iteritems()])
         
-        for n_c in range(1, 13,3):
+        for n_c in range(0,3):
             graphs['{0}_nc={1}'.format(pctype,n_c)]=\
-                nfu.filter_sparse(graphs[pctype],n_c=n_c, 
-                                  max_edges = len(graphs[pctype].edges()),
-                                  last_component = False)
+                gutils.filter_sparse(graphs[pctype],n_c=n_c, 
+                                     max_edges = len(graphs[pctype].edges()/2),
+                                     last_component = False)
             nets['{0}_nc={1}'.format(pctype,n_c)] = nets[pctype]
     else: 
         raise Exception()

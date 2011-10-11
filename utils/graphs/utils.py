@@ -68,7 +68,7 @@ def nx_from_network(targets, nodes_allowed = None,
         if restriction != 'none':
             if restriction == 'bdtnp':
                 allowed_nodes = nio.getBDTNP().keys()
-                graph = restricted_graph(graph, allowd_nodes)
+                graph = restricted_graph(graph, allowed_nodes)
             else: raise (Exception('unrecognized restriction {0}'.\
                                      format(restriction)))
         return graph

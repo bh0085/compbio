@@ -55,8 +55,6 @@ from one of the roots ['compbio', 'programming']'''
   
   if host == None:
     #IS THIS WHY THE LOCAL CALLS TO BSUB ARE FAILING?
-    print abspath
-    print subfun(abspath)
     return subfun(abspath).strip()
 
   scr = pipes.quote('''
@@ -83,8 +81,6 @@ def relPath(path):
   '''
 Get a short version of the given path relative to any one of the root paths.
 '''
-  print roots
-  print(path)
   return min([ os.path.relpath(path, r) for r in roots], 
              key = lambda x: len(x))
 

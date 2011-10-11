@@ -35,7 +35,7 @@ import numpy as np, textwrap as tw
 import cs874.bsub_clusters as bcl
 import os, inspect, itertools as it
 import scipy.io as sio
-
+import scipy.stats as ss
 
 '''
 Short documentation:
@@ -100,7 +100,7 @@ def getClusteringInputs( ncluster =1000, host = 'tin',
   percs = logspace(.1,1.5,8)
   for p in percs:
     d_in.append(dict(similarities = sims,
-                     self_similarity = percentile(sims, p),
+                     self_similarity = ss.scoreatpercentile(sims, p),
                      metric = metric
                      ))
   return d_in
@@ -230,7 +230,7 @@ def c2( launcher = None, ncluster =2000, host = 'tin',
     percs = logspace(.1,1.5,8)
     for p in percs:
       d_in.append(dict(similarities = sims,
-                       self_similarity = percentile(sims, p),
+                       self_similarity = ss.scoreatpercentile(sims, p),
                        metric = metric
                        ))
 
@@ -451,7 +451,7 @@ def cluster_tissues(nx = 20,ny = 500, timepoint = -1,
     ax.plot(h[1][:-1],h[0])
 
 
-  cluster(cluster_training, percentile(cluster_training,.2) )
+  cluster(cluster_training, ss.scoreatpercentile(cluster_training,.2) )
   
   fopen = open(cfg.dataPath('bdtnp/clustering/nuclei/idxs'))
   lines = fopen.readlines()
