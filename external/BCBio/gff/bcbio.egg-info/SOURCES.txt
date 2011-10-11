@@ -1,0 +1,10 @@
+setup.py
+BCBio/__init__.py
+BCBio/GFF/GFFOutput.py
+BCBio/GFF/GFFParser.py
+BCBio/GFF/__init__.py
+BCBio/GFF/_utils.py
+bcbio.egg-info/PKG-INFO
+bcbio.egg-info/SOURCES.txt
+bcbio.egg-info/dependency_links.txt
+bcbio.egg-info/top_level.txt
