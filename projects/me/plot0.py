@@ -13,13 +13,16 @@ import parse as wp
 import inference as wi
 import cb.utils.plots as myplots
 
-def peak_distance_histogram():    
-    chips = wp.tf_chip_props()
+def peak_distance_histogram(**kwargs):    
+
+    atype = kwargs.get('atype', wp. default_atype)
+    chips = wp.get_assay_gprops(**mem.rc(kwargs))
     chiplist = chips.values()
     chipkeys = chips.keys()
     xs = []
     ys = []
     
+
     sec_spread = np.max([
             np.max([ 
                     np.max(np.abs([e['dist'] for e in v2['secondaries']]))
@@ -52,34 +55,41 @@ def peak_distance_histogram():
             
     f= myplots.fignum(1,(8,6))
     ax = f.add_subplot(111)
-    ax.set_title('chip peak distances to primary/sec tss')
+    ax.set_title('chip peak distances to primary/sec tss for {0}'.format(atype))
     for p in prim_hists:
         ax.plot(bin_mids,p, color = 'green')
     for s in sec_hists:
         ax.plot(bin_mids,s, color = 'red')
-    f.savefig(myplots.figpath('chip_distance_histograms.pdf'))
+    f.savefig(myplots.figpath('chip_distance_hists_for{0}.pdf'.format(atype)))
 
     
 
-def peak_thr_histograms():
+def peak_thr_histograms(**kwargs):
     '''histograms of score and distance'''
     dthr = 1500
-    sthr = 1e-10
-    simple = wp.tf_chip_simple_thr(dthr = dthr,
-                                   sthr = sthr,
-                                   )
-    
+    sthr = 1e-2
+    dsign = -1
+    simple = wp.get_simple_thr(**mem.rc(kwargs,
+                                        dthr = dthr,
+                                        sthr = sthr,
+                                        dsign = dsign
+                                        )
+                               )
+
+                                 
+                                 
     min_score = -1
     max_score = -1
     for k,v in simple.iteritems():
         smax = np.max(v['scores'])
-        if max_score == -1 or smax < max_score:
+        if max_score == -1 or smax > max_score:
             max_score = smax
         smin = np.min(v['scores'])
         if min_score == -1 or smin < min_score:
             min_score = smin
-    lrange = [floor(log10(min_score)), ceil(log10(max_score))]
-    sbin_mids = range(*lrange)
+
+    lrange = [int(floor(log10(min_score))), int(ceil(log10(max_score)))]
+    sbin_mids = range(lrange[0],lrange[1]+1)
     nsb = len(sbin_mids)
     sbins = zeros((nsb))
 
@@ -90,7 +100,7 @@ def peak_thr_histograms():
 
     for k,v in simple.iteritems():
         for d in v['dists']:
-            dbins[int(d +dthr)/dbin_size] += 1
+            dbins[int(d + dthr)/dbin_size] += 1
         for s in v['scores']:
             sbins[int(log10(s) - lrange[0])] += 1
     
@@ -111,9 +121,7 @@ def peak_thr_histograms():
 
 
 def plot_easy_inference():
-    edges = io.getNet()
-    dg = nx.DiGraph()
-    dg.add_weighted_edges_from(edges)
+    dg = io.getGraph()
     pos = gd.getpos(dg)
     
     f = myplots.fignum(4, (8,8))
@@ -122,3 +130,8 @@ def plot_easy_inference():
     gd.easy_draw(dg, pos)
 
     f.savefig(myplots.figpath('worm_chip_graph.pdf'))
+
+
+def plot_coexpression():
+    genes, gene_info = wi.get_coexpression()
+    

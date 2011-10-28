@@ -5,15 +5,19 @@ import os, itertools as it
 import cb.utils.memo as mem
 
 import Bio.SeqIO as sio
+import gzip
 import cb.external.GFF as GFF
+import re
 
 '''
 parse all the data required to produce a 
 worm chip network
 '''
 
-def peaks(**kwargs):
-    def setPeaks(**kwargs):
+default_atype = 'wormtile'
+
+def tf_chip_peaks(**kwargs):
+    def setTf_Chip_Peaks(**kwargs):
         root = cfg.dataPath('wormchip')
         files = [os.path.join(root, f) for f in os.listdir(root)]
         out = {}
@@ -36,14 +40,14 @@ def peaks(**kwargs):
                 d['score'] = float(d['score'])
                 d['qValue'] = float(d['qValue'].split('=')[1])
         return out
-    return mem.getOrSet(setPeaks, 
+    return mem.getOrSet(setTf_Chip_Peaks, 
                         **mem.rc(kwargs,
                                  hardcopy = True))
-
+#deprecated... use get_assay info instead
 def tf_chips(**kwargs):
     def set_tf_chips(**kwargs):
        #peaks and keys 
-       assay_peaks = peaks()
+       assay_peaks = tf_chip_peaks()
        pkeys = assay_peaks.keys()
        
        #index and uniquify tfs
@@ -125,9 +129,107 @@ def tf_chips(**kwargs):
        return bind_infos
     return mem.getOrSet(set_tf_chips, **mem.rc(kwargs))
 
-def tf_chip_props(**kwargs):
-    def set_tf_chip_props(**kwargs):
-       chips = tf_chips()
+def get_assay_info(**kwargs):
+    kwargs['atype'] = kwargs.get('atype', default_atype)
+    def set_assay_info(**kwargs):
+       #peaks and keys 
+       atype = kwargs['atype']
+       if atype == 'tfchip':
+           assay_peaks = tf_chip_peaks(**mem.sr(kwargs))
+       elif atype=='wormtile':
+           assay_peaks = tiling_peaks(**mem.sr(kwargs))
+       else: raise Exception()
+       pkeys = assay_peaks.keys()
+       
+       keyvalfuns = {'tfchip':lambda x: x[:x.index(':')],
+                     'wormtile':lambda x:re.compile('Tissue=([^\(]*)')\
+                         .search(x).group(1)}
+       #index and uniquify tfs
+       pkeyvals = dict([(k, keyvalfuns[atype](k)) for k in pkeys])
+       tfnames = set(pkeyvals.values())
+       tfkeys= dict([(name, [k for k,v in pkeyvals.iteritems()
+                             if v == name])
+                     for name in tfnames])       
+
+       chrmap = dict(zip(['I','II', 'III','IV', 'V', 'X'],
+                         chromosome_names()))
+       
+       all_tss = get_tss()
+       all_genes = parse_genes()
+       
+       bind_infos = {}
+       #loop through tfs, assays, and finally peaks
+       for tfname in tfnames:
+           print tfname
+           bind_infos[tfname] = {}
+           for ekey in tfkeys[tfname]:
+             print 'n_exps = {0}'.format(np.sum([len(v) 
+                                              for v in bind_infos.values()]))
+             exp = assay_peaks[ekey]
+             bind_infos[tfname][ekey] = []
+             for e in exp:
+               start = e['start']
+               end = e['end']
+               c = e['chr']
+
+               #if we have non chromosomal DNA, skip it!
+               if c in chrmap.keys():
+                   crkey = chrmap[c]
+               else: continue
+               genes = all_genes[crkey]
+               tss = all_tss[crkey]
+               
+               #grab indexes in the list of upstream and ds genes
+               fdownstream_idx =searchsorted(tss['fwd_tss'],(start+end) /2)
+               rdownstream_idx =searchsorted(tss['rev_tss'],(start+end) /2, 'right')-1
+               
+               #handle the case where the factor hits past the 
+               #last gene
+               fup_ofs = -1
+               if fdownstream_idx == len(tss['fwd_genes']):
+                   fdownstream_idx = fdownstream_idx -1
+                   fup_ofs = 0
+               
+               rup_ofs = 1
+               if fdownstream_idx == len(tss['fwd_genes']):
+                   fdownstream_idx = fdownstream_idx -1
+                   rup_ofs = 0
+               
+               #get gene indexes in the chromosomal gene dicts
+               #for upstream and downstream
+               fdown_gene = tss['fwd_genes'][fdownstream_idx]
+               fup_gene = tss['fwd_genes'][fdownstream_idx +fup_ofs]\
+                   if fdownstream_idx > 0 \
+                   else fdown_gene
+               
+               rdown_gene = tss['rev_genes'][rdownstream_idx]
+               rup_gene = tss['rev_genes'][rdownstream_idx +rup_ofs]\
+                   if rdownstream_idx < len(tss['rev_genes']) - 1\
+                   else rdown_gene
+             
+               bind_infos[tfname][ekey].append({
+                       'rup_gene':rup_gene,
+                       'rdown_gene':rdown_gene,
+                       'fup_gene':fup_gene,
+                       'fdown_gene':fdown_gene,
+                       'chr':crkey,
+                       'start':start,
+                       'end':end,
+                       'mean':(start+end)/2,
+                       'score':e['score']                  
+       
+                })                 
+       
+       return bind_infos
+    return mem.getOrSet(set_assay_info, 
+                        **mem.rc(kwargs ,
+                                 name = kwargs['atype']))
+
+
+def get_assay_gprops(**kwargs):
+    kwargs['atype'] = kwargs.get('atype', default_atype)
+    def set_assay_gprops(**kwargs):
+       chips = get_assay_info(**mem.sr(kwargs))
        genes = parse_genes()
        tf_stats = {}
        for k, v in chips.iteritems():
@@ -181,18 +283,26 @@ def tf_chip_props(**kwargs):
                tf_stats[k][k2]['primaries'] = primaries
                tf_stats[k][k2]['secondaries'] = secondaries
        return tf_stats
-    return mem.getOrSet(set_tf_chip_props, **mem.rc(kwargs,
+    return mem.getOrSet(set_assay_gprops, **mem.rc(kwargs,
+                                                    name = kwargs['atype'],
                                                     hardcopy = True))
 
-def tf_chip_simple(**kwargs):
-    def set_tf_chip_simple(**kwargs):
-        props = tf_chip_props()
-        chips = tf_chips()
+def get_simple_description(**kwargs):
+    kwargs['atype'] = kwargs.get('atype', default_atype)
+    def set_simple_description(**kwargs):
+        props = get_assay_gprops(**mem.sr(kwargs))
+        chips = get_assay_info(**mem.sr(kwargs))
         simple = {}
         for tf, assays in props.iteritems():
             simple[tf] = {}
             assay_keys = assays.keys()
-            
+
+            idfun = lambda g: g.qualifiers['db_xref'][1][9:] 
+
+            simple[tf]['gnames'] = list(it.chain(*[ 
+                        [idfun(e['gene']) for e in assays[k]['primaries']]
+                        for k in assay_keys
+                        ]))
             simple[tf]['genes'] = list(it.chain(*[ 
                         [e['gene'] for e in assays[k]['primaries']]
                         for k in assay_keys
@@ -206,32 +316,87 @@ def tf_chip_simple(**kwargs):
                         for k in assay_keys
                         ])))
         return simple
-    return mem.getOrSet(set_tf_chip_simple,  **mem.rc(kwargs,
-                                                      name = 'blank'))
+    return mem.getOrSet(set_simple_description,
+                        **mem.rc(kwargs,
+                                 name = kwargs['atype']))
                                                  
     
-def tf_chip_simple_thr(**kwargs):
-    kwargs['dthr'] = kwargs.get('dthr',3000)
-    kwargs['sthr'] = kwargs.get('sthr',1e-10)
-    def set_tf_chip_simple_thr(**kwargs):
+def get_simple_thr(**kwargs):
+    kwargs['dthr'] = kwargs.get('dthr',None)
+    kwargs['sthr'] = kwargs.get('sthr',None)
+    kwargs['dsign'] = kwargs.get('dsign',None)
+    kwargs['atype'] = kwargs.get('atype', default_atype)
+
+    def set_simple_thr(**kwargs):
         dthr = kwargs['dthr']
+        dsign = kwargs['dsign']
         sthr = kwargs['sthr']
-        simple = tf_chip_simple(**mem.sr(kwargs))
+        simple = get_simple_description(**mem.sr(kwargs))
         out = {}
         for k,v in simple.iteritems():
-            allowed = nonzero(less(abs(v['dists']), dthr)
-                              *less(v['scores'],sthr))[0]
+            criteria = ones(len(v['scores']))
+            if sthr != None:
+                criteria *= less(v['scores'],sthr)
+            if dsign != None:
+                criteria *= greater(v['dists']*dsign, 0)
+            if dthr != None:
+                criteria *= less(abs(v['dists']),dthr)
+                            
+            allowed = nonzero(criteria)[0]
             out[k] = {'genes':[v['genes'][i] for i in allowed],
+                      'gnames':[v['gnames'][i] for i in allowed],
                       'dists':v['dists'][allowed],
                       'scores':v['scores'][allowed]}
         return out
-    return mem.getOrSet(set_tf_chip_simple_thr,  
+
+    #names = {'wormtile':'sthr_{0}'.format(kwargs['sthr']),
+    #         'tfchip':'dthr_{0}_sthr_{1}'.\
+    #             format(kwargs['dthr'],
+    #                    kwargs['sthr'])
+    #         }
+    
+    tkwargs = dict([(k,kwargs[k]) for k in ['dthr','sthr', 'dsign']])
+    name = '{0}:'.format(kwargs['atype']) + \
+        '_'.join(it.chain(*sorted([(str(k),str(v)) for k,v in tkwargs.iteritems()],
+                                  key = lambda x: x[0])))
+    
+                                  
+    return mem.getOrSet(set_simple_thr,  
                         **mem.rc(kwargs,
-                                 name ='dthr_{0}_sthr_{1}'.\
-                                     format(kwargs['dthr'],
-                                            kwargs['sthr'])))
+                                 name =name))
                                                  
     
+
+
+
+
+def tiling_peaks(**kwargs):
+    def set_tiling_peaks(**kwargs):
+        root = cfg.dataPath('modencode/wormtile/computed-peaks_gff3')
+        files = [os.path.join(root, f) for f in os.listdir(root)]
+        out = {}
+        for f in files:
+            if f[-2:] != 'gz': continue
+            fopen= gzip.open(f)
+            data = [l for l in fopen.readlines() if not l[0] == '#']
+            
+            out[os.path.basename(f)] = \
+                [dict(zip(['chr', 'meth', 'type',
+                  'start','end','score',
+                  'blank','blank2','annotations' ], 
+                         l.strip().split('\t')))
+                 for l in data]
+        
+        for k,v in out.iteritems():
+            for d in v:
+                d['start'] = int(d['start'])
+                d['end'] = int(d['end'])
+                d['score'] = float(d['score'])
+        return out
+    return mem.getOrSet(set_tiling_peaks, 
+                        **mem.rc(kwargs,
+                                 hardcopy = True,
+                                 name = 'default'))
 
 
 def chromosome_names():
@@ -289,6 +454,79 @@ def parse_genes(**kwargs):
     return mem.getOrSet(set_genes, 
                         **mem.rc(kwargs,hardcopy = True))
 
+def cr_locii(chrname = 'CHR_I', **kwargs):
+    ng =20;
+    
+    root = cfg.dataPath('/data/genomes/Caenorhabditis_elegans')
+    fdir = os.path.join(root,chrname)
+    for r, d, files in os.walk(fdir):
+        for f in files:
+            if '.gb' in f:
+                fopen = open(os.path.join(r,f))
+                break
+    gb = list(sio.parse(fopen, 'genbank'))[0]
+
+    chrinfos= parse_genes();
+    for i in range(ng):
+        g = chrinfos[chrname][i]
+        gid = g.qualifiers['db_xref'][1][9:] 
+        print gid
+        neighbor_range =[max(0, g.location.start.position-5000),
+                         min(len(gb.seq)-1, g.location.end.position+5000)]
+        feats_matching =[f for f in gb.features
+                         if f.location.start.position > neighbor_range[0]
+                         and f.location.end.position < neighbor_range[1]]
+        
+        seq = gb.seq[neighbor_range[0]:neighbor_range[1]]
+    
+        import Bio.SeqRecord as sr
+        import Bio.Seq as sq
+        rec = sr.SeqRecord(sq.Seq(seq.tostring(),seq.alphabet),
+                           name = '{0}_g{1}'.format(chrname,i),
+                           description='genomic neighborhood of {0}'\
+                               .format(gid),
+                           annotations = {'organism':'worm'})
+
+        import Bio.SeqFeature as sf
+        import copy
+        for f in feats_matching:
+            
+            fnew = copy.deepcopy(f)
+            fnew.location.start.position -= neighbor_range[0]
+            fnew.location.end.position -= neighbor_range[0]
+            rec.features.append(fnew)
+        root = cfg.dataPath('modencode/worm_gene_extracts/{0}'.format(chrname))
+        if not os.path.isdir(root): os.mkdir(root)
+        fname = os.path.join(root,'{0}.gbk'.format(gid))
+        fopen = open(fname, 'w')
+        sio.write(rec, fopen, 'genbank')
+        fopen.close()
+        
+        
+
+
+def gene_info(**kwargs):
+    def set_gene_info(**kwargs):
+        crofs = chromosome_offsets()
+        gp = parse_genes()
+        genes = {}
+        idfun = lambda g: g.qualifiers['db_xref'][1][9:] 
+            
+        for cname, elts in gp.iteritems():
+            crof = crofs[cname]
+            genes.update(dict([(idfun(e), {'start':e.location.start.position,
+                                           'end':e.location.end.position,
+                                           'genomestart':e.location.start.position+crof,
+                                           'genomeend':e.location.end.position+crof,
+                                           'tss':e.location.start.position  \
+                                               if e.strand == 1 \
+                                               else e.location.end.position})
+                               for e in elts]))
+        return genes
+    return mem.getOrSet(set_gene_info,**mem.rc(kwargs,
+                                               name = 'default'))                                         
+                                         
+                                           
 
 def get_tss(**kwargs):
     def load_tss(**kwargs):
