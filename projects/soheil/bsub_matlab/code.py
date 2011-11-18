@@ -37,24 +37,19 @@ infiles,outfiles,params,run_ids = get_stuff_for_run()
 
 
 
-
     #MODIFY THIS PART ONLY!---------------------------
     elif run_type == 'YOURRUNTYPEHERE':
         '''just make sure that you set values for the four
         crucial parameters:
         infiles, outfiles, params, run_ids'''
+        
 
         pass
     #END MODIFIED PART HERE!---------------------------
 
 
-
-
-
     else:
         print 'RUN TYPE NOT UNDERSTOOD'
-
-
     return infiles, outfiles, params, run_ids
 
 
