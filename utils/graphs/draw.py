@@ -3,6 +3,8 @@ from numpy import *
 import networkx as nx
 from matplotlib.pyplot import gca
 
+
+
 def getpos(g):
     return nx.graphviz_layout(g)
 
