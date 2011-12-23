@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from numpy import *
 import networkx as nx
 from matplotlib.pyplot import gca
+from   matplotlib.collections import LineCollection as lc
 
 
 
@@ -28,7 +29,9 @@ def draw(graph, pos,edges,
          labels = None,
          scatter_nodes = None,
          ckw = {},     #CONNECTION STYLE KWS
-         skw = {}):    #SKATTERPLOT KWS):
+         skw = {},
+         cktype = 'pretty',
+         ckalpha = 1):    #SKATTERPLOT KWS):
     '''
 Draw a graph with scatterpoint keyword given in skw
 and connectionpoint keyworks given by ckw.
@@ -66,19 +69,25 @@ wedge	tail_width=0.3,shrink_factor=0.5
         scatter_nodes = graph.nodes()
 
     ax = plt.gca()
-
-    for i, e in enumerate(edges):
-        if e in ckw:
-
-            
-            ax.annotate('', xy=pos[e[1]],  xycoords='data',
-                        xytext=pos[e[0]], textcoords='data',
-                        arrowprops=dict( 
-                                         #connectionstyle=cstr,
-                                         #shrinkA=10,shrinkB = 10,
-                                         **ckw.get(e,{})  ),
-                        )
-
+    
+    if cktype != 'simple':    
+        for i, e in enumerate(edges):
+            if e in ckw:
+                ax.annotate('', xy=pos[e[1]],  xycoords='data',
+                            xytext=pos[e[0]], textcoords='data',
+                            arrowprops=dict( 
+                        #connectionstyle=cstr,
+                        #shrinkA=10,shrinkB = 10,
+                        **ckw.get(e,{})  ),
+                            )
+    else:
+        lines = [ (pos[e[0]],pos[e[1]])
+                  for e in edges]
+        colors = [ckw.get(e,{}).get('color', [0,0,0,1] ) for e in  edges]
+        linewidths=[ckw.get(e,{}).get('linewidth',1) for e in edges]
+        ax.add_collection(lc( lines, colors = colors, linewidths = linewidths,
+                              alpha = ckalpha))
+        
     
     #return
     xys  = [pos[n] for n in scatter_nodes]
