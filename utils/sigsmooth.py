@@ -1,9 +1,3 @@
-"""
-cookb_signalsmooth.py
-
-from: http://scipy.org/Cookbook/SignalSmooth
-"""
-
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -101,7 +95,7 @@ def smooth_demo():
 
     plt.hold(True)
     for w in windows[1:]:
-        #eval('plt.plot('+w+'(ws) )')
+        #eval('plt.plot('+w+'(ws) )'
         plt.plot(getattr(np, w)(ws))
 
     plt.axis([0,30,0,1.1])
@@ -121,10 +115,10 @@ def smooth_demo():
 
 
 if __name__=='__main__':
-    
+
     # part 1: 1d
     smooth_demo()
-    
+
     # part 2: 2d
     X, Y = np.mgrid[-70:70, -70:70]
     Z = np.cos((X**2+Y**2)/200.)+ np.random.normal(size=X.shape)

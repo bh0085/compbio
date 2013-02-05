@@ -71,26 +71,7 @@ def run0(meth = 'moment',
         srts.append(srto)
 
 
-    #s = ss.medfilt2d(s,5)
-
-    #f2 = plt.figure(fig)
-    #f2.clear()
-    #ax = f2.add_subplot(111)
-    #ax.imshow(s[:,:,newaxis]*[1,0,0], interpolation = 'nearest')
-    
     return s, srts
-
-    #f3 = plt.figure(fig+1)
-    #f3.clear()
-    #ax2=f3.add_subplot(211)
-    #for s in all_scores:
-    #    ax2.plot(s)
-    
-    #ax3 = f3.add_subplot(212)
-    #for s in all_dlts:
-    #    deltas = array(map(lambda x: x[0],s))
-    #    acc = array(map(lambda x: x[1],s))
-    #     ax3.plot(sorted(deltas))
     
 
 def makescore(temp,dims):

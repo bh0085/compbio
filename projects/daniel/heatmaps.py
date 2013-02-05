@@ -69,7 +69,7 @@ def srt_heatmap(net = 3,
                               min_go_size = 5, 
                               min_module_size = 10)
 
-    arr2_510, srts = bs.run0(arr = arr, itr = 1, meth = 'moment')
+    arr2_510, srts = bs.run0(arr = arr, itr = 2, meth = 'moment')
     arr2_510 = arr2_510[:,::-1]
     csrts = [s for s in srts if len(s) == len(cols)]
     rsrts = [s for s in srts if len(s) == len(rows)]

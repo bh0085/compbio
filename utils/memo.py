@@ -69,8 +69,7 @@ def getOrSet(function, **kwargs):
   
   
   if update != None:
-    out = update
-    write(name = name, value = out,  hardcopy = hardcopy, np = np,
+    write(name = name, value = update,  hardcopy = hardcopy, np = np,
           register = register, caller_name = caller_name)
   elif not reset:
     out, sxs = read(name = name, hardcopy = hardcopy, np = np, 
